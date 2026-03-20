@@ -1,0 +1,174 @@
+{
+  "nuestra_historia": {
+    "config": {
+      "tema": "minecraft",
+      "titulo_principal": "NUESTRA HISTORIA",
+      "subtitulo": "Said y Deth",
+      "cancion": "https://music.youtube.com/watch?v=YGw9jRfnyqA&si=DG4Dks55Vl7-BVCy"
+    },
+    "memorias": [
+      {
+        "id": "1",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=EME2eB&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNRTJlQiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.8D_PKtOgyT8XNB-nr72ai1bf3iemn7n2ZDdEhBoEbso&signature=c5d02f9be2a26ad33ab08553104b875be1c466f3166f74df0b78919b95ef5630",
+        "titulo": "A",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "A",
+        "fecha": "2026-03-02",
+        "lugar": "A"
+      },
+      {
+        "id": "2",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=QkWbpG&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlFrV2JwRyIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.afkE93tnTAJ9rrTboy01Zg7xZlmyxTBzRmR18CU7zbE&signature=6f964f25fbf0dfaa885d9e46cd3b6e09ade2d577760e3577167a505bc133f0f6",
+        "titulo": "A",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "A",
+        "fecha": "2026-03-06",
+        "lugar": "A"
+      },
+      {
+        "id": "3",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=vK1laD&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InZLMWxhRCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.FrFf0joYBNyHGIcCbxKZHUrzn8LPeGB-qKPTQnEvxLA&signature=ca0b63880ed9cb1634c369d11ca9b68dcd94552d5af759b4c387ffe632e788e8",
+        "titulo": "A",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "A",
+        "fecha": "2026-03-07",
+        "lugar": "Hs"
+      },
+      {
+        "id": "4",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=JMxQrR&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkpNeFFyUiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.ql1XjZpwhDMc3YAhkFJ1OcWTO4cr0u8gBOf9UeAkqfk&signature=bc37df2d9f95117e1df8fca06fe95f0e365c8333e856cc2d729ed59d70cc311e",
+        "titulo": "js",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Nsns",
+        "fecha": "2026-03-08",
+        "lugar": "Ksjs"
+      },
+      {
+        "id": "5",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=RkaAQj&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlJrYUFRaiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.Ob3XYyCVLtCBhbwtAUIG3cKe5TjsQ1bcM1EEYoGYAAM&signature=de7b4efdd5944f49cd1740e647dee1ace4b03bc50257f2119d8a7fa7b20932f6",
+        "titulo": "Jajsb",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Ya vastaa",
+        "fecha": "2026-03-09",
+        "lugar": "Su"
+      },
+      {
+        "id": "6",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=27ypY9&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI3eXBZOSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.19Q8cS1JtA8XCSZQ7DjdviNcQjXS0zAMjv6sS7L-7mU&signature=2f74b38786d5ec26facf313c70e8b2ac3c18c5a06ac14e1cb32288e94834f3d0",
+        "titulo": "Ya me canse",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Jeje",
+        "fecha": "2026-03-10",
+        "lugar": "Si"
+      },
+      {
+        "id": "7",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=vK1l6D&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InZLMWw2RCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.n4Eup1jNsI_OyCJzLEKiGW0-ThN5UaSwl36HS1GDCDM&signature=8bffe9d58fd5659771048d430ba3c23c13d455373dfea069b1c57e5d4a2b9420",
+        "titulo": "Ya vastaa",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "A",
+        "fecha": "2026-03-11",
+        "lugar": "Jnjjj"
+      },
+      {
+        "id": "8",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=0ayK0j&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjBheUswaiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.zD-Mz2LTdz-qTkXiVLCmetOyAtsp8MrkB4iBlMrEbhU&signature=c5c6873dc54b555212da07298a480ae4547ed793093ff50f772b4f2679e0dd0a",
+        "titulo": "Jaze god",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Si",
+        "fecha": "2026-03-12",
+        "lugar": "No jala nomas esta madre"
+      },
+      {
+        "id": "9",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=xv1Ab5&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Inh2MUFiNSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.5AX5sysvI-OJ2l_ZKrW9Yl8ksM3ymvIbDTUm92MGC58&signature=b78a98f145ec37f668dbfc3117ba72007e9f3424fbf4129ad9eea2630e052ef8",
+        "titulo": "ahaha",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Hajab",
+        "fecha": "2026-03-13",
+        "lugar": "Habs"
+      },
+      {
+        "id": "10",
+        "photo_url": "https://storage.tally.so/private/1000087041.jpg?id=27yp9j&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjI3eXA5aiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.KKoPVsuReiAXQvpkycYpI1KAQf2fEAkYgGIveI6HI-o&signature=4fb5d61fd609c279c6c90ba6fb2a9def9033ab80e4816ff8af0eb6cacb60b35d",
+        "titulo": "Jajs",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Ajsnsj",
+        "fecha": "2026-03-14",
+        "lugar": "Jajsj"
+      }
+    ]
+  },
+  "trivia": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "¿Qué tanto recuerdas de nosotros?"
+    },
+    "preguntas": [
+      {
+        "pregunta": "A",
+        "opciones": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "Ab",
+        "opciones": [
+          "Ahha",
+          "Haba",
+          "Ahah",
+          "Jabs"
+        ],
+        "correcta": 2
+      },
+      {
+        "pregunta": "Jabab",
+        "opciones": [
+          "Bsbs",
+          "Jaba",
+          "Haha",
+          "Jahs"
+        ],
+        "correcta": 3
+      },
+      {
+        "pregunta": "Nana\nB\n",
+        "opciones": [
+          "Baba",
+          "Jaja",
+          "Jj",
+          "Jaja"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "Jabsbaba\n",
+        "opciones": [
+          "Nsns",
+          "Jaja",
+          "Bab",
+          "Bab"
+        ],
+        "correcta": 2
+      }
+    ]
+  },
+  "tarjetas": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Simon",
+        "contenido": "Aver si jala ww",
+        "imagen": "https://storage.tally.so/private/IMG-20260320-WA0043.jpeg?id=vK1l9v&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InZLMWw5diIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDAzODcyM30.NThQ38JAWTRnbdpjyNYUYdye3kZTBDyVIfbySCfkTIw&signature=cdea30eb3d302fc8bc4031029cc04ff92eacdd562de9ef934cf9e8b7722970c9"
+      }
+    ]
+  }
+}
