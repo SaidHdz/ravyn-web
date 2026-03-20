@@ -263,3 +263,55 @@ body {
 .hidden { display: none !important; }
 .fade-transition { transition: opacity 0.3s ease; opacity: 1; }
 .fade-out { opacity: 0; }
+/* ANIMACIONES 
+
+/* Animación de error (Temblor / Shake) */
+@keyframes shakeError {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-8px); }
+    40%, 80% { transform: translateX(8px); }
+}
+
+/* Animación de acierto (Salto / Pop) */
+@keyframes jumpSuccess {
+    0%, 100% { transform: translateY(0) scale(1); }
+    40% { transform: translateY(-10px) scale(1.05); }
+    60% { transform: translateY(-5px) scale(1.02); }
+}
+
+/* Aplicamos las animaciones a las clases que inyecta tu JS */
+.option-btn.incorrect {
+    animation: shakeError 0.4s ease-in-out !important;
+}
+
+.option-btn.correct {
+    animation: jumpSuccess 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    z-index: 10; /* Para que salte por encima de los demás botones */
+    position: relative;
+}
+
+/* Un toque extra: Opacar las respuestas incorrectas cuando ya se eligió una */
+.options-grid.answered .option-btn:not(.correct) {
+    opacity: 0.5;
+    transform: scale(0.95);
+    filter: grayscale(80%);
+}
+
+/* REPRODUCTOR */ 
+#reproductor-flotante {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 320px;
+    z-index: 9999;
+    transition: all 0.3s ease;
+}
+
+body.theme-aesthetic #marco-reproductor {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 10px;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}

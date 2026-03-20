@@ -77,30 +77,13 @@ function unlockSecretMemory() {
 }
 
 // === LÓGICA DE DATOS (FETCH) ===
-async function loadHistoryData() {
-    try {
-        const response = await fetch('data.json');
-        if (!response.ok) throw new Error(`Error de red: ${response.status}`);
-        
-        const data = await response.json();
-        
-        // 1. Cargar el tema dinámicamente desde la carpeta css/
-        if (data.config && data.config.tema) {
-            loadTheme(data.config.tema);
-        }
+function iniciarHistoria(data) {
+    // Inyectar los textos globales
+    document.getElementById('main-title').textContent = data.config.titulo_principal;
+    document.getElementById('main-subtitle').textContent = data.config.subtitulo;
 
-        // 2. Inyectar los textos globales
-        if (data.config) {
-            document.getElementById('main-title').textContent = data.config.titulo_principal;
-            document.getElementById('main-subtitle').textContent = data.config.subtitulo;
-        }
-
-        // 3. Renderizar galería
-        renderGallery(data.memorias);
-        
-    } catch (error) {
-        console.error("Error al cargar data.json:", error);
-    }
+    // Renderizar galería
+    renderGallery(data.memorias);
 }
 
 // === LÓGICA DE LA INTERFAZ ===
@@ -184,10 +167,6 @@ document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && modalOverlay.classList.contains('show-modal')) closeModal();
 });
 
-// === INICIO DE LA APLICACIÓN ===
-document.addEventListener('DOMContentLoaded', () => {
-    loadHistoryData();
-});
 
 function attachCardEvents(memoriasArray) {
     const cards = document.querySelectorAll('.memory-card');

@@ -1,15 +1,16 @@
-document.addEventListener('DOMContentLoaded', async () => {
-    let datos = {};
-    let cartasRestantes = [];
+let datos = {};
+let cartasRestantes = [];
 
-    // 1. Carga Data-Driven
-    try {
-        const response = await fetch('data_tarjetas.json');
-        datos = await response.json();
-        inicializarApp();
-    } catch (error) {
-        console.error("Error cargando el JSON:", error);
-    }
+function iniciarTarjetas(data) {
+    datos = data; // Guardamos los datos globales para este módulo
+    
+    document.getElementById('mensaje-inicio').textContent = datos.config.mensaje_inicio;
+    
+    const paquete = document.getElementById('paquete-cartas');
+    paquete.addEventListener('click', abrirPaquete);
+
+    document.getElementById('btn-reiniciar').addEventListener('click', reiniciar);
+}
 
     // --- TU FUNCIÓN INTEGRADORA DE TEMAS ---
     function loadTheme(themeName) {
@@ -189,4 +190,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         const paquete = document.getElementById('paquete-cartas');
         paquete.classList.remove('animacion-abrir', 'abriendo-cofre', 'abriendo-caja', 'abriendo-lujo');
     }
-});

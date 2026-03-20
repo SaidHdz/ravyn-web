@@ -19,44 +19,34 @@ const elements = {
 };
 
 // === LÓGICA DE INYECCIÓN DE TEMA (Igual que en tu galería) ===
+// === LÓGICA DE INYECCIÓN DE TEMA ===
 function loadTheme(themeName) {
     const head = document.head;
+    
+    // 1. Limpiar el CSS anterior si existe (Para evitar que se encimen si cambias de tema)
+    const existingLink = document.getElementById('dynamic-theme');
+    if (existingLink) {
+        existingLink.remove();
+    }
+
+    // 2. Crear y conectar el nuevo CSS
     const link = document.createElement('link');
+    link.id = 'dynamic-theme';
     link.rel = 'stylesheet';
     
-    // Manejo de la excepción del doble .css de tu archivo de Minecraft
-    if (themeName === 'minecraft') {
-        link.href = `css/theme-minecraft.css.css`;
-    } else {
-        link.href = `css/theme-${themeName}.css`; 
-    }
+    // Ahora busca el archivo normal, ej: css/theme-minecraft.css
+    link.href = `css/theme-${themeName}.css`; 
     
     head.appendChild(link);
     document.body.className = `theme-${themeName}`;
 }
 
 // === CARGA DE DATOS ASÍNCRONA ===
-async function fetchTriviaData() {
-  try {
-    elements.introMessage.textContent = "Cargando recuerdos...";
-    const response = await fetch('data2.json');
-    if (!response.ok) throw new Error(`Error HTTP: ${response.status}`);
-    
-    const data = await response.json();
+function iniciarTrivia(data) {
     triviaConfig = data.config;
     triviaQuestions = data.preguntas;
     
-    // Inyectar el CSS dinámicamente desde la carpeta css/
-    if (triviaConfig && triviaConfig.tema) {
-        loadTheme(triviaConfig.tema);
-    }
-
     elements.introMessage.textContent = triviaConfig.mensaje_inicio;
-    
-  } catch (error) {
-    console.error("Error al cargar la trivia:", error);
-    elements.introMessage.textContent = "Error al cargar los datos.";
-  }
 }
 
 // === LÓGICA DE LA TRIVIA ===
@@ -140,5 +130,3 @@ function showResults() {
 elements.startBtn.addEventListener('click', startGame);
 elements.restartBtn.addEventListener('click', startGame);
 
-// Iniciar fetch al cargar
-document.addEventListener('DOMContentLoaded', fetchTriviaData);

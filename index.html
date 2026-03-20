@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ravyn - Tu Experiencia</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,7 +26,6 @@
 
         /* Rescate del CSS inline que tenías en trivia.html */
         .fondo-trivia {
-            background-color: #050505; 
             color: white; 
             font-family: sans-serif; 
             display: flex; 
@@ -112,10 +111,15 @@
     </section>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> 
+    <script src="reproductor.js"></script>
 
     <script src="core.js"></script> <script src="app.js"></script>
     <script src="trivia.js"></script>
     <script src="tarjetas.js"></script>
-
+    <div id="reproductor-flotante" class="oculto">
+        <div id="marco-reproductor">
+            <div id="reproductor-contenedor"></div>
+        </div>
+    </div>
 </body>
 </html>
