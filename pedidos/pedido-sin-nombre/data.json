@@ -1,0 +1,16 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "cute-soft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Caleb gay",
+        "contenido": "Ponte a trabajar calep",
+        "imagen": "https://storage.tally.so/private/IMG-20260320-WA0050.jpg?id=Rk6Kxp&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlJrNkt4cCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0OTI4NX0.QUp0KH6q7Gy-PZc7P4mWhiS2LCWMFcfxezCSaRAa7hc&signature=78b81b3fa828581025b0f1c7d3ca3c5240a1775180f7b82224ad908e5e57ddb7"
+      }
+    ]
+  }
+}
