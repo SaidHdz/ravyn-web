@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Ravyn - Cartas Deslizables</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=VT323&family=Varela+Round&family=Quicksand:wght@300;500;700&family=Inter:wght@300;400;500&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="estilos_tarjetas.css">
+</head>
+<body>
+    <main id="app-container">
+        <section id="escena-sobre" class="escena activa">
+            <h1 id="mensaje-inicio">Cargando...</h1>
+            <div id="paquete-cartas" class="paquete">
+                <div class="destello"></div>
+                </div>
+        </section>
+
+        <section id="escena-cartas" class="escena oculta">
+            <div id="stack-container"></div>
+        </section>
+
+        <section id="escena-final" class="escena oculta">
+            <h2 id="mensaje-final" style="color: white; font-family: sans-serif; margin-bottom: 20px;">Has leído todas las cartas</h2>
+            <button id="btn-reiniciar">Volver a leer</button>
+        </section>
+    </main>
+
+    <script src="tarjetas.js"></script>
+</body>
+</html>

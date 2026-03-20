@@ -1,0 +1,58 @@
+{
+  "config": {
+    "tema": "minecraft", 
+    "mensaje_inicio": "¿Qué tanto recuerdas de nuestra historia? Ponte a prueba con estos recuerdos."
+  },
+  "preguntas": [
+    {
+      "pregunta": "¿En qué lugar fue nuestro 'Spawn inicial' donde cruzamos ese primer mensaje?",
+      "opciones": [
+        "WhatsApp",
+        "Messenger",
+        "Instagram",
+        "En el Tec"
+      ],
+      "correcta": 1
+    },
+    {
+      "pregunta": "¿Qué accidente ocurrió en nuestra primera cita real en Tony's Pizza?",
+      "opciones": [
+        "Se nos cayó la pizza",
+        "Olvidamos la cartera",
+        "Tiraste un vaso de agua",
+        "Nos equivocamos de mesa"
+      ],
+      "correcta": 2
+    },
+    {
+      "pregunta": "¿A dónde fue nuestro primer viaje juntos donde nos perdimos buscando el hotel?",
+      "opciones": [
+        "Baja California",
+        "Cancún",
+        "Playa del Carmen",
+        "Acapulco"
+      ],
+      "correcta": 2
+    },
+    {
+      "pregunta": "¿Qué interrumpió nuestro pícnic en el Parque Central?",
+      "opciones": [
+        "Empezó a llover",
+        "Se nos olvidó la comida",
+        "Un perro nos robó un sándwich",
+        "La manta se llenó de hormigas"
+      ],
+      "correcta": 3
+    },
+    {
+      "pregunta": "En nuestra escapada a la playa (Baja California), ¿quién se quemó la espalda por quedarse dormida bajo el sol?",
+      "opciones": [
+        "Fui yo",
+        "Fuiste tú",
+        "Ninguno, usamos bloqueador",
+        "Solo nos quemamos los pies"
+      ],
+      "correcta": 1
+    }
+  ]
+}

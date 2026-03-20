@@ -1,0 +1,99 @@
+{
+    "config": {
+        "tema": "aesthetic", 
+        "titulo_principal": "NUESTRA HISTORIA",
+        "subtitulo": "Capítulo 1: Donde todo comenzó"
+    },
+    "memorias": [
+        {
+            "id": "1",
+            "photo_url": "https://images.unsplash.com/photo-1518199266791-5375a83164ba?w=600",
+            "titulo": "Nuestro primer viaje",
+            "descripcion_corta": "Ese fin de semana fue increíble...",
+            "texto_largo": "Recuerdo cómo nos perdimos buscando el hotel...",
+            "fecha": "15 Oct, 2023",
+            "lugar": "Playa del Carmen"
+        },
+        {
+            "id": "2",
+            "photo_url": "https://images.unsplash.com/photo-1555448248-2571daf6344b?w=600",
+            "titulo": "Cena de aniversario",
+            "descripcion_corta": "Un año entero juntos.",
+            "texto_largo": "La comida estaba deliciosa, pero lo mejor fue la sorpresa que preparaste. Aún no me creo que hayas conseguido reservar en este lugar tan rápido.",
+            "fecha": "20 Feb, 2024",
+            "lugar": "Restaurante Lumière"
+        },
+        {
+            "id": "3",
+            "photo_url": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600",
+            "titulo": "Tarde de películas",
+            "descripcion_corta": "Pizza y películas viejas, perfecto.",
+            "texto_largo": "No hicimos nada especial, solo pedir pizza y ver películas viejas, pero es uno de mis recuerdos favoritos. La simplicidad de estar juntos en casa no la cambio por nada.",
+            "fecha": "10 Mar, 2024",
+            "lugar": "Nuestra Casa"
+        },
+        {
+            "id": "4",
+            "photo_url": "https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600",
+            "titulo": "El Spawn inicial",
+            "descripcion_corta": "Donde todo comenzó...",
+            "texto_largo": "Este fue el mensaje con el que todo comenzó, después de habernos visto en el tec me hablaste, algo bien raro, quien diría a todo lo que nos llevaría a vivir ese mensaje.",
+            "fecha": "20 Nov, 2023",
+            "lugar": "Messenger"
+        },
+        {
+            "id": "5",
+            "photo_url": "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=600",
+            "titulo": "Pícnic en el parque",
+            "descripcion_corta": "El sol y buena compañía.",
+            "texto_largo": "Llevamos esa manta de cuadros y compramos sándwiches. Aunque se llenó de hormigas, nos reímos muchísimo y el clima estuvo perfecto para hablar horas.",
+            "fecha": "5 Abr, 2024",
+            "lugar": "Parque Central"
+        },
+        {
+            "id": "6",
+            "photo_url": "https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=600",
+            "titulo": "Concierto increíble",
+            "descripcion_corta": "Música, saltos y sudor.",
+            "texto_largo": "¡Qué locura de noche! La banda tocó nuestra canción favorita y la energía del público era eléctrica. No me lo pude creer cuando conseguimos pases para el meet & greet.",
+            "fecha": "12 May, 2024",
+            "lugar": "Arena Ciudad"
+        },
+        {
+            "id": "7",
+            "photo_url": "https://images.unsplash.com/photo-1513297800832-a3ed1a3c5095?w=600",
+            "titulo": "Cena de Navidad",
+            "descripcion_corta": "El regalo perfecto.",
+            "texto_largo": "Estuvimos decorando el árbol todo el día con ese disco de villancicos viejos de fondo. La cena fue deliciosa y me encantó la cara que pusiste cuando abriste tu regalo.",
+            "fecha": "24 Dic, 2023",
+            "lugar": "Casa Natal"
+        },
+        {
+            "id": "8",
+            "photo_url": "https://images.unsplash.com/photo-1534073828943-f801091bb18c?w=600",
+            "titulo": "Primer café",
+            "descripcion_corta": "El inicio de la historia.",
+            "texto_largo": "Esa tarde estaba lloviendo, pero nos quedamos atrapados en ese café pequeño. No paramos de hablar y nos dimos cuenta de que teníamos tanto en común.",
+            "fecha": "1 Oct, 2023",
+            "lugar": "La Taza Pixelada"
+        },
+        {
+            "id": "9",
+            "photo_url": "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600",
+            "titulo": "Escapada a la playa",
+            "descripcion_corta": "Arena y mar.",
+            "texto_largo": "Recuerdo que te quedaste dormida bajo el sol y te quemaste mucho la espalda, pero no nos importó porque pasamos el día nadando y comiendo mariscos frescos.",
+            "fecha": "18 Abr, 2024",
+            "lugar": "Baja California"
+        },
+        {
+            "id": "10",
+            "photo_url": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=600",
+            "titulo": "Nuestra primera pizza",
+            "descripcion_corta": "Estábamos nerviosos...",
+            "texto_largo": "Esa fue nuestra primera cita 'real' en un restaurante. Me acuerdo de que tiraste un vaso de agua por accidente y yo intenté ocultar mis nervios contando un chiste tonto.",
+            "fecha": "10 Oct, 2023",
+            "lugar": "Tony's Pizza"
+        }
+    ]
+}
