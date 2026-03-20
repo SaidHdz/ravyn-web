@@ -1,0 +1,16 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "aesthetic",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "KNznz",
+        "contenido": "Nnnnn",
+        "imagen": "https://storage.tally.so/private/IMG-20260320-WA0066.jpg?id=G54NPL&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ikc1NE5QTCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0ODY1NX0.1gaq1Gi3IO9czbLJFBVLXax9KQpjudwX7bTPSSy4iSc&signature=41c52bf8769bc0f2bf9c34363fc79ea0f11bc19aaaf7e665e24df0b74f64c9e9"
+      }
+    ]
+  }
+}
