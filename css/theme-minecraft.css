@@ -1,4 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+html, body {
+    overflow-x: hidden; /* Prohibido salirse de la pantalla */
+    width: 100%;
+}
 :root {
     /* --- VARIABLES DE TEMA: MINECRAFT --- */
     --mc-bg-page: #111;
@@ -9,9 +16,6 @@
     --mc-text-main: #ffffff;
     --mc-text-green: #3adb3a;
     --mc-text-gray: #a0a0a0;
-}
-*, *:before, *:after {
-    box-sizing: inherit;
 }
 /* Ajustes de respiración para móvil */
 @media (max-width: 600px) {
@@ -229,7 +233,11 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 .modal-content {
-    position: relative; max-width: 500px; width: 100%; max-height: 90vh; overflow-y: auto;
+    position: relative; 
+    max-width: 500px; 
+    width: calc(100% - 40px); /* DEJA 20px DE MARGEN OBLIGATORIO A CADA LADO */
+    margin: 0 auto; /* LO CENTRA A LA FUERZA */
+    max-height: 90vh; overflow-y: auto;
     background-color: var(--mc-card-bg); border: var(--mc-border-width) solid var(--mc-border-color);
     outline: 2px solid #3a3a3a; outline-offset: -6px;
     box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05), 10px 10px 0 #000;
@@ -332,6 +340,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
     bottom: 20px;
     right: 20px;
     width: 320px;
+    /* MAGIA PARA MÓVILES: Ancho máximo = toda la pantalla menos 40px de márgenes */
+    max-width: calc(100vw - 40px); 
     z-index: 9999;
     transition: all 0.3s ease;
 }

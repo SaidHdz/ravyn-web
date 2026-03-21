@@ -2,7 +2,11 @@
    RAVYN THEME: AESTHETIC DARK (SPOTIFY VIBE)
    ========================================= */
 *, *:before, *:after {
-    box-sizing: inherit;
+    box-sizing: border-box;
+}
+html, body {
+    overflow-x: hidden; /* Prohibido salirse de la pantalla */
+    width: 100%;
 }
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Montserrat:wght@700&display=swap');
 
@@ -178,18 +182,16 @@ body {
 }
 
 .modal-content {
-    /* TU DISEÑO */
     background: #111;
     border: 1px solid var(--glass-border);
     border-radius: 35px;
     padding: 40px;
     max-width: 550px;
-    width: 100%;
+    width: calc(100% - 40px); /* EL CAMBIO */
+    margin: 0 auto; /* EL CAMBIO */
     max-height: 90vh;
-    overflow-y: auto; /* Para que haga scroll si el texto es muy largo */
+    overflow-y: auto; 
     box-shadow: 0 0 100px rgba(0,0,0,1);
-    
-    /* ANIMACIÓN DE ENTRADA (Efecto premium flotante) */
     transform: translateY(30px) scale(0.95);
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
@@ -328,6 +330,8 @@ body {
     bottom: 20px;
     right: 20px;
     width: 320px;
+    /* MAGIA PARA MÓVILES: Ancho máximo = toda la pantalla menos 40px de márgenes */
+    max-width: calc(100vw - 40px); 
     z-index: 9999;
     transition: all 0.3s ease;
 }
