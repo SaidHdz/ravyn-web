@@ -1,0 +1,203 @@
+{
+  "nuestra_historia": {
+    "config": {
+      "tema": "neo-japan",
+      "titulo_principal": "NUESTRA HISTORIA",
+      "subtitulo": "Nadie",
+      "cancion": "https://open.spotify.com/intl-es/track/3yJ8buQlPzQtHyCicOGDJ0?si=77404a4654ee4c69"
+    },
+    "memorias": [
+      {
+        "id": "1",
+        "photo_url": "https://storage.tally.so/private/a4.jpg?id=Okez0p&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ik9rZXowcCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.Gb_hALGQVKAVcrKKFIVZEVlfGzavwZhqJvKc-ySfizE&signature=bc653f997c6a04305224b448136466e41377e3d484a2c02d4fe7183fdb7bf215",
+        "titulo": "El neskui",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Ese neskui lo quiero mucho",
+        "fecha": "2026-03-01",
+        "lugar": "aqui"
+      },
+      {
+        "id": "2",
+        "photo_url": "https://storage.tally.so/private/a3.jpg?id=5MgzLP&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVNZ3pMUCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.X2Ky8k0uA_QOcBTt2q5d6RAkvsgieCZ6LD6FlUrzhPU&signature=c97074f0d43013932c07eea66239134e61af703ed0ba4d129b1df40b4dbf9592",
+        "titulo": "DTMF",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Me gusta mucho ese album",
+        "fecha": "2026-03-07",
+        "lugar": "mi casa"
+      },
+      {
+        "id": "3",
+        "photo_url": "https://storage.tally.so/private/1000083077.jpg?id=8MgK8Y&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhNZ0s4WSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.5CHsssT80Q6eu7GJZEu_cy4IhKopkv5mhQPGE_f1hYU&signature=565dd4cf43dc018b58100b5c68d16a41300576340feae58b930ad0735eaa3947",
+        "titulo": "ugh",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Es un temazo mi pa que te digo",
+        "fecha": "2026-03-26",
+        "lugar": "aqui"
+      },
+      {
+        "id": "4",
+        "photo_url": "https://storage.tally.so/private/1000083097.jpg?id=VDB0Ml&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZEQjBNbCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.EtXFgPOdwBA9eeddsnuG1-QIBg-dWII8PCIwVdm2RBQ&signature=b2e5affbb2f7a8ce5a11a55189e5770ceceee599837a710f525db538cd8749fd",
+        "titulo": "Pongan data",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "El mejor album de su año",
+        "fecha": "2025-03-14",
+        "lugar": "casa de tainy"
+      },
+      {
+        "id": "5",
+        "photo_url": "https://storage.tally.so/private/1000083111.jpg?id=EMrXbL&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNclhiTCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.A1Vhz3dY-kmQJl7t41Wds4KBk6Aivz-uiquwwm3BuW0&signature=029df6524d42601e7ad1e0678e3efd2b1c77a8e435c799b33559e768d96e610d",
+        "titulo": "Pongan neskui",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Que temazo es este, dime que me necesitas carajo",
+        "fecha": "2026-03-20",
+        "lugar": "mi casa"
+      },
+      {
+        "id": "6",
+        "photo_url": "https://storage.tally.so/private/1000079583.jpg?id=gvx0NK&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imd2eDBOSyIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.V2j9FCPTx2auGf3i6BzOQ90UhwkjkxN61Aa7PP0vZLc&signature=bb83e8bed913e039cf0fc346d9801bd25721ddc99c9427bd930fe253f249366e",
+        "titulo": "Otro temazo",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Te canto al oido cosas que jamas diria a nadie",
+        "fecha": "2026-03-24",
+        "lugar": "mi casa"
+      },
+      {
+        "id": "7",
+        "photo_url": "https://storage.tally.so/private/1000069102.jpg?id=Nd964N&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ik5kOTY0TiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.GOIZZ2xVSLXS4RVZCqtMmgLoNPzVy6XqN7bj8RHLYVM&signature=abd532f0956202be004ecf28fd643d0aac875061a3dd2ff8c1692fc18758bc52",
+        "titulo": "Temazo",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Esa no alvarito\n",
+        "fecha": "2026-03-25",
+        "lugar": "Mi casa"
+      },
+      {
+        "id": "8",
+        "photo_url": "https://storage.tally.so/private/dsds.jpg?id=8MgKjk&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhNZ0tqayIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.0mlyBqPbsUOGbUa8e3YSinsXClfh7vvXyyzKROlq-2Y&signature=34bfba8094003c017eef04d0ae56361e38b95ed6f72daed289dc24480c41013f",
+        "titulo": "Misa",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "Este es un temazo de los goood",
+        "fecha": "2026-03-27",
+        "lugar": "ds"
+      },
+      {
+        "id": "9",
+        "photo_url": "https://storage.tally.so/private/1000074284.jpg?id=bvE7N0&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImJ2RTdOMCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.SFW3vpf4kAvsUAaQzOz2ujT69cS4122u0iqmZXGgu6g&signature=833b1811245112642a0036d5d6444aa2fdf39d4f7303837cba4505131fa341cf",
+        "titulo": "Errores",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "SEEE QUE TIENES TUS ERRORES YO TAMBIEN TENGO LOS MIOS",
+        "fecha": "2026-03-19",
+        "lugar": "Mi casa"
+      },
+      {
+        "id": "10",
+        "photo_url": "https://storage.tally.so/private/1000075417.jpg?id=EMrXvA&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkVNclh2QSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.M4miyTZ2mfRxzsFMh8Nt03R9iqvb04ysYUO8-Dg25M0&signature=b2425e93f17d659061cb46ca70e9a4b5b42aaa0a172a1fcd8b30bc9c054e822b",
+        "titulo": "OTRO TEMON",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "BABYSITA NO ME OLVIDES",
+        "fecha": "2026-03-27",
+        "lugar": "casa"
+      }
+    ]
+  },
+  "trivia": {
+    "config": {
+      "tema": "neo-japan",
+      "mensaje_inicio": "¿Qué tanto recuerdas de nosotros?"
+    },
+    "preguntas": [
+      {
+        "pregunta": "Mi artista favorito??",
+        "opciones": [
+          "Alvaro",
+          "nsqk",
+          "kyotto",
+          "jhayco"
+        ],
+        "correcta": 2
+      },
+      {
+        "pregunta": "Comida favorita",
+        "opciones": [
+          "Espagueti",
+          "Coditos con crema",
+          "Pollo loco",
+          "Nada"
+        ],
+        "correcta": 1
+      },
+      {
+        "pregunta": "Mi anime favorito",
+        "opciones": [
+          "Kengan Ashura",
+          "One Piece",
+          "Dragon ball",
+          "Naruto"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "Album favorito de alvaro",
+        "opciones": [
+          "Felicilandia",
+          "Sayonara",
+          "Ninguno",
+          "Diaz Antes"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "Cancion favorita de Data",
+        "opciones": [
+          "Fantasma",
+          "PARANORMAL",
+          "Ninguna",
+          "Mojabi Ghost"
+        ],
+        "correcta": 1
+      }
+    ]
+  },
+  "tarjetas": {
+    "config": {
+      "tema": "neo-japan",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "El mene",
+        "contenido": "Mene pq escribiste eso de mi en tu cancion",
+        "imagen": "https://storage.tally.so/private/1000083124.jpg?id=16glB1&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2Z2xCMSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.DlYpbgubx9Nq6fzyNmMO5dfhN-ATwgwkfmbYzcXYEss&signature=63308b1a72bcfaa80e1ac1b772b6d112d4ff42e247639fc497ce3d8c649a151c"
+      },
+      {
+        "id": 2,
+        "titulo": "Diavlo",
+        "contenido": "El diavlillo loco",
+        "imagen": "https://storage.tally.so/private/Captura-de-pantalla-2026-02-01-171303.png?id=yzp6GX&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Inl6cDZHWCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.efp0y0gfUPnKhQEChclllBnZhMMw9NTfZQhwYXJQghA&signature=da63cf045ade862c6ea045324a8f4560178c1c7a77595156b61947d81e0add2b"
+      },
+      {
+        "id": 3,
+        "titulo": "dtmf de nuevo",
+        "contenido": "Que buen album cawn",
+        "imagen": "https://storage.tally.so/private/a3.jpg?id=VDB0dy&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZEQjBkeSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.wCBy39pmeqPPdkMPtVvHoB8WY2PAbI489NSYZ4w86Y0&signature=acacb920902bffeda82b7f60f5d4f9e9255f8e86c706382bd9f9a3c0c30d0528"
+      }
+    ]
+  },
+  "contador": {
+    "config": {
+      "tema": "neo-japan"
+    },
+    "titulo": "Tiempo sin ti",
+    "mensaje": "Esto llevamos separados",
+    "fecha": "2026-01-16"
+  },
+  "evasivo": {
+    "pregunta": "Volvemos?",
+    "config": {
+      "tema": "neo-japan"
+    },
+    "texto_si": "Si, te extraño",
+    "texto_no": "no, te odio",
+    "mensaje_exito": "JEJE ya sabia la respuesta"
+  }
+}
