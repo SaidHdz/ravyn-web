@@ -1,67 +1,40 @@
 // core.js - El Director de Orquesta de Ravyn
 
-document.addEventListener('DOMContentLoaded', async () => {
+ddocument.addEventListener('DOMContentLoaded', async () => {
+    // 1. Extraer el cliente de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const cliente = urlParams.get('cliente');
+
+    console.log("🔍 Cliente detectado en URL:", cliente);
+
+    // 2. Definir la ruta. 
+    // Si no hay cliente, buscamos un 'data.json' de ejemplo en la raíz.
+    // Si hay cliente, entramos a la carpeta pedidos/nombre-del-cliente/data.json
+    const rutaJson = cliente ? `./pedidos/${cliente}/data.json` : './data.json';
+
+    console.log("📂 Intentando hacer fetch a:", rutaJson);
+
     try {
-        // 1. Buscamos si hay un cliente en la URL (ej: ravyn.com/?cliente=juan-maria)
-        const parametros = new URLSearchParams(window.location.search);
-        const cliente = parametros.get('cliente');
-        const rutaJson = cliente ? `pedidos/${cliente}/data.json` : 'data.json'; 
-
-        console.log("Intentando cargar:", rutaJson);
-
-        // 2. Descargamos el gran JSON unificado UNA SOLA VEZ
         const response = await fetch(rutaJson);
-        if (!response.ok) throw new Error(`Error cargando los datos del cliente: ${response.status}`);
         
+        if (!response.ok) {
+            throw new Error(`No se encontró el archivo en: ${rutaJson} (Error ${response.status})`);
+        }
+
         const dataCompleta = await response.json();
+        console.log("✅ Datos cargados con éxito:", dataCompleta);
 
-        // 3. Cargar el tema global
-        // Buscamos el tema en el primer módulo que encontremos
-        const temaGlobal = dataCompleta.nuestra_historia?.config?.tema || 
-                           dataCompleta.trivia?.config?.tema || 
-                           dataCompleta.tarjetas?.config?.tema || 
-                           "aesthetic"; 
-                           
-        cargarTemaGlobal(temaGlobal);
-        // INICIAR REPRODUCTOR GLOBAL
-        // Busca la canción en la config general o donde la hayas mapeado en n8n
-        const cancionURL = dataCompleta.nuestra_historia?.config?.cancion; 
-        
-        if (cancionURL && typeof iniciarReproductor === 'function') {
-            iniciarReproductor(cancionURL);
-        }
-
-        // ... (resto de tus ifs para encender los módulos) ...
-        // 4. ENCENDER MÓDULOS CONDICIONALMENTE
-        
-        // Módulo: Nuestra Historia
-        if (dataCompleta.nuestra_historia) {
-            document.getElementById('modulo-historia').classList.remove('oculto');
-            // Le pasamos solo su pedacito de datos a la función inicializadora
-            if (typeof iniciarHistoria === 'function') {
-                iniciarHistoria(dataCompleta.nuestra_historia);
-            }
-        }
-
-        // Módulo: Trivia
-        if (dataCompleta.trivia) {
-            document.getElementById('modulo-trivia').classList.remove('oculto');
-            if (typeof iniciarTrivia === 'function') {
-                iniciarTrivia(dataCompleta.trivia);
-            }
-        }
-
-        // Módulo: Tarjetas
-        if (dataCompleta.tarjetas) {
-            document.getElementById('modulo-tarjetas').classList.remove('oculto');
-            if (typeof iniciarTarjetas === 'function') {
-                iniciarTarjetas(dataCompleta.tarjetas);
-            }
-        }
+        // --- Aquí sigue tu lógica de cargarTemaGlobal e iniciar los módulos ---
+        ejecutarModulos(dataCompleta);
 
     } catch (error) {
-        console.error("Error crítico iniciando Ravyn:", error);
-        document.body.innerHTML = `<h2 style="color:white; text-align:center; margin-top:20vh;">Ups, no pudimos cargar esta experiencia. Verifica el enlace.</h2>`;
+        console.error("❌ Error crítico:", error);
+        document.body.innerHTML = `
+            <div style="color:white; text-align:center; margin-top:20vh; font-family: sans-serif;">
+                <h2>Ups, algo salió mal</h2>
+                <p>${error.message}</p>
+                <small>Asegúrate de que la URL sea: tuweb.com/?cliente=${cliente || 'nombre-del-carpeta'}</small>
+            </div>`;
     }
 });
 
