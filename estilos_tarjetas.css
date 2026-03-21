@@ -1,7 +1,9 @@
 /* =========================================================
    MÓDULO: CARTAS DESLIZABLES (SWIPE) - FULL ACTUALIZACIÓN
    ========================================================= */
-
+*, *:before, *:after {
+    box-sizing: inherit;
+}
 /* --- LAYOUT BASE Y ESCENAS --- */
 body {
     margin: 0;
@@ -207,6 +209,7 @@ body {
 .carta {
     position: absolute; top: 0; left: 0; width: 100%; height: 100%;
     will-change: transform; touch-action: none; 
+    touch-action: pan-y !important;
     filter: drop-shadow(0 15px 15px rgba(0,0,0,0.2));
 }
 .carta-inner {

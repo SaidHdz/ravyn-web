@@ -132,13 +132,14 @@ function iniciarTarjetas(data) {
     function hacerDeslizable(carta) {
     let isDragging = false;
     let startX = 0;
-    let startY = 0; // Añadimos rastro vertical
+    let startY = 0; // Guardamos dónde empezó el dedo en el eje Y
 
     carta.addEventListener('pointerdown', (e) => {
         isDragging = true;
         startX = e.clientX;
-        startY = e.clientY;
+        startY = e.clientY; // Capturamos la posición vertical
         carta.style.transition = 'none'; 
+        carta.setPointerCapture(e.pointerId);
     });
 
     carta.addEventListener('pointermove', (e) => {
@@ -147,16 +148,42 @@ function iniciarTarjetas(data) {
         let diffX = e.clientX - startX;
         let diffY = e.clientY - startY;
 
-        // Si el usuario se mueve más hacia abajo que hacia los lados, 
-        // cancelamos el drag de la carta para dejarlo scrollear la web.
-        if (Math.abs(queryY) > Math.abs(diffX)) {
-            isDragging = false;
-            return;
+        // TICS HACK: Si el movimiento es más vertical que horizontal,
+        // significa que el usuario está haciendo SCROLL, no swipeando la carta.
+        if (Math.abs(diffY) > Math.abs(diffX)) {
+            return; // Cancelamos la rotación visual de la carta
         }
 
         const rotacion = diffX * 0.05; 
         carta.style.transform = `translateX(${diffX}px) rotate(${rotacion}deg)`;
     });
+
+    const handlePointerUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        carta.style.transition = 'transform 0.4s ease-out'; 
+
+        const limiteDescarte = window.innerWidth * 0.25; 
+
+        if (Math.abs(e.clientX - startX) > limiteDescarte) {
+            // El swipe fue exitoso
+            const direccion = (e.clientX - startX) > 0 ? window.innerWidth : -window.innerWidth;
+            carta.style.transform = `translateX(${direccion}px) rotate(${(e.clientX - startX) * 0.1}deg)`;
+            
+            setTimeout(() => {
+                carta.remove();
+                cartasRestantes.pop();
+                verificarFin();
+            }, 400); 
+        } else {
+            // No alcanzó el límite, regresa al centro
+            carta.style.transform = `translateX(0px) rotate(0deg)`;
+        }
+    };
+
+    carta.addEventListener('pointerup', handlePointerUp);
+    carta.addEventListener('pointercancel', handlePointerUp);
+}
 
         const handlePointerUp = (e) => {
             if (!isDragging) return;
