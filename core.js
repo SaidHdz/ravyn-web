@@ -5,9 +5,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         // 1. Buscamos si hay un cliente en la URL (ej: ravyn.com/?cliente=juan-maria)
         const parametros = new URLSearchParams(window.location.search);
         const cliente = parametros.get('cliente');
-        
-        // Si hay cliente, buscamos su carpeta. Si no, cargamos el data.json de prueba/demo.
-        const rutaJson = cliente ? `pedidos/${cliente}/data.json` : 'data.json';
+        const rutaJson = cliente ? `pedidos/${cliente}/data.json` : 'data.json'; 
+
+        console.log("Intentando cargar:", rutaJson);
 
         // 2. Descargamos el gran JSON unificado UNA SOLA VEZ
         const response = await fetch(rutaJson);
