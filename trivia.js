@@ -125,8 +125,3 @@ function showResults() {
 
   elements.finalMessage.textContent = message;
 }
-
-// === INICIO ===
-elements.startBtn.addEventListener('click', startGame);
-elements.restartBtn.addEventListener('click', startGame);
-
