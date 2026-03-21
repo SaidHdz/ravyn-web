@@ -1,0 +1,36 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Mono feo",
+        "contenido": "Jajajajaj",
+        "imagen": "https://storage.tally.so/private/IMG-20260313-WA0024.jpg?id=rvbo92&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InJ2Ym85MiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NzU4OH0.szf1PcPplP7kaTMfQyDFAsLmd7zsbeXW__WhYv0Gzg4&signature=da78b3ad06cec8b67e34877e08f44ed8737afa4205175ee41e6bf07f074843d9"
+      },
+      {
+        "id": 2,
+        "titulo": "Nose",
+        "contenido": "Kajshakdhajsjajsbsb",
+        "imagen": "https://storage.tally.so/private/20251225_180205.jpg?id=JMZOEK&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IkpNWk9FSyIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NzU4OH0.oiCWPtnSKbxIozP_HvsYwxGF6MOdY8KfU1b1NAYYmUg&signature=fe9d0f6e60275c37eb6cd9f390a16e60a7a9fd4a42f9e021667e35297167a26e"
+      },
+      {
+        "id": 3,
+        "titulo": "🗣🔥🔥🔥",
+        "contenido": "Angel es un chango",
+        "imagen": "https://storage.tally.so/private/IMG-20260317-WA0004.jpg?id=rvbo82&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InJ2Ym84MiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NzU4OH0.qBlEQFtiMl_DJH_JYrjKpeAng9TcK5oN5ZuXQJMDt88&signature=2368faa112bfc9879b299b0cd07f0e1882aad2920bffd214d6f0a74f555344f1"
+      }
+    ]
+  },
+  "contador": {
+    "config": {
+      "tema": "minecraft"
+    },
+    "titulo": "Si",
+    "mensaje": "Sk",
+    "fecha": "2026-03-19"
+  }
+}
