@@ -2,7 +2,11 @@
    MÓDULO: CARTAS DESLIZABLES (SWIPE) - FULL ACTUALIZACIÓN
    ========================================================= */
 *, *:before, *:after {
-    box-sizing: inherit;
+    box-sizing: border-box;
+}
+html, body {
+    overflow-x: hidden; /* Prohibido salirse de la pantalla */
+    width: 100%;
 }
 /* --- LAYOUT BASE Y ESCENAS --- */
 body {

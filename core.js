@@ -33,6 +33,8 @@ function ejecutarModulos(data) {
     // 1. Detectar el tema (buscamos en cualquier módulo que venga en el JSON)
     const tema = data.nuestra_historia?.config?.tema || 
                  data.trivia?.config?.tema || 
+                 data.evasivo?.config?.tema ||
+                 data.contador?.config?.tema ||
                  data.tarjetas?.config?.tema || "aesthetic";
     
     cargarTemaGlobal(tema);
@@ -71,6 +73,11 @@ function ejecutarModulos(data) {
         const mod = document.getElementById('modulo-evasivo');
         if (mod) mod.classList.remove('oculto');
         if (typeof iniciarEvasivo === 'function') iniciarEvasivo(data.evasivo);
+    }
+    if (data.contador) {
+        const mod = document.getElementById('modulo-contador');
+        if (mod) mod.classList.remove('oculto');
+        if (typeof iniciarContador === 'function') iniciarContador(data.contador);
     }
 }
 

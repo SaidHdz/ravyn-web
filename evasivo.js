@@ -1,4 +1,5 @@
 function iniciarEvasivo(data) {
+    // 1. Inyectar textos (Sigue funcionando igual para el div)
     document.getElementById('evasivo-pregunta').textContent = data.pregunta || "¿Quieres ser mi novia?";
     document.getElementById('btn-si').textContent = data.texto_si || "Sí";
     document.getElementById('btn-no').textContent = data.texto_no || "No";
@@ -7,36 +8,74 @@ function iniciarEvasivo(data) {
         document.getElementById('evasivo-mensaje-final').textContent = data.mensaje_exito;
     }
 
-    const btnNo = document.getElementById('btn-no');
+    const recuadroNo = document.getElementById('btn-no'); // Cambiado el nombre de la variable para que sea más claro
     const btnSi = document.getElementById('btn-si');
     const contenedorBotones = document.getElementById('contenedor-botones');
 
-    const moverBoton = (e) => {
-        if (e) e.preventDefault(); 
+    let escalaActual = 1.0; 
+
+    // 2. Lógica para esquivar (Sin cambios en la matemática)
+    const moverRecuadro = (e) => {
+        // En móviles, detenemos el evento para que no intente hacer un "clic" fantasma después del toque
+        if (e && e.type === 'touchstart') e.preventDefault(); 
         
-        // Calculamos el tamaño del área de juego
+        if (escalaActual > 0.25) { 
+            escalaActual -= 0.09; 
+        }
+        recuadroNo.style.transform = `scale(${escalaActual})`;
+
         const areaWidth = contenedorBotones.offsetWidth;
         const areaHeight = contenedorBotones.offsetHeight;
         
-        // Calculamos el tamaño del botón para que no se desborde
-        const btnWidth = btnNo.offsetWidth;
-        const btnHeight = btnNo.offsetHeight;
+        const btnWidth = recuadroNo.offsetWidth * escalaActual; 
+        const btnHeight = recuadroNo.offsetHeight * escalaActual;
 
-        // Coordenadas aleatorias dentro de la caja fuerte
-        const randomX = Math.floor(Math.random() * (areaWidth - btnWidth));
-        const randomY = Math.floor(Math.random() * (areaHeight - btnHeight));
+        const siRect = btnSi.getBoundingClientRect();
+        const containerRect = contenedorBotones.getBoundingClientRect();
+        
+        const siLeft = siRect.left - containerRect.left;
+        const siTop = siRect.top - containerRect.top;
+        const siRight = siLeft + siRect.width;
+        const siBottom = siTop + siRect.height;
 
-        // Rompemos la alineación original (right) y aplicamos las nuevas coordenadas
-        btnNo.style.right = 'auto'; 
-        btnNo.style.left = `${randomX}px`;
-        btnNo.style.top = `${randomY}px`;
+        const margenSeguridad = 15; 
+
+        let randomX, randomY;
+        let empalmado = true;
+        let intentos = 0;
+
+        while (empalmado && intentos < 30) { 
+            randomX = Math.floor(Math.random() * (areaWidth - btnWidth));
+            randomY = Math.floor(Math.random() * (areaHeight - btnHeight));
+
+            const noRight = randomX + btnWidth;
+            const noBottom = randomY + btnHeight;
+
+            if (
+                randomX < siRight + margenSeguridad &&
+                noRight > siLeft - margenSeguridad &&
+                randomY < siBottom + margenSeguridad &&
+                noBottom > siTop - margenSeguridad
+            ) {
+                empalmado = true;
+                intentos++;
+            } else {
+                empalmado = false; 
+            }
+        }
+
+        recuadroNo.style.right = 'auto'; 
+        recuadroNo.style.left = `${randomX}px`;
+        recuadroNo.style.top = `${randomY}px`;
     };
 
-    // Atrapamos cualquier intento de darle clic
-    btnNo.addEventListener('mouseover', moverBoton);
-    btnNo.addEventListener('touchstart', moverBoton, { passive: false });
-    btnNo.addEventListener('click', moverBoton);
+    // 3. Atrapamos eventos (Ahora sobre el div)
+    // Agregamos 'pointerdown' que cubre tanto clic de mouse como toques rápidos en pantalla.
+    recuadroNo.addEventListener('mouseover', moverRecuadro); // Para PC hover
+    recuadroNo.addEventListener('touchstart', moverRecuadro, { passive: false }); // Para Móviles touch
+    recuadroNo.addEventListener('pointerdown', moverRecuadro); // Refuerzo para toques/clics
 
+    // 4. Lógica de victoria (Sigue siendo un botón)
     btnSi.addEventListener('click', () => {
         document.getElementById('evasivo-contenido').classList.add('oculto');
         document.getElementById('evasivo-exito').classList.remove('oculto');
@@ -44,7 +83,6 @@ function iniciarEvasivo(data) {
     });
 }
 
-// (Deja tu función lanzarConfetiEvasivo() exactamente igual abajo de esto)
 function lanzarConfetiEvasivo() {
     const carta = document.getElementById('carta-evasiva');
     for (let i = 0; i < 30; i++) {
