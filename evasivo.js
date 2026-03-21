@@ -10,37 +10,40 @@ function iniciarEvasivo(data) {
 
     const btnNo = document.getElementById('btn-no');
     const btnSi = document.getElementById('btn-si');
-    const contenedorBotones = document.getElementById('contenedor-botones');
 
-    // 2. Lógica para esquivar (Computadora: mouseover | Celular: touchstart)
+    // 2. Lógica para esquivar (Optimizada para PC y Móvil usando toda la pantalla)
     const moverBoton = (e) => {
-        e.preventDefault(); // Evita el clic fantasma en móviles
-        
-        // Obtener dimensiones seguras para moverse
-        const contenedorRect = contenedorBotones.getBoundingClientRect();
-        const btnRect = btnNo.getBoundingClientRect();
-        
-        // Hacemos que pueda salirse del contenedor local y moverse por toda la tarjeta
-        const maxX = 250; 
-        const maxY = 150; 
+        if (e) e.preventDefault(); // Evita clics fantasma
 
-        // Generar coordenadas aleatorias (positivas o negativas)
-        const randomX = Math.floor(Math.random() * maxX) - (maxX / 2);
-        const randomY = Math.floor(Math.random() * maxY) - (maxY / 2);
+        // Cambiamos el botón a fixed para que pueda viajar por toda la pantalla
+        btnNo.style.position = 'fixed';
+        btnNo.style.margin = '0';
+        btnNo.style.transform = 'none'; // Quitamos el transform por si lo tenía
 
-        btnNo.style.transform = `translate(${randomX}px, ${randomY}px)`;
+        // Calculamos el espacio seguro (Tamaño de la pantalla menos el tamaño del botón)
+        // Le restamos 20px extra para que no se pegue a los bordes exactos
+        const anchoSeguro = window.innerWidth - btnNo.offsetWidth - 20;
+        const altoSeguro = window.innerHeight - btnNo.offsetHeight - 20;
+
+        // Generamos coordenadas aleatorias dentro de la pantalla
+        const randomX = Math.floor(Math.random() * anchoSeguro) + 10;
+        const randomY = Math.floor(Math.random() * altoSeguro) + 10;
+
+        // Movemos el botón
+        btnNo.style.left = `${randomX}px`;
+        btnNo.style.top = `${randomY}px`;
     };
 
-    // Eventos para desktop y mobile
-    btnNo.addEventListener('mouseover', moverBoton);
-    btnNo.addEventListener('touchstart', moverBoton, { passive: false });
+    // 3. Atrapamos TODOS los eventos
+    btnNo.addEventListener('mouseover', moverBoton); // Para PC
+    btnNo.addEventListener('touchstart', moverBoton, { passive: false }); // Para Móviles
+    btnNo.addEventListener('click', moverBoton); // MAGIA: Si logras darle clic, huye de todos modos
 
-    // 3. Lógica para cuando dicen "Sí"
+    // 4. Lógica para cuando dicen "Sí"
     btnSi.addEventListener('click', () => {
         document.getElementById('evasivo-contenido').classList.add('oculto');
         document.getElementById('evasivo-exito').classList.remove('oculto');
         
-        // Efecto de confeti casero
         lanzarConfetiEvasivo();
     });
 }
