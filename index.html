@@ -27,9 +27,32 @@
 
     .oculto { display: none !important; }
 
+    /* --- EL SECRETO PARA LA SEPARACIÓN PERFECTA --- */
     .modulo-ravyn {
-        min-height: 100dvh; /* dvh adapta la altura real de tu S22 */
+        min-height: 100dvh; /* dvh adapta la altura real del celular */
         position: relative;
+        width: 100%;
+        padding: 80px 0; /* ESTO ES LA MAGIA: 80px de aire arriba y abajo de cada módulo */
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    /* Evitamos que el módulo de tarjetas duplique la altura de la pantalla */
+    #modulo-tarjetas #app-container {
+        min-height: auto !important;
+        height: 100% !important;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding-bottom: 0 !important;
+    }
+
+    /* Aseguramos que el contenido interno tome el 100% del ancho permitido */
+    .modulo-ravyn > * {
         width: 100%;
     }
 
@@ -37,27 +60,25 @@
        2. RESTRICCIÓN ABSOLUTA DEL MODAL
        ========================================================= */
     .modal-content {
-        width: 90vw !important; /* Siempre el 90% del ancho de tu teléfono */
-        max-width: 450px !important; /* En PC no crecerá a lo loco */
-        max-height: 80dvh !important; /* Nunca tocará los bordes de arriba o abajo */
+        width: 90vw !important; 
+        max-width: 450px !important; 
+        max-height: 80dvh !important; 
         padding: 20px !important;
         margin: auto !important;
-        overflow-y: auto !important; /* Si el texto es larguísimo, solo scrollea por dentro */
+        overflow-y: auto !important; 
         overflow-x: hidden !important;
     }
 
-    /* La foto jamás empujará al texto fuera de la pantalla */
     .modal-image {
         width: 100% !important;
         height: auto !important;
-        max-height: 35dvh !important; /* La foto no pasará del 35% de tu pantalla */
+        max-height: 35dvh !important; 
         object-fit: cover !important; 
         border-radius: 12px !important;
         margin-bottom: 15px !important;
         pointer-events: none;
     }
 
-    /* Ajuste de textos para que quepan perfectos */
     #modal-title { font-size: 1.4rem !important; margin-bottom: 5px !important; }
     #modal-text { font-size: 1rem !important; line-height: 1.4 !important; }
 
@@ -65,13 +86,13 @@
        3. FIX DEL REPRODUCTOR "ATASCADO"
        ========================================================= */
     #reproductor-flotante {
-        transform: translateZ(0); /* Hack de TICs: Fuerza al celular a usar la GPU para dibujarlo */
+        transform: translateZ(0);
         will-change: transform;
     }
 
     @media (max-width: 600px) {
         #reproductor-flotante {
-            width: calc(100vw - 40px) !important; /* Se ajusta a los bordes de tu teléfono */
+            width: calc(100vw - 40px) !important; 
             bottom: 15px !important;
             right: 20px !important;
         }
@@ -154,61 +175,8 @@
         </main>
     </section>
     <section id="modulo-evasivo" class="modulo-ravyn oculto" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <div id="carta-evasiva" class="memory-card" style="text-align: center; padding: 60px 20px; max-width: 700px; width: 90%; min-height: 450px; position: relative; z-index: 10; display: flex; flex-direction: column;">
-            
-            <div id="evasivo-contenido" style="flex-grow: 1; display: flex; flex-direction: column;">
-                <h2 id="evasivo-pregunta" class="card-title" style="font-size: 2.5rem; margin-bottom: 30px;">¿...?</h2>
-                
-                <div id="contenedor-botones" style="position: relative; flex-grow: 1; min-height: 250px; width: 100%;">
-                    <button id="btn-si" class="option-btn" style="position: absolute; left: 15%; top: 20px; width: 130px; font-size: 1.2rem;">Sí</button>
-                    <div id="btn-no" class="option-btn" style="position: absolute; right: 15%; top: 20px; width: 130px; font-size: 1.2rem; transition: all 0.15s ease-out; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none;">No</div>
-                </div>
-            </div>
-
-            <div id="evasivo-exito" class="oculto" style="margin: auto 0;">
-                <h2 class="card-title" style="font-size: 2.5rem; color: #ff4757;">¡Sabía que dirías que sí!</h2>
-                <p id="evasivo-mensaje-final" class="card-description" style="margin-top: 15px; font-size: 1.5rem;">Misión cumplida.</p>
-            </div>
-
-        </div>
     </section>
     <section id="modulo-contador" class="modulo-ravyn oculto" style="display: flex; justify-content: center; align-items: center; min-height: 100vh;">
-        <div class="memory-card" style="text-align: center; padding: 40px 20px; max-width: 600px; width: 90%; position: relative; z-index: 10;">
-            
-            <h2 id="contador-titulo" class="card-title" style="font-size: 2.5rem; margin-bottom: 10px;">Nuestro Tiempo</h2>
-            <p id="contador-mensaje" class="card-description" style="margin-bottom: 30px; font-size: 1.2rem;">Cada segundo cuenta...</p>
-
-            <div style="display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 15px;">
-                <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 12px; min-width: 90px; backdrop-filter: blur(5px);">
-                    <span id="cont-anios" style="font-size: 3rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Años</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 12px; min-width: 90px; backdrop-filter: blur(5px);">
-                    <span id="cont-meses" style="font-size: 3rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Meses</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.15); padding: 15px; border-radius: 12px; min-width: 90px; backdrop-filter: blur(5px);">
-                    <span id="cont-dias" style="font-size: 3rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Días</span>
-                </div>
-            </div>
-
-            <div style="display: flex; justify-content: center; gap: 10px; flex-wrap: wrap;">
-                <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; min-width: 70px;">
-                    <span id="cont-horas" style="font-size: 1.8rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.7rem; text-transform: uppercase;">Horas</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; min-width: 70px;">
-                    <span id="cont-minutos" style="font-size: 1.8rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.7rem; text-transform: uppercase;">Min</span>
-                </div>
-                <div style="background: rgba(0,0,0,0.1); padding: 10px; border-radius: 8px; min-width: 70px;">
-                    <span id="cont-segundos" style="font-size: 1.8rem; font-weight: bold; display: block; line-height: 1;">00</span>
-                    <span style="font-size: 0.7rem; text-transform: uppercase;">Seg</span>
-                </div>
-            </div>
-
-        </div>
     </section>
     <div id="reproductor-flotante" class="oculto">
         <div id="marco-reproductor">
