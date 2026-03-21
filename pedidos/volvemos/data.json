@@ -1,0 +1,8 @@
+{
+  "evasivo": {
+    "pregunta": "Volvemos?",
+    "texto_si": "Si, te extraño",
+    "texto_no": "no, te odio",
+    "mensaje_exito": "Yo sabia que ibamos a volver jeje"
+  }
+}
