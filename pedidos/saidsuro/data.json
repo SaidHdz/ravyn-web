@@ -1,0 +1,16 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Sooo",
+        "contenido": "Ya jala we",
+        "imagen": "https://storage.tally.so/private/20260320_120226.jpg?id=OkeDJM&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ik9rZURKTSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA1MjUxM30.wUNKMzl80Sz1dLpQWaw8mt6hTG0jhYHhOkG-q3302_k&signature=deebaa8b8d9391a30a69ba077a22dbb373ed75de761a4622eafd73ae23c7100d"
+      }
+    ]
+  }
+}
