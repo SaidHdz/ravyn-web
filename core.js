@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const cliente = urlParams.get('cliente');
 
     console.log("🔍 Cliente detectado en URL:", cliente);
-    // Usamos ./ para asegurar que busque relativo a la carpeta actual en GitHub
+    // Usamos ./ para asegurar que busque relativo a la carpeta actual en GitHub Pages
     const rutaJson = cliente ? `./pedidos/${cliente}/data.json` : './data.json';
     console.log("📂 Intentando hacer fetch a:", rutaJson);
 
@@ -14,20 +14,21 @@ document.addEventListener('DOMContentLoaded', async () => {
         const dataCompleta = await response.json();
         console.log("✅ Datos cargados con éxito:", dataCompleta);
 
-        // LANZAMOS LA ORQUESTA
+        // LANZAMOS LA ORQUESTA (Esta es la función que daba error)
         ejecutarModulos(dataCompleta);
 
     } catch (error) {
         console.error("❌ Error crítico:", error);
         document.body.innerHTML = `
-            <div style="color:white;text-align:center;margin-top:20vh;font-family:sans-serif;">
-                <h2>Lo sentimos</h2>
+            <div style="color:white;text-align:center;margin-top:20vh;font-family:sans-serif;padding:20px;">
+                <h2>Lo sentimos, no pudimos cargar la experiencia</h2>
                 <p>${error.message}</p>
+                <p>Verifica que el link sea correcto o intenta más tarde.</p>
             </div>`;
     }
 });
 
-// ESTA ES LA FUNCIÓN QUE TE FALTABA:
+// === FUNCIÓN ORQUESTADORA (Asegúrate de copiarla toda) ===
 function ejecutarModulos(data) {
     // 1. Detectar el tema (buscamos en cualquier módulo que venga en el JSON)
     const tema = data.nuestra_historia?.config?.tema || 
@@ -37,7 +38,10 @@ function ejecutarModulos(data) {
     cargarTemaGlobal(tema);
 
     // 2. Iniciar Música si viene la URL
-    const cancionURL = data.nuestra_historia?.config?.cancion || data.trivia?.config?.cancion;
+    const cancionURL = data.nuestra_historia?.config?.cancion || 
+                       data.trivia?.config?.cancion || 
+                       data.tarjetas?.config?.cancion;
+                       
     if (cancionURL && typeof iniciarReproductor === 'function') {
         iniciarReproductor(cancionURL);
     }
@@ -64,6 +68,7 @@ function ejecutarModulos(data) {
     }
 }
 
+// === CARGADOR DE TEMAS ===
 function cargarTemaGlobal(themeName) {
     const head = document.head;
     const existingLink = document.getElementById('dynamic-theme');
