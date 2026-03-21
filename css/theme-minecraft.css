@@ -1,13 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
 *, *:before, *:after {
     box-sizing: border-box;
 }
+
 html, body {
-    overflow-x: hidden; /* Prohibido salirse de la pantalla */
+    overflow-x: hidden; 
     width: 100%;
 }
+
+/* Colores */
 :root {
-    /* --- VARIABLES DE TEMA: MINECRAFT --- */
     --mc-bg-page: #111;
     --mc-bg-checker: rgba(255, 255, 255, 0.03);
     --mc-card-bg: #2b323c;
@@ -17,54 +20,50 @@ html, body {
     --mc-text-green: #3adb3a;
     --mc-text-gray: #a0a0a0;
 }
-/* Ajustes de respiración para móvil */
+
+/* pARA QUE jale en mi chingadera */
 @media (max-width: 600px) {
     body {
-        padding: 20px 15px; /* Menos padding lateral para ganar ancho */
+        padding: 20px 15px; 
     }
 
     .header-title {
-        font-size: 2.2rem !important; /* Títulos menos invasivos */
+        font-size: 2.2rem !important;
         margin-bottom: 30px;
     }
 
     .gallery-container, .trivia-card, #stack-container {
         width: 100% !important;
-        margin-bottom: 60px; /* Espacio real entre módulos */
+        margin-bottom: 60px; 
     }
 
-    /* Evitar que las cartas sean gigantes y tapen todo */
     #stack-container {
         height: 50vh; 
         max-height: 400px;
     }
 }
 
-/* === CONTROL MAESTRO === */
 body.no-anim * {
     animation: none !important;
     transition: none !important;
 }
 
-/* === ESTILOS GLOBALES & CURSOR === */
+/* CURSOTR */
 body {
     overflow-x: hidden; 
-    /* Cursor personalizado: Mira de disparo (estilo centro de pantalla Minecraft) */
     cursor: crosshair; 
-    /* Si quieres tu propia imagen, usa esto: cursor: url('tu-cursor.png'), auto; */
 }
 
-/* Todos los elementos clickeables deben tener el cursor de mano */
 button, .memory-card, .close-btn, .easter-egg-trigger {
     cursor: pointer; 
 }
 
-/* === FONDO ANIMADO (PARTÍCULAS DE ROMBOS) === */
 @keyframes scrollBackground {
     from { background-position: 0 0, 0 20px, 20px 20px, 20px 0; }
     to { background-position: 40px 40px, 40px 60px, 60px 60px, 60px 40px; }
 }
 
+/* Fondo mamalon */
 .theme-minecraft {
     background-color: var(--mc-bg-page);
     color: var(--mc-text-main);
@@ -79,8 +78,6 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
         linear-gradient(45deg, transparent 75%, var(--mc-bg-checker) 75%),
         linear-gradient(-45deg, transparent 75%, var(--mc-bg-checker) 75%);
     background-size: 40px 40px;
-    
-    /* Animación infinita y lineal para que nunca se note el corte */
     animation: scrollBackground 4s linear infinite;
 }
 
@@ -103,10 +100,10 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
     transition: color 0.2s;
 }
 .easter-egg-trigger:active {
-    color: var(--mc-text-main); /* Brilla al hacerle clic */
+    color: var(--mc-text-main);
 }
 
-/* === GALERÍA === */
+/* Ya estoy hasta la madre */
 .gallery-container {
     display: flex;
     flex-direction: column;
@@ -157,33 +154,31 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
 .image-wrapper {
     width: 100%;
     aspect-ratio: 16/9;
-    /* Fondo gris oscuro base, un poco más oscuro para contraste */
     background-color: #1e242b;
     position: relative;
     overflow: hidden;
     border-bottom: var(--mc-border-width) solid var(--mc-border-color);
-    display: flex; /* Para centrar la silueta opcional */
+    display: flex;
     justify-content: center;
     align-items: center;
 }
 
+/* Efecto de carga */
 .skeleton::after {
     content: "";
     position: absolute;
     top: 0; right: 0; bottom: 0; left: 0;
     
-    /* Un degradado mucho más visible que cruza de lado a lado */
     background-image: linear-gradient(
         90deg, 
         rgba(255, 255, 255, 0) 0%, 
-        rgba(255, 255, 255, 0.08) 20%, /* Brillo aumentado */
-        rgba(255, 255, 255, 0.15) 50%, /* Pico de brillo */
+        rgba(255, 255, 255, 0.08) 20%, 
+        rgba(255, 255, 255, 0.15) 50%, 
         rgba(255, 255, 255, 0.08) 80%,
         rgba(255, 255, 255, 0) 100%
     );
     
     transform: translateX(-100%);
-    /* Un poco más lento para que sea "smooth" */
     animation: premiumShimmer 1.8s infinite linear; 
 }
 
@@ -192,25 +187,23 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
     position: absolute;
     width: 40px; height: 40px;
     background-color: rgba(255,255,255,0.05);
-    /* Simple cuadrado pixelado centrado */
     display: block;
     opacity: 0.8;
 }
 
 @keyframes premiumShimmer {
     0%   { transform: translateX(-100%); }
-    /* Hacemos que la animación tarde más en volver a empezar para mejor UX */
     70%, 100% { transform: translateX(100%); }
 }
 
 .card-image {
     width: 100%; height: 100%;
     object-fit: cover;
-    opacity: 0; /* Arranca invisible */
-    transition: opacity 0.5s ease; /* Fade suave */
+    opacity: 0; 
+    transition: opacity 0.5s ease;
 }
 
-/* === TARJETA SECRETA (EASTER EGG) === */
+/* easter egg que no voy a usar */
 .secret-card {
     border-color: #ffd700;
     outline-color: #b8860b;
@@ -225,26 +218,31 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
 .card-title { font-size: 1.5rem; color: var(--mc-text-green); margin-bottom: 10px; }
 .card-description { opacity: 0.85; font-size: 1.1rem; }
 
-/* === MODAL (Mantenido igual) === */
+/* El pinche modal */
 .modal-overlay {
     position: fixed; top: 0; left: 0; right: 0; bottom: 0;
     background: rgba(0, 0, 0, 0.85); display: flex; justify-content: center; align-items: center;
     z-index: 1000; padding: 20px; opacity: 0; visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
+
+/*Puta cagadaaaa no jala*/
 .modal-content {
     position: relative; 
     max-width: 500px; 
-    width: calc(100% - 40px); /* DEJA 20px DE MARGEN OBLIGATORIO A CADA LADO */
-    margin: 0 auto; /* LO CENTRA A LA FUERZA */
+    width: calc(100% - 40px); 
+    margin: 0 auto; 
     max-height: 90vh; overflow-y: auto;
     background-color: var(--mc-card-bg); border: var(--mc-border-width) solid var(--mc-border-color);
     outline: 2px solid #3a3a3a; outline-offset: -6px;
     box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05), 10px 10px 0 #000;
     padding: 24px; transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
+/*No se como pero ya jala*/
 .modal-overlay.show-modal { opacity: 1; visibility: visible; }
 .modal-overlay.show-modal .modal-content { transform: scale(1); }
+
 .close-btn {
     position: absolute; top: 15px; right: 15px; background: #c6c6c6; border: 4px solid var(--mc-border-color);
     color: #1a1a1a; font-size: 1.5rem; line-height: 1; padding: 2px 8px;
@@ -257,7 +255,7 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
 .pixel-divider { border: 0; border-top: 4px solid var(--mc-border-color); margin: 15px 0; }
 #modal-text { line-height: 1.6; font-size: 1.2rem; }
 
-/* === TRIVIA MODULE: MINECRAFT === */
+/*Trivia*/
 .trivia-card {
     background-color: var(--mc-card-bg);
     border: var(--mc-border-width) solid var(--mc-border-color);
@@ -286,11 +284,11 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
 }
 .option-btn:hover:not(:disabled) {
     background-color: #929292;
-    transform: translateY(-4px); /* Sube un poco al pasar el mouse */
+    transform: translateY(-4px); 
 }
 .option-btn:active:not(:disabled) {
     box-shadow: inset 4px 4px 0 rgba(0,0,0,0.5), inset -4px -4px 0 rgba(255,255,255,0.2);
-    transform: translateY(2px); /* Se hunde como un botón físico */
+    transform: translateY(2px); 
 }
 .option-btn.correct { background-color: var(--mc-text-green) !important; color: #000 !important; text-shadow: none !important; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.6) !important; }
 .option-btn.incorrect { background-color: #ff5555 !important; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.6) !important; }
@@ -300,34 +298,29 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
 .fade-transition { transition: opacity 0.3s ease; opacity: 1; }
 .fade-out { opacity: 0; }
 
-/* ANIMACIONES 
-
-/* Animación de error (Temblor / Shake) */
+/* ANIMACIONES */
 @keyframes shakeError {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-8px); }
     40%, 80% { transform: translateX(8px); }
 }
 
-/* Animación de acierto (Salto / Pop) */
 @keyframes jumpSuccess {
     0%, 100% { transform: translateY(0) scale(1); }
     40% { transform: translateY(-10px) scale(1.05); }
     60% { transform: translateY(-5px) scale(1.02); }
 }
 
-/* Aplicamos las animaciones a las clases que inyecta tu JS */
 .option-btn.incorrect {
     animation: shakeError 0.4s ease-in-out !important;
 }
 
 .option-btn.correct {
     animation: jumpSuccess 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    z-index: 10; /* Para que salte por encima de los demás botones */
+    z-index: 10; 
     position: relative;
 }
 
-/* Un toque extra: Opacar las respuestas incorrectas cuando ya se eligió una */
 .options-grid.answered .option-btn:not(.correct) {
     opacity: 0.5;
     transform: scale(0.95);
@@ -340,7 +333,6 @@ button, .memory-card, .close-btn, .easter-egg-trigger {
     bottom: 20px;
     right: 20px;
     width: 320px;
-    /* MAGIA PARA MÓVILES: Ancho máximo = toda la pantalla menos 40px de márgenes */
     max-width: calc(100vw - 40px); 
     z-index: 9999;
     transition: all 0.3s ease;
@@ -351,5 +343,4 @@ body.theme-minecraft #marco-reproductor {
     padding: 10px;
     border: 4px solid #000;
     box-shadow: inset -4px -4px 0px rgba(0,0,0,0.5), inset 4px 4px 0px rgba(255,255,255,0.8);
-    /* Opcional: una tipografía pixelada para un label si decides ponerle uno */
 }

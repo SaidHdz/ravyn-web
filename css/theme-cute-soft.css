@@ -1,39 +1,41 @@
-/* =========================================
-   SWEET THEME: CUTE / SOFT (SANRIO VIBE) - ACTUALIZADO V2
-   ========================================= */
+/* Tema cute-soft css - Sweet Theme (Vibras Sanrio) V2 */
+
 *, *:before, *:after {
     box-sizing: border-box;
 }
+
 html, body {
-    overflow-x: hidden; /* Prohibido salirse de la pantalla */
+    overflow-x: hidden; /* Que nada rompa el ancho */
     width: 100%;
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&family=Quicksand:wght@300;500;700&display=swap');
-/* Ajustes de respiración para móvil */
+
+/* Para que se vea bien en el cel */
 @media (max-width: 600px) {
     body {
-        padding: 20px 15px; /* Menos padding lateral para ganar ancho */
+        padding: 20px 15px; 
     }
 
     .header-title {
-        font-size: 2.2rem !important; /* Títulos menos invasivos */
+        font-size: 2.2rem !important; 
         margin-bottom: 30px;
     }
 
     .gallery-container, .trivia-card, #stack-container {
         width: 100% !important;
-        margin-bottom: 60px; /* Espacio real entre módulos */
+        margin-bottom: 60px; 
     }
 
-    /* Evitar que las cartas sean gigantes y tapen todo */
+    /* Controlar tamaño de las cartas */
     #stack-container {
         height: 50vh; 
         max-height: 400px;
     }
 }
 
+/* Mis colores y fuentes */
 :root {
-    /* Palette */
     --cute-bg-gradient: linear-gradient(135deg, #FFDDEE 0%, #DDEEFF 100%);
     --cute-card-bg: rgba(255, 255, 255, 0.9);
     
@@ -43,13 +45,12 @@ html, body {
     --cute-text-main: #555555;
     --cute-text-gray: #BBBBBB;
 
-    /* Typo & Shapes */
     --font-bubbly: 'Varela Round', sans-serif;
     --font-soft: 'Quicksand', sans-serif;
     --bubble-radius: 25px;
 }
 
-/* === ESTILOS GLOBALES === */
+/* Estilos base */
 body {
     background: var(--cute-bg-gradient);
     background-attachment: fixed;
@@ -60,7 +61,7 @@ body {
     min-height: 100vh;
 }
 
-/* === Header === */
+/* Títulos */
 .header-title {
     font-family: var(--font-bubbly);
     color: var(--cute-text-title);
@@ -78,7 +79,7 @@ body {
     font-weight: 300;
 }
 
-/* === Galería === */
+/* Galería principal */
 .gallery-container {
     max-width: 600px;
     margin: 0 auto;
@@ -87,7 +88,7 @@ body {
     gap: 35px;
 }
 
-/* === ESTILOS DE LA TARJETA === */
+/* Tarjetas */
 .memory-card {
     background: var(--cute-card-bg);
     border-radius: var(--bubble-radius);
@@ -106,7 +107,7 @@ body {
     border-color: var(--cute-accent-pink);
 }
 
-/* Foto Wrapper con Corazones Esquineros (Agrandados) */
+/* Contenedor de la foto */
 .image-wrapper {
     width: 100%;
     aspect-ratio: 16/9;
@@ -119,24 +120,24 @@ body {
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
 }
 
-/* --- AJUSTE: Corazones de la tarjeta más grandes y prominentes --- */
+/* Corazones decorativos */
 .image-wrapper::before, .image-wrapper::after {
     content: "♥";
-    /* Agrandamos el font-size de 1.5rem a 2.5rem */
     font-size: 2.5rem; 
     position: absolute;
     z-index: 2;
-    /* Agregamos un text-shadow para profundidad */
     text-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
-/* Corazón Rosa Arriba Izq (Ajustado posicionamiento) */
+
+/* Corazón rosa */
 .image-wrapper::before { 
-    top: 5px; /* Bajamos un poco para separarlo del borde real */
-    left: 5px; /* Separamso un poco */
+    top: 5px; 
+    left: 5px; 
     color: var(--cute-accent-pink); 
     transform: translate(-50%, -50%); 
 }
-/* Corazón Azul Arriba Der (Ajustado posicionamiento) */
+
+/* Corazón azul */
 .image-wrapper::after { 
     top: 5px; 
     right: 5px; 
@@ -151,7 +152,7 @@ body {
     border-radius: 12px;
 }
 
-/* === Detalles === */
+/* Textos de la tarjeta */
 .card-details {
     padding: 5px;
     text-align: center;
@@ -171,9 +172,8 @@ body {
     opacity: 0.9;
 }
 
-/* === MODAL "SWEET REMEMBRANCE" === */
+/* El modal emergente */
 .modal-overlay {
-    /* ESTRUCTURA VITAL */
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
     display: flex;
@@ -182,18 +182,16 @@ body {
     z-index: 1000;
     padding: 20px;
     
-    /* ANIMACIÓN */
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.4s ease, visibility 0.4s ease;
 
-    /* DISEÑO VISUAL CUTE */
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(5px);
     -webkit-backdrop-filter: blur(5px);
 }
 
-/* Clases de estado inyectadas por JS */
+/* Clases para manejar con JS */
 .modal-overlay.show-modal {
     opacity: 1;
     visibility: visible;
@@ -208,8 +206,8 @@ body {
     border-radius: var(--bubble-radius);
     padding: 30px;
     max-width: 600px;
-    width: calc(100% - 40px); /* EL CAMBIO */
-    margin: 0 auto; /* EL CAMBIO */
+    width: calc(100% - 40px);
+    margin: 0 auto;
     max-height: 90vh;
     overflow-y: auto;
     box-shadow: 0 0 50px rgba(255, 102, 170, 0.3);
@@ -242,9 +240,10 @@ body {
     margin-bottom: 20px;
 }
 
+/* Separador lindo */
 .pixel-divider {
     border: 0;
-    border-top: 2px dashed var(--cute-accent-pink); /* Línea punteada tierna */
+    border-top: 2px dashed var(--cute-accent-pink);
     margin: 20px 0;
 }
 
@@ -255,7 +254,7 @@ body {
     font-size: 1.1rem;
 }
 
-/* --- AJUSTE: Botón Cerrar Cute --- */
+/* Botoncito de cerrar */
 .close-btn {
     position: absolute;
     top: 20px;
@@ -281,7 +280,7 @@ body {
     transform: rotate(90deg) scale(1.1); 
 }
 
-/* === SKELETON LOADING (CUTE) === */
+/* Efecto de carga (skeleton) */
 .image-wrapper.skeleton {
     background-color: #EEE; 
 }
@@ -295,7 +294,7 @@ body {
     );
 }
 
-/* === TRIVIA MODULE: CUTE/SOFT === */
+/* Sección de trivia */
 .trivia-card {
     background: var(--cute-card-bg);
     border-radius: var(--bubble-radius);
@@ -306,8 +305,10 @@ body {
     border: 4px solid #fff;
     box-shadow: 0 15px 35px rgba(255, 102, 170, 0.15);
 }
+
 .intro-text, .question-header { font-family: var(--font-bubbly); color: var(--cute-text-title); font-size: 1.5rem; margin-bottom: 30px; }
 .options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+
 .option-btn {
     background: #fff;
     border: 3px solid #ffe4e1;
@@ -318,9 +319,10 @@ body {
     font-family: var(--font-soft);
     font-weight: bold;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55); /* Efecto rebote */
+    transition: all 0.2s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     width: 100%;
 }
+
 .option-btn:hover:not(:disabled) {
     background: var(--cute-accent-pink);
     color: #fff;
@@ -328,56 +330,55 @@ body {
     transform: scale(1.03);
     box-shadow: 0 10px 20px rgba(255, 102, 170, 0.3);
 }
+
 .option-btn:active:not(:disabled) { transform: scale(0.95); }
 .option-btn.correct { background: #7bed9f !important; color: #fff !important; border-color: #fff !important; transform: scale(1.05); }
 .option-btn.incorrect { background: #ff7f50 !important; color: #fff !important; border-color: #fff !important; }
+
 .progress-container { background: #ffe4e1; border-radius: 20px; height: 15px; margin-bottom: 30px; border: 2px solid #fff; }
 .progress-bar { background: var(--cute-accent-pink); border-radius: 20px; height: 100%; transition: width 0.4s ease; width: 0%;}
+
 .hidden { display: none !important; }
 .fade-transition { transition: opacity 0.3s ease; opacity: 1; }
 .fade-out { opacity: 0; }
-/* ANIMACIONES 
 
-/* Animación de error (Temblor / Shake) */
+/* Animaciones de error y acierto */
 @keyframes shakeError {
     0%, 100% { transform: translateX(0); }
     20%, 60% { transform: translateX(-8px); }
     40%, 80% { transform: translateX(8px); }
 }
 
-/* Animación de acierto (Salto / Pop) */
 @keyframes jumpSuccess {
     0%, 100% { transform: translateY(0) scale(1); }
     40% { transform: translateY(-10px) scale(1.05); }
     60% { transform: translateY(-5px) scale(1.02); }
 }
 
-/* Aplicamos las animaciones a las clases que inyecta tu JS */
 .option-btn.incorrect {
     animation: shakeError 0.4s ease-in-out !important;
 }
 
 .option-btn.correct {
     animation: jumpSuccess 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    z-index: 10; /* Para que salte por encima de los demás botones */
+    z-index: 10; 
     position: relative;
 }
 
-/* Un toque extra: Opacar las respuestas incorrectas cuando ya se eligió una */
+/* Opacar las opciones que no elegiste */
 .options-grid.answered .option-btn:not(.correct) {
     opacity: 0.5;
     transform: scale(0.95);
     filter: grayscale(80%);
 }
 
-/* REPRODUCTOR */ 
+/* Reproductor flotante */ 
 #reproductor-flotante {
     position: fixed;
     bottom: 20px;
     right: 20px;
     width: 320px;
-    /* MAGIA PARA MÓVILES: Ancho máximo = toda la pantalla menos 40px de márgenes */
-    max-width: calc(100vw - 40px); 
+    max-width: calc(100vw - 40px); /* Ajuste para que no se salga en móviles */
     z-index: 9999;
     transition: all 0.3s ease;
 }

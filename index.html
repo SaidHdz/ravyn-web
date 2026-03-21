@@ -174,6 +174,37 @@
             </section>
         </main>
     </section>
+    <section id="modulo-dedicatorias" class="modulo-ravyn oculto">
+        <main id="app-container-dedic" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
+            
+            <section id="escena-sobre-dedic" class="escena activa">
+                <h1 id="mensaje-inicio-dedic" class="header-title" style="font-size: 2rem; margin-bottom: 50px;">Cargando...</h1>
+                <div id="paquete-dedic" class="paquete">
+                    <div class="pestillo">?</div>
+                    <div class="destello"></div>
+                </div>
+            </section>
+
+            <section id="escena-secuencia-dedic" class="escena oculta" style="text-align: center; padding: 0 20px;">
+                <h2 id="texto-secuencia-dedic" class="header-title" style="font-size: 3rem;">...</h2>
+            </section>
+
+            <section id="escena-cartas-dedic" class="escena oculta">
+                <div id="stack-container-dedic" style="position: relative; width: 85vw; max-width: 360px; height: 60vh; max-height: 550px; perspective: 1000px;">
+                </div>
+                
+                <div id="controles-cartas-dedic" class="oculto" style="display: flex; gap: 20px; margin-top: 30px; z-index: 50; justify-content: center;">
+                    <button id="btn-swipe-dedic" class="option-btn" style="padding: 10px 30px;">Siguiente Carta ➔</button>
+                </div>
+            </section>
+
+            <section id="escena-final-dedic" class="escena oculta" style="text-align: center;">
+                <h2 id="mensaje-final-dedic" class="header-title" style="margin-bottom: 20px;">Has leído todas las cartas</h2>
+                <button id="btn-reiniciar-dedic" class="option-btn">Volver a leer</button>
+            </section>
+            
+        </main>
+    </section>
     <section id="modulo-evasivo" class="modulo-ravyn oculto">
         <div id="carta-evasiva" class="memory-card" style="text-align: center; padding: 60px 20px; max-width: 700px; width: 90%; min-height: 450px; position: relative; z-index: 10; display: flex; flex-direction: column;">
             
@@ -243,11 +274,9 @@
     <script src="app.js"></script>
     <script src="trivia.js"></script>
     <script src="tarjetas.js"></script>
-    <script src="evasivo.js"></script> <script src="core.js"></script>
-    <script src="contador.js"></script> <script src="core.js"></script>
- 
+    <script src="dedicatoria.js"></script>
+    <script src="evasivo.js"></script> 
+    <script src="contador.js"></script> 
     <script src="core.js"></script>
-
 </body>
 </html>
-

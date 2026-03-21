@@ -33,9 +33,10 @@ function ejecutarModulos(data) {
     // 1. Detectar el tema (buscamos en cualquier módulo que venga en el JSON)
     const tema = data.nuestra_historia?.config?.tema || 
                  data.trivia?.config?.tema || 
-                 data.evasivo?.config?.tema ||
-                 data.contador?.config?.tema ||
-                 data.tarjetas?.config?.tema || "aesthetic";
+                 data.tarjetas?.config?.tema || 
+                 data.evasivo?.config?.tema || 
+                 data.contador?.config?.tema || 
+                 data.dedicatorias?.config?.tema || "aesthetic"; // <--- ¡AQUÍ ESTÁ EL REY PERDIDO!
     
     cargarTemaGlobal(tema);
 
@@ -78,6 +79,13 @@ function ejecutarModulos(data) {
         const mod = document.getElementById('modulo-contador');
         if (mod) mod.classList.remove('oculto');
         if (typeof iniciarContador === 'function') iniciarContador(data.contador);
+    }
+    // 6. Encender Módulo: Dedicatorias (La Coreografía Y2K)
+    if (data.dedicatorias) {
+        const mod = document.getElementById('modulo-dedicatorias'); // <--- AHORA SÍ ENCIENDE EL CORRECTO
+        if (mod) mod.classList.remove('oculto');
+        
+        if (typeof iniciarDedicatorias === 'function') iniciarDedicatorias(data.dedicatorias);
     }
 }
 

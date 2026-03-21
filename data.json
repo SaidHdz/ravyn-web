@@ -1,0 +1,36 @@
+{
+  "dedicatorias": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Hola",
+      "secuencia_1": "Que uebaaa",
+      "secuencia_2": "chupala calep"
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "aaaa",
+        "contenido": "",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 2,
+        "titulo": "saddasd",
+        "contenido": "",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 3,
+        "titulo": "sadsad",
+        "contenido": "",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 4,
+        "titulo": "PACO GOOOD",
+        "contenido": "",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      }
+    ]
+  }
+}
