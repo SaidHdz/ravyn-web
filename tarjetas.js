@@ -131,15 +131,17 @@ function iniciarTarjetas(data) {
     // 4. Mecánica de Interacción (Swipe Vanilla)
     function hacerDeslizable(carta) {
     let isDragging = false;
+    let isScrolling = false; 
     let startX = 0;
-    let startY = 0; // Guardamos dónde empezó el dedo en el eje Y
+    let startY = 0;
 
     carta.addEventListener('pointerdown', (e) => {
         isDragging = true;
+        isScrolling = false;
         startX = e.clientX;
-        startY = e.clientY; // Capturamos la posición vertical
+        startY = e.clientY; 
         carta.style.transition = 'none'; 
-        carta.setPointerCapture(e.pointerId);
+        // AQUÍ BORRAMOS EL setPointerCapture QUE BLOQUEABA TU S22
     });
 
     carta.addEventListener('pointermove', (e) => {
@@ -148,27 +150,33 @@ function iniciarTarjetas(data) {
         let diffX = e.clientX - startX;
         let diffY = e.clientY - startY;
 
-        // TICS HACK: Si el movimiento es más vertical que horizontal,
-        // significa que el usuario está haciendo SCROLL, no swipeando la carta.
-        if (Math.abs(diffY) > Math.abs(diffX)) {
-            return; // Cancelamos la rotación visual de la carta
+        // Si el usuario mueve el dedo más hacia abajo/arriba que hacia los lados, es SCROLL.
+        if (!isScrolling) {
+            if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 5) {
+                isScrolling = true;
+                isDragging = false; // Soltamos la carta
+                carta.style.transform = ''; // La regresamos a su lugar
+                return; // Dejamos que el celular baje la pantalla
+            }
         }
+
+        if (isScrolling) return;
 
         const rotacion = diffX * 0.05; 
         carta.style.transform = `translateX(${diffX}px) rotate(${rotacion}deg)`;
     });
 
     const handlePointerUp = (e) => {
-        if (!isDragging) return;
+        if (!isDragging || isScrolling) return;
         isDragging = false;
         carta.style.transition = 'transform 0.4s ease-out'; 
 
         const limiteDescarte = window.innerWidth * 0.25; 
+        let diffX = e.clientX - startX;
 
-        if (Math.abs(e.clientX - startX) > limiteDescarte) {
-            // El swipe fue exitoso
-            const direccion = (e.clientX - startX) > 0 ? window.innerWidth : -window.innerWidth;
-            carta.style.transform = `translateX(${direccion}px) rotate(${(e.clientX - startX) * 0.1}deg)`;
+        if (Math.abs(diffX) > limiteDescarte) {
+            const direccion = diffX > 0 ? window.innerWidth : -window.innerWidth;
+            carta.style.transform = `translateX(${direccion}px) rotate(${diffX * 0.1}deg)`;
             
             setTimeout(() => {
                 carta.remove();
@@ -176,38 +184,16 @@ function iniciarTarjetas(data) {
                 verificarFin();
             }, 400); 
         } else {
-            // No alcanzó el límite, regresa al centro
             carta.style.transform = `translateX(0px) rotate(0deg)`;
         }
     };
 
     carta.addEventListener('pointerup', handlePointerUp);
-    carta.addEventListener('pointercancel', handlePointerUp);
+    carta.addEventListener('pointercancel', () => {
+        isDragging = false;
+        carta.style.transform = `translateX(0px) rotate(0deg)`;
+    });
 }
-
-        const handlePointerUp = (e) => {
-            if (!isDragging) return;
-            isDragging = false;
-            carta.style.transition = 'transform 0.4s ease-out'; 
-
-            const limiteDescarte = window.innerWidth * 0.25; 
-
-            if (Math.abs(currentX) > limiteDescarte) {
-                const direccion = currentX > 0 ? window.innerWidth : -window.innerWidth;
-                carta.style.transform = `translateX(${direccion}px) rotate(${currentX * 0.1}deg)`;
-                
-                setTimeout(() => {
-                    carta.remove();
-                    cartasRestantes.pop();
-                    verificarFin();
-                }, 400); 
-            } else {
-                carta.style.transform = `translateX(0px) rotate(0deg)`;
-            }
-        };
-
-        carta.addEventListener('pointerup', handlePointerUp);
-        carta.addEventListener('pointercancel', handlePointerUp);
 
     function verificarFin() {
         if (cartasRestantes.length === 0) {
