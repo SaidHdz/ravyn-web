@@ -1,8 +1,12 @@
+/* Archivo Trivia JS - Modulo de preguntas y respuestas */
+
 let triviaConfig = {};
 let triviaQuestions = [];
 
+/* Estado del juego para no perdernos */
 const state = { currentQuestionIndex: 0, score: 0, isAnimating: false };
 
+/* Todos los elementos del DOM que ocupamos */
 const elements = {
   introContainer: document.getElementById('trivia-intro'),
   gameContainer: document.getElementById('trivia-game'),
@@ -18,41 +22,37 @@ const elements = {
   restartBtn: document.getElementById('restart-btn')
 };
 
-// === LÓGICA DE INYECCIÓN DE TEMA (Igual que en tu galería) ===
-// === LÓGICA DE INYECCIÓN DE TEMA ===
+/* Cambia el CSS segun el tema, no tocar los links para que no se rompa. */
 function loadTheme(themeName) {
     const head = document.head;
     
-    // 1. Limpiar el CSS anterior si existe (Para evitar que se encimen si cambias de tema)
     const existingLink = document.getElementById('dynamic-theme');
     if (existingLink) {
         existingLink.remove();
     }
 
-    // 2. Crear y conectar el nuevo CSS
     const link = document.createElement('link');
     link.id = 'dynamic-theme';
     link.rel = 'stylesheet';
-    
-    // Ahora busca el archivo normal, ej: css/theme-minecraft.css
     link.href = `css/theme-${themeName}.css`; 
     
     head.appendChild(link);
     document.body.className = `theme-${themeName}`;
 }
 
+/* Inyecta los datos iniciales del JSON */
 function iniciarTrivia(data) {
     triviaConfig = data.config;
     triviaQuestions = data.preguntas;
     
     elements.introMessage.textContent = triviaConfig.mensaje_inicio;
 
-    // RE-VINCULAR BOTONES (Asegura que funcionen al encender el módulo)
+    /* Vincular los clics de los botones de inicio y reinicio */
     elements.startBtn.onclick = startGame; 
     elements.restartBtn.onclick = startGame;
 }
 
-// === LÓGICA DE LA TRIVIA ===
+/* Resetea todo para empezar de cero */
 function startGame() {
   elements.introContainer.classList.add('hidden');
   elements.gameContainer.classList.remove('hidden');
@@ -64,6 +64,7 @@ function startGame() {
   loadQuestion();
 }
 
+/* Carga la pregunta actual y sus botones */
 function loadQuestion() {
   const currentData = triviaQuestions[state.currentQuestionIndex];
   elements.questionContainer.classList.remove('fade-out');
@@ -80,6 +81,7 @@ function loadQuestion() {
   state.isAnimating = false;
 }
 
+/* Aqui se revisa si le atino o no */
 function handleOptionClick(selectedIndex, correctIndex, selectedBtn) {
   if (state.isAnimating) return;
   state.isAnimating = true;
@@ -95,6 +97,7 @@ function handleOptionClick(selectedIndex, correctIndex, selectedBtn) {
     buttons[correctIndex].classList.add('correct');
   }
 
+  /* Tiempo para que el usuario vea si estuvo bien o mal antes de cambiar */
   setTimeout(() => {
     elements.questionContainer.classList.add('fade-out'); 
     setTimeout(() => {
@@ -109,11 +112,13 @@ function handleOptionClick(selectedIndex, correctIndex, selectedBtn) {
   }, 1500);
 }
 
+/* Actualiza la barrita de arriba */
 function updateProgress() {
   const progressPercentage = (state.currentQuestionIndex / triviaQuestions.length) * 100;
   elements.progressBar.style.width = `${progressPercentage}%`;
 }
 
+/* Pantalla final con mensajes segun el puntaje */
 function showResults() {
   elements.gameContainer.classList.add('hidden');
   elements.resultsContainer.classList.remove('hidden');

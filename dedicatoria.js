@@ -27,7 +27,7 @@ function iniciarDedicatorias(data) {
             </div>
         `;
         
-        /* Posicion inicial de las cartas (escondidas en el fondo) */
+        /* Posicion inicial de las cartas */
         cartaDOM.style.opacity = '0';
         cartaDOM.style.transform = 'translateZ(-200px) translateY(50px)';
         
@@ -48,7 +48,7 @@ function iniciarDedicatorias(data) {
     btnReiniciar.addEventListener('click', reiniciarDedicatoria);
 }
 
-/* COREOGRAFIA DE ENTRADA. Alch no se como pero jala, son puros tiempos calculados, no le muevan. */
+/* COREOGRAFIA DE ENTRADA, son puros tiempos calculados, no le muevan. */
 function iniciarCoreografiaY2K() {
     const paquete = document.getElementById('paquete-dedic');
     paquete.classList.add('abriendo-cofre');
@@ -82,7 +82,6 @@ function iniciarCoreografiaY2K() {
         textoEl.style.transform = 'translateY(-100px) scale(1.5)';
     }, 4000);
 
-    /* Reset de posicion para el segundo mensaje */
     setTimeout(() => {
         textoEl.style.transition = 'none'; 
         textoEl.style.transform = 'translateY(50px) scale(0.5)';
@@ -145,7 +144,7 @@ function siguienteCartaDedicatoria() {
     actualizarVisualStack();
 }
 
-/* Acomodo visual de las cartas (profundidad 3D). Alch no se como pero jala y que no le muevan. */
+/* Acomodo visual de las cartas */
 function actualizarVisualStack() {
     const stack = document.querySelectorAll('#stack-container-dedic .carta');
     

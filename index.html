@@ -11,13 +11,12 @@
     
     <link rel="stylesheet" href="estilos_tarjetas.css">
     
+    
     <style>
-    /* =========================================================
-       1. REGLA DE ORO: CONTROL TOTAL DE TAMAÑOS
-       ========================================================= */
+    /* Ajustes para que nada se salga de la pantalla, tuve q ponerlo pq no quiero hacerlo x cada css xddd  */
     * { 
         box-sizing: border-box !important; 
-        max-width: 100vw; /* NADIE supera el ancho de la pantalla */
+        max-width: 100vw; 
     }
 
     body {
@@ -27,19 +26,19 @@
 
     .oculto { display: none !important; }
 
-    /* --- EL SECRETO PARA LA SEPARACIÓN PERFECTA --- */
+    /* Separación entre secciones para que respiren en el cel */
     .modulo-ravyn {
-        min-height: 100dvh; /* dvh adapta la altura real del celular */
+        min-height: 100dvh; 
         position: relative;
         width: 100%;
-        padding: 80px 0; /* ESTO ES LA MAGIA: 80px de aire arriba y abajo de cada módulo */
+        padding: 80px 0; 
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 
-    /* Evitamos que el módulo de tarjetas duplique la altura de la pantalla */
+    /* Fix para que el stack de tarjetas no se vuelva loco */
     #modulo-tarjetas #app-container {
         min-height: auto !important;
         height: 100% !important;
@@ -51,14 +50,11 @@
         padding-bottom: 0 !important;
     }
 
-    /* Aseguramos que el contenido interno tome el 100% del ancho permitido */
     .modulo-ravyn > * {
         width: 100%;
     }
 
-    /* =========================================================
-       2. RESTRICCIÓN ABSOLUTA DEL MODAL
-       ========================================================= */
+    /* Ajustes del modal para que se vea bien en cualquier pantalla */
     .modal-content {
         width: 90vw !important; 
         max-width: 450px !important; 
@@ -82,9 +78,7 @@
     #modal-title { font-size: 1.4rem !important; margin-bottom: 5px !important; }
     #modal-text { font-size: 1rem !important; line-height: 1.4 !important; }
 
-    /* =========================================================
-       3. FIX DEL REPRODUCTOR "ATASCADO"
-       ========================================================= */
+    /* Fix del reproductor para que no se quede atorado al scrollear */
     #reproductor-flotante {
         transform: translateZ(0);
         will-change: transform;
@@ -174,6 +168,7 @@
             </section>
         </main>
     </section>
+
     <section id="modulo-dedicatorias" class="modulo-ravyn oculto">
         <main id="app-container-dedic" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
             
@@ -205,6 +200,7 @@
             
         </main>
     </section>
+
     <section id="modulo-evasivo" class="modulo-ravyn oculto">
         <div id="carta-evasiva" class="memory-card" style="text-align: center; padding: 60px 20px; max-width: 700px; width: 90%; min-height: 450px; position: relative; z-index: 10; display: flex; flex-direction: column;">
             
@@ -269,7 +265,9 @@
             <div id="reproductor-contenedor"></div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> 
+    
     <script src="reproductor.js"></script>
     <script src="app.js"></script>
     <script src="trivia.js"></script>
@@ -277,6 +275,7 @@
     <script src="dedicatoria.js"></script>
     <script src="evasivo.js"></script> 
     <script src="contador.js"></script> 
+    
     <script src="core.js"></script>
 </body>
 </html>

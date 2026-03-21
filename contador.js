@@ -1,20 +1,22 @@
+/* Archivo Contador JS */
+
 function iniciarContador(data) {
+    /* Textos base */
     document.getElementById('contador-titulo').textContent = data.titulo || "Nuestro Tiempo";
     const mensajeEl = document.getElementById('contador-mensaje');
     mensajeEl.textContent = data.mensaje || "Cada instante a tu lado es especial.";
 
     const fechaObjetivo = new Date(data.fecha + 'T00:00:00');
-    let intervaloReloj; // Guardamos el intervalo para poder detenerlo
+    let intervaloReloj; 
 
     function actualizarReloj() {
         const ahora = new Date();
-        const diferenciaBruta = fechaObjetivo - ahora; // Positivo si es futuro, negativo si es pasado
+        const diferenciaBruta = fechaObjetivo - ahora; 
 
-        // VARIABLES DE TIEMPO
         let diasTotales, horas, minutos, segundos;
 
+        /* Si el evento ya llego a cero, apaga el reloj y tira confeti */
         if (diferenciaBruta <= 0 && data.es_futuro) {
-            // EL EVENTO FUTURO YA LLEGÓ (¡Llegó a cero!)
             clearInterval(intervaloReloj);
             
             document.getElementById('cont-anios').textContent = "00";
@@ -24,16 +26,16 @@ function iniciarContador(data) {
             document.getElementById('cont-minutos').textContent = "00";
             document.getElementById('cont-segundos').textContent = "00";
             
-            mensajeEl.textContent = "¡El momento ha llegado! 🎉";
+            mensajeEl.textContent = "¡El momento ha llegado!";
             mensajeEl.style.color = "#ff4757";
             mensajeEl.style.fontWeight = "bold";
             
-            // Reutilizamos la función de confeti si existe
+            /* Si existe la funcion de confeti la llama, sino ni modo */
             if(typeof lanzarConfetiEvasivo === 'function') lanzarConfetiEvasivo();
             return;
         }
 
-        // Si es pasado (cuenta cuánto llevan) o futuro (aún no llega)
+        /* Matematicas para calcular el tiempo exacto */
         const diferencia = Math.abs(diferenciaBruta);
         const segundosTotales = Math.floor(diferencia / 1000);
         const minutosTotales = Math.floor(segundosTotales / 60);
@@ -48,7 +50,7 @@ function iniciarContador(data) {
         minutos = minutosTotales % 60;
         segundos = segundosTotales % 60;
 
-        // Inyectar al DOM
+        /* Inyectar valores al HTML */
         document.getElementById('cont-anios').textContent = anios.toString().padStart(2, '0');
         document.getElementById('cont-meses').textContent = meses.toString().padStart(2, '0');
         document.getElementById('cont-dias').textContent = dias.toString().padStart(2, '0');
@@ -56,7 +58,7 @@ function iniciarContador(data) {
         document.getElementById('cont-minutos').textContent = minutos.toString().padStart(2, '0');
         document.getElementById('cont-segundos').textContent = segundos.toString().padStart(2, '0');
         
-        // Etiquetamos en el objeto si es un evento futuro para la próxima iteración
+        /* Etiqueta para saber si es un evento futuro en la siguiente vuelta */
         if(diferenciaBruta > 0) data.es_futuro = true;
     }
 

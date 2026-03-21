@@ -1,5 +1,7 @@
+/* Archivo Evasivo JS - El boton que huye */
+
 function iniciarEvasivo(data) {
-    // 1. Inyectar textos (Sigue funcionando igual para el div)
+    /* Inyectar textos de la pregunta y botones */
     document.getElementById('evasivo-pregunta').textContent = data.pregunta || "¿Quieres ser mi novia?";
     document.getElementById('btn-si').textContent = data.texto_si || "Sí";
     document.getElementById('btn-no').textContent = data.texto_no || "No";
@@ -8,17 +10,18 @@ function iniciarEvasivo(data) {
         document.getElementById('evasivo-mensaje-final').textContent = data.mensaje_exito;
     }
 
-    const recuadroNo = document.getElementById('btn-no'); // Cambiado el nombre de la variable para que sea más claro
+    const recuadroNo = document.getElementById('btn-no'); 
     const btnSi = document.getElementById('btn-si');
     const contenedorBotones = document.getElementById('contenedor-botones');
 
     let escalaActual = 1.0; 
 
-    // 2. Lógica para esquivar (Sin cambios en la matemática)
+    /* Logica para calcular el salto del boton. Alch no se como pero jala y que no le muevan. */
     const moverRecuadro = (e) => {
-        // En móviles, detenemos el evento para que no intente hacer un "clic" fantasma después del toque
+        /* Evita clics fantasma en celulares */
         if (e && e.type === 'touchstart') e.preventDefault(); 
         
+        /* El boton se hace mas chico cada vez que intentan picarle */
         if (escalaActual > 0.25) { 
             escalaActual -= 0.09; 
         }
@@ -44,6 +47,7 @@ function iniciarEvasivo(data) {
         let empalmado = true;
         let intentos = 0;
 
+        /* Busca un lugar libre donde no tape al boton del SI (igual lo  tapa ksjkajs) */
         while (empalmado && intentos < 30) { 
             randomX = Math.floor(Math.random() * (areaWidth - btnWidth));
             randomY = Math.floor(Math.random() * (areaHeight - btnHeight));
@@ -69,13 +73,12 @@ function iniciarEvasivo(data) {
         recuadroNo.style.top = `${randomY}px`;
     };
 
-    // 3. Atrapamos eventos (Ahora sobre el div)
-    // Agregamos 'pointerdown' que cubre tanto clic de mouse como toques rápidos en pantalla.
-    recuadroNo.addEventListener('mouseover', moverRecuadro); // Para PC hover
-    recuadroNo.addEventListener('touchstart', moverRecuadro, { passive: false }); // Para Móviles touch
-    recuadroNo.addEventListener('pointerdown', moverRecuadro); // Refuerzo para toques/clics
+    /* Eventos para PC y moviles */
+    recuadroNo.addEventListener('mouseover', moverRecuadro); 
+    recuadroNo.addEventListener('touchstart', moverRecuadro, { passive: false }); 
+    recuadroNo.addEventListener('pointerdown', moverRecuadro); 
 
-    // 4. Lógica de victoria (Sigue siendo un botón)
+    /* Cuando por fin le pican al SI */
     btnSi.addEventListener('click', () => {
         document.getElementById('evasivo-contenido').classList.add('oculto');
         document.getElementById('evasivo-exito').classList.remove('oculto');
@@ -83,6 +86,7 @@ function iniciarEvasivo(data) {
     });
 }
 
+/* Efecto de confeti casero */
 function lanzarConfetiEvasivo() {
     const carta = document.getElementById('carta-evasiva');
     for (let i = 0; i < 30; i++) {
@@ -101,6 +105,7 @@ function lanzarConfetiEvasivo() {
         const tx = Math.cos(angle) * velocity;
         const ty = Math.sin(angle) * velocity;
         
+        /* Animacion de explosion de colores */
         confeti.animate([
             { transform: 'translate(-50%, -50%) scale(1)', opacity: 1 },
             { transform: `translate(calc(-50% + ${tx}px), calc(-50% + ${ty}px)) scale(0)`, opacity: 0 }

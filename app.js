@@ -38,7 +38,7 @@ if(subtitleElement) {
     });
 }
 
-/* Funcion para mostrar la carta oculta */
+/* Funcion para mostrar la carta oculta, ni uso esta madre pero quedo gud */
 function unlockSecretMemory() {
     if (document.getElementById('secret-card')) return;
 
@@ -88,7 +88,7 @@ function iniciarHistoria(data) {
 
 /* RENDER DE LA GALERIA Y SCROLL */
 function renderGallery(memoriasArray) {
-    /* Intersection Observer para animar las tarjetas cuando scrolleas. Alch no se como pero jala y que no le muevan. */
+    /* Alch no se como pero jala esta madre asi que no le muevan */
     const observerOptions = {
         root: null,
         rootMargin: '0px 0px -50px 0px',
@@ -180,3 +180,4 @@ function attachCardEvents(memoriasArray) {
         });
     });
 }
+/*Te oido deyanira pero gracias por mostrarme los modals deidad*/
