@@ -1,5 +1,4 @@
 function iniciarEvasivo(data) {
-    // 1. Inyectar los textos personalizables
     document.getElementById('evasivo-pregunta').textContent = data.pregunta || "¿Quieres ser mi novia?";
     document.getElementById('btn-si').textContent = data.texto_si || "Sí";
     document.getElementById('btn-no').textContent = data.texto_no || "No";
@@ -10,44 +9,42 @@ function iniciarEvasivo(data) {
 
     const btnNo = document.getElementById('btn-no');
     const btnSi = document.getElementById('btn-si');
+    const contenedorBotones = document.getElementById('contenedor-botones');
 
-    // 2. Lógica para esquivar (Optimizada para PC y Móvil usando toda la pantalla)
     const moverBoton = (e) => {
-        if (e) e.preventDefault(); // Evita clics fantasma
+        if (e) e.preventDefault(); 
+        
+        // Calculamos el tamaño del área de juego
+        const areaWidth = contenedorBotones.offsetWidth;
+        const areaHeight = contenedorBotones.offsetHeight;
+        
+        // Calculamos el tamaño del botón para que no se desborde
+        const btnWidth = btnNo.offsetWidth;
+        const btnHeight = btnNo.offsetHeight;
 
-        // Cambiamos el botón a fixed para que pueda viajar por toda la pantalla
-        btnNo.style.position = 'fixed';
-        btnNo.style.margin = '0';
-        btnNo.style.transform = 'none'; // Quitamos el transform por si lo tenía
+        // Coordenadas aleatorias dentro de la caja fuerte
+        const randomX = Math.floor(Math.random() * (areaWidth - btnWidth));
+        const randomY = Math.floor(Math.random() * (areaHeight - btnHeight));
 
-        // Calculamos el espacio seguro (Tamaño de la pantalla menos el tamaño del botón)
-        // Le restamos 20px extra para que no se pegue a los bordes exactos
-        const anchoSeguro = window.innerWidth - btnNo.offsetWidth - 20;
-        const altoSeguro = window.innerHeight - btnNo.offsetHeight - 20;
-
-        // Generamos coordenadas aleatorias dentro de la pantalla
-        const randomX = Math.floor(Math.random() * anchoSeguro) + 10;
-        const randomY = Math.floor(Math.random() * altoSeguro) + 10;
-
-        // Movemos el botón
+        // Rompemos la alineación original (right) y aplicamos las nuevas coordenadas
+        btnNo.style.right = 'auto'; 
         btnNo.style.left = `${randomX}px`;
         btnNo.style.top = `${randomY}px`;
     };
 
-    // 3. Atrapamos TODOS los eventos
-    btnNo.addEventListener('mouseover', moverBoton); // Para PC
-    btnNo.addEventListener('touchstart', moverBoton, { passive: false }); // Para Móviles
-    btnNo.addEventListener('click', moverBoton); // MAGIA: Si logras darle clic, huye de todos modos
+    // Atrapamos cualquier intento de darle clic
+    btnNo.addEventListener('mouseover', moverBoton);
+    btnNo.addEventListener('touchstart', moverBoton, { passive: false });
+    btnNo.addEventListener('click', moverBoton);
 
-    // 4. Lógica para cuando dicen "Sí"
     btnSi.addEventListener('click', () => {
         document.getElementById('evasivo-contenido').classList.add('oculto');
         document.getElementById('evasivo-exito').classList.remove('oculto');
-        
         lanzarConfetiEvasivo();
     });
 }
 
+// (Deja tu función lanzarConfetiEvasivo() exactamente igual abajo de esto)
 function lanzarConfetiEvasivo() {
     const carta = document.getElementById('carta-evasiva');
     for (let i = 0; i < 30; i++) {
