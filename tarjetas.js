@@ -130,23 +130,33 @@ function iniciarTarjetas(data) {
 
     // 4. Mecánica de Interacción (Swipe Vanilla)
     function hacerDeslizable(carta) {
-        let isDragging = false;
-        let startX = 0;
-        let currentX = 0;
+    let isDragging = false;
+    let startX = 0;
+    let startY = 0; // Añadimos rastro vertical
 
-        carta.addEventListener('pointerdown', (e) => {
-            isDragging = true;
-            startX = e.clientX;
-            carta.style.transition = 'none'; 
-            carta.setPointerCapture(e.pointerId);
-        });
+    carta.addEventListener('pointerdown', (e) => {
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+        carta.style.transition = 'none'; 
+    });
 
-        carta.addEventListener('pointermove', (e) => {
-            if (!isDragging) return;
-            currentX = e.clientX - startX;
-            const rotacion = currentX * 0.05; 
-            carta.style.transform = `translateX(${currentX}px) rotate(${rotacion}deg)`;
-        });
+    carta.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+
+        let diffX = e.clientX - startX;
+        let diffY = e.clientY - startY;
+
+        // Si el usuario se mueve más hacia abajo que hacia los lados, 
+        // cancelamos el drag de la carta para dejarlo scrollear la web.
+        if (Math.abs(queryY) > Math.abs(diffX)) {
+            isDragging = false;
+            return;
+        }
+
+        const rotacion = diffX * 0.05; 
+        carta.style.transform = `translateX(${diffX}px) rotate(${rotacion}deg)`;
+    });
 
         const handlePointerUp = (e) => {
             if (!isDragging) return;

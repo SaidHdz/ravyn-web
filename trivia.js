@@ -41,12 +41,15 @@ function loadTheme(themeName) {
     document.body.className = `theme-${themeName}`;
 }
 
-// === CARGA DE DATOS ASÍNCRONA ===
 function iniciarTrivia(data) {
     triviaConfig = data.config;
     triviaQuestions = data.preguntas;
     
     elements.introMessage.textContent = triviaConfig.mensaje_inicio;
+
+    // RE-VINCULAR BOTONES (Asegura que funcionen al encender el módulo)
+    elements.startBtn.onclick = startGame; 
+    elements.restartBtn.onclick = startGame;
 }
 
 // === LÓGICA DE LA TRIVIA ===
