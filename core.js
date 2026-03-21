@@ -1,6 +1,6 @@
 // core.js - El Director de Orquesta de Ravyn
 
-ddocument.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', async () => {
     // 1. Extraer el cliente de la URL
     const urlParams = new URLSearchParams(window.location.search);
     const cliente = urlParams.get('cliente');
