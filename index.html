@@ -41,6 +41,34 @@
     img {
         pointer-events: none; /* Para que el celular no intente "agarrar" la foto */
     }
+    .modal-content {
+    box-sizing: border-box !important; /* Obliga a que el padding se calcule HACIA ADENTRO */
+    width: calc(100% - 40px) !important; /* 100% del ancho menos 20px de margen por lado */
+    max-width: 500px !important;
+    max-height: 85vh !important; /* Nunca será más alto que el 85% de la pantalla */
+    padding: 25px !important; /* Reducimos el padding gigante que tenía (40px) */
+    margin: 0 auto !important; /* Lo centra perfectamente */
+    overflow-x: hidden !important; /* Por si algún texto largo intenta romperlo */
+    }
+
+    /* Controlamos que la imagen del modal no crezca a lo loco */
+    .modal-image {
+        width: 100% !important;
+        max-height: 35vh !important; /* La foto no ocupará más de un tercio de la pantalla */
+        object-fit: cover !important;
+        margin-bottom: 15px !important;
+    }
+
+    /* Ajustamos los textos para que quepan bien */
+    #modal-title {
+        font-size: 1.4rem !important;
+        margin-bottom: 5px !important;
+    }
+
+    #modal-text {
+        font-size: 1rem !important;
+        line-height: 1.5 !important;
+    }
 </style>
 </head>
 <body>
