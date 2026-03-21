@@ -83,3 +83,19 @@ function cargarTemaGlobal(themeName) {
     document.body.className = `theme-${themeName}`;
     document.body.setAttribute('data-theme', themeName);
 }
+
+// ANTIVIRUS DE SCROLL (Fuerza a todos los elementos a permitir scroll vertical)
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Forzamos el body
+    document.body.style.setProperty('touch-action', 'pan-y', 'important');
+    document.documentElement.style.setProperty('touch-action', 'pan-y', 'important');
+
+    // 2. Buscamos todas las tarjetas y las liberamos
+    const elementosBloqueados = document.querySelectorAll('.memory-card, .trivia-card, .carta, #app-container, .escena');
+    
+    elementosBloqueados.forEach(el => {
+        el.style.setProperty('touch-action', 'pan-y', 'important');
+    });
+
+    console.log("🛡️ Antivirus de scroll activado");
+});
