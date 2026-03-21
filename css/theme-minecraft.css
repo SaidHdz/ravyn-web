@@ -10,6 +10,31 @@
     --mc-text-green: #3adb3a;
     --mc-text-gray: #a0a0a0;
 }
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+/* Ajustes de respiración para móvil */
+@media (max-width: 600px) {
+    body {
+        padding: 20px 15px; /* Menos padding lateral para ganar ancho */
+    }
+
+    .header-title {
+        font-size: 2.2rem !important; /* Títulos menos invasivos */
+        margin-bottom: 30px;
+    }
+
+    .gallery-container, .trivia-card, #stack-container {
+        width: 100% !important;
+        margin-bottom: 60px; /* Espacio real entre módulos */
+    }
+
+    /* Evitar que las cartas sean gigantes y tapen todo */
+    #stack-container {
+        height: 50vh; 
+        max-height: 400px;
+    }
+}
 
 /* === CONTROL MAESTRO === */
 body.no-anim * {

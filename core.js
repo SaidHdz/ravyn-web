@@ -66,6 +66,12 @@ function ejecutarModulos(data) {
         if (mod) mod.classList.remove('oculto');
         if (typeof iniciarTarjetas === 'function') iniciarTarjetas(data.tarjetas);
     }
+    // 6. Encender Módulo: Evasivo
+    if (data.evasivo) {
+        const mod = document.getElementById('modulo-evasivo');
+        if (mod) mod.classList.remove('oculto');
+        if (typeof iniciarEvasivo === 'function') iniciarEvasivo(data.evasivo);
+    }
 }
 
 // === CARGADOR DE TEMAS ===
