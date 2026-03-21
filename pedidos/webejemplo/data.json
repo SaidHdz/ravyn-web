@@ -159,13 +159,14 @@
   },
   "tarjetas": {
     "config": {
-      "tema": "neo-japan",
+      "tema": "minecraft",
       "mensaje_inicio": "Nuestras cartas guardadas..."
     },
     "cartas": [
       {
         "id": 1,
         "titulo": "El mene",
+      
         "contenido": "Mene pq escribiste eso de mi en tu cancion",
         "imagen": "https://storage.tally.so/private/1000083124.jpg?id=16glB1&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2Z2xCMSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.DlYpbgubx9Nq6fzyNmMO5dfhN-ATwgwkfmbYzcXYEss&signature=63308b1a72bcfaa80e1ac1b772b6d112d4ff42e247639fc497ce3d8c649a151c"
       },
