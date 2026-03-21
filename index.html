@@ -32,6 +32,35 @@
             justify-content: center; 
             align-items: center; 
         }
+        /* 1. Liberamos el body y el html */
+html, body {
+    touch-action: pan-y !important; /* Fuerza a que el navegador permita scroll vertical SIEMPRE */
+    overflow-y: auto !important;
+    overflow-x: hidden !important; /* Mantiene a raya los desbordes horizontales */
+    overscroll-behavior-y: contain;
+}
+
+/* 2. Liberamos específicamente TODOS los contenedores interactivos */
+.memory-card,
+.trivia-card,
+.carta,
+.option-btn,
+.card-wrapper,
+#app-container,
+#history-gallery,
+#trivia-game {
+    touch-action: pan-y !important; /* Le dice al S22: "Si tocas aquí, igual puedes bajar" */
+}
+
+/* 3. Evitamos que las imágenes arrastrables bloqueen el dedo */
+img {
+    pointer-events: none; /* Las imágenes no atraparán el toque del dedo */
+}
+
+/* Excepción: Las imágenes dentro del modal sí deben poder tocarse si quieres hacer zoom después */
+.modal-image {
+    pointer-events: auto;
+}
     </style>
 </head>
 <body>
