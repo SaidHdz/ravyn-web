@@ -1,0 +1,11 @@
+{
+  "evasivo": {
+    "pregunta": "Volvemos?",
+    "config": {
+      "tema": "minecraft"
+    },
+    "texto_si": "Si",
+    "texto_no": "No",
+    "mensaje_exito": "Que bueno"
+  }
+}
