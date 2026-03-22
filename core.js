@@ -26,9 +26,9 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
-/* Funcion principal */
+/* Funcion para ejecutar y ordenar los modulos */
 function ejecutarModulos(data) {
-    /* Esta monstruosidad detecta el tema buscando en cada modulo. */
+    /* Detecta el tema buscando en cada modulo */
     const tema = data.nuestra_historia?.config?.tema || 
                  data.trivia?.config?.tema || 
                  data.tarjetas?.config?.tema || 
@@ -38,7 +38,7 @@ function ejecutarModulos(data) {
     
     cargarTemaGlobal(tema);
 
-    /* Iniciar musica si viene la URL (ya no jala sepa pq) */
+    /* Iniciar musica */
     const cancionURL = data.nuestra_historia?.config?.cancion || 
                        data.trivia?.config?.cancion || 
                        data.tarjetas?.config?.cancion;
@@ -46,44 +46,56 @@ function ejecutarModulos(data) {
     if (cancionURL && typeof iniciarReproductor === 'function') {
         iniciarReproductor(cancionURL);
     }
-
-    /* Encendido de modulos individuales */
-    if (data.nuestra_historia) {
-        const mod = document.getElementById('modulo-historia');
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarHistoria === 'function') iniciarHistoria(data.nuestra_historia);
-    }
-
-    if (data.trivia) {
-        const mod = document.getElementById('modulo-trivia');
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarTrivia === 'function') iniciarTrivia(data.trivia);
-    }
-
-    if (data.tarjetas) {
-        const mod = document.getElementById('modulo-tarjetas');
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarTarjetas === 'function') iniciarTarjetas(data.tarjetas);
+    /* Llenar el módulo de bienvenida fijo */
+    if (data.bienvenida) {
+        const elPareja = document.getElementById('bienvenida-pareja');
+        const elMensaje = document.getElementById('bienvenida-mensaje');
+        
+        if (elPareja) elPareja.textContent = data.bienvenida.pareja;
+        if (elMensaje) elMensaje.textContent = data.bienvenida.mensaje;
     }
     
-    if (data.evasivo) {
-        const mod = document.getElementById('modulo-evasivo');
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarEvasivo === 'function') iniciarEvasivo(data.evasivo);
-    }
-    
-    if (data.contador) {
-        const mod = document.getElementById('modulo-contador');
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarContador === 'function') iniciarContador(data.contador);
-    }
-    
-    if (data.dedicatorias) {
-        const mod = document.getElementById('modulo-dedicatorias'); 
-        if (mod) mod.classList.remove('oculto');
-        if (typeof iniciarDedicatorias === 'function') iniciarDedicatorias(data.dedicatorias);
-    }
+    /*YA JALOOO*/
+    const lienzo = document.getElementById('lienzo-ravyn');
+    // Agregue un array en n8n que nos da el orden de los modulos en el html
+    const orden = data.configuracion_global?.orden || [];
+
+    // Iteramos sobre el array para activar y mover cada sección en el orden dictado
+    orden.forEach(idModulo => {
+        const mod = document.getElementById(idModulo);
+        if (!mod) return;
+
+        // 1. Lo hacemos visible
+        mod.classList.remove('oculto');
+
+        // 2. MAGIA NEGRA (pq soy moreno): Lo reinsertamos en el lienzo. 
+        // js automáticamente lo moverá a la última posición actual del contenedor.
+        if (lienzo) {
+            lienzo.appendChild(mod);
+        }
+
+        // 3. Encendemos el script que le corresponde
+        if (idModulo === 'modulo-historia' && data.nuestra_historia && typeof iniciarHistoria === 'function') {
+            iniciarHistoria(data.nuestra_historia);
+        }
+        if (idModulo === 'modulo-trivia' && data.trivia && typeof iniciarTrivia === 'function') {
+            iniciarTrivia(data.trivia);
+        }
+        if (idModulo === 'modulo-tarjetas' && data.tarjetas && typeof iniciarTarjetas === 'function') {
+            iniciarTarjetas(data.tarjetas);
+        }
+        if (idModulo === 'modulo-evasivo' && data.evasivo && typeof iniciarEvasivo === 'function') {
+            iniciarEvasivo(data.evasivo);
+        }
+        if (idModulo === 'modulo-contador' && data.contador && typeof iniciarContador === 'function') {
+            iniciarContador(data.contador);
+        }
+        if (idModulo === 'modulo-dedicatorias' && data.dedicatorias && typeof iniciarDedicatorias === 'function') {
+            iniciarDedicatorias(data.dedicatorias);
+        }
+    });
 }
+/*mlp js jeje*/
 
 /* Cargador de CSS de temas */
 function cargarTemaGlobal(themeName) {
