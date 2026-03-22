@@ -93,6 +93,9 @@ function ejecutarModulos(data) {
         if (idModulo === 'modulo-dedicatorias' && data.dedicatorias && typeof iniciarDedicatorias === 'function') {
             iniciarDedicatorias(data.dedicatorias);
         }
+        if (idModulo === 'modulo-wrapped' && data.wrapped && typeof iniciarWrapped === 'function') {
+            iniciarWrapped(data.wrapped);
+        }
     });
 }
 /*mlp js jeje*/

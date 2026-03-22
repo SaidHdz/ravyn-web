@@ -9,108 +9,27 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=VT323&family=Varela+Round&family=Quicksand:wght@300;500;700&family=Inter:wght@300;400;500&family=Montserrat:wght@700&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="estilos_tarjetas.css">
-    
-    
-    <style>
-    /* Ajustes para que nada se salga de la pantalla, tuve q ponerlo pq no quiero hacerlo x cada css xddd  */
-    * { 
-        box-sizing: border-box !important; 
-        max-width: 100vw; 
-    }
-
-    body {
-        overflow-x: hidden !important; 
-        width: 100vw;
-    }
-
-    .oculto { display: none !important; }
-
-    /* Separación entre secciones para que respiren en el cel */
-    .modulo-ravyn {
-    min-height: auto; 
-    position: relative;
-    width: 100%;
-    padding: 50px 0; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    }
-
-    /* Le devolvemos su escenario a los módulos interactivos para que no colapsen */
-    #modulo-tarjetas, 
-    #modulo-dedicatorias, 
-    #modulo-trivia, 
-    #modulo-evasivo {
-        min-height: 60dvh !important;
-    }
-
-    /* Y aseguramos que el contenedor interno de las cartas tome ese espacio */
-    #app-container,
-    #app-container-dedic {
-        min-height: 100% !important;
-    }
-
-    #modulo-tarjetas #app-container {
-        min-height: auto !important;
-        height: 100% !important;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        padding-bottom: 0 !important;
-    }
-
-    .modulo-ravyn > * {
-        width: 100%;
-    }
-
-    /* Ajustes del modal para que se vea bien en cualquier pantalla */
-    .modal-content {
-        width: 90vw !important; 
-        max-width: 450px !important; 
-        max-height: 80dvh !important; 
-        padding: 20px !important;
-        margin: auto !important;
-        overflow-y: auto !important; 
-        overflow-x: hidden !important;
-    }
-
-    .modal-image {
-        width: 100% !important;
-        height: auto !important;
-        max-height: 35dvh !important; 
-        object-fit: cover !important; 
-        border-radius: 12px !important;
-        margin-bottom: 15px !important;
-        pointer-events: none;
-    }
-
-    #modal-title { font-size: 1.4rem !important; margin-bottom: 5px !important; }
-    #modal-text { font-size: 1rem !important; line-height: 1.4 !important; }
-
-    /* Fix del reproductor para que no se quede atorado al scrollear */
-    #reproductor-flotante {
-        transform: translateZ(0);
-        will-change: transform;
-    }
-
-    @media (max-width: 600px) {
-        #reproductor-flotante {
-            width: calc(100vw - 40px) !important; 
-            bottom: 15px !important;
-            right: 20px !important;
-        }
-    }
-    </style>
+    <link rel="stylesheet" href="global.css">
 </head>
 <body>
     <main id="lienzo-ravyn">
         <section id="modulo-bienvenida" class="modulo-ravyn" style="text-align: center; padding: 40px 20px; z-index: 10; margin-bottom: -20px;">
             <h1 id="bienvenida-pareja" class="header-title" style="font-size: 3.5rem; margin-bottom: 15px;">...</h1>
             <p id="bienvenida-mensaje" class="card-description" style="font-size: 1.2rem; max-width: 600px; margin: 0 auto; line-height: 1.6;">...</p>
+        </section>
+
+        <section id="modulo-wrapped" class="modulo-ravyn oculto" style="padding: 0;">
+            <div id="wrapped-ui" style="position: relative; width: 100%; height: 100dvh; max-width: 500px; margin: 0 auto; overflow: hidden; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                
+                <div id="wrapped-progress-container" style="position: absolute; top: 15px; left: 10px; right: 10px; display: flex; gap: 5px; z-index: 100;">
+                    </div>
+
+                <div id="wrapped-slides-area" style="width: 100%; height: 100%; position: relative;">
+                    </div>
+
+                <div id="wrapped-btn-prev" style="position: absolute; top: 0; left: 0; width: 35%; height: 100%; z-index: 90; cursor: pointer;"></div>
+                <div id="wrapped-btn-next" style="position: absolute; top: 0; right: 0; width: 65%; height: 100%; z-index: 90; cursor: pointer;"></div>
+            </div>
         </section>
 
         <section id="modulo-historia" class="modulo-ravyn oculto">
@@ -292,6 +211,7 @@
     <script src="tarjetas.js"></script>
     <script src="dedicatoria.js"></script>
     <script src="evasivo.js"></script> 
+    <script src="wrapped.js"></script>
     <script src="contador.js"></script> 
     
     <script src="core.js"></script>
