@@ -25,7 +25,7 @@
         "tipo": "intro",
         "titulo": "Analizando nuestra conexión...",
         "datos": {
-          "subtitulo": "Cargando memorias de Elideth y Yo."
+          "subtitulo": "Cargando memorias de nadie y Yo."
         }
       },
       {
@@ -57,7 +57,7 @@
         "titulo": "El Nivel de Paciencia",
         "datos": {
           "subtitulo": "¿Quién soporta más los berrinches?",
-          "etiquetas": ["Yo", "Elideth"],
+          "etiquetas": ["Yo", "nadie"],
           "valores": [20, 80],
           "colores": ["#4facfe", "#ff66cc"]
         }
@@ -87,7 +87,7 @@
         "datos": {
           "subtitulo": "Arrepentimientos de orgullo tras una pelea",
           "valor": "Low", 
-          "perdonador_top": "Elideth"
+          "perdonador_top": "nadie"
         }
       },
       {
@@ -106,7 +106,7 @@
         "titulo": "Premio: El que deja en visto",
         "datos": {
           "icono_award": "👀",
-          "ganador": "Elideth",
+          "ganador": "nadie",
           "subtitulo": "Tardas un promedio de 2 hrs en responder"
         }
       },
@@ -116,7 +116,7 @@
         "titulo": "Premio: El más dormilón es para...",
         "datos": {
           "icono_award": "👑",
-          "ganador": "Elideth",
+          "ganador": "nadie",
           "subtitulo": "Siempre te quedas dormida viendo One Piece."
         }
       },
