@@ -5,6 +5,7 @@
   },
   "configuracion_global": {
     "orden": [
+      "modulo-wrapped",
       "modulo-historia",
       "modulo-contador",
       "modulo-evasivo",
@@ -13,11 +14,129 @@
       "modulo-trivia"
     ]
   },
+  "wrapped": {
+    "config": {
+      "tema": "neo-japan",
+      "velocidad_slide_segundos": 5
+    },
+    "diapositivas": [
+      {
+        "id": "slide_1",
+        "tipo": "intro",
+        "titulo": "Analizando nuestra conexión...",
+        "datos": {
+          "subtitulo": "Cargando memorias de Elideth y Yo."
+        }
+      },
+      {
+        "id": "slide_2",
+        "tipo": "metricas_chat",
+        "titulo": "Nuestra conexión en números",
+        "datos": {
+          "total_mensajes": 45203,
+          "palabra_top": "jajaja",
+          "top_emojis": ["❤️", "😭", "🏴‍☠️"]
+        }
+      },
+      {
+        "id": "slide_3",
+        "tipo": "grafica_barras",
+        "titulo": "¿De qué hablamos más?",
+        "datos": {
+          "subtitulo": "Análisis de nuestros temas de conversación",
+          "items": [
+            {"nombre": "Chisme", "porcentaje": 55, "color": "#ff66cc"},
+            {"nombre": "Qué comer", "porcentaje": 30, "color": "#4facfe"},
+            {"nombre": "Memes", "porcentaje": 15, "color": "#7bed9f"}
+          ]
+        }
+      },
+      {
+        "id": "slide_4",
+        "tipo": "grafica_dona",
+        "titulo": "El Nivel de Paciencia",
+        "datos": {
+          "subtitulo": "¿Quién soporta más los berrinches?",
+          "etiquetas": ["Yo", "Elideth"],
+          "valores": [20, 80],
+          "colores": ["#4facfe", "#ff66cc"]
+        }
+      },
+      {
+        "id": "slide_5",
+        "tipo": "horario_pico",
+        "titulo": "¿A qué hora nos amamos más?",
+        "datos": {
+          "subtitulo": "El horario pico de nuestros chats",
+          "valores": [10, 20, 40, 70, 95, 80, 50, 20, 10], 
+          "pico_hora": "9:00 PM"
+        }
+      },
+      {
+        "id": "slide_6",
+        "tipo": "soundtrack",
+        "titulo": "Nuestro Soundtrack",
+        "datos": {
+          "spotify_embed_url": "https://open.spotify.com/track/1mSviQV9iQnGSRyvTIuxAj?si=7011fc700f4941ec"
+        }
+      },
+      {
+        "id": "slide_7",
+        "tipo": "medidor_perdon",
+        "titulo": "El Medidor de Perdón",
+        "datos": {
+          "subtitulo": "Arrepentimientos de orgullo tras una pelea",
+          "valor": "Low", 
+          "perdonador_top": "Elideth"
+        }
+      },
+      {
+        "id": "slide_8",
+        "tipo": "superlativo_custom",
+        "titulo": "Premio: El que siempre tiene hambre",
+        "datos": {
+          "icono_award": "🍕",
+          "ganador": "Yo",
+          "subtitulo": "Siempre preguntas '¿Qué vamos a comer?'"
+        }
+      },
+      {
+        "id": "slide_9",
+        "tipo": "superlativo_custom",
+        "titulo": "Premio: El que deja en visto",
+        "datos": {
+          "icono_award": "👀",
+          "ganador": "Elideth",
+          "subtitulo": "Tardas un promedio de 2 hrs en responder"
+        }
+      },
+      {
+        "id": "slide_10",
+        "tipo": "superlativo_custom",
+        "titulo": "Premio: El más dormilón es para...",
+        "datos": {
+          "icono_award": "👑",
+          "ganador": "Elideth",
+          "subtitulo": "Siempre te quedas dormida viendo One Piece."
+        }
+      },
+      {
+        "id": "slide_11",
+        "tipo": "resumen",
+        "titulo": "Resumen Wrapped 2026",
+        "datos": {
+          "dias_juntos": 365,
+          "total_mensajes": "45.2k",
+          "emoji_top": "❤️"
+        }
+      }
+    ]
+  },
   "nuestra_historia": {
     "config": {
       "tema": "neo-japan",
       "titulo_principal": "NUESTRA HISTORIA",
-      "subtitulo": "Nadie",
+      "subtitulo": "Nosotros",
       "cancion": "https://open.spotify.com/track/1mSviQV9iQnGSRyvTIuxAj?si=7011fc700f4941ec"
     },
     "memorias": [
@@ -215,20 +334,20 @@
       },
       {
         "id": 2,
-        "titulo": "Chupala calep",
-        "contenido": "Solo quería dejarte este pequeño mensaje de prueba para ver cómo se acomoda el texto",
+        "titulo": "saddasd",
+        "contenido": "Solo quería dejarte este pequeño mensaje de prueba para ver cómo se acomoda el texto.",
         "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
       },
       {
         "id": 3,
-        "titulo": "goo goo ga ga tema infra",
-        "contenido": "El diseño de estas tarjetas está quedando genial, pa",
+        "titulo": "sadsad",
+        "contenido": "El diseño de estas tarjetas está quedando genial, pa. La música de fondo le da el toque perfecto.",
         "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
       },
       {
         "id": 4,
         "titulo": "PACO GOOOD",
-        "contenido": "Este es el último texto de prueba para asegurar que el scroll interno de la tarjeta funcione bien si el texto es muy largo",
+        "contenido": "Este es el último texto de prueba para asegurar que el scroll interno de la tarjeta funcione bien si el texto es muy largo.",
         "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
       }
     ]
