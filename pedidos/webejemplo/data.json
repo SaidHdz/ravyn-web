@@ -1,10 +1,24 @@
 {
+  "bienvenida": {
+    "pareja": "Para Elideth",
+    "mensaje": "He preparado esta experiencia con mucho cariño. Cada detalle y cada recuerdo aquí es para ti."
+  },
+  "configuracion_global": {
+    "orden": [
+      "modulo-historia",
+      "modulo-contador",
+      "modulo-evasivo",
+      "modulo-tarjetas",
+      "modulo-dedicatorias",
+      "modulo-trivia"
+    ]
+  },
   "nuestra_historia": {
     "config": {
-      "tema": "minecraft",
+      "tema": "neo-japan",
       "titulo_principal": "NUESTRA HISTORIA",
       "subtitulo": "Nadie",
-      "cancion": "https://open.spotify.com/intl-es/track/3yJ8buQlPzQtHyCicOGDJ0?si=609dc3bb7d7249b6"
+      "cancion": "https://open.spotify.com/track/1mSviQV9iQnGSRyvTIuxAj?si=7011fc700f4941ec"
     },
     "memorias": [
       {
@@ -159,14 +173,13 @@
   },
   "tarjetas": {
     "config": {
-      "tema": "minecraft",
+      "tema": "neo-japan",
       "mensaje_inicio": "Nuestras cartas guardadas..."
     },
     "cartas": [
       {
         "id": 1,
         "titulo": "El mene",
-      
         "contenido": "Mene pq escribiste eso de mi en tu cancion",
         "imagen": "https://storage.tally.so/private/1000083124.jpg?id=16glB1&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjE2Z2xCMSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.DlYpbgubx9Nq6fzyNmMO5dfhN-ATwgwkfmbYzcXYEss&signature=63308b1a72bcfaa80e1ac1b772b6d112d4ff42e247639fc497ce3d8c649a151c"
       },
@@ -181,6 +194,42 @@
         "titulo": "dtmf de nuevo",
         "contenido": "Que buen album cawn",
         "imagen": "https://storage.tally.so/private/a3.jpg?id=VDB0dy&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZEQjBkeSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA3MzI2NX0.wCBy39pmeqPPdkMPtVvHoB8WY2PAbI489NSYZ4w86Y0&signature=acacb920902bffeda82b7f60f5d4f9e9255f8e86c706382bd9f9a3c0c30d0528"
+      }
+    ]
+  },
+  "dedicatorias": {
+    "config": {
+      "tema": "y2k-streamer",
+      "mensaje_inicio": "Hola",
+      "secuencia": [
+        "Que uebaaa",
+        "chupala calep"
+      ]
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "aaaa",
+        "contenido": "aaaaaaaa",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 2,
+        "titulo": "Chupala calep",
+        "contenido": "Solo quería dejarte este pequeño mensaje de prueba para ver cómo se acomoda el texto",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 3,
+        "titulo": "goo goo ga ga tema infra",
+        "contenido": "El diseño de estas tarjetas está quedando genial, pa",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
+      },
+      {
+        "id": 4,
+        "titulo": "PACO GOOOD",
+        "contenido": "Este es el último texto de prueba para asegurar que el scroll interno de la tarjeta funcione bien si el texto es muy largo",
+        "cancion": "https://music.youtube.com/watch?v=lnpBwaH_Rk4&si=Jew3dAXTGQJMp4ob"
       }
     ]
   },
