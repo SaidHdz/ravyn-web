@@ -1,16 +1,8 @@
 {
   "bienvenida": {
-    "pareja": "Para nadie",
-    "mensaje": "He preparado esta experiencia con mucho cariño. Cada detalle y cada recuerdo aquí es para ti."
+    "pareja": "Elpollalarga",
+    "mensaje": "He preparado esta experiencia con mucho cariño."
   },
-  "configuracion_global": {
-    "orden": [
-      "modulo-historia",
-      "modulo-dedicatorias",
-      "modulo-trivia"
-    ]
-  },
-  "wrapped": {
   "nuestra_historia": {
     "config": {
       "tema": "minecraft",
@@ -181,6 +173,13 @@
         "contenido": "Me caes bien w",
         "imagen": "https://storage.tally.so/private/IMG_8054.jpeg?id=4zygob&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjR6eWdvYiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0NTMzNH0.uCkoLt6eqKyEAQs7GyAII3d9ld9RxPSvqzbwdZ3SHTY&signature=652c918cd09332351bc45411f664568ca6d090caefb398b31f277c4db068e94a"
       }
+    ]
+  },
+  "configuracion_global": {
+    "orden": [
+      "modulo-historia",
+      "modulo-trivia",
+      "modulo-tarjetas"
     ]
   }
 }
