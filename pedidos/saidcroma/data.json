@@ -5,11 +5,7 @@
   },
   "configuracion_global": {
     "orden": [
-      "modulo-wrapped",
       "modulo-historia",
-      "modulo-contador",
-      "modulo-evasivo",
-      "modulo-tarjetas",
       "modulo-dedicatorias",
       "modulo-trivia"
     ]
