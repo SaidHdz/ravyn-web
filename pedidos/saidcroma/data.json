@@ -1,4 +1,20 @@
 {
+  "bienvenida": {
+    "pareja": "Para nadie",
+    "mensaje": "He preparado esta experiencia con mucho cariño. Cada detalle y cada recuerdo aquí es para ti."
+  },
+  "configuracion_global": {
+    "orden": [
+      "modulo-wrapped",
+      "modulo-historia",
+      "modulo-contador",
+      "modulo-evasivo",
+      "modulo-tarjetas",
+      "modulo-dedicatorias",
+      "modulo-trivia"
+    ]
+  },
+  "wrapped": {
   "nuestra_historia": {
     "config": {
       "tema": "minecraft",
