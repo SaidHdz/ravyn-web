@@ -50,7 +50,7 @@ body.theme-jake::before {
 
 .header-title, .question-header { 
     font-family: var(--font-titles); 
-    font-size: 4rem; 
+    font-size: 3.5rem; 
     color: var(--jk-yellow-jake);
     text-transform: uppercase; 
     letter-spacing: 2px; 
@@ -71,21 +71,21 @@ body.theme-jake::before {
 
 .memory-card { 
     background-color: var(--jk-bg-panel); 
-    border: 5px solid var(--jk-border-comic); 
-    border-radius: 20px 40px 15px 50px; 
-    box-shadow: var(--hda-shadow); 
-    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
-    margin-bottom: 30px;
-    overflow: hidden;
+    border: solid var(--jk-border-comic);
+    border-width: 4px 3px 5px 4px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    box-shadow: var(--jk-border-comic); 
+    transition: transform 0.2s, box-shadow 0.2s;
+    margin-bottom: 25px;
+    transform: rotate(-0.5deg);
 }
 
 .memory-card:hover { transform: scale(1.02) translate(-4px, -4px); box-shadow: 10px 10px 0px var(--jk-border-comic); }
 
 .image-wrapper { 
-    border-bottom: 5px solid var(--jk-border-comic); 
-    border-radius: 16px 36px 0 0; 
+    border-bottom: 5px solid var(--fn-border); 
+    border-radius: 200px 15px 0 0 / 15px 225px 0 0;
     overflow: hidden;
-    aspect-ratio: 16/10;
 }
 
 .card-details { padding: 15px; background-color: var(--jk-bg-panel); }
@@ -112,16 +112,20 @@ body.theme-jake::before {
 
 .modal-content { 
     background-color: var(--jk-bg-panel); 
-    border: 6px solid var(--jk-border-comic); 
-    border-radius: 30px 15px 40px 10px; 
-    padding: 30px; box-shadow: var(--hda-shadow); 
-    transform: scale(0.95); transition: transform 0.3s ease; 
+    border: solid var(--jk-border-comic);
+    border-width: 4px 3px 5px 4px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    padding: 30px; 
+    box-shadow: var(--jk-border-comic); 
+    /* Combinamos scale con rotación */
+    transform: scale(0.95) rotate(-0.5deg); 
+    transition: transform 0.3s ease; 
 }
 
 .close-btn { 
     background: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); border-radius: 50%;
     color: var(--jk-border-comic); font-family: var(--font-titles); font-size: 1.5rem; 
-    height: 45px; width: 45px; top: -15px; right: -15px; box-shadow: 3px 3px 0px var(--jk-border-comic);
+    height: 45px; width: 45px; top: 15px; right: 15px; box-shadow: 3px 3px 0px var(--jk-border-comic);
 }
 
 .close-btn:hover { background: var(--jk-accent-red); color: white; transform: scale(1.1); }
@@ -141,17 +145,25 @@ body.theme-jake::before {
 #modal-text { color: var(--jk-text-main); font-size: 1.1rem; font-weight: 900; }
 
 .trivia-card { 
-    background-color: var(--jk-bg-panel); border: 5px solid var(--jk-border-comic); 
-    border-radius: 40px 20px 40px 20px; padding: 35px 25px; box-shadow: var(--cartoon-shadow);
+    background-color: var(--jk-bg-panel); 
+    border: solid var(--jk-border-comic);
+    border-width: 4px 3px 5px 4px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px; 
+    padding: 35px 25px; 
+    box-shadow: var(--jk-border-comic);
+    transform: rotate(-0.5deg);
 }
 
 .option-btn { 
-    background-color: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); 
-    border-radius: 30px; 
-    color: var(--jk-text-main); padding: 15px 20px; font-family: var(--font-titles); 
-    font-size: 1.4rem; transition: all 0.1s; 
-    box-shadow: 4px 4px 0px var(--jk-border-comic);
+    background-color: #F0F0F0; 
+    border: solid var(--jk-border-comic);
+    border-width: 4px 3px 5px 4px;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+    color: var(--fn-text-main); padding: 15px 20px; font-family: var(--font-titles); 
+    font-size: 1.4rem; transition: all 0.1s; box-shadow: 4px 4px 0px var(--fn-border);
+    transform: rotate(-0.5deg);
 }
+
 
 .option-btn:hover:not(:disabled) { background-color: var(--jk-bg-main); transform: scale(1.05); box-shadow: 2px 2px 0px var(--jk-border-comic); }
 .option-btn.correct { background-color: var(--jk-bg-main) !important; color: var(--jk-text-main) !important; }
@@ -178,10 +190,12 @@ body.theme-jake::before {
 #marco-reproductor { 
     background-color: #5DD1C8 !important; 
     padding: 12px 12px 30px 12px !important; 
-    border: 5px solid #000000 !important; 
-    border-radius: 12px !important; 
+    border: solid #000000 !important; 
+    border-width: 4px 3px 5px 4px !important;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
     box-shadow: 6px 6px 0px #000000 !important; 
     position: relative;
+    transform: rotate(-0.5deg);
 }
 
 #marco-reproductor::before {
@@ -252,10 +266,10 @@ body.theme-jake::before {
 [data-theme="jake"] .carta-inner p { color: var(--jk-text-main); font-weight: 900; }
 
 #wrapped-ui {
-    background-color: var(--jk-bg-panel) !important;
-    border: 6px solid var(--jk-border-comic) !important;
-    border-radius: 30px 10px 30px 10px !important;
-    box-shadow: var(--hda-shadow) !important;
+    border: solid var(--jk-border-comic) !important;
+    border-width: 4px 3px 5px 4px !important;
+    border-radius: 255px 15px 225px 15px / 15px 225px 15px 255px !important;
+    transform: rotate(-0.5deg);
 }
 
 .wrapped-slide {
