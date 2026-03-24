@@ -137,7 +137,7 @@ body.theme-jake::before {
 .close-btn { 
     background: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); border-radius: 50%;
     color: var(--jk-border-comic); font-family: var(--font-titles); font-size: 1.5rem; 
-    height: 45px; width: 45px; top: -15px; right: -15px; box-shadow: 3px 3px 0px var(--jk-border-comic);
+    height: 45px; width: 45px; top: 15px; right: 15px; box-shadow: 3px 3px 0px var(--jk-border-comic);
 }
 .close-btn:hover { background: var(--jk-accent-red); color: white; transform: scale(1.1); }
 .modal-image { border: 5px solid var(--jk-border-comic); border-radius: 15px 5px 15px 5px; margin-bottom: 15px; }
