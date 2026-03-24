@@ -1,6 +1,6 @@
 {
   "bienvenida": {
-    "pareja": "Para nadie",
+    "pareja": "Para Nadie",
     "mensaje": "He preparado esta experiencia con mucho cariño. Cada detalle y cada recuerdo aquí es para ti."
   },
   "configuracion_global": {
@@ -16,7 +16,7 @@
   },
   "wrapped": {
     "config": {
-      "tema": "neo-japan",
+      "tema": "finn",
       "velocidad_slide_segundos": 5
     },
     "diapositivas": [
@@ -25,7 +25,7 @@
         "tipo": "intro",
         "titulo": "Analizando nuestra conexión...",
         "datos": {
-          "subtitulo": "Cargando memorias de nadie y Yo."
+          "subtitulo": "Cargando memorias de Nadie y Yo."
         }
       },
       {
@@ -57,8 +57,8 @@
         "titulo": "El Nivel de Paciencia",
         "datos": {
           "subtitulo": "¿Quién soporta más los berrinches?",
-          "etiquetas": ["Yo", "nadie"],
-          "valores": [20, 80],
+          "etiquetas": ["Yo", "Nadie"],
+          "valores": [40, 60],
           "colores": ["#4facfe", "#ff66cc"]
         }
       },
@@ -87,7 +87,7 @@
         "datos": {
           "subtitulo": "Arrepentimientos de orgullo tras una pelea",
           "valor": "Low", 
-          "perdonador_top": "nadie"
+          "perdonador_top": "Nadie"
         }
       },
       {
@@ -106,7 +106,7 @@
         "titulo": "Premio: El que deja en visto",
         "datos": {
           "icono_award": "👀",
-          "ganador": "nadie",
+          "ganador": "Nadie",
           "subtitulo": "Tardas un promedio de 2 hrs en responder"
         }
       },
@@ -116,7 +116,7 @@
         "titulo": "Premio: El más dormilón es para...",
         "datos": {
           "icono_award": "👑",
-          "ganador": "nadie",
+          "ganador": "Nadie",
           "subtitulo": "Siempre te quedas dormida viendo One Piece."
         }
       },
@@ -134,7 +134,7 @@
   },
   "nuestra_historia": {
     "config": {
-      "tema": "neo-japan",
+      "tema": "finn",
       "titulo_principal": "NUESTRA HISTORIA",
       "subtitulo": "Nosotros",
       "cancion": "https://open.spotify.com/track/1mSviQV9iQnGSRyvTIuxAj?si=7011fc700f4941ec"
