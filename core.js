@@ -34,14 +34,16 @@ function ejecutarModulos(data) {
                  data.tarjetas?.config?.tema || 
                  data.evasivo?.config?.tema || 
                  data.contador?.config?.tema || 
-                 data.dedicatorias?.config?.tema || "aesthetic"; 
+                 data.dedicatorias?.config?.tema || 
+                 data.wrapped?.config?.tema || "aesthetic";
     
     cargarTemaGlobal(tema);
 
     /* Iniciar musica */
     const cancionURL = data.nuestra_historia?.config?.cancion || 
                        data.trivia?.config?.cancion || 
-                       data.tarjetas?.config?.cancion;
+                       data.tarjetas?.config?.cancion ||
+                       data.wrapped?.config?.cancion;
                        
     if (cancionURL && typeof iniciarReproductor === 'function') {
         iniciarReproductor(cancionURL);

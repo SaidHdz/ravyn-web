@@ -1,302 +1,70 @@
-/* =========================================================
-   RAVYN THEME: NEO JAPAN (JAZEN VIBE)
-   ========================================================= */
+/* Tema neo japones css - 12 PM rage edition */
 @import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;700&display=swap');
 
-*, *:before, *:after {
-    box-sizing: border-box;
-}
-
-html, body {
-    overflow-x: hidden;
-    width: 100%;
-}
-
 :root {
-    /* PALETA JAZEN (60 - 30 - 10) */
-    --nj-bg-dark: #100a1c;        /* 60% Azul/Morado noche profundo */
-    --nj-bg-panel: #1a112c;       /* Fondo de las tarjetas un poco más claro */
-    --nj-red-neon: #e31b3f;       /* 30% Rojo Carmesí Vibrante */
-    --nj-red-dark: #8f1127;       /* Rojo oscuro para sombras/hover */
-    --nj-gold: #e1c17e;           /* 10% Oro/Crema para detalles y nubes */
-    --nj-text-main: #f5f5f5;      /* Texto blanco puro */
-    --nj-text-muted: #a39eb0;     /* Texto secundario */
-    
-    --font-titles: 'Teko', sans-serif;       /* Fuente Blocky para títulos */
-    --font-body: 'Noto Sans JP', sans-serif; /* Fuente limpia para lectura */
+    --nj-bg-dark: #100a1c;        
+    --nj-bg-panel: #1a112c;       
+    --nj-red-neon: #e31b3f;       
+    --nj-red-dark: #8f1127;       
+    --nj-gold: #e1c17e;           
+    --nj-text-main: #f5f5f5;      
+    --nj-text-muted: #a39eb0;     
+    --font-titles: 'Teko', sans-serif;       
+    --font-body: 'Noto Sans JP', sans-serif; 
 }
 
-/* Ajustes de respiración para móvil */
-@media (max-width: 600px) {
-    body { padding: 20px 15px; }
-    .header-title { font-size: 3.5rem !important; margin-bottom: 20px; }
-    .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 60px; }
-    #stack-container { height: 50vh; max-height: 400px; }
-}
-
-/* === CONTROL MAESTRO === */
-body.no-anim * { animation: none !important; transition: none !important; }
-
-/* === ESTILOS GLOBALES === */
 body.theme-neo-japan {
     background-color: var(--nj-bg-dark);
     color: var(--nj-text-main);
     font-family: var(--font-body);
-    margin: 0;
     padding: 40px 20px;
     min-height: 100vh;
-    /* Fondo con un sutil patrón radial para dar profundidad sin usar imágenes pesadas */
     background-image: radial-gradient(circle at 50% 0%, #1a112c 0%, transparent 60%);
 }
 
-button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
+.page-header { margin-bottom: 50px; }
+.header-title { font-family: var(--font-titles); font-size: 4.5rem; color: var(--nj-red-neon); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(227, 27, 63, 0.4); }
+.header-subtitle { font-family: var(--font-titles); color: var(--nj-gold); font-size: 1.8rem; letter-spacing: 4px; text-transform: uppercase; margin-top: -5px; }
 
-/* === HEADER (ESTILO STREAM GRAPHICS) === */
-.page-header {
-    text-align: center;
-    margin-bottom: 50px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    position: relative;
-}
-
-.header-title {
-    font-family: var(--font-titles);
-    font-size: 4.5rem;
-    color: var(--nj-red-neon);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 0;
-    line-height: 1;
-    text-shadow: 0 0 20px rgba(227, 27, 63, 0.4);
-}
-
-.header-subtitle {
-    font-family: var(--font-titles);
-    color: var(--nj-gold);
-    font-size: 1.8rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-top: -5px;
-}
-
-/* === GALERÍA (MEMORY CARDS) === */
-.gallery-container {
-    display: flex; flex-direction: column; gap: 35px; max-width: 600px; margin: 0 auto;
-}
-
-.card-wrapper {
-    opacity: 0; transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-}
-.card-wrapper.from-left { transform: translateX(-50px); }
-.card-wrapper.from-right { transform: translateX(50px); }
-.card-wrapper.is-visible { opacity: 1; transform: translateX(0); }
-
-.memory-card {
-    background-color: var(--nj-bg-panel);
-    border: 2px solid var(--nj-red-neon);
-    position: relative;
-    display: flex; flex-direction: column;
-    transition: all 0.3s ease;
-    /* Esquinas decorativas doradas (Truco de sombras múltiples) */
-    box-shadow: 
-        inset 0 0 0 1px var(--nj-bg-dark), /* Borde interno para separar */
-        0 10px 30px rgba(0,0,0,0.8);
-}
-
-.memory-card:hover {
-    transform: translateY(-5px);
-    border-color: var(--nj-gold);
-    box-shadow: 0 15px 40px rgba(227, 27, 63, 0.2);
-}
-
-.image-wrapper {
-    width: 100%; aspect-ratio: 16/9;
-    position: relative; overflow: hidden;
-    border-bottom: 2px solid var(--nj-red-neon);
-}
-
-.card-image {
-    width: 100%; height: 100%; object-fit: cover;
-    opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease;
-}
-
-.memory-card:hover .card-image { transform: scale(1.05); }
-
+/* Historia */
+.memory-card { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); box-shadow: inset 0 0 0 1px var(--nj-bg-dark), 0 10px 30px rgba(0,0,0,0.8); }
+.memory-card:hover { border-color: var(--nj-gold); box-shadow: 0 15px 40px rgba(227, 27, 63, 0.2); transform: translateY(-5px); }
+.image-wrapper { border-bottom: 2px solid var(--nj-red-neon); }
 .card-details { padding: 20px; }
-.card-title {
-    font-family: var(--font-titles);
-    font-size: 2.2rem;
-    color: var(--nj-red-neon);
-    margin: 0 0 5px 0;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    line-height: 1;
-}
-.card-description { color: var(--nj-text-muted); font-size: 1rem; margin: 0; }
+.card-title { font-family: var(--font-titles); font-size: 2.2rem; color: var(--nj-red-neon); text-transform: uppercase; }
+.card-description { color: var(--nj-text-muted); font-size: 1rem; }
 
-/* === MODAL (ESTILO JAZEN) === */
-.modal-overlay {
-    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(16, 10, 28, 0.95); /* Azul muy oscuro casi opaco */
-    display: flex; justify-content: center; align-items: center;
-    z-index: 1000; padding: 20px;
-    opacity: 0; visibility: hidden;
-    transition: opacity 0.3s ease, visibility 0.3s ease;
-}
-.modal-overlay.show-modal { opacity: 1; visibility: visible; }
-
-.modal-content {
-    position: relative; 
-    max-width: 500px; 
-    width: calc(100% - 40px);
-    margin: 0 auto; 
-    max-height: 90vh; overflow-y: auto;
-    background-color: var(--nj-bg-panel);
-    border: 2px solid var(--nj-red-neon);
-    padding: 30px; 
-    transform: scale(0.95); 
-    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1);
-    box-shadow: 0 0 50px rgba(227, 27, 63, 0.15);
-}
-.modal-overlay.show-modal .modal-content { transform: scale(1); }
-
-.close-btn {
-    position: absolute; top: 10px; right: 10px;
-    background: transparent; border: 2px solid var(--nj-red-neon);
-    color: var(--nj-red-neon); font-family: var(--font-titles);
-    font-size: 1.5rem; padding: 0 10px; height: 35px;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
-}
+/* Modal */
+.modal-overlay { background: rgba(16, 10, 28, 0.95); }
+.modal-content { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); padding: 30px; box-shadow: 0 0 50px rgba(227, 27, 63, 0.15); transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); }
+.close-btn { background: transparent; border: 2px solid var(--nj-red-neon); color: var(--nj-red-neon); font-family: var(--font-titles); font-size: 1.5rem; height: 35px; transition: all 0.2s; top: 10px; right: 10px; }
 .close-btn:hover { background: var(--nj-red-neon); color: var(--nj-bg-dark); }
+.modal-image { border: 2px solid var(--nj-red-dark); margin-bottom: 15px; }
+.modal-meta { font-family: var(--font-titles); font-size: 1.5rem; color: var(--nj-gold); margin-bottom: 10px; }
+.pixel-divider { border-top: 1px dashed var(--nj-red-dark); margin: 15px 0; }
+#modal-text { color: var(--nj-text-main); font-size: 1rem; }
 
-.modal-image { width: 100%; border: 2px solid var(--nj-red-dark); margin-bottom: 15px; aspect-ratio: 1/1; object-fit: cover; }
-.modal-meta { font-family: var(--font-titles); font-size: 1.5rem; color: var(--nj-gold); letter-spacing: 1px; margin-bottom: 10px; }
-.pixel-divider { border: 0; border-top: 1px dashed var(--nj-red-dark); margin: 15px 0; }
-#modal-text { color: var(--nj-text-main); line-height: 1.6; font-size: 1rem; font-weight: 300; }
-
-/* === TRIVIA (LOS PANELES DE TWITCH) === */
-.trivia-card {
-    background-color: var(--nj-bg-panel);
-    border: 2px solid var(--nj-red-neon);
-    padding: 35px 25px; text-align: center;
-    max-width: 600px; margin: 0 auto;
-    position: relative;
-}
-.question-header { 
-    font-family: var(--font-titles); font-size: 2.5rem; 
-    color: var(--nj-gold); text-transform: uppercase; margin-bottom: 30px; line-height: 1.1;
-}
-
-.options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
-
-.option-btn {
-    background-color: transparent;
-    border: 2px solid var(--nj-red-neon);
-    color: var(--nj-text-main);
-    padding: 15px 20px;
-    font-family: var(--font-titles);
-    font-size: 1.6rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    cursor: pointer;
-    transition: all 0.2s;
-    width: 100%;
-    position: relative;
-    overflow: hidden;
-}
-
-/* Efecto hover estilo botón de Esports */
-.option-btn:hover:not(:disabled) {
-    background-color: rgba(227, 27, 63, 0.1);
-    box-shadow: inset 4px 0 0 var(--nj-red-neon); /* Línea gruesa a la izquierda */
-    transform: translateX(5px);
-}
-
-.option-btn.correct { background-color: var(--nj-gold) !important; border-color: var(--nj-gold) !important; color: var(--nj-bg-dark) !important; font-weight: bold;}
+/* Trivia */
+.trivia-card { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); padding: 35px 25px; }
+.question-header { font-family: var(--font-titles); font-size: 2.5rem; color: var(--nj-gold); text-transform: uppercase; margin-bottom: 30px; }
+.option-btn { background-color: transparent; border: 2px solid var(--nj-red-neon); color: var(--nj-text-main); padding: 15px 20px; font-family: var(--font-titles); font-size: 1.6rem; text-transform: uppercase; transition: all 0.2s; }
+.option-btn:hover:not(:disabled) { background-color: rgba(227, 27, 63, 0.1); box-shadow: inset 4px 0 0 var(--nj-red-neon); transform: translateX(5px); }
+.option-btn.correct { background-color: var(--nj-gold) !important; border-color: var(--nj-gold) !important; color: var(--nj-bg-dark) !important; }
 .option-btn.incorrect { background-color: var(--nj-red-dark) !important; border-color: var(--nj-red-neon) !important; opacity: 0.8; }
-
 .progress-container { background-color: var(--nj-bg-dark); border: 1px solid var(--nj-red-dark); height: 10px; margin-bottom: 30px; }
-.progress-bar { background-color: var(--nj-red-neon); height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--nj-red-neon); width: 0%;}
+.progress-bar { background-color: var(--nj-red-neon); box-shadow: 0 0 10px var(--nj-red-neon); }
 
-/* =========================================
-   CLASES DE UTILIDAD PARA JS (TRIVIA)
-   ========================================= */
-.hidden { display: none !important; }
-.fade-transition { transition: opacity 0.3s ease; opacity: 1; }
-.fade-out { opacity: 0; }
-
-/* Un toque extra: Opacar las respuestas incorrectas cuando ya se eligió una */
-.options-grid.answered .option-btn:not(.correct) {
-    opacity: 0.5;
-    transform: scale(0.95);
-    filter: grayscale(80%);
-}
-
-/* === EL COFRE CEREMONIAL (SWIPE CARDS) === */
+/* Cartas y El cofre culero */
 [data-theme="neo-japan"] .paquete { background-color: transparent; box-shadow: none; border: none; overflow: visible; }
+[data-theme="neo-japan"] .paquete::before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)); border: 2px solid var(--nj-gold); border-radius: 4px; z-index: 1; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+[data-theme="neo-japan"] .paquete::after { content: ""; position: absolute; top: 15%; left: 0; width: 100%; height: 35%; background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)); border: 2px solid var(--nj-gold); border-radius: 4px; transition: transform 0.8s ease-in, opacity 0.5s 0.3s; transform-origin: center bottom; z-index: 2; }
 
-/* Cuerpo del cofre lacado en rojo */
-[data-theme="neo-japan"] .paquete::before {
-    content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
-    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark));
-    border: 2px solid var(--nj-gold); border-radius: 4px; z-index: 1;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
-}
-
-/* Tapa del cofre */
-[data-theme="neo-japan"] .paquete::after {
-    content: ""; position: absolute; top: 15%; left: 0; width: 100%; height: 35%;
-    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark));
-    border: 2px solid var(--nj-gold); border-radius: 4px;
-    transition: transform 0.8s ease-in, opacity 0.5s 0.3s;
-    transform-origin: center bottom; z-index: 2;
-}
-
-/* El símbolo dorado central */
-[data-theme="neo-japan"] .paquete .pestillo {
-    content: "龍"; /* Dragón en Kanji o puedes dejar el "?" */
-    font-family: var(--font-body); font-size: 2rem; color: var(--nj-bg-dark);
-    background-color: var(--nj-gold); border: 2px solid var(--nj-bg-dark);
-    border-radius: 50%; width: 50px; height: 50px;
-    display: flex; justify-content: center; align-items: center;
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 3; transition: opacity 0.3s;
-    box-shadow: 0 0 15px rgba(225, 193, 126, 0.4);
-}
-
-/* Partículas Doradas Neo-Japan */
-[data-theme="neo-japan"] .particula-bloque {
-    background-color: var(--nj-gold); border: none;
-    border-radius: 50%; box-shadow: 0 0 10px var(--nj-gold);
-}
-
-/* Diseño de las cartas al salir */
-[data-theme="neo-japan"] .carta-inner {
-    background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon);
-}
+/* El dragón mamador que no jala alv */
+[data-theme="neo-japan"] .paquete .pestillo { content: "龍"; font-family: var(--font-body); font-size: 2rem; color: var(--nj-bg-dark); background-color: var(--nj-gold); border: 2px solid var(--nj-bg-dark); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; transition: opacity 0.3s; box-shadow: 0 0 15px rgba(225, 193, 126, 0.4); }
+[data-theme="neo-japan"] .particula-bloque { background-color: var(--nj-gold); border: none; border-radius: 50%; box-shadow: 0 0 10px var(--nj-gold); }
+[data-theme="neo-japan"] .carta-inner { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); }
 [data-theme="neo-japan"] .carta-inner img { border-bottom: 2px solid var(--nj-red-neon); }
 [data-theme="neo-japan"] .carta-inner h3 { font-family: var(--font-titles); font-size: 2.2rem; color: var(--nj-gold); margin: 15px 20px 5px; text-transform: uppercase; line-height: 1;}
 [data-theme="neo-japan"] .carta-inner p { color: var(--nj-text-main); font-weight: 300; }
 
-/* === REPRODUCTOR === */
-#reproductor-flotante {
-    position: fixed; bottom: 20px; right: 20px;
-    width: 320px; max-width: calc(100vw - 40px); 
-    z-index: 9999; transition: all 0.3s ease;
-}
-
-body.theme-neo-japan #marco-reproductor {
-    background-color: var(--nj-bg-panel);
-    padding: 12px;
-    border: 2px solid var(--nj-red-neon);
-    border-left: 6px solid var(--nj-red-neon); /* Detalle asimétrico estilo panel */
-    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
-}
-
-/* =========================================
-   ANIMACIONES ÉPICAS PARA LA COREOGRAFÍA
-   ========================================= */
-
+body.theme-neo-japan #marco-reproductor { background-color: var(--nj-bg-panel); padding: 12px; border: 2px solid var(--nj-red-neon); border-left: 6px solid var(--nj-red-neon); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }

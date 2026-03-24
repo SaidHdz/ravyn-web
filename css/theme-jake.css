@@ -1,0 +1,348 @@
+/* ============================================================
+   Tema Mejor Amigo (Jake) css - Adventure Time Edition V1.0
+   ============================================================ */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+    /* PALETA "ELASTIC DOG" */
+    --jk-bg-main: #FFB12B;         /* Amarillo Ocre/Naranja de Jake */
+    --jk-bg-panel: #FFFFFF;        /* Blanco puro */
+    --jk-border-comic: #000000;    /* Línea gruesa negra imperfecta */
+    
+    --jk-text-main: #000000;       /* Texto negro principal */
+    --jk-yellow-jake: #FFD230;     /* Amarillo Jake (Para textos/detalles) */
+    --jk-accent-red: #D32F2F;      /* Rojo Violín para acentos/wrapped y text muted */
+    --jk-blue-shorts: #1A4073;     /* Azul Shorts (solo para gráficas) */
+    
+    --font-titles: 'Fredoka One', cursive;   /* Letra HDA */
+    --font-body: 'Nunito', sans-serif;       /* Letra limpia para leer mensajes */
+    
+    /* Sombra elástica sólida */
+    --hda-shadow: 6px 6px 0px var(--jk-border-comic);
+}
+
+body.theme-jake {
+    background-color: var(--jk-bg-main);
+    color: var(--jk-text-main);
+    font-family: var(--font-body);
+    padding: 40px 20px;
+    min-height: 100vh;
+    position: relative;
+    z-index: 0;
+}
+
+/* ============================================================
+   NUBES "ESPACIO GRUMOSO" (FONDO)
+   ============================================================ */
+body.theme-jake::before {
+    content: "";
+    position: fixed;
+    top: -20px; left: -20px; right: -20px; bottom: -20px;
+    z-index: -1;
+    background-color: var(--jk-bg-main);
+    background-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.15) 15%, transparent 16%);
+    background-size: 80px 80px;
+    background-repeat: repeat;
+    filter: blur(2px);
+    animation: flotarNubesJake 30s linear infinite;
+}
+
+@keyframes flotarNubesJake {
+    from { background-position: 0 0; }
+    to { background-position: 80px 80px; }
+}
+
+/* ============================================================
+   TÍTULOS GLOBALES ( Amarillo Jake con Contorno Negro y Sombra)
+   Forzado a Amarillo, Consistency is Key pa!
+   ============================================================ */
+.page-header { margin-bottom: 50px; text-align: center; }
+
+.header-title, .question-header { 
+    font-family: var(--font-titles); 
+    font-size: 4rem; 
+    color: var(--jk-yellow-jake);
+    text-transform: uppercase; 
+    letter-spacing: 2px; 
+    line-height: 1.1;
+    -webkit-text-stroke: 1px var(--jk-border-comic);
+    filter: drop-shadow(2px 4px 0px var(--jk-border-comic));
+    text-shadow: none !important; 
+}
+
+.header-subtitle { 
+    font-family: var(--font-titles); 
+    color: var(--jk-text-main); 
+    font-size: 1.8rem; 
+    letter-spacing: 3px; 
+    text-transform: uppercase; 
+    margin-top: 5px; 
+}
+
+/* ============================================================
+   CARTAS Y MODALES (Diseño Elástico/Irregulares)
+   Se eliminaron todos los gorritos. Layout Neo Japan V2.
+   ============================================================ */
+.memory-card { 
+    background-color: var(--jk-bg-panel); 
+    border: 5px solid var(--jk-border-comic); 
+    /* Magia elástica: Geometría irregular tipo masa */
+    border-radius: 20px 40px 15px 50px; 
+    box-shadow: var(--hda-shadow); 
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s;
+    margin-bottom: 30px;
+    overflow: hidden; /* Para que la imagen no tape los bordes */
+}
+.memory-card:hover { transform: scale(1.02) translate(-4px, -4px); box-shadow: 10px 10px 0px var(--jk-border-comic); }
+
+/* Layout Neo Japan V2: Imagen arriba rectangular */
+.image-wrapper { 
+    border-bottom: 5px solid var(--jk-border-comic); 
+    border-radius: 16px 36px 0 0; 
+    overflow: hidden;
+    aspect-ratio: 16/10; /* Un poco más bajita para dejar aire al texto */
+}
+
+
+.card-details { padding: 15px; background-color: var(--jk-bg-panel); }
+
+/* Títulos internos consistentes: Amarillo Jake */
+.card-title { 
+    font-family: var(--font-titles); 
+    font-size: 2.2rem; 
+    color: var(--jk-yellow-jake); /* AMARILLO JAKE */
+    text-transform: uppercase; 
+    -webkit-text-stroke: 1px var(--jk-border-comic);
+    margin-bottom: 5px;
+}
+/* TEXTO DEL MENSAJE: Negro y Grueso, pero pequeño para legibilidad */
+.card-description { 
+    color: var(--jk-text-main); 
+    font-size: 1rem; /* Pequeño para legibilidad */
+    font-weight: 900; /* Letras gruesas */
+    line-height: 1.3;
+    max-height: 100px; /* Límite de altura */
+    overflow-y: auto; /* Scroll si el mensaje es biblia */
+}
+
+/* Modales */
+.modal-overlay { background: rgba(255, 177, 43, 0.9); }
+.modal-content { 
+    background-color: var(--jk-bg-panel); 
+    border: 6px solid var(--jk-border-comic); 
+    border-radius: 30px 15px 40px 10px; /* Irregular */
+    padding: 30px; box-shadow: var(--hda-shadow); 
+    transform: scale(0.95); transition: transform 0.3s ease; 
+}
+.close-btn { 
+    background: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); border-radius: 50%;
+    color: var(--jk-border-comic); font-family: var(--font-titles); font-size: 1.5rem; 
+    height: 45px; width: 45px; top: -15px; right: -15px; box-shadow: 3px 3px 0px var(--jk-border-comic);
+}
+.close-btn:hover { background: var(--jk-accent-red); color: white; transform: scale(1.1); }
+.modal-image { border: 5px solid var(--jk-border-comic); border-radius: 15px 5px 15px 5px; margin-bottom: 15px; }
+/* Meta del modal: Amarillo Jake */
+.modal-meta { 
+    font-family: var(--font-titles); 
+    font-size: 1.5rem; 
+    color: var(--jk-yellow-jake); 
+    margin-bottom: 10px; 
+    -webkit-text-stroke: 1px var(--jk-border-comic); 
+}
+.pixel-divider { border-top: 5px solid var(--jk-border-comic); margin: 15px 0; border-radius: 2px; }
+/* Texto modal: Negro Grueso */
+#modal-text { color: var(--jk-text-main); font-size: 1.1rem; font-weight: 900; }
+
+/* ============================================================
+   TRIVIA (Grumosos)
+   ============================================================ */
+.trivia-card { 
+    background-color: var(--jk-bg-panel); border: 5px solid var(--jk-border-comic); 
+    border-radius: 40px 20px 40px 20px; padding: 35px 25px; box-shadow: var(--cartoon-shadow);
+}
+/* Botones Nube/Dona: Súper Redondos tipo pastilla */
+.option-btn { 
+    background-color: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); 
+    border-radius: 30px; 
+    color: var(--jk-text-main); padding: 15px 20px; font-family: var(--font-titles); 
+    font-size: 1.4rem; transition: all 0.1s; 
+    box-shadow: 4px 4px 0px var(--jk-border-comic);
+}
+.option-btn:hover:not(:disabled) { background-color: var(--jk-bg-main); transform: scale(1.05); box-shadow: 2px 2px 0px var(--jk-border-comic); }
+.option-btn.correct { background-color: var(--jk-bg-main) !important; color: var(--jk-text-main) !important; }
+.option-btn.incorrect { background-color: var(--jk-accent-red) !important; color: white !important; transform: translate(4px, 4px); box-shadow: 0 0 0 var(--jk-border-comic) !important;}
+.progress-container { 
+    background-color: var(--jk-bg-panel); 
+    border: 4px solid var(--jk-border-comic); 
+    border-radius: 20px; 
+    height: 24px; /* Un poquito más alta para que se vea pro */
+    margin-bottom: 30px; 
+    overflow: hidden; /* Evita que el relleno se desborde de las curvas */
+}
+.progress-bar { 
+    background-color: var(--jk-accent-red); /* Rojo Violín para contrastar brutal */
+    height: 100%; /* FUNDAMENTAL para que se vea */
+    width: 0%; /* Inicia vacía, el JS la irá llenando */
+    border-radius: 0; 
+    border-right: 4px solid var(--jk-border-comic); 
+    transition: width 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Efecto elástico de Jake */
+}
+
+/* ============================================================
+   EL REPRODUCTOR BMO (EASTER EGG HDA)
+   ============================================================ */
+#marco-reproductor { 
+    background-color: #5DD1C8 !important; /* Verde Aqua de BMO */
+    padding: 12px 12px 30px 12px !important; /* Más espacio abajo para los botones */
+    border: 5px solid #000000 !important; 
+    border-radius: 12px !important; 
+    box-shadow: 6px 6px 0px #000000 !important; 
+    position: relative;
+}
+
+/* Círculo Azul de BMO */
+#marco-reproductor::before {
+    content: "●";
+    position: absolute;
+    bottom: 2px;
+    right: 40px;
+    color: #1A4073; /* Azul oscuro */
+    font-size: 1.2rem;
+    -webkit-text-stroke: 2px #000000;
+}
+
+/* Triángulo Rojo de BMO */
+#marco-reproductor::after {
+    content: "▲";
+    position: absolute;
+    bottom: 3px;
+    right: 15px;
+    color: #E32E2E; /* Rojo */
+    font-size: 1.1rem;
+    -webkit-text-stroke: 2px #000000;
+}
+
+/* ============================================================
+   EL ENCHIRIDION (AHORA ES EL COFRE)
+   ============================================================ */
+[data-theme="jake"] .paquete { 
+    background-color: transparent; box-shadow: none; border: none; overflow: visible; 
+    width: 150px; height: 200px;
+}
+
+/* Cuerpo del Libro - Marrón antiguo/Tan desgastado sólido */
+[data-theme="jake"] .paquete::before { 
+    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+    background: #A06F3D; /* Marrón antiguo sólido */
+    border: 6px solid var(--jk-border-comic); 
+    border-radius: 15px 40px 10px 30px; /* Geometría irregular de libro viejo */
+    z-index: 1; 
+    transition: transform 0.6s ease;
+}
+
+/* El sigil del Enchiridion con las dos pupilas - Fondo Marrón Claro sólido */
+[data-theme="jake"] .paquete::after { 
+    content: ""; position: absolute; top: 30%; left: 15%; width: 70%; height: 40%; 
+    background: #D5AD7C; /* Marrón claro/Tan del sigil */
+    border: 4px solid var(--jk-border-comic); 
+    border-radius: 50% / 15px; /* Forma elíptica del sigil central */
+    display: flex; justify-content: center; align-items: center; gap: 10px;
+    z-index: 2; 
+    /* Pintamos las dos pupilas negras dentro del sigil */
+    background-image: 
+        radial-gradient(circle at 35% 50%, #000 12%, transparent 13%),
+        radial-gradient(circle at 65% 50%, #000 12%, transparent 13%);
+}
+
+/* El pestillo (Lock) del sigil - Usamos el Amarillo Jake de la foto */
+[data-theme="jake"] .paquete .pestillo { 
+    content: ""; font-size: 1.5rem; 
+    background-color: var(--jk-yellow-jake); /* Amarillo Jake */
+    border: 5px solid var(--jk-border-comic); border-radius: 50%; width: 50px; height: 50px; 
+    display: flex; justify-content: center; align-items: center; position: absolute; top: 50%; left: 50%; 
+    transform: translate(-50%, -50%); z-index: 3; box-shadow: var(--hda-shadow-sm);
+    transition: opacity 0.3s;
+}
+
+[data-theme="jake"] .paquete.animacion-abrir::before { transform: rotateX(130deg); } /* Abre el libro */
+
+[data-theme="jake"] .particula-bloque { background-color: var(--jk-yellow-jake); border: 2px solid var(--jk-border-comic); border-radius: 4px; }
+
+/* STACK DE CARTAS Elástico */
+[data-theme="jake"] .carta-inner { 
+    background-color: var(--jk-bg-panel); border: 4px solid var(--jk-border-comic); border-radius: 30px 10px 25px 15px; box-shadow: var(--cartoon-shadow); 
+}
+[data-theme="jake"] .carta-inner img { border-bottom: 4px solid var(--jk-border-comic); border-radius: 26px 6px 0 0; }
+[data-theme="jake"] .carta-inner h3 { font-family: var(--font-titles); font-size: 2rem; color: var(--jk-yellow-jake); margin: 15px 20px 5px; text-transform: uppercase; -webkit-text-stroke: 1px var(--jk-border-comic); }
+[data-theme="jake"] .carta-inner p { color: var(--jk-text-main); font-weight: 900; }
+
+/* ============================================================
+   EL BLINDAJE DEL WRAPPED (Forzando Diseño Cartoon)
+   Arreglando las barritas de carga verdes y textos rojos.
+   ============================================================ */
+#wrapped-ui {
+    background-color: var(--jk-bg-panel) !important; /* Fondo blanco gorro */
+    border: 6px solid var(--jk-border-comic) !important;
+    border-radius: 30px 10px 30px 10px !important;
+    box-shadow: var(--hda-shadow) !important;
+}
+
+.wrapped-slide {
+    background-color: var(--jk-bg-panel) !important;
+    color: var(--jk-border-comic) !important;
+}
+
+/* Títulos del Wrapped (Amarillos Chonchos consistententes) */
+.wrapped-slide h2 {
+    font-family: var(--font-titles);
+    font-size: 2.2rem;
+    color: var(--jk-yellow-jake) !important; /* AMARILLO JAKE FORZADO pa! */
+    -webkit-text-stroke: 1px var(--jk-border-comic);
+    filter: drop-shadow(3px 3px 0px var(--jk-border-comic));
+    margin-bottom: 15px;
+}
+
+.numero-contador {
+    color: var(--jk-bg-main) !important; -webkit-text-stroke: 2px var(--jk-border-comic);
+    text-shadow: 4px 4px 0px var(--jk-border-comic) !important;
+}
+
+/* Arreglando las barritas de progreso superiores (historias style) pa! */
+.wrapped-bar { 
+    background: rgba(0, 0, 0, 0.1) !important; /* Track oscuro sólido */
+}
+/* El relleno de la barra: CAMBIADO A VERDE MOCHILA pa! */
+.wrapped-bar-fill { 
+    background: var(--jk-accent-red) !important; /* VERDE MOCHILA SÓLIDO pa! */
+}
+
+/* Textos cortos/meta blancos del wrapped pasados a Rojo Violín */
+.wrapped-barra-etiqueta, .spotify-meta {
+    font-family: var(--font-body);
+    font-weight: 700;
+    color: black !important; /* Rojo Violín pa! */
+    font-size: 0.9rem;
+}
+
+/* Gráficas de Barras */
+.wrapped-barra-track { background: #F0F0F0 !important; border: 3px solid var(--jk-border-comic); border-radius: 20px; height: 30px !important;}
+/* Forzamos el color Azul Shorts de n8n */
+.wrapped-barra-fill { 
+    background-color: var(--jk-yellow-jake) !important; 
+    border-right: 3px solid var(--jk-border-comic); 
+    color: white !important; font-weight: 900;
+}
+
+/* Gráfica Dona (Dona de n8n Amarillo/Azul) */
+.wrapped-dona-container {
+    filter: drop-shadow(6px 6px 0px var(--jk-border-comic));
+}
+/* Segmentos de la dona: Forzando Amarillo Jake y Azul Playera */
+.wrapped-dona-container svg path:nth-child(1) { fill: var(--jk-yellow-jake) !important; } /* Segmento 1 -> Amarillo */
+.wrapped-dona-container svg path:nth-child(2) { fill: var(--jk-bg-sky) !important; }    /* Segmento 2 -> Azul playera */
+
+.wrapped-dona-hueco { background-color: var(--jk-bg-panel) !important; border: 5px solid var(--jk-border-comic); }
+
+/* Vinilo Cartoon */
+.wrapped-vinilo { background: #222 !important; border: 6px solid var(--jk-border-comic) !important; box-shadow: var(--hda-shadow) !important; }
+.wrapped-vinilo-centro { background: var(--jk-yellow-jake) !important; border-color: var(--jk-border-comic) !important; }
