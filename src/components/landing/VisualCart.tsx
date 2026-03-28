@@ -24,6 +24,7 @@ interface VisualCartProps {
   onReorder: (newOrder: string[]) => void;
   onRemoveModule: (id: string) => void;
   onRemove: () => void;
+  onCheckout: () => void;
 }
 
 const MODULE_ICONS: Record<string, React.ReactNode> = {
@@ -43,7 +44,8 @@ const VisualCart: React.FC<VisualCartProps> = ({
   selectedTheme, 
   onReorder, 
   onRemoveModule,
-  onRemove 
+  onRemove,
+  onCheckout
 }) => {
   if (modules.length === 0) return null;
 
@@ -97,7 +99,12 @@ const VisualCart: React.FC<VisualCartProps> = ({
               <span className="price-label">${total} MXN</span>
             </div>
           </div>
-          <motion.button className="checkout-btn" whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+          <motion.button 
+            className="checkout-btn" 
+            whileHover={{ scale: 1.02 }} 
+            whileTap={{ scale: 0.98 }}
+            onClick={onCheckout}
+          >
             Continuar al Pago
           </motion.button>
         </div>

@@ -146,7 +146,12 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
                   >
                     <div className="carta-inner" style={{ pointerEvents: 'none' }}>
                       <div className="image-container">
-                        <img src={carta.imagen} alt={carta.titulo} draggable="false" />
+                        <img 
+                          src={carta.imagen} 
+                          alt={carta.titulo} 
+                          draggable="false" 
+                          loading="lazy"
+                        />
                       </div>
                       <h3 className="card-title">{carta.titulo}</h3>
                       <p className="card-description">{carta.contenido}</p>

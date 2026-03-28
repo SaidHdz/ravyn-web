@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
 import ModuleShowcase from '@/components/landing/ModuleShowcase';
 import PackSelector from '@/components/landing/PackSelector';
@@ -10,6 +11,7 @@ import { Pack, MODULE_PRICES } from '@/types/store';
 import '@/styles/landing/landing-base.css';
 
 const Landing: React.FC = () => {
+  const navigate = useNavigate();
   const [activeTheme, setActiveTheme] = useState('neo-japan');
   const [selectedPack, setSelectedPack] = useState<Pack | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +35,7 @@ const Landing: React.FC = () => {
     setCartPack(pack);
     setCartTheme(theme);
     setCartModules([...pack.modulos]);
-    setCartTotal(pack.precio); // El precio del pack es fijo
+    setCartTotal(pack.precio);
     setIsModalOpen(false);
   };
 
@@ -69,6 +71,19 @@ const Landing: React.FC = () => {
 
   const handleReorderModules = (newOrder: string[]) => {
     setCartModules(newOrder);
+  };
+
+  const handleCheckout = () => {
+    if (cartModules.length === 0) return;
+    
+    navigate('/configurator', {
+      state: {
+        selectedPack: cartPack,
+        modules: cartModules,
+        selectedTheme: cartTheme,
+        total: cartTotal
+      }
+    });
   };
 
   return (
@@ -107,7 +122,8 @@ const Landing: React.FC = () => {
         selectedTheme={cartTheme} 
         onReorder={handleReorderModules}
         onRemoveModule={handleRemoveModule}
-        onRemove={handleRemoveFromCart} 
+        onRemove={handleRemoveFromCart}
+        onCheckout={handleCheckout}
       />
 
       {selectedPack && (
