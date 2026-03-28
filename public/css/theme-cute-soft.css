@@ -89,6 +89,7 @@ body {
 }
 
 /* Tarjetas */
+.card-wrapper { opacity: 1 !important; visibility: visible !important; transform: none !important; }
 .memory-card {
     background: var(--cute-card-bg);
     border-radius: var(--bubble-radius);
@@ -99,6 +100,7 @@ body {
     cursor: pointer;
     overflow: hidden;
     position: relative;
+    opacity: 1 !important;
 }
 
 .memory-card:hover {
@@ -370,6 +372,62 @@ body {
     opacity: 0.5;
     transform: scale(0.95);
     filter: grayscale(80%);
+}
+
+/* === CAJA DE REGALO (SWIPE CARDS) === */
+.paquete {
+    width: 150px !important; height: 150px !important; margin: 0 auto !important;
+    background-color: transparent !important; position: relative !important;
+    opacity: 1 !important; visibility: visible !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+}
+
+/* Cuerpo de la caja */
+.paquete::before {
+    content: "" !important; position: absolute !important; bottom: 0 !important; left: 0 !important; width: 100% !important; height: 70% !important;
+    background-color: var(--cute-accent-pink) !important; border: 4px solid white !important; border-radius: 15px !important; z-index: 1 !important;
+    box-shadow: 0 10px 20px rgba(255, 102, 170, 0.2) !important;
+    display: block !important;
+}
+
+/* Tapa de la caja */
+.paquete::after {
+    content: "" !important; position: absolute !important; top: 10% !important; left: -5% !important; width: 110% !important; height: 30% !important;
+    background-color: var(--cute-accent-pink) !important; border: 4px solid white !important; border-radius: 10px !important;
+    transition: transform 0.6s ease-out, opacity 0.4s !important; transform-origin: center top !important; z-index: 2 !important;
+    display: block !important;
+}
+
+/* El lazo */
+.paquete .pestillo {
+    content: "🎀" !important; font-size: 3rem !important;
+    position: absolute !important; top: -10% !important; left: 50% !important; transform: translateX(-50%) !important;
+    z-index: 3 !important; display: flex !important; justify-content: center !important; align-items: center !important;
+}
+
+/* Estilo de la carta interior */
+.carta-inner, .carta-dedic {
+    background-color: white !important;
+    border: 4px solid #ffe4e1 !important;
+    border-radius: var(--bubble-radius) !important;
+    padding: 15px !important;
+    box-shadow: 0 10px 30px rgba(255, 102, 170, 0.1) !important;
+    color: var(--cute-text-main) !important;
+}
+
+.carta-inner h3, .carta-dedic h3 {
+    font-family: var(--font-bubbly) !important;
+    color: var(--cute-text-title) !important;
+    font-size: 1.8rem !important;
+    margin-bottom: 10px !important;
+    text-align: center !important;
+}
+
+.carta-inner p, .carta-dedic .card-description {
+    font-family: var(--font-soft) !important;
+    font-size: 1.1rem !important;
+    line-height: 1.5 !important;
+    text-align: center !important;
 }
 
 /* Reproductor flotante */ 

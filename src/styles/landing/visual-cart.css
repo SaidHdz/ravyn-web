@@ -1,0 +1,225 @@
+/* Estilos para el Carrito Visual Interactivo - Ravyn Studio */
+
+.visual-cart-container {
+  position: fixed;
+  right: 30px;
+  bottom: 30px;
+  width: 320px;
+  background: white;
+  border-radius: 28px;
+  box-shadow: 0 30px 70px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  z-index: 9999;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.visual-cart-header {
+  padding: 20px 25px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f1f3f5;
+  background: white;
+}
+
+.header-info h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--ravyn-blue);
+  line-height: 1;
+}
+
+.pack-name-small {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #adb5bd;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.remove-cart-btn {
+  background: #f1f3f5;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.remove-cart-btn:hover {
+  background: var(--ravyn-red);
+  color: white;
+  transform: rotate(90deg);
+}
+
+.cart-instructions {
+  background: #f8f9fa;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: #adb5bd;
+  text-align: center;
+  padding: 8px 0;
+  letter-spacing: 0.5px;
+}
+
+.cart-stack-wrapper {
+  padding: 20px;
+  background: #f8f9fa;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cart-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.cart-module-block {
+  background: white;
+  padding: 12px 15px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid #eee;
+  cursor: grab;
+  user-select: none;
+}
+
+.cart-module-block:active {
+  cursor: grabbing;
+}
+
+.drag-handle {
+  color: #dee2e6;
+  display: flex;
+  align-items: center;
+}
+
+.block-icon {
+  width: 36px;
+  height: 36px;
+  background: #f1f3f5;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ravyn-blue);
+  flex-shrink: 0;
+}
+
+.block-info {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.block-name {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ravyn-blue);
+}
+
+.block-price {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #adb5bd;
+}
+
+.delete-module-btn {
+  background: none;
+  border: none;
+  color: #adb5bd;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  opacity: 0.6;
+}
+
+.delete-module-btn:hover {
+  color: var(--ravyn-red);
+  background: rgba(211, 47, 47, 0.05);
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+/* Footer del Carrito */
+.cart-footer {
+  padding: 20px 25px;
+  background: white;
+  border-top: 1px solid #f1f3f5;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.total-row .label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #888;
+}
+
+.price-label {
+  font-weight: 900;
+  color: var(--ravyn-blue);
+  font-size: 1.4rem;
+}
+
+.checkout-btn {
+  width: 100%;
+  padding: 18px;
+  border-radius: 16px;
+  border: none;
+  background: var(--ravyn-blue);
+  color: white;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(26, 64, 115, 0.2);
+}
+
+.checkout-btn:hover {
+  background: #14325c;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 25px rgba(26, 64, 115, 0.3);
+}
+
+/* Colores de acento según tema */
+.theme-accent-neo-japan .block-icon { color: #e31b3f; }
+.theme-accent-minecraft .block-icon { color: #3adb3a; }
+.theme-accent-y2k-streamer .block-icon { color: #ff00ff; }
+.theme-accent-cute-soft .block-icon { color: #ff66aa; }
+.theme-accent-aesthetic .block-icon { color: #8b5cf6; }
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+  .visual-cart-container {
+    right: 15px;
+    left: 15px;
+    bottom: 15px;
+    width: auto;
+  }
+}

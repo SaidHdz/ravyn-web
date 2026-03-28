@@ -8,10 +8,16 @@ import Evasivo from '@/components/modules/Evasivo';
 import Wrapped from '@/components/modules/Wrapped';
 import Dedicatorias from '@/components/modules/Dedicatorias';
 import ModulePreviewFrame from '@/components/landing/ModulePreviewFrame';
+import { MODULE_PRICES } from '@/types/store';
 
-const ModuleShowcase: React.FC = () => {
+interface ModuleShowcaseProps {
+  activeTheme: string;
+  onThemeChange: (theme: string) => void;
+  onAddModule: (moduleId: string) => void;
+}
+
+const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeChange, onAddModule }) => {
   const [activeModule, setActiveModule] = useState<any>(null);
-  const [activeTheme, setActiveTheme] = useState('neo-japan');
   const [currentPage, setCurrentPage] = useState(0);
   const [showcaseModules, setShowcaseModules] = useState<any[]>([]);
   const [isPreviewLoading, setIsPreviewLoading] = useState(false);
@@ -151,13 +157,12 @@ const ModuleShowcase: React.FC = () => {
 
   const handleThemeSelect = (themeId: string) => {
     if (themeId === activeTheme) return;
-    setActiveTheme(themeId);
+    onThemeChange(themeId);
     setIsPreviewLoading(true);
   };
 
   return (
     <section className="showcase-section">
-      {/* FILA SUPERIOR: SELECTOR DE TEMAS (Fuera del container para no romper el grid) */}
       <div className="theme-selector-wrapper">
         <div className="theme-selector-container">
           {themes.map((t) => (
@@ -174,7 +179,6 @@ const ModuleShowcase: React.FC = () => {
       </div>
 
       <div className="showcase-container">
-        {/* LADO IZQUIERDO: SELECTOR DE MÓDULOS */}
         <div className="showcase-menu-container">
           <div className="showcase-menu">
             {paginatedModules.map((mod) => (
@@ -189,12 +193,25 @@ const ModuleShowcase: React.FC = () => {
                 <div className="showcase-card-content">
                   <h4>{mod.titulo}</h4>
                   <p>{mod.descripcion}</p>
+                  <div className="module-visual-actions">
+                    <span className="module-price-visual">
+                      ${MODULE_PRICES[mod.tipo] || 0} MXN
+                    </span>
+                    <button 
+                      className="add-module-btn-visual"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onAddModule(mod.tipo);
+                      }}
+                    >
+                      + Agregar
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          {/* PAGINACIÓN */}
           <div className="showcase-pagination">
             <button 
               className={`pagination-btn ${currentPage === 0 ? 'disabled' : ''}`}
@@ -210,18 +227,14 @@ const ModuleShowcase: React.FC = () => {
             >
               Siguiente
             </button>
-            <span className="pagination-info">
-              Página {currentPage + 1} de {totalPages}
-            </span>
           </div>
         </div>
 
-        {/* LADO DERECHO: PREVIEW */}
         <div className="showcase-preview">
           <div className="preview-window">
             <div className="preview-header">
               <div className="dots"><span></span><span></span><span></span></div>
-              <div className="url-bar">ravyn.me/demo/{activeModule?.id}?theme={activeTheme}</div>
+              <div className="url-bar">ravyn.me/demo/{activeModule?.id}</div>
             </div>
             <div 
               className={`preview-content ${isPreviewLoading ? 'is-loading' : ''}`}
@@ -240,8 +253,6 @@ const ModuleShowcase: React.FC = () => {
               </div>
             </div>
           </div>
-          {/* Efecto de resplandor de fondo */}
-          <div className="preview-glow"></div>
         </div>
       </div>
     </section>

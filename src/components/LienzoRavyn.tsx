@@ -11,10 +11,27 @@ import Dedicatorias from '@/components/modules/Dedicatorias';
 
 interface LienzoRavynProps {
   pedido: Pedido;
+  packFilter?: string; // Nuevo: ID del pack para previsualización
 }
 
-const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido }) => {
+const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter }) => {
   const { configuracion_global } = pedido;
+
+  // Si hay un filtro de pack, usamos sus módulos. Si no, usamos el orden del JSON.
+  const getModulosAMostrar = () => {
+    if (!packFilter) return configuracion_global.orden;
+
+    // Diccionario de módulos por pack (debe coincidir con store.ts)
+    const packsModulos: Record<string, string[]> = {
+      'pack-semilla': ['modulo-historia', 'modulo-contador', 'modulo-tarjetas'],
+      'pack-rabanito': ['modulo-historia', 'modulo-trivia', 'modulo-evasivo', 'modulo-dedicatorias'],
+      'pack-cosecha': ['modulo-historia', 'modulo-contador', 'modulo-tarjetas', 'modulo-trivia', 'modulo-evasivo', 'modulo-dedicatorias', 'modulo-wrapped']
+    };
+
+    return packsModulos[packFilter] || configuracion_global.orden;
+  };
+
+  const modulosAMostrar = getModulosAMostrar();
 
   // Efecto para aplicar el tema global
   useEffect(() => {
@@ -70,8 +87,8 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido }) => {
       {/* El Hero/Bienvenida siempre es el primero o según lógica de UI */}
       <Hero data={pedido.bienvenida} />
 
-      {/* Renderizado dinámico según el orden del JSON */}
-      {configuracion_global.orden.map((nombreModulo) => renderModulo(nombreModulo))}
+      {/* Renderizado dinámico según el orden del JSON o del Pack */}
+      {modulosAMostrar.map((nombreModulo) => renderModulo(nombreModulo))}
     </div>
   );
 };

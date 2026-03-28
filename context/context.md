@@ -1,259 +1,88 @@
-1. Descripción general del proyecto
+1. Misión y Concepto Central
+Ravyn Studio es una plataforma de arquitectura de memorias digitales. No somos una agencia de diseño convencional; somos un servicio SaaS (Software as a Service) que permite a los usuarios sustituir regalos efímeros (flores, peluches) por experiencias web interactivas permanentes.
 
-Nombre: Ravyn
-Tipo: Producto digital / servicio web escalable
-Categoría: Regalos digitales personalizados / experiencias interactivas
+Propuesta de Valor: Convertir recuerdos y emociones en una experiencia web accesible, rápida y visualmente potente.
 
-Qué es Ravyn:
-Ravyn es una plataforma que permite crear experiencias web personalizadas enfocadas en relaciones y recuerdos. El usuario construye una mini web interactiva mediante módulos (historia, cartas, galería, etc.), la personaliza dentro de ciertos límites, y la usa como regalo digital.
+Filosofía: Personalización guiada mediante un sistema de módulos independientes que el usuario ensambla a su medida.
 
-Propuesta de valor:
-Convertir recuerdos y emociones en una experiencia web interactiva, accesible, rápida de crear y visualmente atractiva.
+2. Identidad de Marca y Comunidad
+Nombre: Ravyn Studio.
 
-2. Producto
-2.1 Naturaleza del producto
-Producto híbrido: semi-automatizado + intervención humana
-Basado en plantillas reutilizables
-Personalización controlada (no libre)
-2.2 Resultado final
+Comunidad: Nuestros usuarios y seguidores son los Rabanitos.
 
-El cliente recibe:
+Logotipo: Una "R" modular y geométrica que forma la silueta de un rábano, simbolizando la unión entre tecnología y sentimiento.
 
-Una web personalizada
-Acceso mediante link único
-Opcional: dominio personalizado
-Experiencia interactiva (no solo visual)
-3. Sistema modular
-3.1 Estructura
+Tono de Marca: Formal, directo y profesional. Evitamos el lenguaje de ventas agresivo o infantil.
 
-El producto se compone de módulos independientes que el usuario puede combinar.
+Paleta de Colores:
 
-3.2 Módulos principales
+Azul Ravyn (#1A4073): Seriedad tecnológica y estabilidad.
 
-Core:
+Rojo Rábano (#D32F2F): Acento emocional y dinámico.
 
-Nuestra historia
-Galería
-Cartas
-Cuenta regresiva
+Gris Carbón / Blanco Nube: Neutralidad para resaltar los temas visuales.
 
-Diferenciales:
+3. Stack Tecnológico (El Motor)
+Frontend: Vite + React + TypeScript para un desarrollo escalable y tipos de datos seguros.
 
-Wrapped (estadísticas del chat/relación)
-Trivia de pareja
-Tarjetas tipo swipe
-Botón interactivo (rechazo evasivo)
+Orquestador: LienzoRavyn.tsx (Componente que renderiza módulos dinámicamente según un archivo data.json).
 
-Premium:
+Automatización: n8n como cerebro de conexión entre formularios y despliegue.
 
-Rompecabezas interactivo
-Detalles animados
-3.3 Submódulos
+Infraestructura: VPS (Oracle/DigitalOcean) para APIs y Cloudinary para optimización de imágenes.
 
-Cada módulo puede incluir configuraciones limitadas:
+4. Ecosistema de Módulos y Temas
+La experiencia se construye sobre 7 módulos clave que el usuario puede elegir y ordenar:
+Módulo	Descripción Técnica
+Historia	Narrativa visual con imágenes y textos.
+Contador	Cálculo exacto de tiempo transcurrido.
+Tarjetas	Galería dinámica con interacción de swipe.
+Trivia	Juego de preguntas y respuestas personalizadas.
+Botón Evasivo	Minijuego de interacción rápida (rechazo/aceptación).
+Cartas	Mensajes profundos con música individualizada.
+Wrapped	Análisis de datos de convivencia (Procesamiento Python).
+Temas Visuales (Skins)
 
-Cantidad de contenido (ej. número de momentos)
-Música (on/off o selección)
-Estilo visual (predefinido)
-Nivel de animación (básico/pro)
-4. Sistema de personalización
-4.1 Editable por usuario
-Textos
-Imágenes
-Nombres
-Selección de módulos
-Selección de tema visual
-4.2 No editable
-Layout base
-Estructura del módulo
-Animaciones complejas
-Flujo de navegación
-4.3 Filosofía
+Neo-Japan: Oscuro con acentos neón.
 
-Personalización guiada, no libre.
-Objetivo: balance entre experiencia única y escalabilidad.
+Cubos (Minecraft): Geometría pixelada y sombras marcadas.
 
-5. Sistema de precios
-5.1 Modelo
-Venta por módulos
-Venta por paquetes (principal)
-Upsells mediante extras
-Plan personalizado premium
-5.2 Rangos de precios
+Y2K: Estética anime retro.
 
-Módulos:
+Aesthetic: Visuales oscuros y minimalistas.
 
-Core: 149–249 MXN
-Diferenciales: 199–349 MXN
-Premium: 249–499 MXN
+5. Modelo de Negocio y Precios (MXN)
+Estrategia de Tiered Pricing diseñada para el mercado de Reynosa, Tamaulipas.
 
-Combos:
+Módulos Individuales
+Contador: $69
 
-Básico: ~499 MXN
-Emocional: ~699 MXN
-Interactivo: ~799 MXN
-Premium: 999–1199 MXN
+Botón Evasivo: $89
 
-Extras:
+Historia: $109
 
-Incrementos pequeños (50–150 MXN)
+Trivia: $129
 
-Personalizado:
+Tarjetas: $149
 
-1500–3000+ MXN
-5.3 Objetivo financiero
-Ticket promedio: 700–1000 MXN
-Maximizar combos sobre módulos individuales
-6. Flujo del usuario (UX)
-6.1 Entrada
-Usuario llega desde redes sociales
-Visualiza ejemplos/demos
-6.2 Selección
-Elige un paquete base o módulos
-Selecciona tema visual
-Agrega extras
-6.3 Configuración
-Llena formulario estructurado:
-textos
-imágenes
-datos clave
-6.4 Pago
-Realiza pago
-6.5 Producción
-Sistema automatizado genera base
-Equipo ajusta detalles
-6.6 Entrega
-Se entrega link final
-Opcional: revisión ligera
-7. Página web (plataforma de venta)
-7.1 Estructura
+Cartas: $179
 
-Landing:
+Wrapped: $309
 
-Hero (mensaje emocional)
-Ejemplos interactivos
-Explicación simple
-CTA
+Paquetes Estratégicos
+BASICO (Semilla) - $249: Historia + Contador + Tarjetas. (El detalle rápido).
 
-Sección demos:
+INTERACTIVO (Rabanito) - $389: Historia + Trivia + Botón Evasivo + Cartas. (La experiencia media).
 
-Acceso a webs de ejemplo
-Diferentes temas y módulos
+COMPLETO (Cosecha) - $799: Los 7 módulos. (El regalo definitivo).
 
-Configurador:
+6. Ravyn Store: Experiencia de Usuario (Showroom Táctil)
+Diseñado específicamente para dispositivos móviles (Mobile-First).
 
-Selección de paquete
-Selección de módulos
-Personalización básica
+Sistema de Rarezas: Los packs se presentan como tarjetas coleccionables (Común, Rara, Épica) con efectos visuales de brillo diferenciados.
 
-Formulario:
+Live Demo Modal: Previsualización instantánea que permite cambiar de tema (Finn, Jake, etc.) en tiempo real mediante un iframe dinámico.
 
-Recolección de datos
+Carrito Visual: En lugar de una lista de texto, el carrito muestra una maqueta vertical de los módulos elegidos, permitiendo al usuario ver el "tamaño" real de su web antes de pagar.
 
-Checkout:
-
-Pago
-8. Automatización y tecnología
-8.1 Herramientas
-n8n (automatización de flujos)
-IA (generación de texto, procesamiento de datos)
-Templates HTML/CSS/JS
-8.2 Flujo técnico
-Usuario envía formulario
-n8n procesa datos
-IA:
-genera textos (opcional)
-estructura contenido
-Se inyecta en plantilla
-Se genera versión base
-Equipo revisa y ajusta
-Se publica
-9. Producción interna
-9.1 Roles (equipo de 3)
-Desarrollo / plantillas
-Diseño / estética
-Operación / cliente / ajustes
-9.2 Tiempo objetivo
-30 a 60 minutos por pedido (ideal)
-Máximo 24–48 horas de entrega
-10. Costos del proyecto
-10.1 Costos fijos
-Hosting
-Dominio principal
-Herramientas (n8n, APIs IA)
-Plataforma web
-10.2 Costos variables
-Uso de IA (tokens)
-Tiempo humano
-almacenamiento de imágenes
-10.3 Costos ocultos
-soporte al cliente
-revisiones
-cambios fuera de alcance
-11. Plan personalizado
-11.1 Qué incluye
-Diseño fuera de plantillas
-Nuevos módulos o interacciones
-mayor tiempo de desarrollo
-11.2 Posicionamiento
-
-Producto premium separado del flujo estándar
-
-12. Marketing
-12.1 Canales principales
-Instagram
-TikTok
-12.2 Estrategia
-contenido emocional
-demostraciones reales
-storytelling
-reacciones
-12.3 Objetivo
-
-Generar deseo antes de explicar el producto
-
-13. Diferenciadores clave
-Interactividad (no solo visual)
-Sistema modular
-Personalización controlada
-Entrega rápida
-Enfoque emocional
-Uso de IA para escalar
-14. Riesgos
-Sobrepersonalización
-UX compleja
-tiempo de producción alto
-dependencia de contenido del usuario
-baja diferenciación si no se cuida estética
-15. Objetivo del proyecto
-
-Construir un sistema escalable de creación de experiencias web personalizadas con alto valor emocional, manteniendo eficiencia operativa mediante plantillas, automatización e IA.
-
--------------------------------
-Que opinas de eso para la tienda principal? 
-​## 🛍️ Ravyn Store: El Showroom Táctil (Mobile-First)
-​1. El Feed de Packs (Rarezas)
-​En la pantalla de tu S22, el usuario no verá una lista aburrida. Verá un feed de "Tarjetas Premium" (piensa en cartas de FIFA Ultimate Team o Magic: The Gathering pero con estética Ravyn).
-​Diseño Visual: Cada pack es una tarjeta con bordes redondeados y un "aura" o brillo de color según su rareza.
-​Sistema de Rarezas:
-​COMÚN (Bronce/Cobre): Pack Básico (Historia). Un brillo sutil.
-​RARA (Plata/Azul neón): Pack Interactivo (Historia + Trivia + Cuenta Regresiva). Brillo constante.
-​ÉPICA (Oro/Morado neón): Pack Full (Todo + Rompecabezas + Wrapped VSoon). Brillo intenso y pequeñas partículas flotando.
-​2. El Modal de Previsualización (Live Demo)
-​Al tocar una tarjeta, no vas al carrito. Se abre una "ventana emergente" (modal) que ocupa el 90% de la pantalla.
-​La Barra de Temas: Arriba, una barra horizontal elegante con los nombres: MINECRAFT, AESTHETIC, CUTE, DARK. Al tocar uno, el JS cambia el CSS del demo al instante.
-​El Demo: Un <iframe> pequeño que carga la web demo real. El usuario puede interactuar (abrir el cofre, swipear una carta).
-​Botones de Acción: Abajo del modal, dos botones: ← Regresar y + CONFIRMAR Y AGREGAR.
-​## 3. El Carrito: Tu Web en Miniatura (La Muestra de Cómo Queda)
-​Esta idea es tu Diferenciador Clave. En lugar de una lista de texto que dice "Pack Épico... $1199", el carrito se convierte en una maqueta vertical.
-​¿Cómo funciona técnicamente?
-​Cuando el usuario agrega un pack Épico (que incluye Historia, Trivia, Swipe y Rompecabezas), el JS del carrito genera una columna de 4 rectángulos (módulos) apilados.
-​El Vibe: Cada rectángulo es una "miniatura" simplificada del módulo real.
-​El rectángulo de Historia tiene un icono de foto.
-​El de Trivia tiene un icono de signo de interrogación.
-​El de Rompecabezas tiene un icono de pieza de puzzle.
-​La Experiencia del Usuario (UX):
-​El cliente ve su carrito y piensa: "¡Wow, así de grande va a quedar mi web!". Si decide quitar el módulo de Trivia, el rectángulo desaparece y los demás "se pegan" automáticamente hacia arriba. Es una visualización real de la "Personalización Controlada" que definimos en tu plan.
-​## 4. El Producto "Personalizado" (High Touch)
-​Este producto no es una tarjeta en el feed. Mi recomendación es que sea un banner grande al final o un botón destacado: "¿Quieres algo único fuera del catálogo? Cotiza tu Ravyn Personalizado".
-​El Proceso: Esto abre un chat directo de WhatsApp Business o un form de contacto muy simple para que tú y tu equipo coticen el desarrollo a medida (como definiste en el punto 11 del plan).
+Cotizador Premium: Apartado especial para proyectos personalizados de alta gama fuera del flujo estándar.

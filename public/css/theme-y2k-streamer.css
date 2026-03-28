@@ -24,26 +24,24 @@ html, body {
     
     --font-bubble: 'M PLUS Rounded 1c', sans-serif; /* Títulos WordArt / Burbuja */
     --font-pixel: 'VT323', monospace;               /* Datos técnicos / Stream */
-}
 
-/* === ANIMACIÓN DE SCANLINES Y LEVITACIÓN === */
-@keyframes scanlines {
-    0% { background-position: 0 0; }
-    100% { background-position: 0 40px; }
-}
-
-@keyframes floatY2K {
-    0%, 100% { transform: translateY(0) rotate(-2deg); }
-    50% { transform: translateY(-15px) rotate(2deg); }
+    /* Variables para la Landing y Módulos */
+    --text-primary: #ffffff;
+    --text-secondary: #00ffff;
+    --bg-color: #1a0b2e;
+    --card-bg: #ffe6f2;
+    --accent-glow: #ff66cc;
+    --glass-border: #ff66cc;
+    --font-main: var(--font-pixel);
 }
 
 /* === ESTILOS GLOBALES === */
-body.theme-y2k-streamer {
-    background-color: var(--y2k-bg-base);
+body {
+    background-color: var(--y2k-bg-base) !important;
     color: var(--y2k-text-light);
     font-family: var(--font-pixel);
     margin: 0;
-    padding: 40px 20px;
+    padding: 0;
     min-height: 100vh;
     
     /* Efecto Scanlines Retro */
@@ -52,22 +50,22 @@ body.theme-y2k-streamer {
         transparent 2px,
         rgba(255, 102, 204, 0.05) 2px,
         rgba(255, 102, 204, 0.05) 4px
-    );
-    background-size: 100% 4px;
-    animation: scanlines 10s linear infinite;
+    ) !important;
+    background-size: 100% 4px !important;
+    animation: scanlines 10s linear infinite !important;
     position: relative;
 }
 
-/* Elementos flotantes decorativos en el fondo (Hechos con CSS puro) */
-body.theme-y2k-streamer::before, body.theme-y2k-streamer::after {
+/* Elementos flotantes decorativos en el fondo */
+body::before, body::after {
     position: fixed;
     font-size: 4rem;
     z-index: -1;
     opacity: 0.15;
     animation: floatY2K 6s ease-in-out infinite;
 }
-body.theme-y2k-streamer::before { content: '💖'; top: 10%; left: 5%; }
-body.theme-y2k-streamer::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
+body::before { content: '💖'; top: 10%; left: 5%; }
+body::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
 
 button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 
@@ -82,10 +80,10 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 /* === HEADER (ESTILO WORDART & NIVEL DE AMOR) === */
 .page-header { text-align: center; margin-bottom: 60px; }
 
-.header-title {
+.header-title, #mensaje-inicio, #mensaje-inicio-dedic {
     font-family: var(--font-bubble);
     font-size: 4rem;
-    color: var(--y2k-text-light);
+    color: var(--y2k-text-light) !important;
     margin: 0 0 15px 0;
     /* Sombras múltiples para efecto 3D WordArt Y2K */
     text-shadow: 
@@ -117,6 +115,12 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 /* === GALERÍA (VENTANAS RETRO) === */
 .gallery-container { display: flex; flex-direction: column; gap: 40px; max-width: 600px; margin: 0 auto; }
 
+.card-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
 .memory-card {
     background-color: var(--y2k-window-bg);
     border: 3px solid var(--y2k-pink-neon);
@@ -125,6 +129,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     padding-top: 30px; /* Espacio para la barra de título falsa */
     box-shadow: 8px 8px 0 rgba(153, 51, 255, 0.5); /* Sombra dura Y2K */
     transition: all 0.2s ease;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 /* La Barra de Título Retro (Hecha con CSS) */
@@ -249,42 +255,63 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 }
 
 /* === CARTAS SWIPE (MÁQUINA GACHA CÁPSULA) === */
-[data-theme="y2k-streamer"] .paquete {
-    background: transparent; box-shadow: none; border: none; overflow: visible;
-    width: 140px; height: 140px; /* Redondo para ser una cápsula */
+.paquete {
+    background: transparent !important; box-shadow: none !important; border: none !important; overflow: visible !important;
+    width: 140px !important; height: 140px !important; margin: 0 auto !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    opacity: 1 !important; visibility: visible !important; position: relative !important;
 }
 /* Mitad inferior (Rosa Plástico) */
-[data-theme="y2k-streamer"] .paquete::before {
-    content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%;
-    background: radial-gradient(circle at 30% 70%, #ff99dd, var(--y2k-pink-neon));
-    border: 3px solid var(--y2k-text-light); border-radius: 0 0 70px 70px; z-index: 1;
+.paquete::before {
+    content: "" !important; position: absolute !important; bottom: 0 !important; left: 0 !important; width: 100% !important; height: 50% !important;
+    background: radial-gradient(circle at 30% 70%, #ff99dd, var(--y2k-pink-neon)) !important;
+    border: 3px solid var(--y2k-text-light) !important; border-radius: 0 0 70px 70px !important; z-index: 1 !important;
+    display: block !important;
 }
 /* Mitad superior (Cristal Cian) */
-[data-theme="y2k-streamer"] .paquete::after {
-    content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 50%;
-    background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0.2));
-    border: 3px solid var(--y2k-text-light); border-radius: 70px 70px 0 0; z-index: 2;
-    transition: transform 0.6s ease-out, opacity 0.5s; transform-origin: center right;
+.paquete::after {
+    content: "" !important; position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 50% !important;
+    background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0.2)) !important;
+    border: 3px solid var(--y2k-text-light) !important; border-radius: 70px 70px 0 0 !important; z-index: 2 !important;
+    transition: transform 0.6s ease-out, opacity 0.5s !important; transform-origin: center right !important;
+    display: block !important;
 }
 /* La perilla de la gacha */
-[data-theme="y2k-streamer"] .paquete .pestillo {
-    content: "⭐"; font-size: 2rem;
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 3; transition: transform 0.5s;
-    background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-    border: 3px solid var(--y2k-pink-neon);
+.paquete .pestillo {
+    content: "⭐" !important; font-size: 2rem !important;
+    position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
+    z-index: 3 !important; transition: transform 0.5s !important;
+    background: white !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important;
+    border: 3px solid var(--y2k-pink-neon) !important;
 }
-/* Animación Gacha Abriendo */
-[data-theme="y2k-streamer"] .paquete.abriendo-cofre .pestillo { transform: translate(-50%, -50%) rotate(360deg); opacity: 0; transition: transform 0.5s, opacity 0.3s 0.3s;}
-[data-theme="y2k-streamer"] .paquete.abriendo-cofre::after { transform: rotate(110deg) translateX(40px); opacity: 0.3; }
 
 /* Estilo de la carta interior (Notificación Retro) */
-[data-theme="y2k-streamer"] .carta-inner {
-    background: #9933ff; border: 2px outset #9933ff; color: black;
+.carta-inner, .carta-dedic {
+    background: var(--y2k-window-bg) !important; 
+    border: 3px solid var(--y2k-pink-neon) !important; 
+    color: var(--y2k-text-dark) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: 8px 8px 0 rgba(153, 51, 255, 0.5) !important;
 }
-[data-theme="y2k-streamer"] .carta-inner img { border-bottom: 2px groove #ffffff; }
-[data-theme="y2k-streamer"] .carta-inner h3 { font-family: var(--font-pixel); font-size: 1.8rem; background: #ff99dd; color: #9933ff; padding: 5px 10px; margin: 0; }
-[data-theme="y2k-streamer"] .carta-inner p { font-family: var(--font-pixel); padding: 10px; font-size: 1.2rem; }
+
+.carta-inner h3, .carta-dedic h3 { 
+    font-family: var(--font-pixel) !important; 
+    font-size: 1.5rem !important; 
+    background: linear-gradient(90deg, var(--y2k-pink-neon), var(--y2k-purple)) !important; 
+    color: white !important; 
+    padding: 8px 15px !important; 
+    margin: 0 !important;
+    text-transform: uppercase !important;
+    border-bottom: 2px solid var(--y2k-pink-neon) !important;
+}
+
+.carta-inner p, .carta-dedic .card-description { 
+    font-family: var(--font-pixel) !important; 
+    padding: 20px !important; 
+    font-size: 1.2rem !important; 
+    line-height: 1.4 !important;
+}
 
 /* === REPRODUCTOR (WINAMP VIBES) === */
 #reproductor-flotante {

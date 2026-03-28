@@ -140,12 +140,12 @@ const ModulePreviewFrame: React.FC<ModulePreviewFrameProps> = ({
   }, [theme, mountNode, onThemeLoadStateChange]);
 
   return (
-    <div className="preview-frame-container">
+    <div className="preview-frame-container" style={{ width: '100%', height: '100%', display: 'flex' }}>
       <iframe
         ref={iframeRef}
         className="module-preview-frame"
         title="Vista previa del módulo"
-        // No usamos srcDoc aquí para evitar recargas accidentales al renderizar
+        style={{ width: '100%', height: '100%', border: 'none' }}
       />
       {mountNode && createPortal(children, mountNode)}
     </div>

@@ -24,29 +24,31 @@ html, body {
     
     --font-titles: 'Teko', sans-serif;       /* Fuente Blocky para títulos */
     --font-body: 'Noto Sans JP', sans-serif; /* Fuente limpia para lectura */
-}
 
-/* Ajustes de respiración para móvil */
-@media (max-width: 600px) {
-    body { padding: 20px 15px; }
-    .header-title { font-size: 3.5rem !important; margin-bottom: 20px; }
-    .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 60px; }
-    #stack-container { height: 50vh; max-height: 400px; }
+    /* Variables para la Landing y Módulos */
+    --text-primary: #f5f5f5;
+    --text-secondary: #a39eb0;
+    --bg-color: #100a1c;
+    --card-bg: #1a112c;
+    --accent-glow: #e31b3f;
+    --glass-border: rgba(227, 27, 63, 0.3);
+    --font-main: var(--font-body);
 }
-
-/* === CONTROL MAESTRO === */
-body.no-anim * { animation: none !important; transition: none !important; }
 
 /* === ESTILOS GLOBALES === */
-.theme-neo-japan {
-    background-color: var(--nj-bg-dark);
+body {
+    background-color: var(--nj-bg-dark) !important;
+    background-image: radial-gradient(circle at 50% 0%, #1a112c 0%, transparent 60%) !important;
+    background-attachment: fixed !important;
     color: var(--nj-text-main);
     font-family: var(--font-body);
     margin: 0;
-    padding: 0; /* Padding controlado por el módulo */
+    padding: 0;
     min-height: 100vh;
-    /* Fondo con un sutil patrón radial para dar profundidad sin usar imágenes pesadas */
-    background-image: radial-gradient(circle at 50% 0%, #1a112c 0%, transparent 60%);
+}
+
+.theme-neo-japan, [data-theme="neo-japan"] {
+    color: var(--nj-text-main);
 }
 
 button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
@@ -61,15 +63,25 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     position: relative;
 }
 
-.header-title {
+.header-title, #mensaje-inicio-dedic {
     font-family: var(--font-titles);
     font-size: 4.5rem;
-    color: var(--nj-red-neon);
+    color: var(--nj-red-neon) !important;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 0;
     line-height: 1;
     text-shadow: 0 0 20px rgba(227, 27, 63, 0.4);
+}
+
+#mensaje-inicio {
+    font-family: var(--font-titles);
+    font-size: 2.5rem !important;
+    color: var(--nj-red-neon) !important;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+    text-shadow: 0 0 15px rgba(227, 27, 63, 0.3);
 }
 
 .header-subtitle {
@@ -83,26 +95,37 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 
 /* === GALERÍA (MEMORY CARDS) === */
 .gallery-container {
-    display: flex; flex-direction: column; gap: 35px; max-width: 600px; margin: 0 auto;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 35px !important;
+    max-width: 600px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    min-height: 200px !important;
+    visibility: visible !important;
+    opacity: 1 !important;
 }
 
 .card-wrapper {
-    opacity: 0; transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    display: block !important;
+    width: 100% !important;
+    min-height: 100px !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
 }
-.card-wrapper.from-left { transform: translateX(-50px); }
-.card-wrapper.from-right { transform: translateX(50px); }
-.card-wrapper.is-visible { opacity: 1; transform: translateX(0); }
 
 .memory-card {
-    background-color: var(--nj-bg-panel);
-    border: 2px solid var(--nj-red-neon);
-    position: relative;
-    display: flex; flex-direction: column;
-    transition: all 0.3s ease;
-    /* Esquinas decorativas doradas (Truco de sombras múltiples) */
-    box-shadow: 
-        inset 0 0 0 1px var(--nj-bg-dark), /* Borde interno para separar */
-        0 10px 30px rgba(0,0,0,0.8);
+    background-color: var(--nj-bg-panel, #1a112c) !important;
+    border: 2px solid var(--nj-red-neon, #e31b3f) !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: 300px !important;
+    width: 100% !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
 }
 
 .memory-card:hover {
@@ -119,7 +142,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 
 .card-image {
     width: 100%; height: 100%; object-fit: cover;
-    opacity: 0; transition: opacity 0.5s ease, transform 0.5s ease;
+    opacity: 1 !important;
+    transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
 .memory-card:hover .card-image { transform: scale(1.05); }
@@ -236,35 +260,51 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 }
 
 /* === EL COFRE CEREMONIAL (SWIPE CARDS) === */
-[data-theme="neo-japan"] .paquete { background-color: transparent; box-shadow: none; border: none; overflow: visible; }
+.paquete { 
+    background-color: transparent !important; 
+    box-shadow: none !important; 
+    border: none !important; 
+    overflow: visible !important; 
+    width: 160px !important; 
+    height: 220px !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    position: relative !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    margin: 0 auto !important;
+}
 
 /* Cuerpo del cofre lacado en rojo */
-[data-theme="neo-japan"] .paquete::before {
-    content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%;
-    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark));
-    border: 2px solid var(--nj-gold); border-radius: 4px; z-index: 1;
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+.paquete::before {
+    content: "" !important; position: absolute !important; bottom: 0 !important; left: 0 !important; width: 100% !important; height: 60% !important;
+    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)) !important;
+    border: 2px solid var(--nj-gold) !important; border-radius: 4px !important; z-index: 1 !important;
+    box-shadow: inset 0 0 20px rgba(0,0,0,0.5) !important;
+    display: block !important;
 }
 
 /* Tapa del cofre */
-[data-theme="neo-japan"] .paquete::after {
-    content: ""; position: absolute; top: 15%; left: 0; width: 100%; height: 35%;
-    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark));
-    border: 2px solid var(--nj-gold); border-radius: 4px;
-    transition: transform 0.8s ease-in, opacity 0.5s 0.3s;
-    transform-origin: center bottom; z-index: 2;
+.paquete::after {
+    content: "" !important; position: absolute !important; top: 15% !important; left: 0 !important; width: 100% !important; height: 35% !important;
+    background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)) !important;
+    border: 2px solid var(--nj-gold) !important; border-radius: 4px !important;
+    transition: transform 0.8s ease-in, opacity 0.5s 0.3s !important;
+    transform-origin: center bottom !important; z-index: 2 !important;
+    display: block !important;
 }
 
 /* El símbolo dorado central */
-[data-theme="neo-japan"] .paquete .pestillo {
-    content: "龍"; /* Dragón en Kanji o puedes dejar el "?" */
-    font-family: var(--font-body); font-size: 2rem; color: var(--nj-bg-dark);
-    background-color: var(--nj-gold); border: 2px solid var(--nj-bg-dark);
-    border-radius: 50%; width: 50px; height: 50px;
-    display: flex; justify-content: center; align-items: center;
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    z-index: 3; transition: opacity 0.3s;
-    box-shadow: 0 0 15px rgba(225, 193, 126, 0.4);
+.paquete .pestillo {
+    content: "龍" !important; 
+    font-family: var(--font-body) !important; font-size: 2rem !important; color: var(--nj-bg-dark) !important;
+    background-color: var(--nj-gold) !important; border: 2px solid var(--nj-bg-dark) !important;
+    border-radius: 50% !important; width: 50px !important; height: 50px !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
+    z-index: 3 !important; transition: opacity 0.3s !important;
+    box-shadow: 0 0 15px rgba(225, 193, 126, 0.4) !important;
 }
 
 /* Partículas Doradas Neo-Japan */
@@ -274,12 +314,29 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 }
 
 /* Diseño de las cartas al salir */
-[data-theme="neo-japan"] .carta-inner {
-    background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon);
+.carta-inner, .carta-dedic {
+    background-color: var(--nj-bg-panel) !important;
+    border: 2px solid var(--nj-red-neon) !important;
+    color: var(--nj-text-main) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8) !important;
 }
-[data-theme="neo-japan"] .carta-inner img { border-bottom: 2px solid var(--nj-red-neon); }
-[data-theme="neo-japan"] .carta-inner h3 { font-family: var(--font-titles); font-size: 2.2rem; color: var(--nj-gold); margin: 15px 20px 5px; text-transform: uppercase; line-height: 1;}
-[data-theme="neo-japan"] .carta-inner p { color: var(--nj-text-main); font-weight: 300; }
+
+.carta-inner img { border-bottom: 2px solid var(--nj-red-neon); }
+
+.carta-inner h3, .carta-dedic h3 { 
+    font-family: var(--font-titles) !important; 
+    font-size: 2.2rem !important; 
+    color: var(--nj-gold) !important; 
+    margin: 15px 20px 5px !important; 
+    text-transform: uppercase !important; 
+    line-height: 1 !important;
+}
+
+.carta-inner p, .carta-dedic .card-description { 
+    color: var(--nj-text-main) !important; 
+    font-weight: 300 !important; 
+    padding: 0 20px 20px !important;
+}
 
 /* === REPRODUCTOR === */
 #reproductor-flotante {

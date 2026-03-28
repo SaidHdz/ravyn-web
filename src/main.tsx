@@ -16,6 +16,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         {/* Página para ver un pedido específico */}
         <Route path="/experience/:id" element={<App />} />
         
+        {/* Página de previsualización para el modal de packs */}
+        <Route path="/preview" element={<App />} />
+        
         {/* Rutas de debug para módulos aislados */}
         <Route path="/debug/:moduleType" element={<ModuleViewer />} />
         <Route path="/debug/:theme/:moduleType" element={<ModuleViewer />} />

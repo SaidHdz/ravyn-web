@@ -131,17 +131,16 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 }
 
 .escena { 
-    position: absolute; 
-    top: 0; 
-    left: 0; 
+    position: relative; 
     width: 100%; 
-    min-height: 450px; /* Altura mínima base en lugar de 100% */
+    min-height: 500px; /* Aumentamos un poco la altura mínima */
     display: flex; 
     flex-direction: column; 
     justify-content: center; 
     align-items: center; 
     transition: opacity 0.5s ease, visibility 0.5s; 
     background-color: transparent; 
+    margin: 20px 0;
 }
 .escena.oculta { opacity: 0; visibility: hidden; pointer-events: none; }
 .escena.activa { opacity: 1; visibility: visible; }
@@ -186,8 +185,9 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     margin: 30px auto; 
     position: relative;
     border-radius: 25px; 
-    background-color: var(--nj-bg-panel, var(--y2k-window-bg, var(--mc-card-bg, var(--cute-card-bg, var(--card-bg, #111)))));
-    border: 2px solid var(--nj-red-neon, var(--y2k-pink-neon, var(--mc-border-color, #fff)));
+    background-color: rgba(0, 0, 0, 0.4) !important; 
+    backdrop-filter: blur(15px);
+    border: 2px solid var(--accent-glow, #fff);
     box-shadow: 0 10px 40px rgba(0,0,0,0.5); 
     overflow: hidden; 
     display: flex; flex-direction: column; justify-content: center; align-items: center;
