@@ -47,7 +47,7 @@ padding: 20px 15px;
     animation: aestheticFlyOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
 }
 
-:root {
+.theme-aesthetic {
 --bg-color: #050505;
 --card-bg: rgba(18, 18, 18, 0.7);
 --accent-glow: #8b5cf6; /* El morado de siempre */
@@ -57,7 +57,7 @@ padding: 20px 15px;
 --transition-smooth: 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-body {
+body.theme-aesthetic, .ravyn-canvas.theme-aesthetic {
 background-color: var(--bg-color);
 color: var(--text-primary);
 font-family: 'Inter', sans-serif;
@@ -72,7 +72,9 @@ background-attachment: fixed;
 }
 
 /* El título principal con degradado */
-.header-title, #mensaje-inicio, #mensaje-inicio-dedic {
+.theme-aesthetic .header-title, 
+.theme-aesthetic #mensaje-inicio, 
+.theme-aesthetic #mensaje-inicio-dedic {
 font-family: 'Montserrat', sans-serif;
 font-size: 3rem;
 text-align: center;
@@ -84,7 +86,7 @@ background: linear-gradient(to bottom, #fff 40%, #666 100%);
 filter: drop-shadow(0 0 15px rgba(139, 92, 246, 0.2));
 }
 
-.header-subtitle {
+.theme-aesthetic .header-subtitle {
 font-size: 1.1rem;
 color: var(--text-secondary);
 letter-spacing: 3px;
@@ -94,14 +96,14 @@ margin-bottom: 50px;
 }
 
 /* Separador simple */
-.pixel-divider {
+.theme-aesthetic .pixel-divider {
 border: 0;
 border-top: 1px solid var(--glass-border);
 margin: 20px 0;
 }
 
 /* Las tarjetas de la galería */
-.gallery-container {
+.theme-aesthetic .gallery-container {
 max-width: 700px;
 margin: 0 auto;
 display: flex;
@@ -306,8 +308,8 @@ box-shadow: 0 5px 15px rgba(139, 92, 246, 0.3);
 .option-btn.correct { background: rgba(46, 213, 115, 0.2) !important; border-color: #2ed573 !important; box-shadow: 0 0 20px rgba(46, 213, 115, 0.4) !important; }
 .option-btn.incorrect { background: rgba(255, 71, 87, 0.2) !important; border-color: #ff4757 !important; box-shadow: 0 0 20px rgba(255, 71, 87, 0.4) !important; }
 
-.progress-container { background: rgba(255,255,255,0.1); border-radius: 10px; height: 8px; margin-bottom: 30px; }
-.progress-bar { background: var(--accent-glow); border-radius: 10px; height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--accent-glow); width: 0%;}
+.theme-aesthetic .progress-container { background: rgba(255,255,255,0.1); border-radius: 10px; height: 8px; margin-bottom: 30px; }
+.theme-aesthetic .progress-bar { background: var(--accent-glow); border-radius: 10px; height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--accent-glow); width: 0%;}
 
 .hidden { display: none !important; }
 .fade-transition { transition: opacity 0.3s ease; opacity: 1; }

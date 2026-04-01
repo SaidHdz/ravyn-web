@@ -29,7 +29,7 @@
 .theme-lsp h1, .theme-lsp h2, .theme-lsp h3, .theme-lsp .header-title, .theme-lsp .card-title {
     font-family: var(--font-titles) !important;
     color: var(--lsp-star-yellow) !important;
-    -webkit-text-stroke: 1.5px var(--fn-border) !important;
+    -webkit-text-stroke: 1.5px var(--lsp-border) !important;
     text-shadow: 2px 2px 0px var(--lsp-border) !important;
     text-transform: uppercase;
     letter-spacing: 1px;

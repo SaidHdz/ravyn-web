@@ -29,7 +29,7 @@ body.theme-neo-japan *::-webkit-scrollbar-thumb {
     box-shadow: 0 0 10px var(--nj-red-neon) !important;
 }
 
-:root {
+.theme-neo-japan {
     /* PALETA JAZEN (60 - 30 - 10) */
     --nj-bg-dark: #100a1c;        /* 60% Azul/Morado noche profundo */
     --nj-bg-panel: #1a112c;       /* Fondo de las tarjetas un poco más claro */
@@ -53,7 +53,7 @@ body.theme-neo-japan *::-webkit-scrollbar-thumb {
 }
 
 /* === ESTILOS GLOBALES === */
-body {
+body.theme-neo-japan, .ravyn-canvas.theme-neo-japan {
     background-color: var(--nj-bg-dark) !important;
     background-image: radial-gradient(circle at 50% 0%, #1a112c 0%, transparent 60%) !important;
     background-attachment: fixed !important;
@@ -71,7 +71,7 @@ body {
 button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 
 /* === HEADER (ESTILO STREAM GRAPHICS) === */
-.page-header {
+.theme-neo-japan .page-header {
     text-align: center;
     margin-bottom: 50px;
     display: flex;
@@ -80,7 +80,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     position: relative;
 }
 
-.header-title, #mensaje-inicio-dedic {
+.theme-neo-japan .header-title, 
+.theme-neo-japan #mensaje-inicio-dedic {
     font-family: var(--font-titles);
     font-size: 4.5rem;
     color: var(--nj-red-neon) !important;
@@ -91,7 +92,7 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     text-shadow: 0 0 20px rgba(227, 27, 63, 0.4);
 }
 
-#mensaje-inicio {
+.theme-neo-japan #mensaje-inicio {
     font-family: var(--font-titles);
     font-size: 2.5rem !important;
     color: var(--nj-red-neon) !important;
@@ -101,7 +102,7 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     text-shadow: 0 0 15px rgba(227, 27, 63, 0.3);
 }
 
-.header-subtitle {
+.theme-neo-japan .header-subtitle {
     font-family: var(--font-titles);
     color: var(--nj-gold);
     font-size: 1.8rem;
@@ -277,8 +278,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     animation: shake 0.4s ease-in-out !important;
 }
 
-.progress-container { background-color: var(--nj-bg-dark); border: 1px solid var(--nj-red-dark); height: 10px; margin-bottom: 30px; }
-.progress-bar { background-color: var(--nj-red-neon); height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--nj-red-neon); width: 0%;}
+.theme-neo-japan .progress-container { background-color: var(--nj-bg-dark); border: 1px solid var(--nj-red-dark); height: 10px; margin-bottom: 30px; }
+.theme-neo-japan .progress-bar { background-color: var(--nj-red-neon); height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--nj-red-neon); width: 0%;}
 
 /* =========================================
    CLASES DE UTILIDAD PARA JS (TRIVIA)

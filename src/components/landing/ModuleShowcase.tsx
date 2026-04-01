@@ -62,7 +62,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
             id: 'historia',
             icono: <BookIcon size={24} />,
             titulo: 'Galería de Memorias',
-            descripcion: 'Un recorrido visual cronológico por sus fotos y momentos más importantes.',
+            descripcion: 'Un recorrido visual cronológico por tus fotos y momentos más importantes.',
             tipo: 'historia',
             mockData: data.nuestra_historia
           },
@@ -94,7 +94,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
             id: 'wrapped',
             icono: <ChartIcon size={24} />,
             titulo: 'Wrapped Anual',
-            descripcion: 'Toda su relación resumida en gráficas y datos curiosos al estilo Spotify.',
+            descripcion: 'Toda tu relación resumida en gráficas y datos curiosos al estilo Spotify.',
             tipo: 'wrapped',
             mockData: data.wrapped
           },
@@ -186,7 +186,13 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
 
   return (
     <section className="showcase-section">
-      <div className="theme-selector-wrapper">
+      <motion.div 
+        className="theme-selector-wrapper"
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="theme-selector-container">
           {themes.map((t) => (
             <div 
@@ -199,10 +205,16 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
             </div>
           ))}
         </div>
-      </div>
+      </motion.div>
 
       <div className="showcase-container">
-        <div className="showcase-menu-container">
+        <motion.div 
+          className="showcase-menu-container"
+          initial={{ opacity: 0, x: -30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+        >
           <div className="showcase-menu">
             {paginatedModules.map((mod) => (
               <div 
@@ -251,9 +263,15 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
               Siguiente
             </button>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="showcase-preview">
+        <motion.div 
+          className="showcase-preview"
+          initial={{ opacity: 0, x: 30 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.4 }}
+        >
           <div className="preview-window">
             <div className="preview-header">
               <div className="dots"><span></span><span></span><span></span></div>
@@ -276,7 +294,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
               </div>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

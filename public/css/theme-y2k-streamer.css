@@ -30,7 +30,7 @@ body.theme-y2k-streamer *::-webkit-scrollbar-thumb {
     box-shadow: inset 0 0 5px rgba(0,0,0,0.5) !important;
 }
 
-:root {
+.theme-y2k-streamer {
     /* PALETA Y2K PASTEL / NEÓN */
     --y2k-bg-base: #1a0b2e;         /* Morado oscuro de fondo */
     --y2k-pink-neon: #ff66cc;       /* Rosa vibrante principal */
@@ -54,7 +54,7 @@ body.theme-y2k-streamer *::-webkit-scrollbar-thumb {
 }
 
 /* === ESTILOS GLOBALES === */
-body {
+body.theme-y2k-streamer, .ravyn-canvas.theme-y2k-streamer {
     background-color: var(--y2k-bg-base) !important;
     color: var(--y2k-text-light);
     font-family: var(--font-pixel);
@@ -75,30 +75,32 @@ body {
 }
 
 /* Elementos flotantes decorativos en el fondo */
-body::before, body::after {
+body.theme-y2k-streamer::before, body.theme-y2k-streamer::after {
     position: fixed;
     font-size: 4rem;
     z-index: -1;
     opacity: 0.15;
     animation: floatY2K 6s ease-in-out infinite;
 }
-body::before { content: '💖'; top: 10%; left: 5%; }
-body::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
+body.theme-y2k-streamer::before { content: '💖'; top: 10%; left: 5%; }
+body.theme-y2k-streamer::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
 
 button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 
 /* Ajustes móvil */
 @media (max-width: 600px) {
-    body { padding: 20px 15px; }
+    body.theme-y2k-streamer { padding: 20px 15px; }
     .header-title { font-size: 2.8rem !important; margin-bottom: 20px; }
     .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 60px; }
     #stack-container { height: 50vh; max-height: 400px; }
 }
 
 /* === HEADER (ESTILO WORDART & NIVEL DE AMOR) === */
-.page-header { text-align: center; margin-bottom: 60px; }
+.theme-y2k-streamer .page-header { text-align: center; margin-bottom: 60px; }
 
-.header-title, #mensaje-inicio, #mensaje-inicio-dedic {
+.theme-y2k-streamer .header-title, 
+.theme-y2k-streamer #mensaje-inicio, 
+.theme-y2k-streamer #mensaje-inicio-dedic {
     font-family: var(--font-bubble);
     font-size: 4rem;
     color: var(--y2k-text-light) !important;
@@ -111,7 +113,7 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     transform: rotate(-2deg);
 }
 
-.header-subtitle {
+.theme-y2k-streamer .header-subtitle {
     font-family: var(--font-pixel);
     background: var(--y2k-pink-neon);
     color: var(--y2k-text-light);
@@ -255,8 +257,8 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 .option-btn.correct { background: #00ff00 !important; box-shadow: 0 0 20px #00ff00 !important; color: black !important; border-color: white !important;}
 .option-btn.incorrect { background: #ff0000 !important; color: white !important; opacity: 0.8; }
 
-.progress-container { background: var(--y2k-bg-base); border: 2px solid var(--y2k-cyan); border-radius: 10px; height: 15px; margin-bottom: 30px; }
-.progress-bar { background: var(--y2k-cyan); height: 100%; border-radius: 8px; transition: width 0.4s ease; box-shadow: 0 0 10px var(--y2k-cyan); width: 0%;}
+.theme-y2k-streamer .progress-container { background: var(--y2k-bg-base); border: 2px solid var(--y2k-cyan); border-radius: 10px; height: 15px; margin-bottom: 30px; }
+.theme-y2k-streamer .progress-bar { background: var(--y2k-cyan); height: 100%; border-radius: 8px; transition: width 0.4s ease; box-shadow: 0 0 10px var(--y2k-cyan); width: 0%;}
 
 /* =========================================
    CLASES DE UTILIDAD PARA JS (TRIVIA)

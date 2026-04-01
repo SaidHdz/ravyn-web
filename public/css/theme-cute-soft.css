@@ -64,7 +64,7 @@ body.theme-cute-soft *::-webkit-scrollbar-thumb {
     box-shadow: 0 2px 5px rgba(255, 102, 170, 0.2) !important;
 }
 
-:root {
+.theme-cute-soft {
     --cute-bg-gradient: linear-gradient(135deg, #FFDDEE 0%, #DDEEFF 100%);
     --cute-card-bg: rgba(255, 255, 255, 0.9);
     
@@ -80,7 +80,7 @@ body.theme-cute-soft *::-webkit-scrollbar-thumb {
 }
 
 /* Estilos base */
-body {
+body.theme-cute-soft, .ravyn-canvas.theme-cute-soft {
     background: var(--cute-bg-gradient);
     background-attachment: fixed;
     color: var(--cute-text-main);
@@ -91,7 +91,7 @@ body {
 }
 
 /* Títulos */
-.header-title {
+.theme-cute-soft .header-title {
     font-family: var(--font-bubbly);
     color: var(--cute-text-title);
     font-size: 3.5rem;
@@ -100,7 +100,7 @@ body {
     text-shadow: 2px 2px 0px rgba(255,255,255,0.8);
 }
 
-.header-subtitle {
+.theme-cute-soft .header-subtitle {
     font-family: var(--font-soft);
     color: var(--cute-text-main);
     text-align: center;
@@ -109,7 +109,7 @@ body {
 }
 
 /* Galería principal */
-.gallery-container {
+.theme-cute-soft .gallery-container {
     max-width: 600px;
     margin: 0 auto;
     display: flex;
@@ -366,8 +366,8 @@ body {
 .option-btn.correct { background: #7bed9f !important; color: #fff !important; border-color: #fff !important; transform: scale(1.05); }
 .option-btn.incorrect { background: #ff7f50 !important; color: #fff !important; border-color: #fff !important; }
 
-.progress-container { background: #ffe4e1; border-radius: 20px; height: 15px; margin-bottom: 30px; border: 2px solid #fff; }
-.progress-bar { background: var(--cute-accent-pink); border-radius: 20px; height: 100%; transition: width 0.4s ease; width: 0%;}
+.theme-cute-soft .progress-container { background: #ffe4e1; border-radius: 20px; height: 15px; margin-bottom: 30px; border: 2px solid #fff; }
+.theme-cute-soft .progress-bar { background: var(--cute-accent-pink); border-radius: 20px; height: 100%; transition: width 0.4s ease; width: 0%;}
 
 .hidden { display: none !important; }
 .fade-transition { transition: opacity 0.3s ease; opacity: 1; }

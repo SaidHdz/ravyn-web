@@ -54,7 +54,7 @@ export const PACKS_CONFIG: Pack[] = [
     subtitulo: 'Pack Completo',
     rareza: 'epica',
     precio: 799,
-    descripcion: 'La arquitectura total de vuestros recuerdos. El regalo definitivo.',
+    descripcion: 'La arquitectura total de tus recuerdos. El regalo definitivo.',
     modulos: ['historia', 'contador', 'tarjetas', 'trivia', 'evasivo', 'dedicatorias', 'wrapped'],
     colorAura: 'rgba(211, 47, 47, 0.5)',
     colorBorde: '#D32F2F',
