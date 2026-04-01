@@ -62,8 +62,8 @@ const ModuleViewer: React.FC = () => {
   const resolvedTheme = forcedTheme || theme || 'aesthetic';
 
   return (
-    <div className="module-viewer-isolated" style={{ minHeight: '100vh', width: '100vw' }}>
-      <ThemeManager theme={resolvedTheme} />
+    <div className={`module-viewer-isolated ravyn-canvas theme-${resolvedTheme}`} data-theme={resolvedTheme} style={{ minHeight: '100vh', width: '100vw' }}>
+      <ThemeManager theme={resolvedTheme} isStandalone={true} />
       {component}
     </div>
   );

@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Gamepad2, BookOpen, Layers, BarChart3, Clock, MousePointer2, Heart } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { 
+  Gamepad2 as GamepadIcon, 
+  BookOpen as BookIcon, 
+  Layers as LayersIcon, 
+  BarChart3 as ChartIcon, 
+  Clock as ClockIcon, 
+  MousePointer2 as CursorIcon, 
+  Heart as HeartIcon 
+} from 'lucide-react';
 import Contador from '@/components/modules/Contador';
 import Historia from '@/components/modules/Historia';
 import Tarjetas from '@/components/modules/Tarjetas';
@@ -26,9 +35,12 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
   const themes = [
     { id: 'y2k-streamer', label: 'Y2K' },
     { id: 'neo-japan', label: 'Neo Japan' },
-    { id: 'minecraft', label: 'Minecraft' },
-    { id: 'cute-soft', label: 'Cute Soft' },
-    { id: 'aesthetic', label: 'Aesthetic' }
+    { id: 'minecraft', label: 'Cubos' },
+    { id: 'cute-soft', label: 'Cute' },
+    { id: 'aesthetic', label: 'Aesthetic' },
+    { id: 'finn', label: 'Heroe' },
+    { id: 'jake', label: 'Mejor Amigo' },
+    { id: 'lsp', label: 'Grumos' }
   ];
 
   useEffect(() => {
@@ -40,7 +52,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
         const modules = [
           {
             id: 'contador',
-            icono: <Clock size={24} />,
+            icono: <ClockIcon size={24} />,
             titulo: 'Contador de Tiempo',
             descripcion: 'Muestra cuánto tiempo ha pasado desde ese día especial con precisión de segundos.',
             tipo: 'contador',
@@ -48,7 +60,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'historia',
-            icono: <BookOpen size={24} />,
+            icono: <BookIcon size={24} />,
             titulo: 'Galería de Memorias',
             descripcion: 'Un recorrido visual cronológico por sus fotos y momentos más importantes.',
             tipo: 'historia',
@@ -56,7 +68,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'trivia',
-            icono: <Gamepad2 size={24} />,
+            icono: <GamepadIcon size={24} />,
             titulo: 'Trivia de Pareja',
             descripcion: '¿Qué tan bien se conocen? Un juego divertido con resultados personalizados.',
             tipo: 'trivia',
@@ -64,7 +76,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'evasivo',
-            icono: <MousePointer2 size={24} />,
+            icono: <CursorIcon size={24} />,
             titulo: 'Botón Evasivo',
             descripcion: 'El clásico botón de "No" que huye cuando intentas presionarlo. ¡Imposible decir que no!',
             tipo: 'evasivo',
@@ -72,7 +84,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'tarjetas',
-            icono: <Layers size={24} />,
+            icono: <LayersIcon size={24} />,
             titulo: 'Cartas de Amor',
             descripcion: 'Un mazo de cartas interactivas que se deslizan para revelar mensajes profundos.',
             tipo: 'tarjetas',
@@ -80,7 +92,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'wrapped',
-            icono: <BarChart3 size={24} />,
+            icono: <ChartIcon size={24} />,
             titulo: 'Wrapped Anual',
             descripcion: 'Toda su relación resumida en gráficas y datos curiosos al estilo Spotify.',
             tipo: 'wrapped',
@@ -88,7 +100,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           },
           {
             id: 'dedicatorias',
-            icono: <Heart size={24} />,
+            icono: <HeartIcon size={24} />,
             titulo: 'Dedicatorias Especiales',
             descripcion: 'Un cofre virtual con mensajes secuenciales y cartas apiladas con música.',
             tipo: 'dedicatorias',
@@ -129,28 +141,40 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
   const renderPreview = () => {
     if (!activeModule) return null;
 
-    const getModuleComponent = () => {
-      const { tipo, mockData } = activeModule;
-      switch (tipo) {
-        case 'contador': return <Contador data={mockData} />;
-        case 'historia': return <Historia data={mockData} />;
-        case 'tarjetas': return <Tarjetas data={mockData} />;
-        case 'trivia': return <Trivia data={mockData} />;
-        case 'evasivo': return <Evasivo data={mockData} />;
-        case 'wrapped': return <Wrapped data={mockData} />;
-        case 'dedicatorias': return <Dedicatorias data={mockData} />;
-        default: return <div style={{ padding: '40px', textAlign: 'center' }}>Módulo en desarrollo</div>;
-      }
-    };
-
+    const { tipo, mockData } = activeModule;
+    
     return (
       <ModulePreviewFrame
         theme={activeTheme}
         onThemeLoadStateChange={setIsPreviewLoading}
       >
-        <React.Fragment key={activeModule?.id}>
-          {getModuleComponent()}
-        </React.Fragment>
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={activeModule.id}
+            initial={{ opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 1.02 }}
+            transition={{ duration: 0.4, ease: "easeInOut" }}
+            className={`ravyn-canvas theme-${activeTheme}`} 
+            data-theme={activeTheme} 
+            style={{ minHeight: '100%' }}
+          >
+            <section className="modulo-ravyn">
+              {(() => {
+                switch (tipo) {
+                  case 'contador': return <Contador data={mockData} />;
+                  case 'historia': return <Historia data={mockData} />;
+                  case 'tarjetas': return <Tarjetas data={mockData} />;
+                  case 'trivia': return <Trivia data={mockData} />;
+                  case 'evasivo': return <Evasivo data={mockData} />;
+                  case 'wrapped': return <Wrapped data={mockData} />;
+                  case 'dedicatorias': return <Dedicatorias data={mockData} />;
+                  default: return <div style={{ padding: '40px', textAlign: 'center' }}>Módulo en desarrollo</div>;
+                }
+              })()}
+            </section>
+          </motion.div>
+        </AnimatePresence>
       </ModulePreviewFrame>
     );
   };
@@ -158,7 +182,6 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
   const handleThemeSelect = (themeId: string) => {
     if (themeId === activeTheme) return;
     onThemeChange(themeId);
-    setIsPreviewLoading(true);
   };
 
   return (
@@ -168,7 +191,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           {themes.map((t) => (
             <div 
               key={t.id} 
-              className={`theme-card ${activeTheme === t.id ? 'active' : ''}`}
+              className={`theme-card theme-card-${t.id} ${activeTheme === t.id ? 'active' : ''}`}
               data-theme={t.id}
               onClick={() => handleThemeSelect(t.id)}
             >
@@ -240,10 +263,10 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
               className={`preview-content ${isPreviewLoading ? 'is-loading' : ''}`}
             >
               {renderPreview()}
-              <div className="preview-loading-overlay">
+
+              <div className="preview-loading-overlay" style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(4px)' }}>
                 <div className="preview-loading-card">
-                  <p className="preview-loading-title">Aplicando tema</p>
-                  <p className="preview-loading-subtitle">Dale un segundo, estamos vistiendo el módulo.</p>
+                  <p className="preview-loading-title">Personalizando...</p>
                   <div className="preview-loading-dots">
                     <span></span>
                     <span></span>

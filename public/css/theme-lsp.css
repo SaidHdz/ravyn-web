@@ -1,0 +1,269 @@
+/* Tema LSP (Princesa Espacio Bultos) - Estilo Grumoso y Dramático (Versión Reparada y Estable) */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+:root {
+    --lsp-bg-space: #B39DDB;
+    --lsp-bg-panel: #F3E5F5;
+    --lsp-border: #4A148C;
+    --lsp-magenta: #C2185B;
+    --lsp-star-yellow: #FFD54F;
+    --lsp-text-main: #4A148C;
+    --font-titles: 'Fredoka One', cursive;
+    --font-body: 'Nunito', sans-serif;
+    --lsp-shadow: 6px 6px 0px var(--lsp-border);
+    --lumpy-radius: 35px 25px 45px 20px / 25px 45px 20px 35px;
+}
+
+.ravyn-canvas.theme-lsp {
+    background-color: var(--lsp-bg-space) !important;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.3) 10%, transparent 20%) !important;
+    background-size: 60px 60px !important;
+    color: var(--lsp-text-main) !important;
+    font-family: var(--font-body) !important;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* === TIPOGRAFÍA Y COLORES === */
+.theme-lsp h1, .theme-lsp h2, .theme-lsp h3, .theme-lsp .header-title, .theme-lsp .card-title {
+    font-family: var(--font-titles) !important;
+    color: var(--lsp-star-yellow) !important;
+    -webkit-text-stroke: 1.5px var(--fn-border) !important;
+    text-shadow: 2px 2px 0px var(--lsp-border) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.theme-lsp p, .theme-lsp span, .theme-lsp .intro-text, .theme-lsp .card-description, .theme-lsp .question-header {
+    font-family: var(--font-body) !important;
+    color: var(--lsp-text-main) !important;
+    font-weight: 700;
+}
+
+/* === BOTONES ESTILO LSP === */
+.theme-lsp .option-btn {
+    background-color: var(--lsp-bg-panel) !important;
+    color: var(--lsp-border) !important;
+    border: 4px solid var(--lsp-border) !important;
+    border-radius: 20px !important;
+    padding: 20px 25px !important;
+    margin: 0 auto 12px auto !important;
+    max-width: 320px !important;
+    width: 100% !important;
+    font-family: var(--font-titles) !important;
+    font-size: 1.1rem !important;
+    box-shadow: var(--lsp-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    position: relative;
+    overflow: visible !important;
+    cursor: pointer;
+    text-align: center;
+    display: block !important;
+}
+
+/* Ajuste específico para Botón Evasivo en LSP */
+.theme-lsp #contenedor-botones .option-btn {
+    width: 140px !important;
+    max-width: 140px !important;
+    height: 65px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.theme-lsp .option-btn::after {
+    content: "★";
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background: var(--lsp-star-yellow);
+    color: var(--lsp-border);
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--lsp-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    box-shadow: 2px 2px 0px var(--lsp-border);
+}
+
+.theme-lsp .option-btn:hover { transform: scale(1.05); }
+.theme-lsp .option-btn:active { transform: scale(0.9); }
+
+.theme-lsp .option-btn.correct { background-color: #78C850 !important; color: white !important; }
+.theme-lsp .option-btn.incorrect { 
+    background-color: #ff4757 !important; 
+    color: white !important;
+    animation: lumpyShake 0.4s ease-in-out !important;
+}
+
+@keyframes lumpyShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px) rotate(-2deg); }
+    75% { transform: translateX(10px) rotate(2deg); }
+}
+
+/* === ESTRUCTURA DE TARJETAS Y MODALES === */
+.theme-lsp .memory-card, .theme-lsp .trivia-card, .theme-lsp .carta, .theme-lsp .carta-dedic {
+    background-color: var(--lsp-bg-panel) !important;
+    border: 4px solid var(--lsp-border) !important;
+    border-radius: var(--lumpy-radius) !important;
+    box-shadow: var(--lsp-shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: 30px !important;
+}
+
+/* === MODAL REPARADO LSP === */
+@keyframes lumpyModalIn {
+    0% { transform: scale(0.8) rotate(5deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.theme-lsp .modal-overlay {
+    background: rgba(74, 20, 140, 0.6) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2000 !important;
+}
+
+.theme-lsp .modal-overlay.show-modal .modal-content {
+    animation: lumpyModalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+.theme-lsp .modal-content {
+    background-color: var(--lsp-bg-panel) !important;
+    border: 5px solid var(--lsp-border) !important;
+    border-radius: var(--lumpy-radius) !important;
+    box-shadow: var(--lsp-shadow) !important;
+    padding: 50px 30px 30px 30px !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+}
+
+.theme-lsp .modal-image {
+    width: 100% !important;
+    border: 4px solid var(--lsp-border) !important;
+    border-radius: 30px !important;
+    aspect-ratio: 1/1 !important;
+    object-fit: cover !important;
+}
+
+.theme-lsp .modal-details {
+    text-align: center !important;
+}
+
+.theme-lsp .close-btn { 
+    position: absolute !important; 
+    top: 15px !important; 
+    right: 15px !important; 
+    background: var(--lsp-star-yellow) !important; 
+    color: #000 !important;
+    border: 3px solid #000 !important; 
+    width: 50px !important; 
+    height: 50px !important;
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%) !important;
+    cursor: pointer !important; 
+    z-index: 100 !important;
+}
+
+/* ANIMACIONES "DRAMA" LSP */
+@keyframes lumpyFloat {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+#modulo-historia .card-wrapper { animation: lumpyFloat 6s ease-in-out infinite; }
+
+/* === PAQUETES (LSP BULTOS) === */
+@keyframes lumpyBultos {
+    0% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+    50% { border-radius: 40% 60% 30% 70% / 60% 40% 50% 60%; transform: scale(1.05); }
+    100% { border-radius: 60% 40% 70% 30% / 40% 50% 60% 50%; }
+}
+
+.theme-lsp #paquete-dedic, .theme-lsp #paquete-cartas {
+    background-color: #CE93D8 !important;
+    border: 5px solid var(--lsp-border) !important;
+    position: relative;
+    margin: 60px auto;
+    box-shadow: var(--lsp-shadow) !important;
+    cursor: pointer;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: visible !important;
+    animation: lumpyBultos 4s ease-in-out infinite;
+}
+
+/* Animación de Explosión al Abrir */
+.theme-lsp #paquete-dedic.abriendo-cofre, 
+.theme-lsp #paquete-cartas.animacion-abrir {
+    animation: lumpyExplode 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards !important;
+}
+
+@keyframes lumpyExplode {
+    0% { transform: scale(1); opacity: 1; border-radius: var(--lumpy-radius); }
+    50% { transform: scale(1.4) rotate(15deg); opacity: 0.8; border-radius: 40% 60% 40% 60% / 60% 40% 60% 40%; }
+    100% { transform: scale(2); opacity: 0; border-radius: 50%; }
+}
+
+.theme-lsp #paquete-dedic { width: 220px; height: 220px; }
+.theme-lsp #paquete-cartas { width: 240px; height: 160px; }
+
+.theme-lsp #paquete-dedic .pestillo, .theme-lsp #paquete-cartas .pestillo {
+    width: 70px !important; height: 70px !important;
+    background: var(--lsp-star-yellow) !important; border: 4px solid var(--lsp-border) !important;
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%) !important;
+    z-index: 10 !important;
+}
+
+/* === LAS CARTAS INTERIORES === */
+.theme-lsp .carta-inner {
+    background-color: var(--lsp-bg-panel) !important;
+    color: var(--lsp-border) !important;
+}
+
+/* 6. WRAPPED CONTRACT */
+.theme-lsp .wrapped-card-ui {
+    --w-bg: var(--lsp-bg-panel) !important;
+    --w-accent: var(--lsp-magenta) !important;
+    --w-accent-secondary: rgba(74, 20, 140, 0.15) !important;
+    --w-text: var(--lsp-text-main) !important;
+    --w-radius: var(--lumpy-radius) !important;
+    --w-border: solid var(--lsp-border) !important;
+    --w-shadow: var(--lsp-shadow) !important;
+    backdrop-filter: none !important;
+}
+
+/* Scrollbar LSP */
+body.theme-lsp::-webkit-scrollbar,
+body.theme-lsp *::-webkit-scrollbar {
+    width: 10px !important;
+}
+body.theme-lsp::-webkit-scrollbar-track,
+body.theme-lsp *::-webkit-scrollbar-track {
+    background: rgba(74, 20, 140, 0.1) !important;
+    border-radius: 10px !important;
+}
+body.theme-lsp::-webkit-scrollbar-thumb,
+body.theme-lsp *::-webkit-scrollbar-thumb {
+    background: var(--lsp-magenta) !important;
+    border: 2px solid var(--lsp-border) !important;
+    border-radius: 10px !important;
+}

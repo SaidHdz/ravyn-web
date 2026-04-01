@@ -12,6 +12,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [isAnimating, setIsAnimating] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
+  const [isShaking, setIsShaking] = useState(false);
 
   const startGame = () => {
     setScene('game');
@@ -20,6 +21,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
     setSelectedOption(null);
     setIsAnimating(false);
     setIsFadingOut(false);
+    setIsShaking(false);
   };
 
   const handleOptionClick = (index: number) => {
@@ -28,7 +30,12 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
     setSelectedOption(index);
 
     const isCorrect = index === data.preguntas[currentQuestionIndex].correcta;
-    if (isCorrect) setScore(prev => prev + 1);
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+    } else {
+      setIsShaking(true);
+      setTimeout(() => setIsShaking(false), 500);
+    }
 
     setTimeout(() => {
       setIsFadingOut(true);
@@ -58,7 +65,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
 
   return (
     <section className="modulo-ravyn fondo-trivia" style={{ padding: '40px 0', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <div id="trivia-module" className="trivia-card" style={{ maxWidth: '600px', width: '90%', margin: '0 auto' }}>
+      <div id="trivia-module" className={`trivia-card ${isShaking ? 'shake-anim' : ''}`} style={{ maxWidth: '600px', width: '90%', margin: '0 auto' }}>
         
         {/* SCENE: INTRO */}
         {scene === 'intro' && (

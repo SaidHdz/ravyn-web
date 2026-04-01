@@ -35,6 +35,35 @@ html, body {
 }
 
 /* Mis colores y fuentes */
+/* Animación de Salida Soft */
+@keyframes cuteFlyOut {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(-15deg) translateX(-20px); opacity: 0; }
+}
+
+.theme-cute-soft .carta-dedic.leaving, 
+.theme-cute-soft .carta.leaving {
+    animation: cuteFlyOut 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
+}
+
+/* === SCROLLBAR GLOBAL === */
+body.theme-cute-soft::-webkit-scrollbar,
+body.theme-cute-soft *::-webkit-scrollbar {
+    width: 10px !important;
+}
+body.theme-cute-soft::-webkit-scrollbar-track,
+body.theme-cute-soft *::-webkit-scrollbar-track {
+    background: #fdf2f7 !important; /* Rosa muy pálido */
+    border-radius: 10px !important;
+}
+body.theme-cute-soft::-webkit-scrollbar-thumb,
+body.theme-cute-soft *::-webkit-scrollbar-thumb {
+    background: var(--cute-accent-pink) !important;
+    border: 3px solid #fff !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 5px rgba(255, 102, 170, 0.2) !important;
+}
+
 :root {
     --cute-bg-gradient: linear-gradient(135deg, #FFDDEE 0%, #DDEEFF 100%);
     --cute-card-bg: rgba(255, 255, 255, 0.9);
@@ -447,4 +476,60 @@ body.theme-cute-soft #marco-reproductor {
     border-radius: 20px;
     border: 2px dashed #ffb3b3;
     box-shadow: 0 4px 15px rgba(255, 180, 180, 0.4);
+}
+
+/* 6. WRAPPED CONTRACT */
+.theme-cute-soft .wrapped-card-ui {
+    --w-bg: linear-gradient(to bottom, #ffffff, #fff0f5) !important;
+    --w-accent: var(--cute-accent-pink, #FF66AA) !important;
+    --w-text: var(--cute-text-main, #555) !important;
+    --w-radius: 40px !important;
+    --w-border: 3px dashed var(--cute-accent-pink) !important;
+    --w-shadow: none !important;
+    --w-accent-secondary: var(--cute-accent-blue) !important;
+    backdrop-filter: none !important;
+}
+
+.theme-cute-soft .wrapped-header-title {
+    font-family: var(--font-bubbly, sans-serif) !important;
+    color: var(--cute-text-title, #4477DD) !important;
+    text-shadow: none !important;
+}
+
+.theme-cute-soft .card-description {
+    color: var(--cute-text-main) !important;
+    font-weight: 500 !important;
+}
+
+.theme-cute-soft .wrapped-progress-track {
+    background: #ffe4e1 !important;
+}
+
+.theme-cute-soft .wrapped-dona-center {
+    background: #fff !important;
+    color: var(--cute-text-title) !important;
+}
+
+/* Colores de Gráficas para Cute Soft */
+.theme-cute-soft .wrapped-card-ui {
+    --w-accent-secondary: var(--cute-accent-blue, #66CCFF);
+}
+
+.theme-cute-soft .bar-track-custom {
+    background: #f0f8ff !important;
+    border: 1px solid #e0f0ff !important;
+}
+
+.theme-cute-soft .wrapped-peak-bar:not(.is-peak) {
+    background-color: #e0f0ff !important;
+}
+
+.theme-cute-soft .wrapped-summary-card {
+    background: #ffffff !important;
+    border: 3px dashed var(--cute-accent-blue) !important;
+    box-shadow: 0 15px 30px rgba(102, 204, 255, 0.1) !important;
+}
+
+.theme-cute-soft .wrapped-highlight-text {
+    color: var(--cute-accent-pink) !important;
 }

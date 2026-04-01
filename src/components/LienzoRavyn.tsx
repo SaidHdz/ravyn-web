@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Pedido } from '@/types/pedido';
 import Contador from '@/components/modules/Contador';
 import Hero from '@/components/modules/Hero';
@@ -12,16 +13,17 @@ import Dedicatorias from '@/components/modules/Dedicatorias';
 interface LienzoRavynProps {
   pedido: Pedido;
   packFilter?: string; // Nuevo: ID del pack para previsualización
+  isStandalone?: boolean; // Define si aplica el tema al body o localmente
 }
 
-const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter }) => {
+const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter, isStandalone = true }) => {
   const { configuracion_global } = pedido;
+  const lienzoRef = React.useRef<HTMLDivElement>(null);
 
   // Si hay un filtro de pack, usamos sus módulos. Si no, usamos el orden del JSON.
   const getModulosAMostrar = () => {
     if (!packFilter) return configuracion_global.orden;
 
-    // Diccionario de módulos por pack (debe coincidir con store.ts)
     const packsModulos: Record<string, string[]> = {
       'pack-semilla': ['modulo-historia', 'modulo-contador', 'modulo-tarjetas'],
       'pack-rabanito': ['modulo-historia', 'modulo-trivia', 'modulo-evasivo', 'modulo-dedicatorias'],
@@ -33,62 +35,92 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter }) => {
 
   const modulosAMostrar = getModulosAMostrar();
 
-  // Efecto para aplicar el tema global
+  // Efecto para aplicar el tema
   useEffect(() => {
     const tema = pedido.configuracion_global.tema || pedido.wrapped?.config.tema || 'aesthetic';
     
-    // Eliminar links de temas previos para evitar conflictos
-    const existingThemeLink = document.getElementById('ravyn-theme-link');
-    if (existingThemeLink) {
-      existingThemeLink.remove();
+    if (isStandalone) {
+      const existingThemeLink = document.getElementById('ravyn-theme-link');
+      if (existingThemeLink) existingThemeLink.remove();
+
+      const link = document.createElement('link');
+      link.id = 'ravyn-theme-link';
+      link.rel = 'stylesheet';
+      link.href = `/css/theme-${tema}.css`;
+      document.head.appendChild(link);
+
+      document.body.className = `ravyn-canvas theme-${tema}`;
+      document.body.setAttribute('data-theme', tema);
     }
-
-    // Crear y añadir el nuevo link del tema
-    const link = document.createElement('link');
-    link.id = 'ravyn-theme-link';
-    link.rel = 'stylesheet';
-    link.href = `/css/theme-${tema}.css`;
-    document.head.appendChild(link);
-
-    // Aplicar clase de tema al body
-    document.body.className = `ravyn-canvas theme-${tema}`;
-    document.body.setAttribute('data-theme', tema);
 
     return () => {
-      // Opcional: limpiar al desmontar si es necesario
+      if (isStandalone) {
+        document.body.className = '';
+      }
     };
-  }, [pedido]);
+  }, [pedido, isStandalone]);
 
   const renderModulo = (nombre: string) => {
-    // A medida que añadamos componentes, los registraremos aquí
+    let component = null;
     switch (nombre) {
       case 'modulo-contador':
-        return pedido.contador ? <Contador key={nombre} data={pedido.contador} /> : null;
+        component = pedido.contador ? <Contador data={pedido.contador} /> : null;
+        break;
       case 'modulo-evasivo':
-        return pedido.evasivo ? <Evasivo key={nombre} data={pedido.evasivo} /> : null;
+        component = pedido.evasivo ? <Evasivo data={pedido.evasivo} /> : null;
+        break;
       case 'modulo-historia':
-        return pedido.nuestra_historia ? <Historia key={nombre} data={pedido.nuestra_historia} /> : null;
+        component = pedido.nuestra_historia ? <Historia data={pedido.nuestra_historia} /> : null;
+        break;
       case 'modulo-tarjetas':
-        return pedido.tarjetas ? <Tarjetas key={nombre} data={pedido.tarjetas} /> : null;
+        component = pedido.tarjetas ? <Tarjetas data={pedido.tarjetas} /> : null;
+        break;
       case 'modulo-trivia':
-        return pedido.trivia ? <Trivia key={nombre} data={pedido.trivia} /> : null;
+        component = pedido.trivia ? <Trivia data={pedido.trivia} /> : null;
+        break;
       case 'modulo-wrapped':
-        return pedido.wrapped ? <Wrapped key={nombre} data={pedido.wrapped} /> : null;
+        component = pedido.wrapped ? <Wrapped data={pedido.wrapped} /> : null;
+        break;
       case 'modulo-dedicatorias':
-        return pedido.dedicatorias ? <Dedicatorias key={nombre} data={pedido.dedicatorias} /> : null;
+        component = pedido.dedicatorias ? <Dedicatorias data={pedido.dedicatorias} /> : null;
+        break;
       default:
-        return <div key={nombre}>[Módulo {nombre} no reconocido]</div>;
+        component = <div key={nombre}>[Módulo {nombre} no reconocido]</div>;
     }
+
+    if (!component) return null;
+
+    return (
+      <motion.section 
+        key={nombre}
+        layout
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95 }}
+        transition={{ 
+          layout: { type: "spring", stiffness: 300, damping: 30 },
+          opacity: { duration: 0.4 }
+        }}
+        className="modulo-ravyn"
+      >
+        {component}
+      </motion.section>
+    );
   };
 
+  const lienzoClasses = `lienzo-container ravyn-canvas theme-${pedido.configuracion_global.tema || 'aesthetic'}`;
 
   return (
-    <div className="lienzo-container">
-      {/* El Hero/Bienvenida siempre es el primero o según lógica de UI */}
+    <div 
+      ref={lienzoRef} 
+      className={lienzoClasses} 
+      data-theme={pedido.configuracion_global.tema || 'aesthetic'}
+      style={{ minHeight: '100vh' }}
+    >
       <Hero data={pedido.bienvenida} />
-
-      {/* Renderizado dinámico según el orden del JSON o del Pack */}
-      {modulosAMostrar.map((nombreModulo) => renderModulo(nombreModulo))}
+      <AnimatePresence mode="popLayout">
+        {modulosAMostrar.map((nombreModulo) => renderModulo(nombreModulo))}
+      </AnimatePresence>
     </div>
   );
 };

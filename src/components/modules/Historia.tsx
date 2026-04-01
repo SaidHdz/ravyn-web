@@ -27,15 +27,13 @@ const Historia: React.FC<HistoriaProps> = ({ data }) => {
       });
     }, observerOptions);
 
-    const wrappers = document.querySelectorAll('.card-wrapper');
+    if (!galleryRef.current) return;
+    const wrappers = galleryRef.current.querySelectorAll('.card-wrapper');
     wrappers.forEach(wrapper => {
       observer.observe(wrapper);
       
-      // Fallback: si ya es visible (en debug), forzar clase
-      const rect = wrapper.getBoundingClientRect();
-      if (rect.top < window.innerHeight) {
-        wrapper.classList.add('is-visible');
-      }
+      // Forzar visibilidad inmediata (útil para previews e iframes)
+      wrapper.classList.add('is-visible');
     });
 
     return () => {

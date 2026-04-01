@@ -36,6 +36,17 @@ padding: 20px 15px;
 }
 
 /* Mis colores y variables principales */
+/* Animación de Salida Premium */
+@keyframes aestheticFlyOut {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; filter: blur(0px); }
+    100% { transform: translateY(100vh) rotate(10deg); opacity: 0; filter: blur(10px); }
+}
+
+.theme-aesthetic .carta-dedic.leaving, 
+.theme-aesthetic .carta.leaving {
+    animation: aestheticFlyOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
 :root {
 --bg-color: #050505;
 --card-bg: rgba(18, 18, 18, 0.7);

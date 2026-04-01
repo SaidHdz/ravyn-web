@@ -1,17 +1,19 @@
 import { useState, useEffect } from 'react';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, useLocation } from 'react-router-dom';
 import { Pedido } from '@/types/pedido';
 import LienzoRavyn from '@/components/LienzoRavyn';
 
 function App() {
   const { id } = useParams<{ id: string }>();
   const [searchParams] = useSearchParams();
+  const location = useLocation();
   const [pedido, setPedido] = useState<Pedido | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   // Parámetros de previsualización
   const previewPack = searchParams.get('pack');
   const previewTheme = searchParams.get('theme');
+  const isPreviewRoute = location.pathname === '/preview';
 
   useEffect(() => {
     // Si no hay ID, usamos webejemplo por defecto
@@ -23,7 +25,7 @@ function App() {
         return res.json();
       })
       .then((data) => {
-        // Si estamos en modo previsualización, sobreescribimos el tema
+        // Si estamos en modo previsualización de URL, sobreescribimos el tema
         if (previewTheme) {
           data.configuracion_global.tema = previewTheme;
         }
@@ -39,7 +41,8 @@ function App() {
     <div className="app-main">
       <LienzoRavyn 
         pedido={pedido} 
-        packFilter={previewPack || undefined} 
+        packFilter={previewPack || undefined}
+        isStandalone={!isPreviewRoute}
       />
     </div>
   );

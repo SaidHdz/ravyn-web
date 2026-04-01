@@ -1,0 +1,338 @@
+/* Tema Jake - Estilo Elástico y Divertido (Versión Trivia Mejorada) */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+.theme-jake {
+    --jk-bg-main: #FFB12B;
+    --jk-bg-panel: #FFFFFF;
+    --jk-border: #000000;
+    --jk-yellow-jake: #FFD230;
+    --jk-orange-dark: #E69B1D;
+    --jk-accent-red: #D32F2F;
+    --jk-blue-collar: #1A4073;
+    --jk-text-main: #000000;
+    --font-titles: 'Fredoka One', cursive;
+    --font-body: 'Nunito', sans-serif;
+    --cartoon-shadow: 6px 6px 0px var(--jk-border);
+    --sketch-radius: 20px 255px 15px 225px / 225px 15px 255px 20px;
+}
+
+.ravyn-canvas.theme-jake {
+    background-color: var(--jk-bg-main) !important;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.1) 2px, transparent 2px), linear-gradient(90deg, rgba(255, 255, 255, 0.1) 2px, transparent 2px) !important;
+    background-size: 50px 50px !important;
+    color: var(--jk-text-main) !important;
+    font-family: var(--font-body) !important;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* === TIPOGRAFÍA Y COLORES === */
+.theme-jake h1, .theme-jake h2, .theme-jake h3, .theme-jake .header-title, .theme-jake .card-title {
+    font-family: var(--font-titles) !important;
+    color: var(--jk-yellow-jake) !important;
+    -webkit-text-stroke: 1.5px var(--jk-border) !important;
+    text-shadow: 2px 2px 0px var(--jk-border) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.theme-jake p, .theme-jake span, .theme-jake .intro-text, .theme-jake .card-description, .theme-jake .question-header {
+    font-family: var(--font-body) !important;
+    color: var(--jk-text-main) !important;
+    font-weight: 700;
+}
+
+/* === BOTONES ESTILO JAKE === */
+.theme-jake .option-btn {
+    background-color: var(--jk-bg-panel) !important;
+    color: var(--jk-text-main) !important;
+    border: 4px solid var(--jk-border) !important;
+    border-radius: var(--sketch-radius) !important;
+    padding: 15px 25px !important;
+    font-family: var(--font-titles) !important;
+    font-size: 1.2rem !important;
+    box-shadow: var(--cartoon-shadow) !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    cursor: pointer;
+    text-align: center;
+    display: block !important;
+    width: 100% !important;
+    max-width: 320px;
+    margin: 0 auto 12px auto;
+}
+
+.theme-jake .option-btn:hover:not(:disabled) {
+    transform: scale(1.05) rotate(1deg);
+    background-color: #f8f8f8 !important;
+}
+
+.theme-jake .option-btn:active:not(:disabled) {
+    transform: scale(0.95, 0.8); /* Se aplasta cual Jake */
+    box-shadow: 2px 2px 0px var(--jk-border) !important;
+}
+
+.theme-jake .option-btn.correct { background-color: #78C850 !important; color: white !important; box-shadow: 0 4px 0 #4e7a27 !important; }
+.theme-jake .option-btn.incorrect { background-color: #ff4757 !important; color: white !important; box-shadow: 0 4px 0 #a01a24 !important; }
+
+/* Trivia Feedback */
+.theme-jake .shake-anim {
+    animation: jakeShake 0.4s ease-in-out !important;
+}
+
+@keyframes jakeShake {
+    0%, 100% { transform: translateX(0) scale(1); }
+    25% { transform: translateX(-10px) scale(1.05, 0.95); }
+    75% { transform: translateX(10px) scale(0.95, 1.05); }
+}
+
+/* Barra de Carga Jake */
+.theme-jake .progress-container {
+    background-color: rgba(0,0,0,0.1) !important; /* Fondo gris claro */
+    border: 3px solid var(--jk-border) !important;
+    height: 20px !important;
+    border-radius: 50px !important;
+    margin-top: 15px !important; /* Margen superior añadido */
+    margin-bottom: 25px !important;
+    overflow: hidden !important;
+}
+
+.theme-jake .progress-bar {
+    background-color: var(--jk-yellow-jake) !important;
+    height: 100% !important;
+    transition: width 0.4s ease !important;
+}
+
+/* === ESTRUCTURA DE TARJETAS Y MODALES === */
+.theme-jake .memory-card, .theme-jake .trivia-card, .theme-jake .carta, .theme-jake .carta-dedic {
+    background-color: var(--jk-bg-panel) !important;
+    border: 4px solid var(--jk-border) !important;
+    border-radius: var(--sketch-radius) !important;
+    box-shadow: var(--cartoon-shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: 30px !important;
+}
+
+/* Centrado de textos específico para el módulo de Historia */
+.theme-jake #modulo-historia .card-details {
+    text-align: center !important;
+    padding: 20px !important;
+}
+
+/* Animación Elástica para Jake */
+@keyframes stretchFloat {
+    0% { transform: translateY(0px) scale(1, 1); }
+    50% { transform: translateY(-10px) scale(1.05, 0.95); }
+    100% { transform: translateY(0px) scale(1, 1); }
+}
+
+#modulo-historia .card-wrapper {
+    animation: stretchFloat 4s ease-in-out infinite;
+}
+
+/* === MODAL REPARADO JAKE === */
+@keyframes jakeModalIn {
+    0% { transform: scale(0.5) rotate(-5deg); opacity: 0; }
+    70% { transform: scale(1.1) rotate(2deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+}
+
+.theme-jake .modal-overlay {
+    background: rgba(0, 0, 0, 0.8) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    z-index: 2000 !important;
+}
+
+.theme-jake .modal-overlay.show-modal .modal-content {
+    animation: jakeModalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+.theme-jake .modal-content {
+    background-color: var(--jk-bg-panel) !important;
+    border: 5px solid #000 !important;
+    border-radius: var(--sketch-radius) !important;
+    box-shadow: var(--cartoon-shadow) !important;
+    padding: 50px 30px 30px 30px !important;
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 15px !important;
+    max-width: 500px !important;
+    width: 90% !important;
+    max-height: 85vh !important;
+    overflow-y: auto !important;
+}
+
+.theme-jake .modal-image {
+    width: 100% !important;
+    border: 4px solid var(--jk-border) !important;
+    border-radius: 20px !important;
+    aspect-ratio: 1/1 !important;
+    object-fit: cover !important;
+}
+
+.theme-jake .modal-details {
+    text-align: center !important;
+}
+
+.theme-jake .close-btn { 
+    position: absolute !important; 
+    top: 15px !important; 
+    right: 15px !important; 
+    background: var(--jk-yellow-jake) !important; 
+    color: #000 !important;
+    border: 3px solid #000 !important; 
+    border-radius: 10px 30px 10px 30px !important;
+    width: 45px !important; 
+    height: 45px !important;
+    display: flex !important; 
+    align-items: center !important; 
+    justify-content: center !important;
+    font-weight: 900 !important; 
+    cursor: pointer !important; 
+    z-index: 100 !important;
+}
+
+/* === AJUSTE EVASIVO JAKE === */
+.theme-jake #contenedor-botones .option-btn {
+    width: 140px !important;
+    max-width: 140px !important;
+    height: 65px !important; /* Paridad corregida */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+.theme-jake #btn-si {
+    background-color: #78C850 !important;
+    color: #fff !important;
+}
+
+.theme-jake #btn-no {
+    background-color: var(--jk-yellow-jake) !important;
+    color: var(--jk-text-main) !important;
+    border-radius: var(--sketch-radius) !important;
+}
+
+/* === PAQUETES (SOBRE JAKE) === */
+.theme-jake #paquete-cartas { background-color: #fff9e6 !important; border: 4px solid var(--jk-border) !important; border-radius: 15px !important; position: relative; margin: 60px auto; box-shadow: var(--cartoon-shadow) !important; width: 220px; height: 160px; overflow: visible !important; }
+.theme-jake #paquete-cartas::after { content: "" !important; position: absolute; top: -2px; left: -2px; width: calc(100% + 4px); height: 65%; background-color: #fff3cc !important; border: 4px solid var(--jk-border) !important; clip-path: polygon(0% 0%, 100% 0%, 50% 100%); z-index: 2 !important; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; transform-origin: top; }
+.theme-jake #paquete-cartas.animacion-abrir { animation: jakePopOpen 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards !important; }
+@keyframes jakePopOpen { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.2); opacity: 0.8; } 100% { transform: scale(2); opacity: 0; } }
+.theme-jake #paquete-cartas.animacion-abrir::after { transform: rotateX(160deg) !important; }
+.theme-jake #paquete-cartas .pestillo { width: 45px !important; height: 45px !important; background: #000 !important; border: 3px solid #333 !important; border-radius: 50% !important; z-index: 10 !important; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) !important; box-shadow: 0 4px 0 rgba(0,0,0,0.3) !important; }
+
+/* === EL ENCHIRIDION (CARTOON EDITION) === */
+.theme-jake #paquete-dedic {
+    background-color: #8B5A2B !important; /* Marrón Cartoon */
+    border: 5px solid #000 !important;
+    border-radius: 5px 15px 15px 5px !important;
+    position: relative;
+    margin: 60px auto;
+    box-shadow: 10px 10px 0 rgba(0,0,0,0.2) !important;
+    width: 180px; 
+    height: 240px;
+    perspective: 1000px;
+}
+
+/* Portada Cartoon */
+.theme-jake #paquete-dedic::after {
+    content: "" !important;
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    width: calc(100% + 10px);
+    height: calc(100% + 10px);
+    background-color: #A0522D !important;
+    border: 5px solid #000 !important;
+    border-radius: 5px 15px 15px 5px !important;
+    z-index: 2;
+    transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform-origin: left;
+}
+
+/* Esquinas de metal dibujadas */
+.theme-jake #paquete-dedic::before {
+    content: "" !important;
+    position: absolute;
+    top: 0; right: 0; width: 40px; height: 40px;
+    background-color: #FFD700 !important;
+    border-left: 5px solid #000 !important;
+    border-bottom: 5px solid #000 !important;
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* Gema Cartoon */
+.theme-jake #paquete-dedic .pestillo {
+    width: 60px !important; 
+    height: 60px !important;
+    background: #FF4444 !important; 
+    border: 5px solid #000 !important;
+    border-radius: 50% !important;
+    z-index: 10 !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) !important;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.2) !important;
+}
+
+/* Brillo en la gema */
+.theme-jake #paquete-dedic .pestillo::after {
+    content: "" !important;
+    position: absolute;
+    top: 10%; left: 20%; width: 15px; height: 15px;
+    background: #fff; border-radius: 50%; opacity: 0.6;
+}
+
+.theme-jake #paquete-dedic.abriendo-cofre::after {
+    transform: rotateY(-140deg) !important;
+}
+
+.theme-jake #paquete-dedic.abriendo-cofre .pestillo {
+    opacity: 0;
+}
+
+/* Animación de salida de cartas Jake */
+@keyframes jakeCardOut {
+    0% { transform: translateY(0) scale(1) rotate(0); opacity: 1; }
+    100% { transform: translateY(100vh) scale(0.8) rotate(-15deg); opacity: 0; }
+}
+
+.theme-jake .carta-dedic.leaving {
+    animation: jakeCardOut 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+/* === LAS CARTAS INTERIORES === */
+.theme-jake .carta-inner { background-color: var(--jk-bg-panel) !important; color: var(--jk-text-main) !important; }
+
+/* 6. WRAPPED CONTRACT (RESTAURADO) */
+.theme-jake .wrapped-card-ui {
+    --w-bg: #ffffff !important;
+    --w-accent: var(--jk-yellow-jake, #FFD230) !important;
+    --w-text: var(--jk-text-main, #000) !important;
+    --w-radius: 32px !important;
+    --w-border: 4px solid #000 !important;
+    --w-shadow: 8px 8px 0px #000 !important;
+    --w-accent-secondary: var(--jk-orange-dark) !important;
+    backdrop-filter: none !important;
+}
+
+.theme-jake .wrapped-peak-bar {
+    background-color: rgba(0, 0, 0, 0.1) !important; /* El Único Cambio: Gris para secundarias */
+}
+
+.theme-jake .wrapped-peak-bar.is-peak {
+    background-color: var(--jk-yellow-jake) !important;
+    box-shadow: 0 0 15px var(--jk-yellow-jake) !important;
+}
+
+/* Scrollbar Jake */
+body.theme-jake::-webkit-scrollbar, body.theme-jake *::-webkit-scrollbar { width: 12px !important; }
+body.theme-jake::-webkit-scrollbar-track, body.theme-jake *::-webkit-scrollbar-track { background: rgba(0,0,0,0.05) !important; border-left: 3px solid #000 !important; }
+body.theme-jake::-webkit-scrollbar-thumb, body.theme-jake *::-webkit-scrollbar-thumb { background: var(--jk-yellow-jake) !important; border: 3px solid #000 !important; border-radius: 10px !important; }

@@ -73,9 +73,12 @@
 
 .theme-pill.active[data-theme="neo-japan"] { border-color: #e31b3f; color: #e31b3f; }
 .theme-pill.active[data-theme="minecraft"] { border-color: #3adb3a; color: #3adb3a; }
-.theme-pill.active[data-theme="y2k-streamer"] { border-color: #ff00ff; color: #ff00ff; }
+.theme-pill.active[data-theme="y2k-streamer"] { border-color: #ff66cc; color: #ff66cc; }
 .theme-pill.active[data-theme="cute-soft"] { border-color: #ff66aa; color: #ff66aa; }
 .theme-pill.active[data-theme="aesthetic"] { border-color: #8b5cf6; color: #8b5cf6; }
+.theme-pill.active[data-theme="finn"] { border-color: #4CB7FF; color: #4CB7FF; }
+.theme-pill.active[data-theme="jake"] { border-color: #FFD230; color: #FFD230; }
+.theme-pill.active[data-theme="lsp"] { border-color: #B39DDB; color: #B39DDB; }
 
 /* Contenedor de la Demo */
 .modal-demo-container {
@@ -114,7 +117,7 @@
 }
 
 .btn-confirm {
-  background: #111;
+  background: var(--ravyn-red);
   color: #fff;
   border: none;
   padding: 15px 30px;
@@ -130,7 +133,7 @@
 
 .btn-confirm:hover {
   transform: scale(1.05);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(211, 47, 47, 0.2);
 }
 
 .pack-info-mini {

@@ -11,13 +11,25 @@
 
 .landing-container {
   font-family: 'Inter', sans-serif;
-  background: radial-gradient(circle at top left, rgba(26, 64, 115, 0.04) 0%, transparent 40%),
-              radial-gradient(circle at bottom right, rgba(211, 47, 47, 0.04) 0%, transparent 40%),
-              var(--landing-bg);
+  position: relative;
   color: var(--landing-text-main);
   min-height: 100vh;
   padding: 0 40px;
   transition: color 0.3s ease;
+}
+
+.landing-container::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at top left, rgba(26, 64, 115, 0.06) 0%, transparent 70%),
+              radial-gradient(circle at bottom right, rgba(211, 47, 47, 0.06) 0%, transparent 70%),
+              var(--landing-bg);
+  z-index: -1;
+  pointer-events: none;
 }
 
 /* NAVBAR */
@@ -110,9 +122,41 @@
 
 .theme-card.active {
   background: white;
-  border-color: var(--landing-primary);
-  color: var(--landing-primary);
-  box-shadow: 0 4px 10px rgba(211, 47, 47, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* === Colores dinámicos para el tema activo === */
+.theme-card-y2k-streamer.active {
+  border-color: #ff66cc !important;
+  color: #ff66cc !important;
+}
+.theme-card-neo-japan.active {
+  border-color: #e31b3f !important;
+  color: #e31b3f !important;
+}
+.theme-card-minecraft.active {
+  border-color: #3adb3a !important;
+  color: #3adb3a !important;
+}
+.theme-card-cute-soft.active {
+  border-color: #FF66AA !important;
+  color: #FF66AA !important;
+}
+.theme-card-aesthetic.active {
+  border-color: #8b5cf6 !important;
+  color: #8b5cf6 !important;
+}
+.theme-card-finn.active {
+  border-color: #4CB7FF !important;
+  color: #4CB7FF !important;
+}
+.theme-card-jake.active {
+  border-color: #FFD230 !important;
+  color: #FFD230 !important;
+}
+.theme-card-lsp.active {
+  border-color: #B39DDB !important;
+  color: #B39DDB !important;
 }
 
 .showcase-container {
@@ -214,7 +258,7 @@
   background: var(--landing-secondary);
   border-radius: 40px;
   padding: 15px;
-  box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+  box-shadow: 0 15px 20px -12px rgba(0, 0, 0, 0.3);
   height: 100%;
   display: flex;
   flex-direction: column;

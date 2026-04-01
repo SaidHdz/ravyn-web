@@ -12,31 +12,103 @@ interface PackPreviewModalProps {
 }
 
 const THEMES = [
-  { id: 'neo-japan', name: 'Neo-Japan' },
+  { id: 'neo-japan', name: 'Neo Japan' },
   { id: 'minecraft', name: 'Cubos' },
   { id: 'y2k-streamer', name: 'Y2K' },
   { id: 'aesthetic', name: 'Aesthetic' },
-  { id: 'cute-soft', name: 'Soft' },
+  { id: 'cute-soft', name: 'Cute' },
+  { id: 'finn', name: 'Heroe' },
+  { id: 'jake', name: 'Mejor Amigo' },
+  { id: 'lsp', name: 'Grumos' }
 ];
 
 const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClose, onConfirm }) => {
   const [activeTheme, setActiveTheme] = useState('neo-japan');
+  const [isThemeLoading, setIsThemeLoading] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [isIframeLoaded, setIsIframeLoaded] = useState(false);
 
+  // Manejar el overflow del body y resetear estado
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden';
+      setIsIframeLoaded(false); // Resetear en cada apertura
     } else {
       document.body.style.overflow = 'auto';
     }
     return () => { document.body.style.overflow = 'auto'; };
   }, [isOpen]);
 
+  // Cargar el iframe una sola vez al abrir
   useEffect(() => {
-    if (!isOpen || !iframeRef.current) return;
-    const demoUrl = `/preview?theme=${activeTheme}&pack=${pack.id}`;
-    iframeRef.current.src = demoUrl;
-  }, [isOpen, activeTheme, pack]);
+    if (!isOpen) return;
+    
+    const iframe = iframeRef.current;
+    if (!iframe) return;
+
+    const handleLoad = () => {
+      setIsIframeLoaded(true);
+    };
+
+    iframe.addEventListener('load', handleLoad);
+    iframe.src = `/preview?pack=${pack.id}`;
+
+    return () => {
+      iframe.removeEventListener('load', handleLoad);
+    };
+  }, [isOpen, pack]);
+
+  // Aplicar tema dinámicamente SOLO si el iframe está cargado
+  useEffect(() => {
+    if (!isOpen || !isIframeLoaded) return;
+    
+    const iframe = iframeRef.current;
+    if (!iframe?.contentDocument) return;
+
+    const doc = iframe.contentDocument;
+    const currentThemeId = 'pack-preview-theme';
+
+    const existingLink = doc.getElementById(currentThemeId) as HTMLLinkElement;
+    if (existingLink && existingLink.href.includes(`/theme-${activeTheme}.css`)) {
+      return; // El tema ya está aplicado, no hacer nada
+    }
+
+    setIsThemeLoading(true);
+    
+    doc.body.className = `ravyn-canvas theme-${activeTheme}`;
+    doc.body.setAttribute('data-theme', activeTheme);
+    
+    const themeLink = existingLink || doc.createElement('link');
+    if (!existingLink) {
+      themeLink.id = currentThemeId;
+      themeLink.rel = 'stylesheet';
+      doc.head.appendChild(themeLink);
+    }
+    
+    let cancelled = false;
+    
+    const onFinishLoading = () => {
+      if (!cancelled) {
+        setIsThemeLoading(false);
+      }
+    };
+
+    const timeoutId = setTimeout(onFinishLoading, 2000);
+    
+    themeLink.onload = () => {
+      clearTimeout(timeoutId);
+      onFinishLoading();
+    };
+    themeLink.onerror = themeLink.onload;
+    
+    themeLink.href = `/css/theme-${activeTheme}.css?v=${new Date().getTime()}`;
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timeoutId);
+    };
+  }, [activeTheme, isIframeLoaded, isOpen]);
+
 
   return (
     <AnimatePresence>
@@ -77,6 +149,19 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
 
             {/* Centro: Live Demo Iframe */}
             <div className="modal-demo-container">
+              <AnimatePresence>
+                {isThemeLoading && (
+                  <motion.div 
+                    className="preview-loading-overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <span>Aplicando skin...</span>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
               <iframe 
                 ref={iframeRef}
                 className="modal-demo-iframe"

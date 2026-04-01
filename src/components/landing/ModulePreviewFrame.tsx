@@ -91,15 +91,24 @@ const ModulePreviewFrame: React.FC<ModulePreviewFrameProps> = ({
         return;
       }
 
+      // Aplicar clases al body del iframe para que los selectores .theme-X funcionen
+      doc.body.className = `ravyn-canvas theme-${theme}`;
+      doc.body.setAttribute('data-theme', theme);
+
       // Limpiar temas anteriores
       const existingThemes = doc.querySelectorAll('link[id^="module-preview-theme"]');
       existingThemes.forEach(el => el.remove());
 
       onThemeLoadStateChange?.(true);
 
-      const themeLink = doc.createElement('link');
-      themeLink.id = `module-preview-theme-${Date.now()}`; // ID único para forzar refresco si es necesario
-      themeLink.rel = 'stylesheet';
+      const themeLink = doc.getElementById('module-preview-theme') as HTMLLinkElement || doc.createElement('link');
+      
+      if (!themeLink.id) {
+        themeLink.id = 'module-preview-theme';
+        themeLink.rel = 'stylesheet';
+        doc.head.appendChild(themeLink);
+      }
+
       themeLink.href = `/css/theme-${theme}.css`;
 
       let cancelled = false;

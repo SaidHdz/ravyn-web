@@ -12,6 +12,23 @@ html, body {
     width: 100%;
 }
 
+/* === SCROLLBAR GLOBAL === */
+body.theme-neo-japan::-webkit-scrollbar,
+body.theme-neo-japan *::-webkit-scrollbar {
+    width: 10px !important;
+}
+body.theme-neo-japan::-webkit-scrollbar-track,
+body.theme-neo-japan *::-webkit-scrollbar-track {
+    background: var(--nj-bg-dark) !important;
+    border-left: 1px solid var(--nj-red-dark) !important;
+}
+body.theme-neo-japan::-webkit-scrollbar-thumb,
+body.theme-neo-japan *::-webkit-scrollbar-thumb {
+    background: var(--nj-red-neon) !important;
+    border: 2px solid var(--nj-gold) !important;
+    box-shadow: 0 0 10px var(--nj-red-neon) !important;
+}
+
 :root {
     /* PALETA JAZEN (60 - 30 - 10) */
     --nj-bg-dark: #100a1c;        /* 60% Azul/Morado noche profundo */
@@ -232,6 +249,19 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
     overflow: hidden;
 }
 
+/* Ajuste específico para Botón Evasivo en Neo Japan */
+.theme-neo-japan #contenedor-botones .option-btn {
+    width: 140px !important;
+    max-width: 140px !important;
+    height: 55px !important; /* Altura fija */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    font-size: 1.4rem !important;
+}
+
 /* Efecto hover estilo botón de Esports */
 .option-btn:hover:not(:disabled) {
     background-color: rgba(227, 27, 63, 0.1);
@@ -240,7 +270,12 @@ button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
 }
 
 .option-btn.correct { background-color: var(--nj-gold) !important; border-color: var(--nj-gold) !important; color: var(--nj-bg-dark) !important; font-weight: bold;}
-.option-btn.incorrect { background-color: var(--nj-red-dark) !important; border-color: var(--nj-red-neon) !important; opacity: 0.8; }
+.option-btn.incorrect { 
+    background-color: var(--nj-red-dark) !important; 
+    border-color: var(--nj-red-neon) !important; 
+    opacity: 0.8; 
+    animation: shake 0.4s ease-in-out !important;
+}
 
 .progress-container { background-color: var(--nj-bg-dark); border: 1px solid var(--nj-red-dark); height: 10px; margin-bottom: 30px; }
 .progress-bar { background-color: var(--nj-red-neon); height: 100%; transition: width 0.4s ease; box-shadow: 0 0 10px var(--nj-red-neon); width: 0%;}
@@ -353,7 +388,85 @@ body.theme-neo-japan #marco-reproductor {
     box-shadow: 0 10px 30px rgba(0,0,0,0.8);
 }
 
+/* 6. WRAPPED CONTRACT */
+.theme-neo-japan {
+    --w-bg: rgba(16, 10, 28, 0.9);
+    --w-accent: var(--nj-red-neon, #e31b3f);
+    --w-text: #f5f5f5;
+    --w-radius: 20px;
+    --w-border: 2px solid var(--nj-red-neon);
+    --w-shadow: 0 0 40px rgba(227, 27, 63, 0.2);
+}
+
+.theme-neo-japan .wrapped-header-title {
+    color: var(--nj-gold) !important;
+    text-shadow: 0 0 15px rgba(227, 27, 63, 0.5);
+}
+
+.theme-neo-japan .wrapped-peak-bar.is-peak {
+    box-shadow: 0 0 20px var(--nj-red-neon);
+}
+
 /* =========================================
    ANIMACIONES ÉPICAS PARA LA COREOGRAFÍA
    ========================================= */
 
+/* Animación de Apertura Futurista */
+.theme-neo-japan .paquete.animacion-abrir, 
+.theme-neo-japan .paquete.abriendo-cofre {
+    animation: cyberExplode 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.5) forwards !important;
+}
+
+@keyframes cyberExplode {
+    0% { transform: scale(1); opacity: 1; filter: brightness(1); }
+    40% { transform: scale(1.2) rotate(5deg); filter: brightness(2) blur(2px); opacity: 0.8; }
+    100% { transform: scale(2); opacity: 0; filter: brightness(5) blur(20px); }
+}
+
+@keyframes cyberFloat {
+    0%, 100% { transform: translateY(0) scale(1); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
+    50% { transform: translateY(-10px) scale(1.01); box-shadow: 0 20px 40px rgba(227, 27, 63, 0.3); }
+}
+
+@keyframes cyberScan {
+    0% { top: -100%; }
+    100% { top: 200%; }
+}
+
+@keyframes cyberReveal {
+    0% { transform: scale(0.9) translateY(20px); opacity: 0; filter: brightness(2) blur(10px); }
+    50% { opacity: 0.5; filter: brightness(1.5) blur(5px); }
+    100% { transform: scale(1) translateY(0); opacity: 1; filter: brightness(1) blur(0); }
+}
+
+@keyframes cyberFlicker {
+    0%, 100% { opacity: 1; }
+    5%, 15%, 25% { opacity: 0.8; }
+    10%, 20% { opacity: 0.9; }
+}
+
+/* Aplicación de Animaciones */
+.theme-neo-japan #modulo-historia .card-wrapper {
+    animation: cyberFloat 6s ease-in-out infinite;
+    position: relative;
+    overflow: hidden;
+}
+
+.theme-neo-japan .shake-anim {
+    animation: shake 0.4s ease-in-out !important;
+}
+
+.theme-neo-japan .modal-overlay.show-modal .modal-content {
+    animation: cyberReveal 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards,
+               cyberFlicker 0.3s ease-in-out;
+}
+
+.theme-neo-japan .memory-card {
+    transition: all 0.3s ease !important;
+}
+
+.theme-neo-japan .memory-card:hover {
+    border-color: var(--nj-gold) !important;
+    box-shadow: 0 0 30px rgba(225, 193, 126, 0.3) !important;
+    transform: translateY(-12px) scale(1.02) !important;
+}

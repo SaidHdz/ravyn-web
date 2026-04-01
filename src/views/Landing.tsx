@@ -88,7 +88,7 @@ const Landing: React.FC = () => {
 
   return (
     <div className="landing-container">
-      <ThemeManager theme={activeTheme} />
+      <ThemeManager theme={activeTheme} isStandalone={false} />
       
       <nav className="landing-nav">
         <div className="logo">Ravyn Studio</div>

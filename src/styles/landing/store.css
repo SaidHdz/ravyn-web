@@ -147,11 +147,13 @@
   cursor: pointer; 
   transition: all 0.3s ease; 
   color: white; 
+  background: var(--ravyn-red);
 }
 
-.pack-card.comun .select-pack-btn { background: #cd7f32; }
-.pack-card.rara .select-pack-btn { background: var(--ravyn-blue); }
-.pack-card.epica .select-pack-btn { background: var(--ravyn-red); }
+.select-pack-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 10px 20px rgba(211, 47, 47, 0.2);
+}
 
 .pack-aura { 
   position: absolute; 

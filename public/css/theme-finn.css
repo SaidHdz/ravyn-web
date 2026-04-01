@@ -1,0 +1,217 @@
+/* Tema Finn - Estilo Lápiz Premium (Versión Corregida y Pulida) */
+
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;700;900&display=swap');
+
+.theme-finn {
+    --fn-bg-sky: #4CB7FF;
+    --fn-bg-panel: #FFFFFF;
+    --fn-border: #000000;
+    --fn-blue-shirt: #4CB7FF;
+    --fn-green-pack: #78C850;
+    --fn-green-dark: #5da03d;
+    --fn-white-hat: #FFFFFF;
+    --fn-text-main: #000000;
+    --font-titles: 'Fredoka One', cursive;
+    --font-body: 'Nunito', sans-serif;
+    --fn-shadow: 6px 6px 0px var(--fn-border);
+    /* El radio mágico de Finn */
+    --pencil-radius: 255px 15px 225px 15px / 15px 225px 15px 255px;
+}
+
+.ravyn-canvas.theme-finn {
+    background-color: var(--fn-bg-sky) !important;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.2) 15%, transparent 20%) !important;
+    background-size: 40px 40px !important;
+    color: var(--fn-text-main) !important;
+    font-family: var(--font-body) !important;
+    padding: 40px 20px;
+    min-height: 100vh;
+}
+
+/* === TIPOGRAFÍA Y COLORES === */
+.theme-finn h1, .theme-finn h2, .theme-finn h3, .theme-finn .header-title, .theme-finn .card-title {
+    font-family: var(--font-titles) !important;
+    color: var(--fn-green-pack) !important;
+    -webkit-text-stroke: 1.5px var(--fn-border) !important;
+    text-shadow: 2px 2px 0px var(--fn-border) !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.theme-finn p, .theme-finn span, .theme-finn .intro-text, .theme-finn .card-description, .theme-finn .question-header {
+    font-family: var(--font-body) !important;
+    color: var(--fn-text-main) !important;
+    font-weight: 700;
+}
+
+/* === BOTONES CON BORDE IRREGULAR === */
+.theme-finn .option-btn {
+    background-color: var(--fn-bg-panel) !important;
+    color: var(--fn-text-main) !important;
+    border: 3px solid var(--fn-border) !important;
+    border-radius: var(--pencil-radius) !important;
+    padding: 15px 25px !important;
+    font-family: var(--font-titles) !important;
+    font-size: 1.2rem !important;
+    box-shadow: var(--fn-shadow) !important;
+    transition: all 0.2s ease !important;
+    cursor: pointer;
+    text-align: center;
+    display: block !important;
+    width: 100% !important;
+    max-width: 320px;
+    margin: 0 auto 12px auto;
+}
+
+.theme-finn .option-btn:hover {
+    transform: scale(1.05) rotate(-1deg);
+    background-color: #f8f8f8 !important;
+}
+
+/* === TRIVIA FINN === */
+.theme-finn .progress-container {
+    background-color: rgba(0,0,0,0.1) !important;
+    border: 3px solid var(--fn-border) !important;
+    height: 20px !important;
+    border-radius: 10px !important;
+    margin-top: 15px !important; /* Margen superior añadido */
+    margin-bottom: 30px !important;
+    overflow: hidden !important;
+}
+
+.theme-finn .progress-bar {
+    background-color: var(--fn-green-pack) !important;
+    height: 100% !important;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    border-right: 2px solid var(--fn-border) !important;
+}
+
+.theme-finn .option-btn.correct { background-color: #78C850 !important; color: white !important; box-shadow: 0 4px 0 #4e7a27 !important; }
+.theme-finn .option-btn.incorrect { background-color: #ff4757 !important; color: white !important; box-shadow: 0 4px 0 #a01a24 !important; }
+
+.theme-finn .shake-anim { animation: pencilShake 0.4s ease-in-out !important; }
+@keyframes pencilShake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-10px) rotate(-1deg); } 75% { transform: translateX(10px) rotate(1deg); } }
+
+/* === ESTRUCTURA DE TARJETAS === */
+.theme-finn .memory-card, .theme-finn .trivia-card, .theme-finn .modal-content {
+    background-color: var(--fn-bg-panel) !important;
+    border: 4px solid var(--fn-border) !important;
+    border-radius: var(--pencil-radius) !important;
+    box-shadow: var(--fn-shadow) !important;
+    overflow: hidden !important;
+    margin-bottom: 30px !important;
+    animation: pencilFloat 5s ease-in-out infinite;
+}
+
+.theme-finn .carta, .theme-finn .carta-dedic {
+    background-color: var(--fn-bg-panel) !important;
+    border: 4px solid var(--fn-border) !important;
+    border-radius: var(--pencil-radius) !important;
+    box-shadow: var(--fn-shadow) !important;
+    overflow: hidden !important;
+    pointer-events: auto !important;
+}
+
+/* LÍNEA PUNTEADA MEJORADA (GUIONES REDONDEADOS) */
+.theme-finn .carta-dedic .card-title::after {
+    content: "" !important;
+    display: block !important;
+    width: 70% !important;
+    margin: 20px auto !important;
+    height: 0 !important;
+    border-bottom: 6px dashed rgba(0,0,0,0.15) !important;
+    border-radius: 10px !important; /* Suaviza los guiones */
+}
+
+/* ANIMACIÓN DE CORTE MEJORADA */
+@keyframes pencilSliceOut {
+    0% { transform: translateY(0) scale(1) rotate(0); opacity: 1; clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%); }
+    40% { transform: translateY(-10px) scale(1.02); }
+    100% { transform: translateY(100vh) rotate(20deg); opacity: 0; clip-path: polygon(0% 0%, 45% 0%, 45% 100%, 0% 100%, 55% 100%, 55% 0%, 100% 0%, 100% 100%); }
+}
+
+.theme-finn .carta-dedic.leaving {
+    animation: pencilSliceOut 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+}
+
+/* Centrado de texto en Historia */
+.theme-finn #modulo-historia .card-details { text-align: center !important; padding: 20px !important; }
+
+/* === WRAPPED FINN BASADO EN JAKE === */
+.theme-finn .wrapped-card-ui { --w-bg: #ffffff !important; --w-accent: var(--fn-green-pack) !important; --w-accent-secondary: var(--fn-blue-shirt) !important; --w-text: var(--fn-text-main) !important; --w-radius: var(--pencil-radius) !important; --w-border: 4px solid #000 !important; --w-shadow: var(--fn-shadow) !important; backdrop-filter: none !important; padding: 40px 20px !important; border-radius: var(--w-radius) !important; background-color: var(--w-bg) !important; border: var(--w-border) !important; box-shadow: var(--w-shadow) !important; }
+.theme-finn .wrapped-header-title { font-family: var(--font-titles) !important; color: var(--fn-green-pack) !important; -webkit-text-stroke: 1px #000; }
+.theme-finn .bar-fill-custom { background: var(--fn-green-pack) !important; border: 2px solid #000 !important; }
+.theme-finn .wrapped-peak-bar { background-color: rgba(0, 0, 0, 0.1) !important; }
+.theme-finn .wrapped-peak-bar.is-peak { background-color: var(--fn-blue-shirt) !important; box-shadow: 0 0 15px var(--fn-blue-shirt) !important; }
+.theme-finn .wrapped-summary-card { border: 3px dashed var(--fn-green-pack) !important; border-radius: var(--pencil-radius) !important; }
+
+/* MODAL REPARADO FINN */
+@keyframes pencilModalIn { 0% { transform: scale(0.8) rotate(-2deg); opacity: 0; } 70% { transform: scale(1.05) rotate(1deg); } 100% { transform: scale(1) rotate(0deg); opacity: 1; } }
+.theme-finn .modal-overlay { background: rgba(0, 0, 0, 0.8) !important; display: flex !important; align-items: center !important; justify-content: center !important; z-index: 2000 !important; }
+.theme-finn .modal-overlay.show-modal .modal-content { animation: pencilModalIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important; }
+.theme-finn .modal-content { background-color: var(--fn-bg-panel) !important; border: 5px solid #000 !important; border-radius: var(--pencil-radius) !important; box-shadow: var(--fn-shadow) !important; padding: 50px 30px 30px 30px !important; position: relative !important; display: flex !important; flex-direction: column !important; gap: 15px !important; max-width: 500px !important; width: 90% !important; max-height: 85vh !important; overflow-y: auto !important; }
+.theme-finn .modal-image { width: 100% !important; border: 3px solid var(--fn-border) !important; border-radius: 15px !important; aspect-ratio: 1/1 !important; object-fit: cover !important; }
+.theme-finn .close-btn { position: absolute !important; top: 15px !important; right: 15px !important; background: var(--fn-blue-shirt) !important; color: #fff !important; border: 3px solid #000 !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important; font-weight: 900 !important; cursor: pointer !important; z-index: 100 !important; }
+
+/* Ajuste evasivo Finn */
+.theme-finn #contenedor-botones .option-btn { width: 130px !important; max-width: 130px !important; height: 60px !important; display: flex !important; align-items: center !important; justify-content: center !important; padding: 0 !important; margin: 0 !important; font-size: 1.3rem !important; }
+.theme-finn #btn-si { background-color: var(--fn-green-pack) !important; color: #fff !important; }
+.theme-finn #btn-no { background-color: #ff4757 !important; color: #fff !important; }
+
+/* SOBRE BLANCO FINN (TARJETAS) */
+.theme-finn #paquete-cartas { background-color: #ffffff !important; border: 4px solid var(--fn-border) !important; border-radius: 10px !important; position: relative; margin: 60px auto; box-shadow: var(--fn-shadow) !important; width: 220px; height: 160px; overflow: visible !important; }
+.theme-finn #paquete-cartas::after { content: "" !important; position: absolute; top: -2px; left: -2px; width: calc(100% + 4px); height: 60%; background-color: #f0f0f0 !important; border: 4px solid var(--fn-border) !important; clip-path: polygon(0% 0%, 100% 0%, 50% 100%); z-index: 2 !important; transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; transform-origin: top; }
+.theme-finn #paquete-cartas .pestillo { width: 45px !important; height: 45px !important; background: var(--fn-green-pack) !important; border: 3px solid #000 !important; border-radius: 50% !important; z-index: 10 !important; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) !important; box-shadow: 0 4px 0 rgba(0,0,0,0.2) !important; }
+
+/* MOCHILA FINN (DEDICATORIAS REPARADA) */
+.theme-finn #paquete-dedic { 
+    background-color: var(--fn-green-pack) !important; 
+    border: 5px solid var(--fn-border) !important; 
+    border-radius: 20px 20px 40px 40px !important; 
+    position: relative; 
+    margin: 60px auto; 
+    box-shadow: var(--fn-shadow) !important; 
+    width: 180px; height: 220px; 
+    overflow: visible !important; 
+}
+
+/* Tapa perfectamente alineada */
+.theme-finn #paquete-dedic::after { 
+    content: "" !important; 
+    position: absolute; 
+    top: -5px; 
+    left: -5px; /* Alineación exacta con el borde izquierdo */
+    width: calc(100% + 10px); /* Alineación exacta con el ancho total */
+    height: 45%; 
+    background-color: var(--fn-green-dark) !important; 
+    border: 5px solid var(--fn-border) !important; 
+    border-radius: 20px 20px 10px 10px !important; 
+    z-index: 2 !important; 
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important; 
+    transform-origin: top;
+}
+
+.theme-finn #paquete-dedic.abriendo-cofre::after { 
+    transform: rotateX(140deg) !important; 
+    opacity: 0.1;
+}
+
+.theme-finn #paquete-dedic .pestillo { 
+    width: 45px !important; height: 25px !important; 
+    background: #fff !important; 
+    border: 3px solid #000 !important; 
+    border-radius: 5px !important; 
+    z-index: 10 !important; 
+    position: absolute; 
+    top: 35%; /* Posición ajustada para que el pestillo esté en la tapa */
+    left: 50%; 
+    transform: translateX(-50%) !important; 
+}
+
+@keyframes pencilFloat { 0%, 100% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-8px) rotate(-1deg); } }
+#modulo-historia .card-wrapper { animation: pencilFloat 5s ease-in-out infinite; }
+
+/* SCROLLBAR FINN */
+body.theme-finn::-webkit-scrollbar, body.theme-finn *::-webkit-scrollbar { width: 12px !important; }
+body.theme-finn::-webkit-scrollbar-track, body.theme-finn *::-webkit-scrollbar-track { background: rgba(0,0,0,0.05) !important; border-left: 3px solid #000 !important; }
+body.theme-finn::-webkit-scrollbar-thumb, body.theme-finn *::-webkit-scrollbar-thumb { background: var(--fn-blue-shirt) !important; border: 3px solid #000 !important; border-radius: 10px !important; }

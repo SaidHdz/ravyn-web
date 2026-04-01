@@ -53,12 +53,13 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
   const nextCard = () => {
     if (currentCardIndex < data.cartas.length - 1) {
       setIsCardFlying(true);
+      setCurrentCardIndex(prev => prev + 1);
       setTimeout(() => {
-        setCurrentCardIndex(prev => prev + 1);
         setIsCardFlying(false);
       }, 600);
     } else {
       setIsCardFlying(true);
+      // Esperar a que la última carta caiga antes de cambiar de escena
       setTimeout(() => {
         setScene('final');
         setIsCardFlying(false);
@@ -73,6 +74,18 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
     setIsCardFlying(false);
   };
 
+  const getTemaClase = () => {
+    const tema = data.config.tema || 'aesthetic';
+    switch (tema) {
+      case 'minecraft': return 'abriendo-cofre';
+      case 'finn': return 'abriendo-cofre'; // Reusa la lógica de mochila
+      case 'jake': return 'abriendo-cofre'; // Reusa la lógica de estiramiento
+      case 'lsp': return 'abriendo-cofre'; // Reusa la lógica de bultos
+      case 'neo-japan': return 'abriendo-cofre';
+      default: return 'abriendo-cofre';
+    }
+  };
+
   return (
     <section id="modulo-dedicatorias" className="modulo-ravyn" style={{ padding: '40px 0', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <main id="app-container-dedic" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -85,12 +98,11 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
             </h1>
             <div 
               id="paquete-dedic" 
-              className={`paquete ${isBoxOpening ? 'abriendo-cofre' : ''}`}
+              className={`paquete ${isBoxOpening ? `animacion-abrir ${getTemaClase()}` : ''}`}
               onPointerDown={startChoreography}
               style={{ cursor: 'pointer' }}
             >
               <div className="pestillo">?</div>
-              <div className="destello"></div>
             </div>
           </section>
         )}
@@ -120,7 +132,9 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
             <div id="stack-container-dedic" style={{ position: 'relative', width: '85vw', maxWidth: '360px', height: '60vh', maxHeight: '550px', perspective: '1000px' }}>
               {data.cartas.map((carta, index) => {
                 const i = index - currentCardIndex;
-                if (i < 0 && !(i === -1 && isCardFlying)) return null;
+                
+                // Mostrar la carta anterior si está volando, la actual y las siguientes en el stack
+                if (i < -1 || (i === -1 && !isCardFlying)) return null;
 
                 const isLeaving = i === -1 && isCardFlying;
                 const isCurrent = i === 0;
@@ -137,12 +151,12 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
                   padding: '20px',
                   display: 'flex',
                   flexDirection: 'column',
-                  transition: 'all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                  transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
                   opacity: isLeaving ? 0 : 
                            i === 0 ? 1 : 
                            i === 1 ? 0.9 : 
                            i === 2 ? 0.5 : 0,
-                  transform: isLeaving ? 'translateX(-150vw) translateY(-20vh) rotate(-35deg) scale(0.8)' :
+                  transform: isLeaving ? 'translateY(120vh) rotate(15deg) scale(0.9)' :
                              i === 0 ? 'translateZ(0) translateY(0) scale(1)' :
                              i === 1 ? 'translateZ(-50px) translateY(15px) scale(0.95)' :
                              i === 2 ? 'translateZ(-100px) translateY(30px) scale(0.9)' : 
@@ -153,7 +167,11 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
                 };
 
                 return (
-                  <div key={index} className="carta-dedic" style={style}>
+                  <div 
+                    key={index} 
+                    className={`carta-dedic ${isLeaving ? 'leaving' : ''}`} 
+                    style={style}
+                  >
                     <h3 className="card-title" style={{ fontSize: '1.8rem', textAlign: 'center', marginBottom: '15px' }}>
                       {carta.titulo || `Carta ${index + 1}`}
                     </h3>
