@@ -36,6 +36,7 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
     if (escena !== 'cartas' || cartasRestantes.length === 0) return;
     setIsDragging(true);
     startPos.current = { x: e.clientX, y: e.clientY };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
@@ -44,7 +45,8 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
     const diffX = e.clientX - startPos.current.x;
     const diffY = e.clientY - startPos.current.y;
 
-    if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 10) {
+    // Relajamos la restricción vertical: solo cancela si el movimiento vertical es MUCHO mayor que el horizontal
+    if (Math.abs(diffY) > Math.abs(diffX) * 1.5 && Math.abs(diffY) > 20) {
       setIsDragging(false);
       setDragOffset({ x: 0, y: 0 });
       setRotation(0);
@@ -52,15 +54,16 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
     }
 
     setDragOffset({ x: diffX, y: 0 });
-    setRotation(diffX * 0.05);
+    setRotation(diffX * 0.08); // Aumentamos un poco la rotación para más feedback
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!isDragging) return;
     setIsDragging(false);
+    (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 
     const diffX = e.clientX - startPos.current.x;
-    const threshold = window.innerWidth * 0.25;
+    const threshold = window.innerWidth * 0.15; // Umbral más sensible (15%)
 
     if (Math.abs(diffX) > threshold) {
       const direction = diffX > 0 ? 1 : -1;
@@ -103,8 +106,8 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
   };
 
   return (
-    <section id="modulo-tarjetas" className="modulo-ravyn">
-      <main id="app-container">
+    <section id="modulo-tarjetas" className="modulo-ravyn" style={{ padding: '60px 0', minHeight: '85vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <main id="app-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* ESCENA: SOBRE / PAQUETE */}
         {escena === 'sobre' && (
@@ -173,7 +176,7 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
         {escena === 'final' && (
           <section id="escena-final" className="escena activa">
             <h2 id="mensaje-final">Has leído todas las cartas</h2>
-            <button id="btn-reiniciar" className="option-btn" onClick={reiniciar}>Volver a leer</button>
+            <button id="btn-reiniciar" className="option-btn" onClick={reiniciar} style={{ width: 'auto', padding: '10px 30px' }}>Volver a leer</button>
           </section>
         )}
 

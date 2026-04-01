@@ -14,24 +14,29 @@ body {
 }
 
 #app-container {
-    height: auto; 
     width: 100%;
     max-width: 600px;
     margin: 0 auto;
     position: relative;
     padding-bottom: 20px; 
+    height: 650px; /* Altura fija bloqueada para estabilidad total */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .escena {
     position: absolute;
-    top: 0; left: 0;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
     width: 100%;
+    height: 100%; /* Ocupa todo el contenedor bloqueado */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     transition: opacity 0.5s ease, visibility 0.5s;
-    background-color: transparent; /* Permite que el fondo del body se vea */
+    background-color: transparent;
 }
 
 .escena.oculta { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -180,7 +185,7 @@ body {
     position: absolute; top: -50px; left: 50%; transform: translateX(-50%);
     z-index: 2; transition: all 0.5s ease-out;
 }
-[data-theme="cute-soft"] .paquete.abriendo-caja { animation: jumpSuccess 1s infinite, shakeAndBurst 1s forwards 0.3s ease-in; pointer-events: none;}
+[data-theme="cute-soft"] .paquete.abriendo-caja { animation: shakeAndBurst 1s forwards 0.3s ease-in; pointer-events: none;}
 
 
 /* --- TEMA: AESTHETIC DARK (MANTENER IGUAL) --- */
@@ -192,14 +197,12 @@ body {
 }
 [data-theme="aesthetic"] .paquete::after {
     content: "✧"; font-size: 4rem; color: #8b5cf6;
-    filter: drop-shadow(0 0 15px #8b5cf6);
-    animation: pulsateGlow 2s infinite ease-in-out;
 }
 [data-theme="aesthetic"] .paquete.abriendo-lujo { animation: intensifyAndBurst 1s forwards ease-in; pointer-events: none;}
 @keyframes pulsateGlow { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
 @keyframes intensifyAndBurst {
     0% { transform: scale(1); }
-    50% { transform: scale(1.02); box-shadow: 0 20px 80px rgba(139, 92, 246, 0.6); }
+    50% { transform: scale(1.02); }
     100% { transform: scale(1.5) translateY(-50px); opacity: 0; filter: blur(5px); }
 }
 
@@ -223,7 +226,7 @@ body {
 .particula-bloque:nth-child(even) { background-color: #6c4a31; }
 
 .particula-corazon::after { content: '♥'; font-size: 1.5rem; color: #FF66AA; filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1)); }
-.particula-chispa { background-color: #8b5cf6; border-radius: 50%; box-shadow: 0 0 10px #8b5cf6; }
+.particula-chispa { background-color: #8b5cf6; border-radius: 50%; }
 
 
 /* =========================================================

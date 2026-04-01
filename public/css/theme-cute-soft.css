@@ -41,11 +41,9 @@ html, body {
     100% { transform: translateY(100vh) rotate(-15deg) translateX(-20px); opacity: 0; }
 }
 
-.theme-cute-soft .carta-dedic.leaving, 
-.theme-cute-soft .carta.leaving {
+.theme-cute-soft .carta-dedic.leaving {
     animation: cuteFlyOut 1.2s cubic-bezier(0.23, 1, 0.32, 1) forwards !important;
 }
-
 /* === SCROLLBAR GLOBAL === */
 body.theme-cute-soft::-webkit-scrollbar,
 body.theme-cute-soft *::-webkit-scrollbar {

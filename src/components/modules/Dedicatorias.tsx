@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Dedicatorias as DedicatoriasType } from '@/types/pedido';
+import '@@/estilos_tarjetas.css';
 
 interface DedicatoriasProps {
   data: DedicatoriasType;
@@ -87,8 +88,8 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
   };
 
   return (
-    <section id="modulo-dedicatorias" className="modulo-ravyn" style={{ padding: '40px 0', minHeight: '80vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <main id="app-container-dedic" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <section id="modulo-dedicatorias" className="modulo-ravyn" style={{ padding: '40px 0', minHeight: '85vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <main id="app-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
         
         {/* ESCENA: SOBRE */}
         {scene === 'sobre' && (
@@ -109,7 +110,7 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
 
         {/* ESCENA: SECUENCIA DE MENSAJES */}
         {scene === 'secuencia' && (
-          <section id="escena-secuencia-dedic" style={{ textAlign: 'center', padding: '0 20px' }}>
+          <section id="escena-secuencia-dedic" className="escena activa" style={{ textAlign: 'center', padding: '0 20px' }}>
             <h2 
               className={`header-title message-sequence ${messageAnimClass}`} 
               style={{ 
@@ -128,8 +129,8 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
 
         {/* ESCENA: CARTAS / STACK */}
         {scene === 'cartas' && (
-          <section id="escena-cartas-dedic" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div id="stack-container-dedic" style={{ position: 'relative', width: '85vw', maxWidth: '360px', height: '60vh', maxHeight: '550px', perspective: '1000px' }}>
+          <section id="escena-cartas-dedic" className="escena activa">
+            <div id="stack-container" style={{ position: 'relative', width: '85vw', maxWidth: '360px', height: '60vh', maxHeight: '550px', perspective: '1000px', margin: '0 auto' }}>
               {data.cartas.map((carta, index) => {
                 const i = index - currentCardIndex;
                 
@@ -148,7 +149,7 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
                   borderRadius: '20px',
                   backgroundColor: 'white',
                   boxShadow: '0 10px 30px rgba(0,0,0,0.1)',
-                  padding: '20px',
+                  padding: '25px',
                   display: 'flex',
                   flexDirection: 'column',
                   transition: 'all 0.7s cubic-bezier(0.4, 0, 0.2, 1)',
@@ -184,7 +185,7 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
             </div>
             
             <div id="controles-cartas-dedic" style={{ display: 'flex', gap: '20px', marginTop: '30px', zIndex: 50, justifyContent: 'center' }}>
-              <button className="option-btn" onClick={nextCard} style={{ padding: '10px 30px' }}>
+              <button className="option-btn" onClick={nextCard} style={{ padding: '10px 30px', width: 'auto' }}>
                 Siguiente Carta ➔
               </button>
             </div>
@@ -193,9 +194,9 @@ const Dedicatorias: React.FC<DedicatoriasProps> = ({ data }) => {
 
         {/* ESCENA: FINAL */}
         {scene === 'final' && (
-          <section id="escena-final-dedic" style={{ textAlign: 'center' }}>
+          <section id="escena-final-dedic" className="escena activa" style={{ textAlign: 'center' }}>
             <h2 className="header-title" style={{ marginBottom: '20px' }}>Has leído todas las cartas</h2>
-            <button className="option-btn" onClick={restart}>Volver a leer</button>
+            <button className="option-btn" onClick={restart} style={{ padding: '10px 30px', width: 'auto' }}>Volver a leer</button>
           </section>
         )}
         
