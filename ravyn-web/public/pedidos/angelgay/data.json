@@ -1,0 +1,46 @@
+{
+  "contador": {
+    "config": {
+      "tema": "y2k-streamer"
+    },
+    "titulo": "Kuando te konozi😍",
+    "mensaje": "Deja a tu ligue le va al tigres nmms",
+    "fecha": "2026-03-18"
+  },
+  "dedicatorias": {
+    "config": {
+      "tema": "y2k-streamer",
+      "mensaje_inicio": "T",
+      "secuencia": [
+        "T",
+        "T"
+      ]
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Ola kuatahaj",
+        "contenido": "",
+        "cancion": "https://open.spotify.com/track/6QJCZyJv1fhkCyZA3lRoAD?si=Ux1nU9uNS42U4ngTDIN6XA"
+      },
+      {
+        "id": 2,
+        "titulo": "Tengo hambre ",
+        "contenido": "",
+        "cancion": "https://open.spotify.com/track/6QJCZyJv1fhkCyZA3lRoAD?si=Ux1nU9uNS42U4ngTDIN6XA"
+      },
+      {
+        "id": 3,
+        "titulo": "Angel es gay",
+        "contenido": "",
+        "cancion": "https://open.spotify.com/track/6QJCZyJv1fhkCyZA3lRoAD?si=Ux1nU9uNS42U4ngTDIN6XA"
+      },
+      {
+        "id": 4,
+        "titulo": "Presten feria",
+        "contenido": "",
+        "cancion": "https://open.spotify.com/track/6QJCZyJv1fhkCyZA3lRoAD?si=Ux1nU9uNS42U4ngTDIN6XA"
+      }
+    ]
+  }
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "id": "slide_1",
+    "tipo": "intro",
+    "titulo": "Analizando nuestra conexión...",
+    "datos": {
+      "subtitulo": "Cargando memorias de Elideth y Said :b."
+    }
+  },
+  {
+    "id": "slide_2",
+    "tipo": "metricas_chat",
+    "titulo": "Nuestra conexión en números",
+    "datos": {
+      "total_mensajes": 18511,
+      "palabra_top": "asi",
+      "top_emojis": [
+        "😭",
+        "💕",
+        "💗"
+      ]
+    }
+  },
+  {
+    "id": "slide_3",
+    "tipo": "grafica_dona",
+    "titulo": "El Nivel de Interés",
+    "datos": {
+      "subtitulo": "Basado en la cantidad de mensajes enviados",
+      "etiquetas": [
+        "Said :b",
+        "Elideth"
+      ],
+      "valores": [
+        57,
+        43
+      ],
+      "colores": [
+        "#ff66cc",
+        "#4facfe"
+      ]
+    }
+  },
+  {
+    "id": "slide_4",
+    "tipo": "horario_pico",
+    "titulo": "¿A qué hora nos amamos más?",
+    "datos": {
+      "subtitulo": "El horario pico de nuestros chats",
+      "valores": [
+        4,
+        0,
+        0,
+        14,
+        26,
+        17,
+        28,
+        56,
+        100
+      ],
+      "pico_hora": "10 PM"
+    }
+  },
+  {
+    "id": "slide_5",
+    "tipo": "soundtrack",
+    "titulo": "Nuestro Soundtrack",
+    "datos": {
+      "spotify_embed_url": "https://open.spotify.com/embed/track/3k79jI4A2z6x943E19w2hE?utm_source=generator"
+    }
+  },
+  {
+    "id": "slide_6",
+    "tipo": "resumen",
+    "titulo": "Resumen Wrapped 2026",
+    "datos": {
+      "dias_juntos": 365,
+      "total_mensajes": "18.5k",
+      "emoji_top": "😭"
+    }
+  }
+]

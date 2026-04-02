@@ -1,0 +1,36 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "cute-soft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Nosotros, que lindos nos vemos",
+        "contenido": "Te extraño mucho, ojala te des cuenta de que somos el uno para el otro, nadie te va a amar como yo",
+        "imagen": "https://storage.tally.so/private/IMG_20260116_191928_765.webp?id=jvqogJ&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imp2cW9nSiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NTMzNH0.IeUT8rFcYVQLmccK1pwco0XkZQx3StyZ7D2i3oOcZN0&signature=fc454a5c33670cb85425b37429fb857e071d34b853ab1c5b360f066f73f2d0a3"
+      },
+      {
+        "id": 2,
+        "titulo": "Perdí aura",
+        "contenido": "Dios, perdi aura por rogar? Nah no creo",
+        "imagen": "https://storage.tally.so/private/78808205584c3c353f781f6478585f8b.jpg?id=9MgZa5&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjlNZ1phNSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NTMzNH0.cx278xWMmM2qBOlpoy-1J41cg6zYFxweJRpwpFY4oV0&signature=824d6097559c3d6ea4ab3a5acc3910861d37bdf42f9a31a621224f4862d40d0e"
+      },
+      {
+        "id": 3,
+        "titulo": "Dia lindo",
+        "contenido": "Ojala volver a ese día, volver a darnos nuestro primer abrazo ",
+        "imagen": "https://storage.tally.so/private/20251218_175931.jpg?id=OkeXyg&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ik9rZVh5ZyIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA2NTMzNH0.K39E1_WY6LFdZMuC3cM2wLLC1y5eZns4M5gKmcuLbQE&signature=c957f46cf84be47f666e8fb03c240ca5d3d06461925335b80e4cf6cc42474b5c"
+      }
+    ]
+  },
+  "contador": {
+    "config": {
+      "tema": "cute-soft"
+    },
+    "titulo": "Tiempo sin ti",
+    "mensaje": "Te extraño mucho",
+    "fecha": "2026-01-16"
+  }
+}

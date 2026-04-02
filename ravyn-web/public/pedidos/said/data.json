@@ -1,0 +1,16 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Soy yo, said",
+        "contenido": "Si jala esta madre?",
+        "imagen": "https://storage.tally.so/private/IMG-20260320-WA0075.jpg?id=lv9byp&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imx2OWJ5cCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA1MjE5MH0.MisLUJfEAsuU92Q36bzhnZZY5XS1efZrEiv9EzdAoeg&signature=475e83a3bb57e206e6d0a0dc3c666b0a7d24c21d46312b4be1da27fbdb216fa1"
+      }
+    ]
+  }
+}

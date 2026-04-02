@@ -1,0 +1,70 @@
+/* Tema neo japones css - 12 PM rage edition */
+@import url('https://fonts.googleapis.com/css2?family=Teko:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;700&display=swap');
+
+:root {
+    --nj-bg-dark: #100a1c;        
+    --nj-bg-panel: #1a112c;       
+    --nj-red-neon: #e31b3f;       
+    --nj-red-dark: #8f1127;       
+    --nj-gold: #e1c17e;           
+    --nj-text-main: #f5f5f5;      
+    --nj-text-muted: #a39eb0;     
+    --font-titles: 'Teko', sans-serif;       
+    --font-body: 'Noto Sans JP', sans-serif; 
+}
+
+body.theme-neo-japan {
+    background-color: var(--nj-bg-dark);
+    color: var(--nj-text-main);
+    font-family: var(--font-body);
+    padding: 40px 20px;
+    min-height: 100vh;
+    background-image: radial-gradient(circle at 50% 0%, #1a112c 0%, transparent 60%);
+}
+
+.page-header { margin-bottom: 50px; }
+.header-title { font-family: var(--font-titles); font-size: 4.5rem; color: var(--nj-red-neon); text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 20px rgba(227, 27, 63, 0.4); }
+.header-subtitle { font-family: var(--font-titles); color: var(--nj-gold); font-size: 1.8rem; letter-spacing: 4px; text-transform: uppercase; margin-top: -5px; }
+
+/* Historia */
+.memory-card { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); box-shadow: inset 0 0 0 1px var(--nj-bg-dark), 0 10px 30px rgba(0,0,0,0.8); }
+.memory-card:hover { border-color: var(--nj-gold); box-shadow: 0 15px 40px rgba(227, 27, 63, 0.2); transform: translateY(-5px); }
+.image-wrapper { border-bottom: 2px solid var(--nj-red-neon); }
+.card-details { padding: 20px; }
+.card-title { font-family: var(--font-titles); font-size: 2.2rem; color: var(--nj-red-neon); text-transform: uppercase; }
+.card-description { color: var(--nj-text-muted); font-size: 1rem; }
+
+/* Modal */
+.modal-overlay { background: rgba(16, 10, 28, 0.95); }
+.modal-content { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); padding: 30px; box-shadow: 0 0 50px rgba(227, 27, 63, 0.15); transform: scale(0.95); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1); }
+.close-btn { background: transparent; border: 2px solid var(--nj-red-neon); color: var(--nj-red-neon); font-family: var(--font-titles); font-size: 1.5rem; height: 35px; transition: all 0.2s; top: 10px; right: 10px; }
+.close-btn:hover { background: var(--nj-red-neon); color: var(--nj-bg-dark); }
+.modal-image { border: 2px solid var(--nj-red-dark); margin-bottom: 15px; }
+.modal-meta { font-family: var(--font-titles); font-size: 1.5rem; color: var(--nj-gold); margin-bottom: 10px; }
+.pixel-divider { border-top: 1px dashed var(--nj-red-dark); margin: 15px 0; }
+#modal-text { color: var(--nj-text-main); font-size: 1rem; }
+
+/* Trivia */
+.trivia-card { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); padding: 35px 25px; }
+.question-header { font-family: var(--font-titles); font-size: 2.5rem; color: var(--nj-gold); text-transform: uppercase; margin-bottom: 30px; }
+.option-btn { background-color: transparent; border: 2px solid var(--nj-red-neon); color: var(--nj-text-main); padding: 15px 20px; font-family: var(--font-titles); font-size: 1.6rem; text-transform: uppercase; transition: all 0.2s; }
+.option-btn:hover:not(:disabled) { background-color: rgba(227, 27, 63, 0.1); box-shadow: inset 4px 0 0 var(--nj-red-neon); transform: translateX(5px); }
+.option-btn.correct { background-color: var(--nj-gold) !important; border-color: var(--nj-gold) !important; color: var(--nj-bg-dark) !important; }
+.option-btn.incorrect { background-color: var(--nj-red-dark) !important; border-color: var(--nj-red-neon) !important; opacity: 0.8; }
+.progress-container { background-color: var(--nj-bg-dark); border: 1px solid var(--nj-red-dark); height: 10px; margin-bottom: 30px; }
+.progress-bar { background-color: var(--nj-red-neon); box-shadow: 0 0 10px var(--nj-red-neon); }
+
+/* Cartas y El cofre culero */
+[data-theme="neo-japan"] .paquete { background-color: transparent; box-shadow: none; border: none; overflow: visible; }
+[data-theme="neo-japan"] .paquete::before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)); border: 2px solid var(--nj-gold); border-radius: 4px; z-index: 1; box-shadow: inset 0 0 20px rgba(0,0,0,0.5); }
+[data-theme="neo-japan"] .paquete::after { content: ""; position: absolute; top: 15%; left: 0; width: 100%; height: 35%; background: linear-gradient(135deg, var(--nj-red-neon), var(--nj-red-dark)); border: 2px solid var(--nj-gold); border-radius: 4px; transition: transform 0.8s ease-in, opacity 0.5s 0.3s; transform-origin: center bottom; z-index: 2; }
+
+/* El dragón mamador que no jala alv */
+[data-theme="neo-japan"] .paquete .pestillo { content: "龍"; font-family: var(--font-body); font-size: 2rem; color: var(--nj-bg-dark); background-color: var(--nj-gold); border: 2px solid var(--nj-bg-dark); border-radius: 50%; width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; transition: opacity 0.3s; box-shadow: 0 0 15px rgba(225, 193, 126, 0.4); }
+[data-theme="neo-japan"] .particula-bloque { background-color: var(--nj-gold); border: none; border-radius: 50%; box-shadow: 0 0 10px var(--nj-gold); }
+[data-theme="neo-japan"] .carta-inner { background-color: var(--nj-bg-panel); border: 2px solid var(--nj-red-neon); }
+[data-theme="neo-japan"] .carta-inner img { border-bottom: 2px solid var(--nj-red-neon); }
+[data-theme="neo-japan"] .carta-inner h3 { font-family: var(--font-titles); font-size: 2.2rem; color: var(--nj-gold); margin: 15px 20px 5px; text-transform: uppercase; line-height: 1;}
+[data-theme="neo-japan"] .carta-inner p { color: var(--nj-text-main); font-weight: 300; }
+
+body.theme-neo-japan #marco-reproductor { background-color: var(--nj-bg-panel); padding: 12px; border: 2px solid var(--nj-red-neon); border-left: 6px solid var(--nj-red-neon); box-shadow: 0 10px 30px rgba(0,0,0,0.8); }

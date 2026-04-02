@@ -1,0 +1,80 @@
+/* Tema minecraft css */
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+    --mc-bg-page: #111;
+    --mc-bg-checker: rgba(255, 255, 255, 0.03);
+    --mc-card-bg: #2b323c;
+    --mc-border-color: #000;
+    --mc-border-width: 6px;
+    --mc-text-main: #ffffff;
+    --mc-text-green: #3adb3a;
+    --mc-text-gray: #a0a0a0;
+}
+
+/* CURSOTR */
+body.theme-minecraft {
+    cursor: crosshair; 
+    background-color: var(--mc-bg-page); color: var(--mc-text-main);
+    font-family: 'VT323', 'Courier New', monospace; padding: 40px 20px; min-height: 100vh;
+    background-image: linear-gradient(45deg, var(--mc-bg-checker) 25%, transparent 25%), linear-gradient(-45deg, var(--mc-bg-checker) 25%, transparent 25%), linear-gradient(45deg, transparent 75%, var(--mc-bg-checker) 75%), linear-gradient(-45deg, transparent 75%, var(--mc-bg-checker) 75%);
+    background-size: 40px 40px; animation: scrollBackground 4s linear infinite;
+}
+
+@keyframes scrollBackground { from { background-position: 0 0, 0 20px, 20px 20px, 20px 0; } to { background-position: 40px 40px, 40px 60px, 60px 60px, 60px 40px; } }
+
+.header-title { font-size: 3.2rem; text-shadow: 4px 4px 0 #000; text-align: center; margin-bottom: 50px; }
+.header-subtitle { text-align: center; margin-bottom: 50px;}
+
+@keyframes idleFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+
+/* Tarjetas */
+.memory-card { background-color: var(--mc-card-bg); border: var(--mc-border-width) solid var(--mc-border-color); outline: 2px solid #3a3a3a; outline-offset: -6px; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05), 6px 6px 0 #000; transition: transform 0.15s ease-out, box-shadow 0.15s ease-out; animation: idleFloat 4s ease-in-out infinite; }
+.card-wrapper:nth-child(even) .memory-card { animation-delay: 1s; }
+.card-wrapper:nth-child(3n) .memory-card { animation-delay: 2s; }
+.memory-card:hover { animation-play-state: paused; transform: translate(-4px, -4px); box-shadow: inset -4px -4px 0 rgba(0,0,0,0.7), inset 4px 4px 0 rgba(255,255,255,0.08), 10px 10px 0 #000; }
+.memory-card:active { transform: translate(2px, 2px); box-shadow: inset 4px 4px 0 rgba(0,0,0,0.7), 2px 2px 0 #000; }
+
+.image-wrapper { background-color: #1e242b; border-bottom: var(--mc-border-width) solid var(--mc-border-color); }
+.card-details { padding: 18px; }
+.card-title { font-size: 1.5rem; color: var(--mc-text-green); margin-bottom: 10px; }
+.card-description { opacity: 0.85; font-size: 1.1rem; }
+
+/* Modal */
+.modal-overlay { background: rgba(0, 0, 0, 0.85); }
+.modal-content { background-color: var(--mc-card-bg); border: var(--mc-border-width) solid var(--mc-border-color); outline: 2px solid #3a3a3a; outline-offset: -6px; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05), 10px 10px 0 #000; padding: 24px; transform: scale(0.8); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+.close-btn { background: #c6c6c6; border: 4px solid var(--mc-border-color); color: #1a1a1a; font-size: 1.5rem; line-height: 1; padding: 2px 8px; box-shadow: inset -2px -2px 0 rgba(0,0,0,0.3), inset 2px 2px 0 rgba(255,255,255,0.8); top: 15px; right: 15px;}
+.close-btn:active { box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); transform: translate(2px, 2px); }
+.modal-image { border: 4px solid var(--mc-border-color); margin-bottom: 15px; }
+.modal-meta { font-size: 1.1rem; color: var(--mc-text-gray); }
+.pixel-divider { border-top: 4px solid var(--mc-border-color); margin: 15px 0; }
+#modal-text { line-height: 1.6; font-size: 1.2rem; }
+
+/* Trivia */
+.trivia-card { background-color: var(--mc-card-bg); border: var(--mc-border-width) solid var(--mc-border-color); padding: 30px; outline: 2px solid #3a3a3a; outline-offset: -6px; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05), 10px 10px 0 #000; }
+.intro-text, .question-header { color: var(--mc-text-main); font-size: 1.6rem; margin-bottom: 30px; text-shadow: 2px 2px 0 #000; }
+.option-btn { background-color: #7b7b7b; border: 4px solid #000; color: #fff; padding: 15px 20px; font-size: 1.3rem; font-family: 'VT323', monospace; text-transform: uppercase; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.4), inset 4px 4px 0 rgba(255,255,255,0.4); transition: transform 0.1s; }
+.option-btn:hover:not(:disabled) { background-color: #929292; transform: translateY(-4px); }
+.option-btn:active:not(:disabled) { box-shadow: inset 4px 4px 0 rgba(0,0,0,0.5), inset -4px -4px 0 rgba(255,255,255,0.2); transform: translateY(2px); }
+.option-btn.correct { background-color: var(--mc-text-green) !important; color: #000 !important; text-shadow: none !important; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.6) !important; }
+.option-btn.incorrect { background-color: #ff5555 !important; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.3), inset 4px 4px 0 rgba(255,255,255,0.6) !important; }
+.progress-container { background-color: #333; border: 4px solid #000; height: 20px; margin-bottom: 30px; box-shadow: inset 2px 2px 0 rgba(0,0,0,0.5); }
+.progress-bar { background-color: var(--mc-text-green); border-right: 4px solid #000; }
+
+/* Cofre Pixelado */
+[data-theme="minecraft"] .escena-fondo-animado { animation: scrollBackground 4s linear infinite; }
+[data-theme="minecraft"] .paquete { background-color: transparent; box-shadow: none; border: none; overflow: visible; }
+[data-theme="minecraft"] .paquete::before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 60%; background-image: repeating-linear-gradient(#7d5b41, #7d5b41 6px, #5e412f 6px, #5e412f 12px); border: 6px solid #000; outline: 3px solid #7d5b41; outline-offset: -9px; border-radius: 4px; image-rendering: pixelated; z-index: 1; }
+[data-theme="minecraft"] .paquete::after { content: ""; position: absolute; top: 15%; left: 0; width: 100%; height: 35%; background-image: repeating-linear-gradient(#6c4a31, #6c4a31 6px, #4d3423 6px, #4d3423 12px); border: 6px solid #000; outline: 3px solid #6c4a31; outline-offset: -9px; border-radius: 4px; transition: transform 0.8s ease-in, opacity 0.5s 0.3s; transform-origin: center bottom; image-rendering: pixelated; z-index: 2; }
+[data-theme="minecraft"] .paquete .pestillo { content: "?"; font-family: 'VT323', monospace; font-size: 2.5rem; color: #fff; text-shadow: 2px 2px 0 #000; background-color: #8a8a8a; border: 4px solid #000; padding: 5px 10px; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; transition: opacity 0.3s; image-rendering: pixelated; }
+[data-theme="minecraft"] .paquete.abriendo-cofre::after { transform: rotateX(-120deg); opacity: 0.1; }
+[data-theme="minecraft"] .paquete.abriendo-cofre .pestillo { opacity: 0; }
+[data-theme="minecraft"] .paquete.abriendo-cofre { animation: shakeAndBurst 1s forwards ease-in; pointer-events: none;}
+@keyframes shakeAndBurst { 0% { transform: scale(1) rotate(0); } 20% { transform: scale(1.05) rotate(-3deg); } 40% { transform: scale(1.05) rotate(3deg); } 60% { transform: scale(1.1) rotate(-3deg); } 100% { transform: scale(1.5) translateY(-50px); opacity: 0; filter: blur(5px); } }
+
+/* Cartas de Minceraft */
+[data-theme="minecraft"] .carta-inner { background-color: #2b323c; border: 6px solid #000; box-shadow: inset -4px -4px 0 rgba(0,0,0,0.6), inset 4px 4px 0 rgba(255,255,255,0.05); }
+[data-theme="minecraft"] .carta-inner img { border-bottom: 6px solid #000; }
+[data-theme="minecraft"] .carta-inner h3 { color: #3adb3a; }
+
+body.theme-minecraft #marco-reproductor { background-color: #8b8b8b; padding: 10px; border: 4px solid #000; box-shadow: inset -4px -4px 0px rgba(0,0,0,0.5), inset 4px 4px 0px rgba(255,255,255,0.8); }

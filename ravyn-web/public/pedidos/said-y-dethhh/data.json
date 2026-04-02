@@ -1,0 +1,16 @@
+{
+  "tarjetas": {
+    "config": {
+      "tema": "cute-soft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "Te extraño ",
+        "contenido": "Hola deth, te extraño mucho",
+        "imagen": "https://storage.tally.so/private/IMG-20260320-WA0073.jpg?id=8Myvjx&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhNeXZqeCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0Nzc1MH0.k0LoCyFHltpm_paExl8DV94msAiM7uQ31BrPnbJnUu0&signature=e20ece22d04fe62848514b1fd6119dacd81cbff9517b4ae76cf781d3b73f9b68"
+      }
+    ]
+  }
+}

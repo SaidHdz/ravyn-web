@@ -1,0 +1,60 @@
+{
+  "trivia": {
+    "config": {
+      "tema": "cute-soft",
+      "mensaje_inicio": "¿Qué tanto recuerdas de nosotros?"
+    },
+    "preguntas": [
+      {
+        "pregunta": "Pipo es joto?",
+        "opciones": [
+          "Si",
+          "No",
+          "Nose ",
+          "Quiensabe"
+        ],
+        "correcta": 2
+      },
+      {
+        "pregunta": "Quien le debe dinero a antonio?",
+        "opciones": [
+          "Said",
+          "Nahum",
+          "Caleb",
+          "Said y nahum"
+        ],
+        "correcta": 3
+      },
+      {
+        "pregunta": "Jair es joto y usa a elsy de tapadera?",
+        "opciones": [
+          "Si",
+          "No",
+          "Si, yo lo vi besándose con marco",
+          "Nose"
+        ],
+        "correcta": 2
+      },
+      {
+        "pregunta": "Quien se compro un control de nintendo",
+        "opciones": [
+          "Marco",
+          "Antonio",
+          "Said",
+          "Jair"
+        ],
+        "correcta": 1
+      },
+      {
+        "pregunta": "Said es la fokin cabrá goat asi chingon?",
+        "opciones": [
+          "Si",
+          "Si",
+          "Si",
+          "Si"
+        ],
+        "correcta": 2
+      }
+    ]
+  }
+}

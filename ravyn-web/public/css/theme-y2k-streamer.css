@@ -1,0 +1,333 @@
+/* =========================================================
+   RAVYN THEME: Y2K STREAMER EDITION (RETRO WINDOWS & GACHA)
+   ========================================================= */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=M+PLUS+Rounded+1c:wght@700;800&display=swap');
+
+*, *:before, *:after {
+    box-sizing: border-box;
+}
+
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+
+:root {
+    /* PALETA Y2K PASTEL / NEÓN */
+    --y2k-bg-base: #1a0b2e;         /* Morado oscuro de fondo */
+    --y2k-pink-neon: #ff66cc;       /* Rosa vibrante principal */
+    --y2k-purple: #9933ff;          /* Morado sombra */
+    --y2k-cyan: #00ffff;            /* Cian para brillos/hover */
+    --y2k-window-bg: #ffe6f2;       /* Fondo de las ventanas retro (rosa muy clarito) */
+    --y2k-text-dark: #330033;       /* Texto oscuro para leer en ventanas */
+    --y2k-text-light: #ffffff;      /* Texto blanco */
+    
+    --font-bubble: 'M PLUS Rounded 1c', sans-serif; /* Títulos WordArt / Burbuja */
+    --font-pixel: 'VT323', monospace;               /* Datos técnicos / Stream */
+
+    /* Variables para la Landing y Módulos */
+    --text-primary: #ffffff;
+    --text-secondary: #00ffff;
+    --bg-color: #1a0b2e;
+    --card-bg: #ffe6f2;
+    --accent-glow: #ff66cc;
+    --glass-border: #ff66cc;
+    --font-main: var(--font-pixel);
+}
+
+/* === ESTILOS GLOBALES === */
+body {
+    background-color: var(--y2k-bg-base) !important;
+    color: var(--y2k-text-light);
+    font-family: var(--font-pixel);
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    
+    /* Efecto Scanlines Retro */
+    background-image: repeating-linear-gradient(
+        transparent,
+        transparent 2px,
+        rgba(255, 102, 204, 0.05) 2px,
+        rgba(255, 102, 204, 0.05) 4px
+    ) !important;
+    background-size: 100% 4px !important;
+    animation: scanlines 10s linear infinite !important;
+    position: relative;
+}
+
+/* Elementos flotantes decorativos en el fondo */
+body::before, body::after {
+    position: fixed;
+    font-size: 4rem;
+    z-index: -1;
+    opacity: 0.15;
+    animation: floatY2K 6s ease-in-out infinite;
+}
+body::before { content: '💖'; top: 10%; left: 5%; }
+body::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
+
+button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }
+
+/* Ajustes móvil */
+@media (max-width: 600px) {
+    body { padding: 20px 15px; }
+    .header-title { font-size: 2.8rem !important; margin-bottom: 20px; }
+    .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 60px; }
+    #stack-container { height: 50vh; max-height: 400px; }
+}
+
+/* === HEADER (ESTILO WORDART & NIVEL DE AMOR) === */
+.page-header { text-align: center; margin-bottom: 60px; }
+
+.header-title, #mensaje-inicio, #mensaje-inicio-dedic {
+    font-family: var(--font-bubble);
+    font-size: 4rem;
+    color: var(--y2k-text-light) !important;
+    margin: 0 0 15px 0;
+    /* Sombras múltiples para efecto 3D WordArt Y2K */
+    text-shadow: 
+        3px 3px 0 var(--y2k-pink-neon),
+        6px 6px 0 var(--y2k-purple),
+        9px 9px 0 var(--y2k-cyan);
+    transform: rotate(-2deg);
+}
+
+.header-subtitle {
+    font-family: var(--font-pixel);
+    background: var(--y2k-pink-neon);
+    color: var(--y2k-text-light);
+    display: inline-block;
+    padding: 5px 20px;
+    border-radius: 20px;
+    border: 2px solid var(--y2k-text-light);
+    font-size: 1.5rem;
+    box-shadow: 0 0 15px var(--y2k-pink-neon);
+    position: relative;
+}
+/* La colita del globo de diálogo */
+.header-subtitle::after {
+    content: ''; position: absolute; top: -10px; left: 20px;
+    border-width: 0 10px 10px 0; border-style: solid;
+    border-color: transparent var(--y2k-pink-neon) transparent transparent;
+}
+
+/* === GALERÍA (VENTANAS RETRO) === */
+.gallery-container { display: flex; flex-direction: column; gap: 40px; max-width: 600px; margin: 0 auto; }
+
+.card-wrapper {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+.memory-card {
+    background-color: var(--y2k-window-bg);
+    border: 3px solid var(--y2k-pink-neon);
+    border-radius: 0 0 8px 8px; /* Solo redondeado abajo */
+    position: relative;
+    padding-top: 30px; /* Espacio para la barra de título falsa */
+    box-shadow: 8px 8px 0 rgba(153, 51, 255, 0.5); /* Sombra dura Y2K */
+    transition: all 0.2s ease;
+    opacity: 1 !important;
+    visibility: visible !important;
+}
+
+/* La Barra de Título Retro (Hecha con CSS) */
+.memory-card::before {
+    content: 'NUEVA_MEMORIA.exe';
+    position: absolute; top: 0; left: 0; width: 100%; height: 30px;
+    background: linear-gradient(90deg, var(--y2k-pink-neon), var(--y2k-purple));
+    color: white; font-family: var(--font-pixel); font-size: 1.1rem;
+    display: flex; align-items: center; padding-left: 10px;
+    border-bottom: 2px solid var(--y2k-pink-neon);
+}
+/* Los botones _, [], X */
+.memory-card::after {
+    content: '_ □ x';
+    position: absolute; top: 4px; right: 10px;
+    color: white; font-family: sans-serif; font-size: 0.9rem; font-weight: bold;
+    letter-spacing: 5px;
+}
+
+.memory-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--y2k-cyan); }
+
+.image-wrapper { width: 100%; aspect-ratio: 16/9; overflow: hidden; border-bottom: 3px solid var(--y2k-pink-neon); border-top: 3px solid var(--y2k-pink-neon); }
+.card-image { width: 100%; height: 100%; object-fit: cover; }
+
+.card-details { padding: 15px; color: var(--y2k-text-dark); }
+.card-title { font-family: var(--font-bubble); font-size: 1.8rem; color: var(--y2k-purple); margin: 0 0 5px 0; }
+.card-description { font-family: var(--font-pixel); font-size: 1.2rem; margin: 0; }
+
+/* === MODAL (ERROR DEL SISTEMA) === */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    display: flex; justify-content: center; align-items: center;
+    z-index: 1000; padding: 20px; opacity: 0; visibility: hidden;
+    transition: opacity 0.3s, visibility 0.3s;
+}
+.modal-overlay.show-modal { opacity: 1; visibility: visible; }
+
+.modal-content {
+    background-color: var(--y2k-window-bg);
+    border: 3px solid var(--y2k-pink-neon);
+    border-radius: 0 0 8px 8px; /* Solo redondeado abajo */
+    padding: 2px; 
+    max-width: 500px; width: calc(100% - 40px); margin: 0 auto; max-height: 90vh; overflow-y: auto;
+    position: relative; transform: scale(0.9); transition: transform 0.3s;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.5);
+}
+.modal-overlay.show-modal .modal-content { transform: scale(1); }
+
+/* Barra de título del modal de Error */
+.modal-content::before {
+    content: '⚠️ SYSTEM_ERROR - SORPRESA_DETECTADA';
+    display: block; background: #9933ff; color: white;
+    font-family: var(--font-pixel); padding: 5px 10px; font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.close-btn {
+    position: absolute; top: 5px; right: 5px;
+    background: #9933ff; border: 2px outset #9933ff; color: black;
+    font-weight: bold; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center;
+    font-family: sans-serif; font-size: 1rem;
+}
+
+.close-btn:hover { 
+    background: #e31b3f !important; 
+    color: #100a1c !important; 
+    transform: rotate(90deg) scale(1.1) !important; 
+}
+
+.close-btn:active { border-style: inset; }
+
+.modal-image { width: 100%; border: 2px inset #ffffff; margin-bottom: 15px; aspect-ratio: 1/1; object-fit: cover; }
+.modal-meta { font-family: var(--font-pixel); font-size: 1.3rem; color: #9933ff; margin-bottom: 10px; font-weight: bold; }
+#modal-text { color: black; font-family: var(--font-pixel); font-size: 1.2rem; }
+
+/* === TRIVIA (CAJA DE CHAT TWITCH / BURBUJAS) === */
+.trivia-card {
+    background: rgba(26, 11, 46, 0.9);
+    border: 2px solid var(--y2k-purple); border-radius: 15px;
+    padding: 30px; text-align: center; max-width: 600px; margin: 0 auto;
+    box-shadow: inset 0 0 20px rgba(153, 51, 255, 0.3), 0 0 15px var(--y2k-purple);
+}
+.question-header { 
+    font-family: var(--font-bubble); font-size: 1.8rem; color: var(--y2k-text-light);
+    text-shadow: 2px 2px 0 var(--y2k-pink-neon); margin-bottom: 30px;
+}
+
+.options-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+
+.option-btn {
+    background: var(--y2k-window-bg);
+    border: 2px solid var(--y2k-pink-neon);
+    border-radius: 30px; /* Botón tipo píldora / burbuja chat */
+    color: var(--y2k-purple);
+    padding: 15px 20px; font-family: var(--font-bubble); font-size: 1.2rem; font-weight: bold;
+    transition: all 0.2s; width: 100%; position: relative;
+}
+.option-btn:hover:not(:disabled) {
+    background: var(--y2k-cyan); color: var(--y2k-text-dark);
+    box-shadow: 0 0 15px var(--y2k-cyan); transform: scale(1.02); border-color: var(--y2k-text-light);
+}
+.option-btn.correct { background: #00ff00 !important; box-shadow: 0 0 20px #00ff00 !important; color: black !important; border-color: white !important;}
+.option-btn.incorrect { background: #ff0000 !important; color: white !important; opacity: 0.8; }
+
+.progress-container { background: var(--y2k-bg-base); border: 2px solid var(--y2k-cyan); border-radius: 10px; height: 15px; margin-bottom: 30px; }
+.progress-bar { background: var(--y2k-cyan); height: 100%; border-radius: 8px; transition: width 0.4s ease; box-shadow: 0 0 10px var(--y2k-cyan); width: 0%;}
+
+/* =========================================
+   CLASES DE UTILIDAD PARA JS (TRIVIA)
+   ========================================= */
+.hidden { display: none !important; }
+.fade-transition { transition: opacity 0.3s ease; opacity: 1; }
+.fade-out { opacity: 0; }
+
+/* Un toque extra: Opacar las respuestas incorrectas cuando ya se eligió una */
+.options-grid.answered .option-btn:not(.correct) {
+    opacity: 0.5;
+    transform: scale(0.95);
+    filter: grayscale(80%);
+}
+
+/* === CARTAS SWIPE (MÁQUINA GACHA CÁPSULA) === */
+.paquete {
+    background: transparent !important; box-shadow: none !important; border: none !important; overflow: visible !important;
+    width: 140px !important; height: 140px !important; margin: 0 auto !important;
+    display: flex !important; justify-content: center !important; align-items: center !important;
+    opacity: 1 !important; visibility: visible !important; position: relative !important;
+}
+/* Mitad inferior (Rosa Plástico) */
+.paquete::before {
+    content: "" !important; position: absolute !important; bottom: 0 !important; left: 0 !important; width: 100% !important; height: 50% !important;
+    background: radial-gradient(circle at 30% 70%, #ff99dd, var(--y2k-pink-neon)) !important;
+    border: 3px solid var(--y2k-text-light) !important; border-radius: 0 0 70px 70px !important; z-index: 1 !important;
+    display: block !important;
+}
+/* Mitad superior (Cristal Cian) */
+.paquete::after {
+    content: "" !important; position: absolute !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 50% !important;
+    background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0.2)) !important;
+    border: 3px solid var(--y2k-text-light) !important; border-radius: 70px 70px 0 0 !important; z-index: 2 !important;
+    transition: transform 0.6s ease-out, opacity 0.5s !important; transform-origin: center right !important;
+    display: block !important;
+}
+/* La perilla de la gacha */
+.paquete .pestillo {
+    content: "⭐" !important; font-size: 2rem !important;
+    position: absolute !important; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%) !important;
+    z-index: 3 !important; transition: transform 0.5s !important;
+    background: white !important; border-radius: 50% !important; width: 40px !important; height: 40px !important; display: flex !important; align-items: center !important; justify-content: center !important;
+    border: 3px solid var(--y2k-pink-neon) !important;
+}
+
+/* Estilo de la carta interior (Notificación Retro) */
+.carta-inner, .carta-dedic {
+    background: var(--y2k-window-bg) !important; 
+    border: 3px solid var(--y2k-pink-neon) !important; 
+    color: var(--y2k-text-dark) !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    box-shadow: 8px 8px 0 rgba(153, 51, 255, 0.5) !important;
+}
+
+.carta-inner h3, .carta-dedic h3 { 
+    font-family: var(--font-pixel) !important; 
+    font-size: 1.5rem !important; 
+    background: linear-gradient(90deg, var(--y2k-pink-neon), var(--y2k-purple)) !important; 
+    color: white !important; 
+    padding: 8px 15px !important; 
+    margin: 0 !important;
+    text-transform: uppercase !important;
+    border-bottom: 2px solid var(--y2k-pink-neon) !important;
+}
+
+.carta-inner p, .carta-dedic .card-description { 
+    font-family: var(--font-pixel) !important; 
+    padding: 20px !important; 
+    font-size: 1.2rem !important; 
+    line-height: 1.4 !important;
+}
+
+/* === REPRODUCTOR (WINAMP VIBES) === */
+#reproductor-flotante {
+    position: fixed; bottom: 20px; right: 20px;
+    width: 320px; max-width: calc(100vw - 40px); 
+    z-index: 9999; transition: all 0.3s ease;
+}
+body.theme-y2k-streamer #marco-reproductor {
+    background: linear-gradient(180deg, #ff99dd, #9933ff);
+    padding: 10px; border: 3px outset #ff99dd;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.5);
+    color: #00ff00; /* Letras verdes de reproductor retro */
+    font-family: var(--font-pixel);
+}
+
+/* =========================================
+   ANIMACIONES ÉPICAS PARA LA COREOGRAFÍA
+   ========================================= */
+

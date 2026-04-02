@@ -1,0 +1,174 @@
+{
+  "nuestra_historia": {
+    "config": {
+      "tema": "minecraft",
+      "titulo_principal": "NUESTRA HISTORIA",
+      "subtitulo": "Said y nadie",
+      "cancion": "https://music.youtube.com/watch?v=Mvxv9vNRJBg&si=w6J1GGkNme2FtvYD"
+    },
+    "memorias": [
+      {
+        "id": "1",
+        "photo_url": "https://storage.tally.so/private/a1.jpg?id=4zy5Bb&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjR6eTVCYiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.aHioI0oaOz1LZ-BwLs4BSTAfzkeziuKXswNPq4pWkSM&signature=943423c10443e51a45a7593ec7f8cd3a8a77e0dde3a32f1c0efe794d9fad6b29",
+        "titulo": "asdd",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "sds",
+        "fecha": "2026-03-01",
+        "lugar": "sds"
+      },
+      {
+        "id": "2",
+        "photo_url": "https://storage.tally.so/private/a4.jpg?id=G54WK2&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ikc1NFdLMiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.tN74XuVRRqrdAcoDMST3bgJQkLcVLJQAiLqDn4kBiWs&signature=2daf08f3ad4c9ffd15a7fb6051b3d5b60965313fc2d80c38a81548b21ca41ab1",
+        "titulo": "atp",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "atepeeee",
+        "fecha": "2026-03-02",
+        "lugar": "asd"
+      },
+      {
+        "id": "3",
+        "photo_url": "https://storage.tally.so/private/a3.jpg?id=evl4QE&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImV2bDRRRSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.NVjL846wwrUOPmgR2kRTsY_off8JXz9_rULEo8FoHiU&signature=7dd75ed5df78ee43fe9d7cdf9d16cf39286dde16d2791038b1c157a45e7448ef",
+        "titulo": "asd",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asd",
+        "fecha": "2026-03-03",
+        "lugar": "asd"
+      },
+      {
+        "id": "4",
+        "photo_url": "https://storage.tally.so/private/a2.jpg?id=kv1qeJ&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imt2MXFlSiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.Pr1bl_pvOBnkV_dXSth9CwVV0oQyccTN4ffbe5VEYVQ&signature=ce8786e5bb1e8bb9c1d9869ed8c4bde0a6e5f18bf8e1a86f1a99f3598fd1e642",
+        "titulo": "asd",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asd",
+        "fecha": "2026-03-04",
+        "lugar": "asdasd"
+      },
+      {
+        "id": "5",
+        "photo_url": "https://storage.tally.so/private/a1.jpg?id=gv12d1&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Imd2MTJkMSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.YXkkAzGMp2NKcSJWUmZNbZqndMBnDsfQTT9kSIB9LyY&signature=c15a6ec542dfd52346931e982f26987e20d21368ed54cd124d040877be1c7535",
+        "titulo": "asdas",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asdas",
+        "fecha": "2026-03-05",
+        "lugar": "asdasd"
+      },
+      {
+        "id": "6",
+        "photo_url": "https://storage.tally.so/private/a2.jpg?id=zLoly8&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InpMb2x5OCIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.VTu14KygK-fo3ZKvcVNH60S348RV01l72-TApVSjH48&signature=f3835f1cd21334b5c1585d262adfae29b033844e044a0508d91a0b5bd54cf043",
+        "titulo": "asdas",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asdaasdasdasd",
+        "fecha": "2026-03-06",
+        "lugar": "asdasdasdas"
+      },
+      {
+        "id": "7",
+        "photo_url": "https://storage.tally.so/private/a3.jpg?id=VDAgPE&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlZEQWdQRSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.Lglq0wm2YMW45XOMor8uqPm1_5SS1g5I94eInK2eGyY&signature=632d117f8dad05e64ebae03a1c30da88ded829575beecb689e508fdf3d9bb262",
+        "titulo": "asdasdsad",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asdasd",
+        "fecha": "2026-03-07",
+        "lugar": "asdasdasdsadasdasd"
+      },
+      {
+        "id": "8",
+        "photo_url": "https://storage.tally.so/private/a4.jpg?id=ZDK0Oa&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IlpESzBPYSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.mxW-KoVfhO-ge8R42pxEnwhh-DNiHcVgIDLIds_l7Cs&signature=c8f87b314586d4dcca9c197d4a14c1b254bd3fc1ef94c80e67938bd4c9c8968b",
+        "titulo": "asdasdas",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asdasdasdasdasdasdassaasdasdasdasdasdasdsadasdsadsaasdasdasdasdasdasdassaasdasdasdasdasdasdsadasdsadsa",
+        "fecha": "2026-03-08",
+        "lugar": "ad"
+      },
+      {
+        "id": "9",
+        "photo_url": "https://storage.tally.so/private/a2.jpg?id=6MyoKO&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZNeW9LTyIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.az8vAoKqKHSfZzWGmCB4OHQCBpp9vdFZQg6KZ1pQN2w&signature=1b9b7a1e41af8e3da5926c4b75c221601d2006e00609500c6238da070e203e37",
+        "titulo": "aaaaaaa",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "aaaaaaaaaaaaaaa",
+        "fecha": "2026-03-09",
+        "lugar": "asdasdas"
+      },
+      {
+        "id": "10",
+        "photo_url": "https://storage.tally.so/private/38.jpg?id=pv1aoZ&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InB2MWFvWiIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.MqwDLrtj6OxdnhfRIRnKApLlEmvMbAkWxm5lz9pFF8I&signature=ec03409c8c5666b05540f13efeb5d237cd1bed9aaf09e22d84fbefa0a3a4d7ef",
+        "titulo": "asdasdasd",
+        "descripcion_corta": "Un momento especial",
+        "texto_largo": "asdasdasdasdasd",
+        "fecha": "2026-03-10",
+        "lugar": "asdasdasd"
+      }
+    ]
+  },
+  "trivia": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "¿Qué tanto recuerdas de nosotros?"
+    },
+    "preguntas": [
+      {
+        "pregunta": "adaad",
+        "opciones": [
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "correcta": 1
+      },
+      {
+        "pregunta": "a",
+        "opciones": [
+          "a",
+          "aa",
+          "a",
+          "a"
+        ],
+        "correcta": 1
+      },
+      {
+        "pregunta": "a",
+        "opciones": [
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "a",
+        "opciones": [
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "correcta": 0
+      },
+      {
+        "pregunta": "a",
+        "opciones": [
+          "a",
+          "a",
+          "a",
+          "a"
+        ],
+        "correcta": 2
+      }
+    ]
+  },
+  "tarjetas": {
+    "config": {
+      "tema": "minecraft",
+      "mensaje_inicio": "Nuestras cartas guardadas..."
+    },
+    "cartas": [
+      {
+        "id": 1,
+        "titulo": "adada",
+        "contenido": "adadada",
+        "imagen": "https://storage.tally.so/private/38.jpg?id=xv1KJ9&accessToken=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Inh2MUtKOSIsImZvcm1JZCI6IjlxbGpsViIsImlhdCI6MTc3NDA0MTAyM30.B4ZjU2w6J0S9CrwQz0grqIBIKRLr44U_ajkoxIQFuvY&signature=fa9810efdc9b75866c7765aa66bdcc7b8eb9e9790bd3406db78c5eeadcd6810d"
+      }
+    ]
+  }
+}

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ravyn - Trivia de Pareja</title>
+  
+  <style>
+    body { background-color: #050505; color: white; font-family: sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <div id="trivia-module" class="trivia-card">
+    
+    <div id="trivia-intro" class="fade-transition">
+      <h1 class="header-title" style="margin-bottom: 10px; font-size: 2.5rem;">Nuestra Trivia</h1>
+      <p id="intro-message" class="intro-text">Cargando...</p>
+      <button id="start-btn" class="option-btn">Empezar a jugar</button>
+    </div>
+
+    <div id="trivia-game" class="hidden fade-transition">
+      <div class="progress-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      
+      <div id="question-container" class="fade-transition">
+        <h2 id="question-text" class="question-header">Pregunta</h2>
+        <div id="options-grid" class="options-grid"></div>
+      </div>
+    </div>
+
+    <div id="trivia-results" class="hidden fade-transition">
+      <h2 id="final-score" class="header-title" style="margin-bottom: 10px;"></h2>
+      <p id="final-message" class="intro-text"></p>
+      <button id="restart-btn" class="option-btn">Volver a jugar</button>
+    </div>
+    
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script> 
+  <script src="trivia.js"></script> 
+</body>
+</html>

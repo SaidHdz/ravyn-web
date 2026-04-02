@@ -1,0 +1,81 @@
+/* Tema Y2K Streamer Edition css - Retro Windows & Gacha */
+@import url('https://fonts.googleapis.com/css2?family=VT323&family=M+PLUS+Rounded+1c:wght@700;800&display=swap');
+
+:root {
+    --y2k-bg-base: #1a0b2e;         
+    --y2k-pink-neon: #ff66cc;       
+    --y2k-purple: #9933ff;          
+    --y2k-cyan: #00ffff;            
+    --y2k-window-bg: #ffe6f2;       
+    --y2k-text-dark: #330033;       
+    --y2k-text-light: #ffffff;      
+    --font-bubble: 'M PLUS Rounded 1c', sans-serif; 
+    --font-pixel: 'VT323', monospace;               
+}
+
+@keyframes scanlines { 0% { background-position: 0 0; } 100% { background-position: 0 40px; } }
+@keyframes floatY2K { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-15px) rotate(2deg); } }
+
+body.theme-y2k-streamer {
+    background-color: var(--y2k-bg-base); color: var(--y2k-text-light);
+    font-family: var(--font-pixel); padding: 40px 20px; min-height: 100vh;
+    background-image: repeating-linear-gradient(transparent, transparent 2px, rgba(255, 102, 204, 0.05) 2px, rgba(255, 102, 204, 0.05) 4px);
+    background-size: 100% 4px; animation: scanlines 10s linear infinite; position: relative;
+}
+
+body.theme-y2k-streamer::before, body.theme-y2k-streamer::after { position: fixed; font-size: 4rem; z-index: -1; opacity: 0.15; animation: floatY2K 6s ease-in-out infinite; }
+body.theme-y2k-streamer::before { content: '💖'; top: 10%; left: 5%; }
+body.theme-y2k-streamer::after { content: '✨'; bottom: 20%; right: 10%; animation-delay: -3s; }
+
+.page-header { text-align: center; margin-bottom: 60px; }
+.header-title { font-family: var(--font-bubble); font-size: 4rem; color: var(--y2k-text-light); margin: 0 0 15px 0; text-shadow: 3px 3px 0 var(--y2k-pink-neon), 6px 6px 0 var(--y2k-purple), 9px 9px 0 var(--y2k-cyan); transform: rotate(-2deg); }
+.header-subtitle { font-family: var(--font-pixel); background: var(--y2k-pink-neon); color: var(--y2k-text-light); display: inline-block; padding: 5px 20px; border-radius: 20px; border: 2px solid var(--y2k-text-light); font-size: 1.5rem; box-shadow: 0 0 15px var(--y2k-pink-neon); position: relative; }
+.header-subtitle::after { content: ''; position: absolute; top: -10px; left: 20px; border-width: 0 10px 10px 0; border-style: solid; border-color: transparent var(--y2k-pink-neon) transparent transparent; }
+
+/* Ventanas de Windows viejo */
+.memory-card { background-color: var(--y2k-window-bg); border: 3px solid var(--y2k-pink-neon); border-radius: 0 0 8px 8px; position: relative; padding-top: 30px; box-shadow: 8px 8px 0 rgba(153, 51, 255, 0.5); transition: all 0.2s ease; }
+.memory-card::before { content: 'NUEVA_MEMORIA.exe'; position: absolute; top: 0; left: 0; width: 100%; height: 30px; background: linear-gradient(90deg, var(--y2k-pink-neon), var(--y2k-purple)); color: white; font-family: var(--font-pixel); font-size: 1.1rem; display: flex; align-items: center; padding-left: 10px; border-bottom: 2px solid var(--y2k-pink-neon); }
+.memory-card::after { content: '_ □ x'; position: absolute; top: 4px; right: 10px; color: white; font-family: sans-serif; font-size: 0.9rem; font-weight: bold; letter-spacing: 5px; }
+.memory-card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 var(--y2k-cyan); }
+.image-wrapper { border-bottom: 3px solid var(--y2k-pink-neon); border-top: 3px solid var(--y2k-pink-neon); }
+.card-details { padding: 15px; color: var(--y2k-text-dark); }
+.card-title { font-family: var(--font-bubble); font-size: 1.8rem; color: var(--y2k-purple); margin: 0 0 5px 0; }
+.card-description { font-family: var(--font-pixel); font-size: 1.2rem; }
+
+/* Modal System Error */
+.modal-overlay { backdrop-filter: blur(8px) !important; -webkit-backdrop-filter: blur(8px) !important; }
+.modal-content { background-color: var(--y2k-window-bg); border: 3px solid var(--y2k-pink-neon); border-radius: 0 0 8px 8px; padding: 2px; transform: scale(0.9); transition: transform 0.3s; box-shadow: 5px 5px 15px rgba(0,0,0,0.5); }
+.modal-content::before { content: '⚠️ SYSTEM_ERROR - SORPRESA_DETECTADA'; display: block; background: #9933ff; color: white; font-family: var(--font-pixel); padding: 5px 10px; font-size: 1.2rem; margin-bottom: 15px; }
+.close-btn { background: #9933ff; border: 2px outset #9933ff; color: black; font-weight: bold; width: 25px; height: 25px; font-family: sans-serif; font-size: 1rem; top: 5px; right: 5px;}
+.close-btn:hover { background: #e31b3f !important; color: #100a1c !important; transform: rotate(90deg) scale(1.1) !important; }
+.close-btn:active { border-style: inset; }
+.modal-image { border: 2px inset #ffffff; margin-bottom: 15px; }
+.modal-meta { font-family: var(--font-pixel); font-size: 1.3rem; color: #9933ff; margin-bottom: 10px; font-weight: bold; }
+#modal-text { color: black; font-family: var(--font-pixel); font-size: 1.2rem; }
+
+/* Trivia */
+.trivia-card { background: rgba(26, 11, 46, 0.9); border: 2px solid var(--y2k-purple); border-radius: 15px; padding: 30px; box-shadow: inset 0 0 20px rgba(153, 51, 255, 0.3), 0 0 15px var(--y2k-purple); }
+.question-header { font-family: var(--font-bubble); font-size: 1.8rem; color: var(--y2k-text-light); text-shadow: 2px 2px 0 var(--y2k-pink-neon); margin-bottom: 30px; }
+.option-btn { background: var(--y2k-window-bg); border: 2px solid var(--y2k-pink-neon); border-radius: 30px; color: var(--y2k-purple); padding: 15px 20px; font-family: var(--font-bubble); font-size: 1.2rem; font-weight: bold; transition: all 0.2s; }
+.option-btn:hover:not(:disabled) { background: var(--y2k-cyan); color: var(--y2k-text-dark); box-shadow: 0 0 15px var(--y2k-cyan); transform: scale(1.02); border-color: var(--y2k-text-light); }
+.option-btn.correct { background: #00ff00 !important; box-shadow: 0 0 20px #00ff00 !important; color: black !important; border-color: white !important;}
+.option-btn.incorrect { background: #ff0000 !important; color: white !important; opacity: 0.8; }
+.progress-container { background: var(--y2k-bg-base); border: 2px solid var(--y2k-cyan); border-radius: 10px; height: 15px; margin-bottom: 30px; }
+.progress-bar { background: var(--y2k-cyan); border-radius: 8px; box-shadow: 0 0 10px var(--y2k-cyan); }
+
+/* Máquina Gacha */
+[data-theme="y2k-streamer"] .paquete { background: transparent; box-shadow: none; border: none; overflow: visible; width: 140px; height: 140px; }
+[data-theme="y2k-streamer"] .paquete::before { content: ""; position: absolute; bottom: 0; left: 0; width: 100%; height: 50%; background: radial-gradient(circle at 30% 70%, #ff99dd, var(--y2k-pink-neon)); border: 3px solid var(--y2k-text-light); border-radius: 0 0 70px 70px; z-index: 1; }
+[data-theme="y2k-streamer"] .paquete::after { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 50%; background: radial-gradient(circle at 30% 30%, rgba(0, 255, 255, 0.8), rgba(0, 255, 255, 0.2)); border: 3px solid var(--y2k-text-light); border-radius: 70px 70px 0 0; z-index: 2; transition: transform 0.6s ease-out, opacity 0.5s; transform-origin: center right; }
+[data-theme="y2k-streamer"] .paquete .pestillo { content: "⭐"; font-size: 2rem; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 3; transition: transform 0.5s; background: white; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border: 3px solid var(--y2k-pink-neon); }
+[data-theme="y2k-streamer"] .paquete.abriendo-cofre .pestillo { transform: translate(-50%, -50%) rotate(360deg); opacity: 0; transition: transform 0.5s, opacity 0.3s 0.3s;}
+[data-theme="y2k-streamer"] .paquete.abriendo-cofre::after { transform: rotate(110deg) translateX(40px); opacity: 0.3; }
+
+/* Cartas Internas */
+[data-theme="y2k-streamer"] .carta-inner { background: #9933ff; border: 2px outset #9933ff; color: black; }
+[data-theme="y2k-streamer"] .carta-inner img { border-bottom: 2px groove #ffffff; }
+[data-theme="y2k-streamer"] .carta-inner h3 { font-family: var(--font-pixel); font-size: 1.8rem; background: #ff99dd; color: #9933ff; padding: 5px 10px; margin: 0; }
+[data-theme="y2k-streamer"] .carta-inner p { font-family: var(--font-pixel); padding: 10px; font-size: 1.2rem; }
+
+/* Reproductor Winamp */
+body.theme-y2k-streamer #marco-reproductor { background: linear-gradient(180deg, #ff99dd, #9933ff); padding: 10px; border: 3px outset #ff99dd; box-shadow: 4px 4px 0 rgba(0,0,0,0.5); color: #00ff00; font-family: var(--font-pixel); }
