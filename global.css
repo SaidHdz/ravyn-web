@@ -39,9 +39,33 @@ body.no-anim * {
 }
 
 @media (max-width: 600px) {
-    body { padding: 20px 15px; }
-    .header-title { font-size: 2.2rem !important; margin-bottom: 30px; }
-    .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 60px; }
+    body { padding: 10px 10px; }
+    .header-title { font-size: 2rem !important; margin-bottom: 20px; }
+    .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 40px; }
+    
+    /* Escalado dinámico para el Wrapped en móviles pequeños */
+    .wrapped-card-ui {
+        width: 98%;
+        height: 80vh; /* Altura más adaptable */
+        min-height: 600px;
+        --w-padding-top: 80px;
+    }
+    .wrapped-dona-visual { width: 180px; height: 180px; }
+    .wrapped-dona-center { width: 130px; height: 130px; font-size: 1.6rem; }
+
+    /* Nuevas clases para responsividad de Wrapped */
+    .wrapped-counter-display { font-size: 3.5rem !important; font-weight: 900; margin: 10px 0; }
+    .wrapped-title-large { font-size: 2.2rem !important; }
+    .wrapped-info-box { margin-top: 20px !important; padding: 15px !important; }
+    .wrapped-info-value { font-size: 1.8rem !important; }
+    .wrapped-emoji-row { font-size: 2.5rem !important; margin-top: 20px !important; }
+}
+
+@media (max-width: 400px) {
+    .header-title { font-size: 1.8rem !important; }
+    .wrapped-header-title { font-size: 1.5rem !important; }
+    .carta-content { padding: 15px; }
+    .card-title { font-size: 1.2rem; }
 }
 
 button, .memory-card, .close-btn, .easter-egg-trigger { cursor: pointer; }

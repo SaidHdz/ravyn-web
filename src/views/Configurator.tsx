@@ -320,6 +320,37 @@ const Configurator: React.FC = () => {
     return (
       <>
         <ThemeManager theme={projectConfig.tema} isStandalone={false} />
+        
+        {/* Preview Sticky para Móvil - Solo en el paso de Resumen/Checkout */}
+        {normalizedId === 'final' && (
+          <div className="mobile-only mobile-preview-sticky">
+            <div className="phone-frame">
+              <div className="phone-screen">
+                <div className="phone-notch"></div>
+                <div className="phone-content-skeleton" style={{ fontFamily: projectConfig.tema === 'minecraft' ? 'monospace' : 'inherit' }}>
+                  <div className="skeleton-hero" style={{ 
+                    background: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color + '22',
+                    borderRadius: projectConfig.tema === 'minecraft' ? '0px' : projectConfig.tema === 'cute-soft' ? '20px' : '12px'
+                  }}>
+                    <div className="mini-web-header">
+                      <Heart size={16} style={{ color: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color }} />
+                      <span className="mini-couple-name" style={{ color: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color }}>{projectConfig.pareja || 'Tu Historia'}</span>
+                    </div>
+                    <p className="mini-welcome-text">{projectConfig.mensajeBienvenida || 'Personalizando...'}</p>
+                  </div>
+                  <div className="mini-modules-stack">
+                    {modules.slice(0, 4).map((m: string) => (
+                      <div key={m} className="mini-module-preview" style={{ borderLeft: `3px solid ${THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color}` }}>
+                        <span className="mini-module-title">{m.replace('modulo-', '').toUpperCase()}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {(() => {
           switch (normalizedId) {
             case 'general':
@@ -366,9 +397,9 @@ const Configurator: React.FC = () => {
                       <h3>Selector de Temas</h3>
                     </div>
                     <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: '-0.75rem', marginBottom: '1.5rem' }}>
-                      Elige la estética visual que mejor encaje con tu historia.
+                      Desliza y elige la estética visual para tu historia.
                     </p>
-                    <div className="theme-grid-config">
+                    <div className="theme-grid-config horizontal-scroll-themes">
                       {THEME_OPTIONS.map(t => (
                         <div 
                           key={t.id} 

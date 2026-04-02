@@ -95,36 +95,30 @@ const Wrapped: React.FC<WrappedProps> = ({ data }) => {
     switch (tipo) {
       case 'intro':
         return (
-          <div>
+          <div className="wrapped-slide-content">
             <div className="wrapped-custom-loader"></div>
-            <h2 className="wrapped-header-title" style={{ fontSize: '3rem' }}>{titulo}</h2>
+            <h2 className="wrapped-header-title wrapped-title-large">{titulo}</h2>
             <p className="card-description" style={{ opacity: 0.8 }}>{datos.subtitulo}</p>
           </div>
         );
 
       case 'metricas_chat':
         return (
-          <div style={{ width: '100%' }}>
+          <div style={{ width: '100%' }} className="wrapped-slide-content">
             {renderTitle()}
             <p className="card-description">Se enviaron un total de</p>
-            <div style={{ fontSize: '5rem', fontWeight: 900, margin: '15px 0' }}>
+            <div className="wrapped-counter-display">
               <Counter value={datos.total_mensajes || 0} active={isActive} />
             </div>
             <p className="card-description">mensajes este año.</p>
             
-            <div style={{ 
-              marginTop: '40px', 
-              background: 'rgba(255,255,255,0.05)', 
-              padding: '25px', 
-              borderRadius: '24px', 
-              border: '1px solid rgba(255,255,255,0.1)' 
-            }}>
-              <p style={{ margin: '0 0 10px 0', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '2px', opacity: 0.6 }}>Palabra más usada:</p>
-              <span style={{ fontSize: '2.4rem', fontWeight: 900, color: 'var(--w-accent)' }} className="wrapped-highlight-text">"{datos.palabra_top}"</span>
+            <div className="wrapped-info-box">
+              <p className="wrapped-info-label">Palabra más usada:</p>
+              <span className="wrapped-info-value">"{datos.palabra_top}"</span>
             </div>
 
-            <div style={{ marginTop: '30px', display: 'flex', gap: '20px', justifyContent: 'center', fontSize: '3rem' }}>
-              {datos.top_emojis?.slice(0, 3).map((e, i) => <span key={i} style={{ filter: 'drop-shadow(0 10px 15px rgba(0,0,0,0.2))' }}>{e}</span>)} 
+            <div className="wrapped-emoji-row">
+              {datos.top_emojis?.slice(0, 3).map((e, i) => <span key={i} className="wrapped-emoji-item">{e}</span>)} 
             </div>
           </div>
         );

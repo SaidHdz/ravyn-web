@@ -172,7 +172,22 @@
 }
 
 @media (max-width: 600px) { 
-  .packs-section { padding: 60px 15px; } 
+  .packs-section { padding: 40px 15px; } 
   .packs-title { font-size: 2.2rem; } 
-  .pack-card { padding: 40px 25px; } 
+  
+  .packs-grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas en móvil */
+    gap: 12px;
+  }
+
+  .pack-card { 
+    padding: 25px 15px; 
+    border-radius: 20px;
+  }
+
+  .pack-name { font-size: 1.4rem; }
+  .pack-sub { font-size: 0.85rem; margin-bottom: 15px; }
+  .pack-price { font-size: 2rem; margin-bottom: 15px; }
+  .pack-description, .pack-features { display: none; } /* Ocultamos detalles para Web App look */
+  .select-pack-btn { padding: 12px; font-size: 0.9rem; border-radius: 12px; }
 }

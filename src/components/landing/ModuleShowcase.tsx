@@ -186,6 +186,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
 
   return (
     <section className="showcase-section">
+      {/* Selector de Temas */}
       <motion.div 
         className="theme-selector-wrapper"
         initial={{ opacity: 0, y: -20 }}
@@ -208,6 +209,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
       </motion.div>
 
       <div className="showcase-container">
+        {/* 1. Menú de Módulos (Izquierda en PC, Abajo en móvil) */}
         <motion.div 
           className="showcase-menu-container"
           initial={{ opacity: 0, x: -30 }}
@@ -265,6 +267,7 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
           </div>
         </motion.div>
 
+        {/* 2. Preview (Derecha en PC, Centro en móvil) */}
         <motion.div 
           className="showcase-preview"
           initial={{ opacity: 0, x: 30 }}
@@ -282,16 +285,21 @@ const ModuleShowcase: React.FC<ModuleShowcaseProps> = ({ activeTheme, onThemeCha
             >
               {renderPreview()}
 
-              <div className="preview-loading-overlay" style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(4px)' }}>
-                <div className="preview-loading-card">
-                  <p className="preview-loading-title">Personalizando...</p>
-                  <div className="preview-loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                  </div>
-                </div>
-              </div>
+              <AnimatePresence>
+                {isPreviewLoading && (
+                  <motion.div 
+                    className="preview-loading-overlay"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                  >
+                    <div className="preview-loading-card">
+                      <div className="loading-spinner-ravyn"></div>
+                      <p className="preview-loading-title">Personalizando...</p>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </div>
         </motion.div>

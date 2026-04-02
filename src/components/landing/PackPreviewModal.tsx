@@ -25,6 +25,7 @@ const THEMES = [
 const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClose, onConfirm }) => {
   const [activeTheme, setActiveTheme] = useState('neo-japan');
   const [isThemeLoading, setIsThemeLoading] = useState(false);
+  const [canInteract, setCanInteract] = useState(false); // Nuevo: controla pointer-events
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const [isIframeLoaded, setIsIframeLoaded] = useState(false);
 
@@ -33,6 +34,7 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
     if (isOpen) {
       document.body.style.overflow = 'hidden';
       setIsIframeLoaded(false); // Resetear en cada apertura
+      setCanInteract(false);
     } else {
       document.body.style.overflow = 'auto';
     }
@@ -122,14 +124,20 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
         >
           <motion.div 
             className="pack-modal-container"
-            initial={{ scale: 0.98, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.98, opacity: 0 }}
+            initial={{ y: window.innerWidth < 768 ? "100%" : 0, scale: window.innerWidth < 768 ? 1 : 0.98, opacity: 0 }}
+            animate={{ y: 0, scale: 1, opacity: 1 }}
+            exit={{ y: window.innerWidth < 768 ? "100%" : 0, scale: window.innerWidth < 768 ? 1 : 0.98, opacity: 0 }}
             transition={{ 
-              duration: 0.4,
-              ease: [0.22, 1, 0.36, 1] // Curve de suavizado premium
+              duration: 0.5,
+              ease: [0.22, 1, 0.36, 1]
             }}
+            onClick={(e) => e.stopPropagation()}
           >
+            {/* Botón de cierre rápido para móvil */}
+            <div className="mobile-only mobile-close-tab" onClick={onClose}>
+              <div className="tab-handle"></div>
+            </div>
+
             {/* Barra Superior: Selector de Temas */}
             <div className="modal-theme-bar">
               <h4>Personaliza tu Skin</h4>
@@ -157,7 +165,7 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                   >
-                    <span>Aplicando skin...</span>
+                    <span>Cargando skin...</span>
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -171,7 +179,7 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
 
             {/* Barra Inferior: Acciones */}
             <div className="modal-actions-bar">
-              <button className="btn-back" onClick={onClose}>
+              <button className="btn-back desktop-only" onClick={onClose}>
                 <ArrowLeft size={20} />
                 Regresar
               </button>
@@ -183,7 +191,7 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
 
               <button className="btn-confirm" onClick={() => onConfirm(pack, activeTheme)}>
                 <Plus size={20} />
-                Confirmar y Agregar
+                {window.innerWidth < 600 ? 'Agregar' : 'Confirmar y Agregar'}
               </button>
             </div>
           </motion.div>

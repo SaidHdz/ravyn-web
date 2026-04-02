@@ -145,9 +145,93 @@
 .pack-info-mini .price { color: #888; font-size: 0.9rem; }
 
 /* Mobile Adjustments */
+.mobile-only {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .pack-modal-overlay { padding: 0; }
-  .pack-modal-container { width: 100%; height: 100vh; border-radius: 0; }
-  .modal-actions-bar { padding: 15px 20px; }
+  .pack-modal-container { 
+    width: 100%; 
+    height: 100vh; 
+    border-radius: 0; 
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .modal-demo-container {
+    aspect-ratio: 9/16; /* Aspecto de teléfono en móvil */
+    max-height: 65vh;
+    width: 85%;
+    margin: 10px auto;
+    border-radius: 24px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    border: 8px solid #1a1a1a; /* Simular marco de teléfono */
+  }
+
+  .modal-actions-bar { padding: 20px; }
   .modal-theme-bar { padding: 10px 20px; }
+  .theme-pill { padding: 6px 12px; font-size: 0.75rem; }
+  .mobile-only { display: block !important; }
+}
+
+/* Web App UI Elements */
+.mobile-close-tab {
+  width: 100%;
+  height: 44px; /* Altura estándar de toque Apple/Google */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffffff;
+  cursor: pointer;
+  border-top-left-radius: 32px;
+  border-top-right-radius: 32px;
+  padding-top: 8px;
+}
+
+.tab-handle {
+  width: 45px;
+  height: 6px;
+  background: #cbd5e1;
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+.mobile-close-tab:active .tab-handle {
+  background: #94a3b8;
+}
+
+.tap-to-interact-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(2px);
+  z-index: 5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 700;
+  pointer-events: none;
+}
+
+.tap-to-interact-overlay span {
+  padding: 12px 24px;
+  background: rgba(255,255,255,0.2);
+  border-radius: 50px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.desktop-only {
+  display: flex;
+}
+
+@media (max-width: 768px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+}
+
+/* Utilidad para evitar que el iframe robe el scroll */
+.iframe-no-interaction {
+  pointer-events: none !important;
 }
