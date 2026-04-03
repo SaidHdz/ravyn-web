@@ -73,6 +73,8 @@ export interface Trivia {
   config: {
     tema: string;
     mensaje_inicio: string;
+    mensaje_exito?: string;
+    mensaje_error?: string;
   };
   preguntas: Pregunta[];
 }
