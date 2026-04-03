@@ -4,10 +4,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ArrowLeft, CheckCircle2, ChevronRight, ChevronLeft, Heart, Palette, Type, 
   Camera, Plus, Trash2, Calendar, MapPin, Image as ImageIcon, Upload, Clock, Layers, Gamepad2, Check, MousePointer2, Music, Mail, 
-  ShoppingBag, Sparkles, Layout, Pencil, Zap, Hourglass, Image as PhotoFrame, HelpCircle, Users
+  ShoppingBag, Sparkles, Layout, Pencil, Zap, Hourglass, Image as PhotoFrame, HelpCircle, Users, Eye
 } from 'lucide-react';
 import WrappedFormConfigurator from '@/components/configurator/WrappedFormConfigurator';
 import ThemeManager from '@/components/ThemeManager';
+import LivePreviewModal from '@/components/configurator/LivePreviewModal';
 import '@/styles/landing/configurator.css';
 
 const THEME_OPTIONS = [
@@ -1134,6 +1135,39 @@ const Configurator: React.FC = () => {
               </div>
               <div className="summary-total"><span>Inversión Total:</span><span className="total-amount">${total} MXN</span></div>
               
+              {/* Botón de Preview Integrado (Ghost Button) */}
+              <button 
+                className="btn-preview-ghost" 
+                onClick={() => setShowPreviewModal(true)}
+                style={{ 
+                  display: 'flex', 
+                  alignItems: 'center', 
+                  justifyContent: 'center', 
+                  gap: '8px',
+                  width: '100%',
+                  padding: '0.8rem',
+                  marginTop: '1rem',
+                  marginBottom: '1rem',
+                  background: 'transparent',
+                  border: `1px solid ${THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color || 'var(--primary-color)'}`,
+                  color: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color || 'var(--primary-color)',
+                  borderRadius: '12px',
+                  fontWeight: 600,
+                  fontSize: '0.95rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: `${THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color || 'var(--primary-color)'}10`
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = `${THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color || 'var(--primary-color)'}20`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = `${THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color || 'var(--primary-color)'}10`;
+                }}
+              >
+                <Eye size={18} /> Vista Previa de mi Web
+              </button>
+
               <div className="payment-trust-badges">
                 <span className="trust-label">Pago Seguro vía Stripe</span>
                 <div className="badges-row">
@@ -1141,61 +1175,6 @@ const Configurator: React.FC = () => {
                   <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/mastercard.svg" alt="Mastercard" />
                   <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/amex.svg" alt="Amex" />
                   <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/stripe.svg" alt="Stripe" className="stripe-badge" />
-                </div>
-              </div>
-            </div>
-
-            <div className="phone-preview-mockup">
-              <span className="preview-label">Vista Previa de la Experiencia</span>
-              <div className="phone-frame">
-                <div className="phone-screen">
-                  <div className="phone-notch"></div>
-                    <div className="phone-content-skeleton" style={{ fontFamily: projectConfig.tema === 'minecraft' ? 'monospace' : 'inherit' }}>
-                      <div className="skeleton-hero" style={{ 
-                        background: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color + '22',
-                        borderRadius: projectConfig.tema === 'minecraft' ? '0px' : projectConfig.tema === 'cute-soft' ? '20px' : '12px'
-                      }}>
-                        <div className="mini-web-header">
-                          <Heart size={16} style={{ color: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color }} />
-                          <span className="mini-couple-name" style={{ color: THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color }}>{projectConfig.pareja || 'Tu Historia'}</span>
-                        </div>
-                        <p className="mini-welcome-text">{projectConfig.mensajeBienvenida || 'Bienvenidos a tu experiencia...'}</p>
-                      </div>
-                      
-                      <div className="mini-modules-stack">
-                        {modules.map((m: string, idx: number) => {
-                          const type = m.replace('modulo-', '');
-                          const themeColor = THEME_OPTIONS.find(t => t.id === projectConfig.tema)?.color;
-                          return (
-                            <motion.div 
-                              key={m} 
-                              className={`mini-module-preview preview-${type}`}
-                              style={{ 
-                                borderRadius: projectConfig.tema === 'minecraft' ? '0px' : '8px',
-                                borderLeft: `3px solid ${themeColor}` 
-                              }}
-                              initial={{ opacity: 0, x: 20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: 0.5 + (idx * 0.15) }}
-                            >
-                              <div className="mini-module-body">
-                                <span className="mini-module-title" style={{ color: themeColor }}>{type.toUpperCase()}</span>
-                                <div className="mini-module-visual">
-                                  {type === 'historia' && <PhotoFrame size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'tarjetas' && <Layers size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'trivia' && <Gamepad2 size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'wrapped' && <Sparkles size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'contador' && <Hourglass size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'dedicatorias' && <Mail size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                  {type === 'evasivo' && <MousePointer2 size={14} className="mini-icon" style={{ color: themeColor }} />}
-                                </div>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                      <div className="skeleton-footer" style={{ borderRadius: projectConfig.tema === 'minecraft' ? '0px' : '6px' }}></div>
-                    </div>
                 </div>
               </div>
             </div>
@@ -1261,6 +1240,13 @@ const Configurator: React.FC = () => {
           </motion.section>
         </AnimatePresence>
       </main>
+
+      <LivePreviewModal 
+        isOpen={showPreviewModal} 
+        onClose={() => setShowPreviewModal(false)} 
+        projectConfig={projectConfig} 
+        activeModules={modules} 
+      />
     </div>
   );
 };

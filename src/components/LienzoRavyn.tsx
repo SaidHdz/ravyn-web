@@ -25,9 +25,9 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter, isStandal
     if (!packFilter) return configuracion_global.orden;
 
     const packsModulos: Record<string, string[]> = {
-      'pack-semilla': ['modulo-historia', 'modulo-contador', 'modulo-tarjetas'],
-      'pack-rabanito': ['modulo-historia', 'modulo-trivia', 'modulo-evasivo', 'modulo-dedicatorias'],
-      'pack-cosecha': ['modulo-historia', 'modulo-contador', 'modulo-tarjetas', 'modulo-trivia', 'modulo-evasivo', 'modulo-dedicatorias', 'modulo-wrapped']
+      'pack-semilla': ['historia', 'contador', 'tarjetas'],
+      'pack-rabanito': ['historia', 'trivia', 'evasivo', 'dedicatorias'],
+      'pack-cosecha': ['historia', 'contador', 'tarjetas', 'trivia', 'evasivo', 'dedicatorias', 'wrapped']
     };
 
     return packsModulos[packFilter] || configuracion_global.orden;
@@ -63,25 +63,25 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter, isStandal
   const renderModulo = (nombre: string) => {
     let component = null;
     switch (nombre) {
-      case 'modulo-contador':
+      case 'contador':
         component = pedido.contador ? <Contador data={pedido.contador} /> : null;
         break;
-      case 'modulo-evasivo':
+      case 'evasivo':
         component = pedido.evasivo ? <Evasivo data={pedido.evasivo} /> : null;
         break;
-      case 'modulo-historia':
-        component = pedido.nuestra_historia ? <Historia data={pedido.nuestra_historia} /> : null;
+      case 'historia':
+        component = pedido.historia ? <Historia data={pedido.historia} /> : null;
         break;
-      case 'modulo-tarjetas':
+      case 'tarjetas':
         component = pedido.tarjetas ? <Tarjetas data={pedido.tarjetas} /> : null;
         break;
-      case 'modulo-trivia':
+      case 'trivia':
         component = pedido.trivia ? <Trivia data={pedido.trivia} /> : null;
         break;
-      case 'modulo-wrapped':
+      case 'wrapped':
         component = pedido.wrapped ? <Wrapped data={pedido.wrapped} /> : null;
         break;
-      case 'modulo-dedicatorias':
+      case 'dedicatorias':
         component = pedido.dedicatorias ? <Dedicatorias data={pedido.dedicatorias} /> : null;
         break;
       default:

@@ -135,7 +135,7 @@ export interface Pedido {
   configuracion_global: ConfiguracionGlobal;
   contador?: Contador;
   evasivo?: Evasivo;
-  nuestra_historia?: Historia;
+  historia?: Historia;
   tarjetas?: Tarjetas;
   trivia?: Trivia;
   wrapped?: Wrapped;

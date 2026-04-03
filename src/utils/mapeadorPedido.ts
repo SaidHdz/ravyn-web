@@ -19,7 +19,7 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     },
     configuracion_global: {
       tema: temaGlobal,
-      orden: activeModules
+      orden: activeModules.map(m => m.replace('modulo-', ''))
     }
   };
 
@@ -27,7 +27,7 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
   // Solo inyectamos los módulos que el usuario ha configurado o seleccionado
 
   if (activeModules.includes('modulo-historia') || formContent.memorias?.length > 0) {
-    pedido.nuestra_historia = {
+    pedido.historia = {
       config: {
         tema: temaGlobal,
         titulo_principal: 'Nuestra Historia',
