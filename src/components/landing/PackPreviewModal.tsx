@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Pack } from '@/types/store';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, X } from 'lucide-react';
 import '@/styles/landing/store-modal.css';
 
 interface PackPreviewModalProps {
@@ -136,6 +136,7 @@ const PackPreviewModal: React.FC<PackPreviewModalProps> = ({ pack, isOpen, onClo
             {/* Botón de cierre rápido para móvil */}
             <div className="mobile-only mobile-close-tab" onClick={onClose}>
               <div className="tab-handle"></div>
+              <X size={20} className="close-icon-mobile" />
             </div>
 
             {/* Barra Superior: Selector de Temas */}

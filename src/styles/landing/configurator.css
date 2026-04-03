@@ -421,13 +421,66 @@
   padding: 2px;
 }
 
-/* === Formulario de TRIVIA === */
-.options-config-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.option-input-group { display: flex; align-items: center; gap: 8px; }
-.btn-select-correct { background: none; border: none; padding: 0; cursor: pointer; }
-.circle-placeholder { width: 20px; height: 20px; border-radius: 50%; border: 2px solid #ced4da; }
-.option-input-group.is-correct .circle-placeholder { border-color: var(--success-color); }
-.option-input-group.is-correct .btn-select-correct { color: var(--success-color); }
+/* === Formulario de TRIVIA Premium === */
+.options-config-grid { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 15px; 
+  width: 100%;
+}
+
+.option-input-group { 
+  display: flex; 
+  align-items: center; 
+  gap: 12px; 
+  padding: 4px;
+  transition: all 0.3s ease;
+  width: 100%;
+}
+
+.btn-select-correct { 
+  background: none; 
+  border: none; 
+  padding: 0; 
+  cursor: pointer; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+}
+
+.btn-select-correct:active { transform: scale(0.9); }
+
+.circle-placeholder { 
+  width: 22px; 
+  height: 22px; 
+  border-radius: 50%; 
+  border: 2px solid #cbd5e1; 
+  background: #f8fafc;
+}
+
+.option-input-group input {
+  width: 100% !important;
+  flex: 1;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Estado: Opción Correcta Seleccionada */
+.option-input-group.is-correct .circle-placeholder { 
+  border-color: #4ADE80;
+  background: #f0fdf4;
+}
+
+.option-input-group.is-correct .btn-select-correct { 
+  color: #22c55e; /* Verde más intenso para el icono */
+}
+
+.option-input-group.is-correct input {
+  border-color: #4ADE80 !important;
+  box-shadow: 0 0 0 4px rgba(74, 222, 128, 0.15) !important;
+  background-color: #f0fdf4;
+}
 
 /* === Formulario de WRAPPED === */
 .mode-selector { display: flex; background-color: #e9ecef; padding: 6px; border-radius: 12px; margin-bottom: 1rem; }
@@ -1148,57 +1201,80 @@
 
 /* === Web App Layout Mobile === */
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
   .configurator-layout {
     height: 100dvh;
-    overflow: hidden;
+    width: 100%;
+    overflow-x: hidden; /* Blindaje lateral */
+    position: relative;
   }
 
   .config-nav {
     padding: 10px 15px;
+    display: grid;
+    grid-template-columns: 40px 1fr 100px;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    box-sizing: border-box;
   }
+
+  /* ... (botones y progress containers iguales) ... */
 
   .config-main {
     padding: 0;
     display: flex;
     flex-direction: column;
+    width: 100%;
+    overflow-x: hidden;
   }
 
   .config-step-section {
     display: flex;
     flex-direction: column;
     height: 100%;
+    width: 100%;
+    overflow-x: hidden;
   }
 
-  /* El Preview Sticky arriba */
-  .mobile-preview-sticky {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: #fff;
-    height: 35vh; /* Limitamos altura */
-    min-height: 250px;
-    border-bottom: 1px solid var(--border-color);
-    padding: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-  }
-
-  .mobile-preview-sticky .phone-frame {
-    transform: scale(0.6); /* Versión miniatura */
-    transform-origin: center;
-    margin: -100px 0; /* Compensar escala */
-  }
-
-  /* El Formulario abajo con scroll */
   .step-content {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 15px 100px 15px; /* Padding extra para el footer fijo */
+    overflow-x: hidden;
+    padding: 20px 15px 140px 15px;
+    width: 100%;
+    box-sizing: border-box;
   }
 
-  /* Temas en Scroll Horizontal */
+  /* Blindaje de Tarjetas */
+  .wrapped-section-card, .memoria-form-card {
+    padding: 1.25rem !important;
+    margin: 0 0 1.5rem 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow: hidden; /* Evita que sombras o hijos se salgan */
+    border-width: 2px !important; /* Normalizar bordes de temas en móvil */
+  }
+
+  .grid-2-cols, .grid-3-cols, .options-config-grid {
+    grid-template-columns: 1fr !important;
+    gap: 15px;
+    width: 100%;
+  }
+
+  .input-group input, .input-group textarea, .input-group select {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+  }
+
+  /* Temas en Scroll Horizontal Ultra-Compacto */
   .theme-grid-config {
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -1207,27 +1283,62 @@
     padding: 10px 5px 20px 5px;
     -webkit-overflow-scrolling: touch;
     scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .theme-grid-config::-webkit-scrollbar {
+    display: none;
   }
 
   .theme-option-card {
-    flex: 0 0 120px;
+    flex: 0 0 110px;
+    height: 80px;
     scroll-snap-align: center;
-    padding: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    border-width: 2px;
   }
 
   .theme-option-card.active {
     transform: scale(1.05);
+    border-color: var(--ravyn-blue);
+    background: #f0f7ff;
   }
 
-  /* Footer Fijo */
+  .theme-color-dot {
+    position: absolute !important;
+    top: 8px !important;
+    left: 8px !important;
+    width: 14px !important;
+    height: 14px !important;
+    margin: 0 !important;
+  }
+
+  .theme-option-card span {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .theme-option-card .check-icon {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+  }
+
+  /* Footer Fijo con respiro extra */
   .step-actions {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(10px);
-    padding: 15px 20px env(safe-area-inset-bottom);
+    padding: 15px 20px calc(25px + env(safe-area-inset-bottom)); /* Aumentado de 20px a 25px */
     margin: 0;
     border-top: 1px solid var(--border-color);
     display: flex;

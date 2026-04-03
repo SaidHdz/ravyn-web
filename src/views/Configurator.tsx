@@ -92,6 +92,7 @@ const Configurator: React.FC = () => {
   };
 
   const [currentStep, setCurrentStep] = useState(0);
+  const [showPreviewModal, setShowPreviewModal] = useState(false);
   
   const [projectConfig, setProjectConfig] = useState({
     pareja: '',
@@ -849,9 +850,6 @@ const Configurator: React.FC = () => {
                             {op.length}/50
                           </div>
                         </div>
-                        {newPregunta.correcta === idx && op.trim() !== '' && (
-                          <span className="correct-badge">Correcta</span>
-                        )}
                       </div>
                     ))}
                   </div>
@@ -1215,7 +1213,7 @@ const Configurator: React.FC = () => {
   return (
     <div className="configurator-layout">
       <nav className="config-nav">
-        <button className="back-btn" onClick={handleBack}><ArrowLeft size={20} /><span>Regresar</span></button>
+        <button className="back-btn" onClick={handleBack} title="Regresar"><ArrowLeft size={20} /></button>
         <div className="progress-container">
           <div className="progress-bar">
             <motion.div 
@@ -1238,7 +1236,7 @@ const Configurator: React.FC = () => {
             <div className="step-header"><span className="step-tag">Ravyn Studio</span><h1>{steps[currentStep].title}</h1><p>Confirmación de tu experiencia digital.</p></div>
             <div className="step-content">{renderStepContent()}</div>
             <div className="step-actions">
-              <button className="btn-secondary" onClick={handleBack}><ChevronLeft size={20} /> Atrás</button>
+              <button className="btn-secondary" onClick={handleBack}><ChevronLeft size={20} /> <span>Atrás</span></button>
               <div className="primary-action-wrapper">
                 {currentStep === steps.length - 1 && (
                   <motion.div 

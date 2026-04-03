@@ -99,12 +99,18 @@
   grid-template-columns: 1fr 2.5fr; /* Proporción original */
   gap: 40px;
   height: 700px;
-  overflow: hidden;
-  padding-bottom: 40px;
+  padding: 10px 20px 40px 10px; /* Padding para evitar cortes de sombras y animaciones */
   align-items: stretch;
 }
 
-.showcase-menu-container { display: flex; flex-direction: column; height: 100%; justify-content: flex-start; gap: 30px; }
+.showcase-menu-container { 
+  display: flex; 
+  flex-direction: column; 
+  height: 100%; 
+  justify-content: flex-start; 
+  gap: 30px;
+  padding-right: 20px; /* Espacio extra para el desplazamiento de las cards */
+}
 .showcase-menu { display: grid; grid-template-rows: repeat(4, 120px); gap: 12px; align-content: start; }
 
 .showcase-card {
@@ -171,9 +177,24 @@
 .step-card h3 { font-size: 1.5rem; font-weight: 800; margin-bottom: 15px; color: var(--landing-secondary); }
 .step-card p { color: var(--landing-text-sub); line-height: 1.6; }
 
-.testimonials-section { padding: 100px 40px; background: rgba(26, 64, 115, 0.03); margin: 0 -40px; }
-.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; max-width: 1200px; margin: 0 auto; }
-.testimonial-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
+.testimonials-section { padding: 80px 20px; background: rgba(26, 64, 115, 0.03); margin: 40px 0; border-radius: 40px; }
+.testimonials-grid { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 30px; 
+  max-width: 1200px; 
+  margin: 0 auto;
+  justify-items: center; 
+  justify-content: center;
+}
+.testimonial-card { 
+  background: white; 
+  padding: 30px; 
+  border-radius: 24px; 
+  box-shadow: 0 10px 20px rgba(0,0,0,0.02); 
+  width: 100%;
+  max-width: 380px;
+}
 .testimonial-text { font-style: italic; font-size: 1.1rem; color: var(--landing-secondary); line-height: 1.6; margin-bottom: 20px; }
 .testimonial-author { font-weight: 800; color: var(--ravyn-red); font-size: 0.9rem; text-transform: uppercase; }
 
@@ -191,11 +212,11 @@
 
 @media (max-width: 768px) {
   .landing-container { padding: 0 15px; }
-  .landing-nav { padding: 20px 0; }
+  .landing-nav { padding: 15px 0; }
 
   /* Hero */
-  .hero-section { padding: 40px 0 30px; }
-  .hero-tagline { font-size: 0.85rem; letter-spacing: 1px; }
+  .hero-section { padding: 20px 0 15px; }
+  .hero-tagline { font-size: 0.85rem; letter-spacing: 1px; margin-bottom: 10px; }
   .hero-title { font-size: 2.2rem; }
 
   /* Pasos */
@@ -211,23 +232,35 @@
   .theme-card { flex: 0 0 auto; padding: 8px 14px; font-size: 0.7rem; border-radius: 10px; }
 
   .showcase-container { display: flex; flex-direction: column; height: auto; gap: 20px; }
-  .showcase-preview { order: 1; height: 60vh !important; min-height: 400px; border-radius: 30px; }
+  .showcase-preview { order: 1; height: 60vh !important; min-height: 400px; border-radius: 30px; padding: 6px !important; }
   .showcase-menu-container { order: 2; }
 
-  .showcase-menu { grid-template-columns: repeat(2, 1fr) !important; grid-template-rows: auto !important; gap: 10px; }
+  .showcase-menu { grid-template-columns: 1fr !important; grid-template-rows: auto !important; gap: 8px; }
   
-  /* Tarjetas Dietéticas Móvil */
+  /* Tarjetas Horizontales Compactas Móvil */
   .showcase-card { 
-    height: auto !important; min-height: 75px; flex-direction: column; 
-    text-align: center; padding: 10px 5px !important; border-radius: 16px; 
+    height: auto !important; min-height: 60px; flex-direction: row; 
+    text-align: left; padding: 10px 15px !important; border-radius: 16px; 
+    justify-content: space-between; gap: 12px;
   }
-  .showcase-card-icon { width: 32px; height: 32px; border-radius: 10px; }
-  .showcase-card-icon svg { width: 16px; height: 18px; }
-  .showcase-card-content h4 { font-size: 0.75rem; margin: 0; }
+  .showcase-card-icon { width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0; }
+  .showcase-card-icon svg { width: 20px; height: 20px; }
+  
+  .showcase-card-content { flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+  .showcase-card-content h4 { font-size: 0.9rem; margin: 0 0 2px 0; }
   .showcase-card-content p { display: none; }
-  .add-module-btn-visual { width: 100%; padding: 4px 8px; font-size: 0.6rem; }
+  
+  .module-visual-actions { 
+    display: flex; align-items: center; gap: 10px; margin-top: 4px; 
+  }
+  .module-price-visual { font-size: 0.75rem; font-weight: 700; color: var(--landing-primary); }
+  
+  .add-module-btn-visual { 
+    padding: 6px 10px; font-size: 0.7rem; border-radius: 8px;
+    background: var(--ravyn-red); color: white; border: none; font-weight: 800;
+  }
 
-  .showcase-card:active { transform: scale(1.05) translateY(-5px); z-index: 10; }
+  .showcase-card:active { transform: scale(0.98); background: #f8f9fa; }
 
   .testimonials-grid { grid-template-columns: 1fr; }
   .testimonials-section { padding: 40px 15px; }
