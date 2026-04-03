@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Smartphone, Monitor, Eye } from 'lucide-react';
+import { X, Smartphone, Monitor, Eye, Maximize } from 'lucide-react';
 import LienzoRavyn from '@/components/LienzoRavyn';
 import ModulePreviewFrame from '@/components/landing/ModulePreviewFrame';
 import { transformFormToLienzo } from '@/utils/mapeadorPedido';
@@ -13,7 +13,7 @@ interface LivePreviewModalProps {
 }
 
 const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, projectConfig, activeModules }) => {
-  const [viewMode, setViewMode] = useState<'desktop' | 'mobile'>(
+  const [viewMode, setViewMode] = useState<'desktop' | 'mobile' | 'fullscreen'>(
     window.innerWidth < 768 ? 'mobile' : 'desktop'
   );
 
@@ -118,6 +118,24 @@ const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, pr
                 <Smartphone size={16} />
                 <span className="desktop-only" style={{ fontSize: '0.85rem', fontWeight: 500 }}>Móvil</span>
               </button>
+              <button 
+                className={viewMode === 'fullscreen' ? 'active' : ''} 
+                onClick={() => setViewMode('fullscreen')}
+                style={{ 
+                  color: viewMode === 'fullscreen' ? '#fff' : 'rgba(255,255,255,0.4)',
+                  background: viewMode === 'fullscreen' ? 'rgba(255,255,255,0.1)' : 'transparent',
+                  borderRadius: '9999px',
+                  padding: '8px 16px',
+                  transition: 'all 0.2s',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px'
+                }}
+                title="Pantalla Completa"
+              >
+                <Maximize size={16} />
+                <span className="desktop-only" style={{ fontSize: '0.85rem', fontWeight: 500 }}>Completa</span>
+              </button>
             </div>
 
             {/* Botón Cerrar Vibrante */}
@@ -169,7 +187,7 @@ const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, pr
                     </ModulePreviewFrame>
                   </div>
                 </div>
-              ) : (
+              ) : viewMode === 'mobile' ? (
                 <div className={`smartphone-mockup-v2 theme-${theme}`} style={{ height: '75vh', maxHeight: '720px', width: '340px', maxWidth: '100%', borderRadius: '40px', overflow: 'hidden', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)', border: '8px solid #1e293b', backgroundColor: 'var(--bg-primary, #0f172a)', position: 'relative' }}>
                   <div className="smartphone-notch-v2" style={{ position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)', width: '120px', height: '25px', background: '#1e293b', borderBottomLeftRadius: '16px', borderBottomRightRadius: '16px', zIndex: 50 }}></div>
                   <div className="smartphone-content-v2" style={{ width: '100%', height: '100%', padding: 0, margin: 0, overflow: 'hidden', borderRadius: '32px' }}>
@@ -179,6 +197,14 @@ const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, pr
                       </div>
                     </ModulePreviewFrame>
                   </div>
+                </div>
+              ) : (
+                <div className={`fullscreen-mockup-v2 theme-${theme}`} style={{ width: '100vw', height: '100vh', position: 'fixed', top: 0, left: 0, zIndex: 900, backgroundColor: 'var(--bg-primary, #0f172a)', overflow: 'hidden' }}>
+                  <ModulePreviewFrame theme={theme}>
+                    <div style={{ height: '100%', overflowY: 'auto', overflowX: 'hidden' }}>
+                      <LienzoRavyn pedido={pedidoData} isStandalone={false} />
+                    </div>
+                  </ModulePreviewFrame>
                 </div>
               )}
             </div>

@@ -1187,11 +1187,11 @@ const Configurator: React.FC = () => {
 
               <div className="payment-trust-badges">
                 <span className="trust-label">Pago Seguro vía Stripe</span>
-                <div className="badges-row">
-                  <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/visa.svg" alt="Visa" />
-                  <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/mastercard.svg" alt="Mastercard" />
-                  <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/amex.svg" alt="Amex" />
-                  <img src="https://raw.githubusercontent.com/crepererum/Stripe-Icons/master/stripe.svg" alt="Stripe" className="stripe-badge" />
+                <div className="badges-row" style={{ display: 'flex', gap: '12px', alignItems: 'center', justifyContent: 'center' }}>
+                  <img src="https://cdn.simpleicons.org/visa/00579F" alt="Visa" style={{ height: '24px' }} />
+                  <img src="https://cdn.simpleicons.org/mastercard/EB001B" alt="Mastercard" style={{ height: '24px' }} />
+                  <img src="https://cdn.simpleicons.org/americanexpress/002663" alt="Amex" style={{ height: '24px' }} />
+                  <img src="https://cdn.simpleicons.org/stripe/008CDD" alt="Stripe" className="stripe-badge" style={{ height: '24px' }} />
                 </div>
               </div>
             </div>
