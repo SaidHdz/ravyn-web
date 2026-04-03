@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
@@ -145,6 +145,9 @@ const Configurator: React.FC = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
 
+  const historiaInputRef = useRef<HTMLInputElement>(null);
+  const tarjetasInputRef = useRef<HTMLInputElement>(null);
+
   useEffect(() => {
     if (!modules || modules.length === 0) navigate('/');
   }, [modules, navigate]);
@@ -155,6 +158,7 @@ const Configurator: React.FC = () => {
 
     if (file.size > 5 * 1024 * 1024) {
       alert('La imagen es demasiado grande. Máximo 5MB.');
+      e.target.value = ''; // Clean up on error
       return;
     }
 
@@ -177,6 +181,8 @@ const Configurator: React.FC = () => {
             setUploadProgress(0);
           };
           reader.readAsDataURL(file);
+          // Limpiar input tras subir para poder subir el mismo archivo en caso de error/cancelar
+          e.target.value = '';
           return 100;
         }
         return prev + 10;
@@ -467,18 +473,21 @@ const Configurator: React.FC = () => {
                   </span>
                 </div>
                 
+                <input 
+                  type="file" 
+                  ref={historiaInputRef}
+                  hidden 
+                  accept="image/png, image/jpeg"
+                  onChange={(e) => handleImageUpload(e, 'historia')} 
+                />
                 <div 
                   className={`upload-placeholder-container ${newMemoria.foto ? 'has-image' : ''} ${isUploading ? 'is-uploading' : ''}`}
-                  onClick={() => !isUploading && document.getElementById('historia-upload')?.click()}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (!isUploading) historiaInputRef.current?.click();
+                  }}
                 >
-                  <input 
-                    type="file" 
-                    id="historia-upload" 
-                    hidden 
-                    accept="image/png, image/jpeg"
-                    onChange={(e) => handleImageUpload(e, 'historia')} 
-                  />
-                  
                   {isUploading ? (
                     <div className="upload-loading-state">
                       <div className="rabanesco-spinner"></div>
@@ -499,8 +508,9 @@ const Configurator: React.FC = () => {
                           <button 
                             className="btn-change-photo"
                             onClick={(e) => {
+                              e.preventDefault();
                               e.stopPropagation();
-                              document.getElementById('historia-upload')?.click();
+                              historiaInputRef.current?.click();
                             }}
                           >
                             <ImageIcon size={16} /> Cambiar Foto
@@ -509,6 +519,7 @@ const Configurator: React.FC = () => {
                             className="btn-delete-photo"
                             title="Eliminar foto"
                             onClick={(e) => {
+                              e.preventDefault();
                               e.stopPropagation();
                               setNewMemoria(prev => ({ ...prev, foto: '' }));
                             }}
@@ -649,18 +660,22 @@ const Configurator: React.FC = () => {
                 </span>
               </div>
               
+              <input 
+                type="file" 
+                ref={tarjetasInputRef}
+                hidden 
+                accept="image/png, image/jpeg"
+                onChange={(e) => handleImageUpload(e, 'tarjetas')} 
+              />
+              
               <div 
                 className={`upload-placeholder-container ${newTarjeta.imagen ? 'has-image' : ''} ${isUploading ? 'is-uploading' : ''}`}
-                onClick={() => !isUploading && document.getElementById('tarjetas-upload')?.click()}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (!isUploading) tarjetasInputRef.current?.click();
+                }}
               >
-                <input 
-                  type="file" 
-                  id="tarjetas-upload" 
-                  hidden 
-                  accept="image/png, image/jpeg"
-                  onChange={(e) => handleImageUpload(e, 'tarjetas')} 
-                />
-                
                 {isUploading ? (
                   <div className="upload-loading-state">
                     <div className="rabanesco-spinner"></div>
@@ -681,8 +696,9 @@ const Configurator: React.FC = () => {
                         <button 
                           className="btn-change-photo"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
-                            document.getElementById('tarjetas-upload')?.click();
+                            tarjetasInputRef.current?.click();
                           }}
                         >
                           <ImageIcon size={16} /> Cambiar Imagen
@@ -691,6 +707,7 @@ const Configurator: React.FC = () => {
                           className="btn-delete-photo"
                           title="Eliminar imagen"
                           onClick={(e) => {
+                            e.preventDefault();
                             e.stopPropagation();
                             setNewTarjeta(prev => ({ ...prev, imagen: '' }));
                           }}

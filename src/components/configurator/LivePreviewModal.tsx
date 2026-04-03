@@ -40,7 +40,7 @@ const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, pr
         style={{ 
           backdropFilter: 'blur(40px)', 
           WebkitBackdropFilter: 'blur(40px)',
-          background: 'rgba(2, 6, 23, 0.9)', // bg-slate-950/90
+          background: 'radial-gradient(circle at center, rgba(30, 41, 59, 0.9) 0%, rgba(15, 23, 42, 0.95) 100%)',
           zIndex: 9999 
         }}
       >
