@@ -448,3 +448,12 @@
     color: var(--mc-text-green) !important;
     text-shadow: 1px 1px 0 #000 !important;
 }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    .theme-minecraft.ravyn-canvas,
+    .ravyn-canvas[data-theme="minecraft"] {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

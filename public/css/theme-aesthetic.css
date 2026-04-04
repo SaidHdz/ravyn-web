@@ -355,3 +355,11 @@ body.theme-aesthetic, .ravyn-canvas.theme-aesthetic {
 .theme-aesthetic .wrapped-peak-bar.is-peak { background: linear-gradient(0deg, var(--aes-glow), #d8b4fe) !important; box-shadow: 0 0 20px rgba(167, 139, 250, 0.4) !important; }
 .theme-aesthetic .wrapped-highlight-text { color: #d8b4fe !important; text-shadow: 0 0 15px rgba(216, 180, 254, 0.3) !important; }
 .theme-aesthetic .wrapped-custom-loader { border: 3px solid rgba(255,255,255,0.05) !important; border-top-color: var(--aes-glow) !important; }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    body.theme-aesthetic, .ravyn-canvas.theme-aesthetic {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

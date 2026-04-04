@@ -215,3 +215,11 @@
 body.theme-finn::-webkit-scrollbar, body.theme-finn *::-webkit-scrollbar { width: 12px !important; }
 body.theme-finn::-webkit-scrollbar-track, body.theme-finn *::-webkit-scrollbar-track { background: rgba(0,0,0,0.05) !important; border-left: 3px solid #000 !important; }
 body.theme-finn::-webkit-scrollbar-thumb, body.theme-finn *::-webkit-scrollbar-thumb { background: var(--fn-blue-shirt) !important; border: 3px solid #000 !important; border-radius: 10px !important; }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    .ravyn-canvas.theme-finn {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

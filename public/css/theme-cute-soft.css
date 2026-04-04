@@ -531,3 +531,11 @@ body.theme-cute-soft #marco-reproductor {
 .theme-cute-soft .wrapped-highlight-text {
     color: var(--cute-accent-pink) !important;
 }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    .ravyn-canvas.theme-cute-soft {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

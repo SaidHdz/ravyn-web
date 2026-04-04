@@ -267,3 +267,11 @@ body.theme-lsp *::-webkit-scrollbar-thumb {
     border: 2px solid var(--lsp-border) !important;
     border-radius: 10px !important;
 }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    .ravyn-canvas.theme-lsp {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

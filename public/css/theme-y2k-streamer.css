@@ -528,3 +528,11 @@ body.theme-y2k-streamer #marco-reproductor {
     box-shadow: 15px 15px 0 var(--y2k-cyan) !important;
     filter: brightness(1.1);
 }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    body.theme-y2k-streamer, .ravyn-canvas.theme-y2k-streamer {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}

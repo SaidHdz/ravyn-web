@@ -471,3 +471,11 @@ body.theme-neo-japan #marco-reproductor {
     box-shadow: 0 0 30px rgba(225, 193, 126, 0.3) !important;
     transform: translateY(-12px) scale(1.02) !important;
 }
+
+/* === MOBILE FIX: SHADOW CLIPPING === */
+@media (max-width: 600px) {
+    body.theme-neo-japan, .ravyn-canvas.theme-neo-japan {
+        padding: 5px 2px !important;
+        overflow-x: hidden !important;
+    }
+}
