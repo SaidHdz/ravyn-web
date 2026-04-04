@@ -1,12 +1,20 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { Wrapped as WrappedType, Slide } from '@/types/pedido';
 
 const Counter: React.FC<{ value: number | string, duration?: number, active: boolean }> = ({ value, duration = 2000, active }) => {
   const [count, setCount] = useState(0);
-  const target = typeof value === 'string' ? parseInt(value.replace(/[^0-9]/g, '')) : value;
+  
+  const target = useMemo(() => {
+    if (typeof value === 'number') return value;
+    const clean = value.replace(/[^0-9.]/g, '');
+    const num = parseFloat(clean);
+    return value.toLowerCase().includes('k') ? num * 1000 : num;
+  }, [value]);
+
+  const suffix = typeof value === 'string' && value.toLowerCase().includes('k') ? 'k' : '';
 
   useEffect(() => {
-    if (!active) {
+    if (!active || isNaN(target)) {
       setCount(0);
       return;
     }
@@ -25,7 +33,7 @@ const Counter: React.FC<{ value: number | string, duration?: number, active: boo
     return () => window.cancelAnimationFrame(requestRef);
   }, [target, duration, active]);
 
-  return <span>{count.toLocaleString()}{typeof value === 'string' && value.includes('k') ? 'k' : ''}</span>;
+  return <span>{suffix ? (count / 1000).toFixed(1) : count.toLocaleString()}{suffix}</span>;
 };
 
 interface WrappedProps {
@@ -35,13 +43,17 @@ interface WrappedProps {
 const Wrapped: React.FC<WrappedProps> = ({ data }) => {
   const [currentSlideIndex, setCurrentSlideIndex] = useState(0);
   const [progress, setProgress] = useState(0);
-  const { diapositivas, config } = data;
+  
+  // Guardas para evitar errores si la data viene incompleta
+  const diapositivas = data?.diapositivas || [];
+  const config = data?.config || { velocidad_slide_segundos: 6 };
   const duration = (config.velocidad_slide_segundos || 6) * 1000;
   
   const startTimeRef = useRef<number>(0);
   const requestRef = useRef<number>();
 
   const nextSlide = () => {
+    if (diapositivas.length === 0) return;
     if (currentSlideIndex < diapositivas.length - 1) {
       setCurrentSlideIndex(prev => prev + 1);
       setProgress(0);
@@ -70,12 +82,17 @@ const Wrapped: React.FC<WrappedProps> = ({ data }) => {
   };
 
   useEffect(() => {
+    if (diapositivas.length === 0) return;
     startTimeRef.current = 0;
     requestRef.current = requestAnimationFrame(animate);
     return () => {
       if (requestRef.current) cancelAnimationFrame(requestRef.current);
     };
-  }, [currentSlideIndex]);
+  }, [currentSlideIndex, diapositivas.length]);
+
+  if (diapositivas.length === 0) {
+    return <div className="wrapped-card-ui" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'rgba(255,255,255,0.5)' }}>Cargando Wrapped...</div>;
+  }
 
   const formatSpotifyUrl = (url: string) => {
     if (!url) return "";

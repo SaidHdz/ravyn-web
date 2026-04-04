@@ -41,20 +41,9 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDragging) return;
-    
     const diffX = e.clientX - startPos.current.x;
-    const diffY = e.clientY - startPos.current.y;
-
-    // Relajamos la restricción vertical: solo cancela si el movimiento vertical es MUCHO mayor que el horizontal
-    if (Math.abs(diffY) > Math.abs(diffX) * 1.5 && Math.abs(diffY) > 20) {
-      setIsDragging(false);
-      setDragOffset({ x: 0, y: 0 });
-      setRotation(0);
-      return;
-    }
-
     setDragOffset({ x: diffX, y: 0 });
-    setRotation(diffX * 0.08); // Aumentamos un poco la rotación para más feedback
+    setRotation(diffX * 0.08);
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
@@ -63,12 +52,11 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
     (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
 
     const diffX = e.clientX - startPos.current.x;
-    const threshold = window.innerWidth * 0.15; // Umbral más sensible (15%)
+    const threshold = 100;
 
     if (Math.abs(diffX) > threshold) {
       const direction = diffX > 0 ? 1 : -1;
       setDragOffset({ x: direction * window.innerWidth, y: 0 });
-      setRotation(diffX * 0.1);
       
       const cartaActual = cartasRestantes[cartasRestantes.length - 1];
       setIdCartaSaliendo(cartaActual.id);
@@ -80,11 +68,8 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
         setDragOffset({ x: 0, y: 0 });
         setRotation(0);
         setIdCartaSaliendo(null);
-        
-        if (nuevasCartas.length === 0) {
-          setEscena('final');
-        }
-      }, 400);
+        if (nuevasCartas.length === 0) setEscena('final');
+      }, 300);
     } else {
       setDragOffset({ x: 0, y: 0 });
       setRotation(0);
@@ -97,22 +82,17 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
       case 'minecraft': return 'abriendo-cofre';
       case 'cute-soft': return 'abriendo-caja';
       case 'aesthetic': return 'abriendo-lujo';
-      case 'finn': return 'animacion-abrir';
-      case 'jake': return 'animacion-abrir';
-      case 'lsp': return 'animacion-abrir';
-      case 'neo-japan': return 'animacion-abrir';
       default: return 'animacion-abrir';
     }
   };
 
   return (
-    <section id="modulo-tarjetas" className="modulo-ravyn" style={{ padding: '60px 0', minHeight: '85vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <main id="app-container" style={{ width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+    <section id="modulo-tarjetas" className="modulo-ravyn" style={{ padding: '60px 0', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <main id="app-container">
         
-        {/* ESCENA: SOBRE / PAQUETE */}
         {escena === 'sobre' && (
-          <section id="escena-sobre" className="escena activa">
-            <h1 id="mensaje-inicio">{data.config.mensaje_inicio}</h1>
+          <section className="escena activa">
+            <h1 id="mensaje-inicio" style={{ marginBottom: '40px' }}>{data.config.mensaje_inicio}</h1>
             <div 
               id="paquete-cartas" 
               className={`paquete ${abriendo ? `animacion-abrir ${getTemaClase()}` : ''}`}
@@ -123,22 +103,30 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
           </section>
         )}
 
-        {/* ESCENA: CARTAS / STACK */}
         {escena === 'cartas' && (
-          <section id="escena-cartas" className="escena activa">
-            <div id="stack-container">
+          <section className="escena activa">
+            <div id="stack-container" style={{ position: 'relative', width: '320px', height: '450px', margin: '0 auto' }}>
               {cartasRestantes.map((carta, index) => {
                 const isTop = index === cartasRestantes.length - 1;
                 const isLeaving = carta.id === idCartaSaliendo;
+                const depth = cartasRestantes.length - 1 - index;
                 
+                if (depth > 2 && !isLeaving) return null;
+
                 const style: React.CSSProperties = {
+                  position: 'absolute', // FORZADO: Amontonadas una arriba de la otra
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
                   zIndex: isLeaving ? 100 : index + 1,
                   transform: isTop 
                     ? `translateX(${dragOffset.x}px) rotate(${rotation}deg)` 
-                    : `scale(${1 - (cartasRestantes.length - 1 - index) * 0.05}) translateY(${(cartasRestantes.length - 1 - index) * 10}px)`,
-                  transition: isDragging ? 'none' : 'transform 0.4s ease-out',
-                  touchAction: 'none', // CLAVE: Evita scroll del navegador al arrastrar
-                  pointerEvents: isTop ? 'auto' : 'none', // Asegura que solo la de arriba sea interactiva
+                    : `scale(${1 - depth * 0.05}) translateY(${depth * 15}px)`,
+                  opacity: 1 - depth * 0.2,
+                  transition: isDragging && isTop ? 'none' : 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s',
+                  touchAction: 'none',
+                  pointerEvents: isTop ? 'auto' : 'none',
                 };
 
                 return (
@@ -153,12 +141,7 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
                   >
                     <div className="carta-inner">
                       <div className="image-container">
-                        <img 
-                          src={carta.imagen} 
-                          alt={carta.titulo} 
-                          draggable="false" 
-                          loading="lazy"
-                        />
+                        <img src={carta.imagen} alt={carta.titulo} draggable="false" />
                       </div>
                       <div className="carta-content">
                         <h3 className="card-title">{carta.titulo}</h3>
@@ -172,11 +155,10 @@ const Tarjetas: React.FC<TarjetasProps> = ({ data }) => {
           </section>
         )}
 
-        {/* ESCENA: FINAL */}
         {escena === 'final' && (
-          <section id="escena-final" className="escena activa">
-            <h2 id="mensaje-final">Has leído todas las cartas</h2>
-            <button id="btn-reiniciar" className="option-btn" onClick={reiniciar} style={{ width: 'auto', padding: '10px 30px' }}>Volver a leer</button>
+          <section className="escena activa">
+            <h2 id="mensaje-final" style={{ marginBottom: '20px' }}>Has leído todas las cartas</h2>
+            <button className="option-btn" onClick={reiniciar} style={{ width: 'auto', padding: '12px 35px' }}>Volver a leer</button>
           </section>
         )}
 

@@ -33,7 +33,7 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter, isStandal
     return packsModulos[packFilter] || configuracion_global.orden;
   };
 
-  const modulosAMostrar = getModulosAMostrar();
+  const modulosAMostrar = getModulosAMostrar().map(m => m.replace('modulo-', ''));
 
   // Efecto para aplicar el tema
   useEffect(() => {
@@ -70,7 +70,8 @@ const LienzoRavyn: React.FC<LienzoRavynProps> = ({ pedido, packFilter, isStandal
         component = pedido.evasivo ? <Evasivo data={pedido.evasivo} /> : null;
         break;
       case 'historia':
-        component = pedido.historia ? <Historia data={pedido.historia} /> : null;
+        const historiaData = pedido.historia || pedido.nuestra_historia;
+        component = historiaData ? <Historia data={historiaData} /> : null;
         break;
       case 'tarjetas':
         component = pedido.tarjetas ? <Tarjetas data={pedido.tarjetas} /> : null;

@@ -6,6 +6,7 @@ import { Pedido } from '@/types/pedido';
  */
 export const transformFormToLienzo = (formContent: any, activeModules: string[] = []): Pedido => {
   const temaGlobal = formContent.tema || 'neo-japan';
+  const cleanModules = activeModules.map(m => m.replace('modulo-', ''));
 
   const pedido: Pedido = {
     bienvenida: {
@@ -14,17 +15,14 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     },
     configuracion_global: {
       tema: temaGlobal,
-      orden: activeModules.map(m => m.replace('modulo-', ''))
+      orden: cleanModules
     }
   };
 
-  if (activeModules.includes('modulo-historia') || formContent.memorias?.length > 0) {
+  // --- Módulos Estándar ---
+  if (cleanModules.includes('historia')) {
     pedido.historia = {
-      config: {
-        tema: temaGlobal,
-        titulo_principal: 'Nuestra Historia',
-        subtitulo: formContent.historiaSubtitle || ''
-      },
+      config: { tema: temaGlobal, titulo_principal: 'Nuestra Historia', subtitulo: formContent.historiaSubtitle || '' },
       memorias: (formContent.memorias || []).map((m: any) => ({
         id: String(m.id || Date.now()),
         photo_url: m.foto || '',
@@ -37,7 +35,7 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     };
   }
 
-  if (activeModules.includes('modulo-contador') || formContent.contador?.fecha) {
+  if (cleanModules.includes('contador')) {
     pedido.contador = {
       config: { tema: temaGlobal },
       titulo: formContent.contador?.titulo || '',
@@ -46,38 +44,25 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     };
   }
 
-  if (activeModules.includes('modulo-tarjetas') || formContent.tarjetas?.length > 0) {
+  if (cleanModules.includes('tarjetas')) {
     pedido.tarjetas = {
-      config: {
-        tema: temaGlobal,
-        mensaje_inicio: formContent.mensajeInicioTarjetas || ''
-      },
+      config: { tema: temaGlobal, mensaje_inicio: formContent.mensajeInicioTarjetas || '' },
       cartas: (formContent.tarjetas || []).map((t: any) => ({
-        id: t.id,
-        titulo: t.titulo || '',
-        contenido: t.contenido || '',
-        imagen: t.imagen || ''
+        id: t.id, titulo: t.titulo || '', contenido: t.contenido || '', imagen: t.imagen || ''
       }))
     };
   }
 
-  if (activeModules.includes('modulo-trivia') || formContent.trivia?.preguntas?.length > 0) {
+  if (cleanModules.includes('trivia')) {
     pedido.trivia = {
-      config: {
-        tema: temaGlobal,
-        mensaje_inicio: '',
-        mensaje_exito: formContent.trivia?.mensajeExito || '',
-        mensaje_error: formContent.trivia?.mensajeError || ''
-      },
+      config: { tema: temaGlobal, mensaje_inicio: '', mensaje_exito: formContent.trivia?.mensajeExito || '', mensaje_error: formContent.trivia?.mensajeError || '' },
       preguntas: (formContent.trivia?.preguntas || []).map((p: any) => ({
-        pregunta: p.pregunta || '',
-        opciones: p.opciones || [],
-        correcta: p.correcta || 0
+        pregunta: p.pregunta || '', opciones: p.opciones || [], correcta: p.correcta || 0
       }))
     };
   }
 
-  if (activeModules.includes('modulo-evasivo') || formContent.evasivo?.pregunta) {
+  if (cleanModules.includes('evasivo')) {
     pedido.evasivo = {
       config: { tema: temaGlobal },
       pregunta: formContent.evasivo?.pregunta || '',
@@ -87,25 +72,19 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     };
   }
 
-  if (activeModules.includes('modulo-dedicatorias') || formContent.dedicatorias?.length > 0) {
+  if (cleanModules.includes('dedicatorias')) {
     pedido.dedicatorias = {
-      config: {
-        tema: temaGlobal,
-        mensaje_inicio: formContent.mensajeInicioDedic || ''
-      },
+      config: { tema: temaGlobal, mensaje_inicio: formContent.mensajeInicioDedic || '' },
       cartas: (formContent.dedicatorias || []).map((d: any) => ({
-        id: d.id,
-        titulo: d.titulo || '',
-        contenido: d.texto || '',
-        cancion: d.musica || ''
+        id: d.id, titulo: d.titulo || '', contenido: d.texto || '', cancion: d.musica || ''
       }))
     };
   }
 
-  if (activeModules.includes('modulo-wrapped')) {
+  // --- MÓDULO WRAPPED (MAPEO COMPLETO) ---
+  if (cleanModules.includes('wrapped')) {
     const w = formContent.wrapped || {};
     
-    // CONSTRUCCIÓN DINÁMICA DE DIAPOSITIVAS BASADA EN EL FORMULARIO
     const diapositivas = [
       {
         id: 'slide-intro',
@@ -137,13 +116,23 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
         }
       },
       {
-        id: 'slide-paciencia',
-        tipo: 'grafica_dona',
-        titulo: 'Nivel de Paciencia',
+        id: 'slide-horario',
+        tipo: 'horario_pico',
+        titulo: 'Hora de Intensidad',
         datos: {
-          subtitulo: '¿Quién aguantó más?',
-          etiquetas: ['Yo', 'Tú'],
-          valores: [w.pacienciaYo || 50, w.pacienciaTu || 50]
+          subtitulo: 'Cuando más nos mensajeamos',
+          pico_hora: w.horarioPico || '22:00',
+          valores: [20, 45, 70, 90, 100, 80, 40] // Curva de ejemplo centrada en el pico
+        }
+      },
+      {
+        id: 'slide-perdon',
+        tipo: 'medidor_perdon',
+        titulo: 'Nivel de Paz',
+        datos: {
+          subtitulo: 'Nuestra capacidad de reconciliación',
+          valor: w.pacienciaYo || 85, // Usamos la paciencia como valor del medidor
+          perdonador_top: w.perdonadorTop || 'Tú'
         }
       },
       {
@@ -152,13 +141,34 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
         titulo: 'Nuestra Canción',
         datos: { spotify_embed_url: w.cancionSpotify || '' }
       },
+      // --- PREMIOS / SUPERLATIVOS ---
       {
-        id: 'slide-premios',
+        id: 'award-1',
+        tipo: 'superlativo_custom',
+        titulo: 'El Mejor Chef',
+        datos: {
+          icono_award: '🍳',
+          ganador: w.premio1Ganador || 'Tú',
+          subtitulo: 'Por conquistar mi estómago cada día'
+        }
+      },
+      {
+        id: 'award-2',
+        tipo: 'superlativo_custom',
+        titulo: 'Se duerme en todo',
+        datos: {
+          icono_award: '😴',
+          ganador: w.premio2Ganador || 'Yo',
+          subtitulo: 'Incluso en las pelis de acción'
+        }
+      },
+      {
+        id: 'award-3',
         tipo: 'superlativo_custom',
         titulo: 'Premio al Drama',
         datos: {
           icono_award: '🎭',
-          ganador: w.premio1Ganador || 'Ambos',
+          ganador: w.premio3Ganador || 'Ambos',
           subtitulo: 'Por las mejores escenas de este año'
         }
       },
