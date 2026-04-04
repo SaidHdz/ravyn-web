@@ -17,7 +17,7 @@ const SuccessPage: React.FC = () => {
     }
   }, [location, navigate]);
 
-  const finalUrl = `https://ravyn.studio/experience/${orderData?.order_id || 'tu-historia'}`;
+  const finalUrl = `https://ravynstudio.mx/${orderData?.chosen_slug || orderData?.order_id || 'tu-historia'}`;
 
   return (
     <div className="success-page-container" style={{
