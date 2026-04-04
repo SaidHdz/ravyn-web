@@ -18,9 +18,10 @@ const Viewer: React.FC = () => {
       setError(null);
 
       try {
+        // 1. CAMBIAMOS 'payload' por 'config_json' que es tu columna real
         const { data, error: supabaseError } = await supabase
           .from('pedidos')
-          .select('payload')
+          .select('config_json') 
           .eq('slug', slug)
           .single();
 
@@ -29,15 +30,20 @@ const Viewer: React.FC = () => {
           throw new Error('Experiencia no encontrada');
         }
 
-        if (!data || !data.payload) {
+        // 2. VERIFICAMOS 'config_json' en lugar de 'payload'
+        if (!data || !data.config_json) {
           console.warn('⚠️ No se recibieron datos para este slug.');
           throw new Error('Experiencia no encontrada');
         }
 
-        console.log('✅ Datos recibidos de Supabase:', data.payload);
-        setPedidoData(data.payload.body);
+        console.log('✅ Datos recibidos de Supabase:', data.config_json);
+
+        // 3. PASAMOS LOS DATOS DIRECTAMENTE (Sin el .body)
+        // Según tu Supabase, los datos ya están limpios en config_json
+        setPedidoData(data.config_json);
 
       } catch (err: any) {
+        console.error('❌ Error capturado:', err.message);
         setError(err.message || 'Error al cargar la experiencia');
       } finally {
         setLoading(false);
