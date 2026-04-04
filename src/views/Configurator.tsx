@@ -40,13 +40,24 @@ import {
   Wand2
 } from 'lucide-react';
 import WrappedFormConfigurator from '@/components/configurator/WrappedFormConfigurator';
+import { loadStripe } from '@stripe/stripe-js';
+import { supabase } from '@/lib/supabase';
 import ThemeManager from '@/components/ThemeManager';
 import LivePreviewModal from '@/components/configurator/LivePreviewModal';
 import { transformFormToLienzo } from '@/utils/mapeadorPedido';
 import '@/styles/landing/configurator.css';
 
 const N8N_WEBHOOK_URL = 'https://ravyb.app.n8n.cloud/webhook/v1/nueva-experiencia'; 
+const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY || '';
 
+const fileToBase64 = (file: File | Blob): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = error => reject(error);
+  });
+};
 const RESERVED_SLUGS = ['admin', 'configurator', 'success', 'api'];
 
 const THEME_OPTIONS = [
@@ -265,35 +276,6 @@ const Configurator: React.FC = () => {
   const [processingStep, setProcessingStep] = useState<'compressing' | 'uploading' | 'generating' | 'success' | 'error'>('compressing');
   const [uploadProgressText, setUploadProgressText] = useState('');
 
-  const uploadToCloudinary = async (file: File | Blob, fileName: string): Promise<string> => {
-    console.log(`📤 INTENTANDO SUBIR A CLOUDINARY: ${fileName}`);
-    
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', 'fotos-ravyn');
-      
-      const response = await fetch(`https://api.cloudinary.com/v1_1/dswdggrg8/image/upload`, {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await response.json();
-      console.log("📤 Respuesta de Cloudinary:", data);
-
-      if (!response.ok) {
-        console.error("❌ Error Cloudinary:", data);
-        throw new Error('Error al subir a Cloudinary: ' + (data.error?.message || 'Unknown error'));
-      }
-      
-      console.log("🔥 SUBIDA EXITOSA:", data.secure_url);
-      return data.secure_url;
-    } catch (err) {
-      console.error("🔥 Fallo crítico en uploadToCloudinary:", err);
-      throw err;
-    }
-  };
-
   const processOrderAndDeploy = async () => {
     setProcessingOrder(true);
     setProcessingStep('compressing');
@@ -302,12 +284,12 @@ const Configurator: React.FC = () => {
     try {
       const finalPedido = transformFormToLienzo(projectConfig, modules);
       const imageOptions = { maxSizeMB: 0.8, maxWidthOrHeight: 1280, useWebWorker: true };
-      const itemsToUpload: { parent: any; key: string; url: string; name: string }[] = [];
+      const itemsToProcess: { parent: any; key: string; url: string; name: string }[] = [];
       
       if (finalPedido.historia?.memorias) {
         finalPedido.historia.memorias.forEach((m, i) => {
           if (m.photo_url && (m.photo_url.startsWith('blob:') || m.photo_url.startsWith('data:image'))) {
-            itemsToUpload.push({ parent: finalPedido.historia!.memorias[i], key: 'photo_url', url: m.photo_url, name: `historia-${i}` });
+            itemsToProcess.push({ parent: finalPedido.historia!.memorias[i], key: 'photo_url', url: m.photo_url, name: `historia-${i}` });
           }
         });
       }
@@ -315,7 +297,7 @@ const Configurator: React.FC = () => {
       if (finalPedido.tarjetas?.cartas) {
         finalPedido.tarjetas.cartas.forEach((c, i) => {
           if (c.imagen && (c.imagen.startsWith('blob:') || c.imagen.startsWith('data:image'))) {
-            itemsToUpload.push({ parent: finalPedido.tarjetas!.cartas[i], key: 'imagen', url: c.imagen, name: `tarjeta-${i}` });
+            itemsToProcess.push({ parent: finalPedido.tarjetas!.cartas[i], key: 'imagen', url: c.imagen, name: `tarjeta-${i}` });
           }
         });
       }
@@ -323,76 +305,85 @@ const Configurator: React.FC = () => {
       if (finalPedido.wrapped?.diapositivas) {
         finalPedido.wrapped.diapositivas.forEach((d, i) => {
           if (d.datos?.imagen && (d.datos.imagen.startsWith('blob:') || d.datos.imagen.startsWith('data:image'))) {
-            itemsToUpload.push({ parent: finalPedido.wrapped!.diapositivas[i].datos, key: 'imagen', url: d.datos.imagen, name: `wrapped-${i}` });
+            itemsToProcess.push({ parent: finalPedido.wrapped!.diapositivas[i].datos, key: 'imagen', url: d.datos.imagen, name: `wrapped-${i}` });
           }
         });
       }
 
-      for (let i = 0; i < itemsToUpload.length; i++) {
-        const item = itemsToUpload[i];
+      // 1. PROCESAMIENTO A BASE64 (Sin subir a Cloudinary aún)
+      for (let i = 0; i < itemsToProcess.length; i++) {
+        const item = itemsToProcess[i];
         if (!item.url || item.url.startsWith('https')) continue;
 
-        setProcessingStep('compressing');
-        setUploadProgressText(`Optimizando fotos (${i + 1}/${itemsToUpload.length})...`);
+        setUploadProgressText(`Procesando recuerdos (${i + 1}/${itemsToProcess.length})...`);
         
         const blob = await fetch(item.url).then(r => r.blob());
         if (!(blob instanceof Blob) || !blob.type.includes('image')) continue;
 
-        console.log(`📸 Procesando archivo ${item.name} de tipo:`, blob.type);
-        
         const fileType = blob.type || 'image/jpeg';
         const compressedFile = await imageCompression(
           new File([blob], `${item.name}.jpg`, { type: fileType }), 
           imageOptions
         );
         
-        setProcessingStep('uploading');
-        setUploadProgressText(`Subiendo a la nube (${i + 1}/${itemsToUpload.length})...`);
-        
-        const secureUrl = await uploadToCloudinary(compressedFile, item.name);
-        item.parent[item.key] = secureUrl;
+        // Convertimos a Base64 para guardar en Supabase
+        const base64Data = await fileToBase64(compressedFile);
+        item.parent[item.key] = base64Data;
       }
+
+      setProcessingStep('uploading');
+      setUploadProgressText('Guardando borrador...');
+
+      // 2. GUARDAR EN SUPABASE BORRADORES
+      const orderId = `RAV-${Date.now()}`;
+      const { data: draftData, error: draftError } = await supabase
+        .from('borradores')
+        .insert({
+          config_json: finalPedido,
+          email_cliente: emailCliente,
+          chosen_slug: chosenSlug,
+          order_id: orderId,
+          total_mxn: total,
+          status: 'pending_payment'
+        })
+        .select()
+        .single();
+
+      if (draftError) throw draftError;
 
       setProcessingStep('generating');
-      setUploadProgressText('Generando tu link mágico...');
+      setUploadProgressText('Redirigiendo a pago seguro...');
 
-      console.log("✅ JSON FINAL (URLS CLOUDINARY):", finalPedido);
-      console.log("📡 ENVIANDO A WEBHOOK...");
+      // 3. SALTAR A STRIPE CHECKOUT
+      const stripe = await loadStripe(STRIPE_PUBLIC_KEY);
+      if (!stripe) throw new Error('No se pudo cargar Stripe');
 
-      // 2. ENVÍO AL WEBHOOK
-      const orderId = `RAV-${Date.now()}`;
-      try {
-        await fetch(N8N_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            ...finalPedido,
-            email_cliente: emailCliente, 
-            chosen_slug: chosenSlug,
-            order_id: orderId
-          }),
-        });
-      } catch (webhookError) {
-        console.warn("⚠️ Webhook falló o bloqueó respuesta:", webhookError);
-      }
+      // Llamamos a nuestra función de backend para crear la sesión
+      const response = await fetch('/.netlify/functions/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          draft_id: draftData.id,
+          email: emailCliente,
+          order_id: orderId,
+          total: total,
+          success_url: `${window.location.origin}/exito?session_id={CHECKOUT_SESSION_ID}`,
+          cancel_url: window.location.href
+        }),
+      });
 
-      setProcessingStep('success');
-      setUploadProgressText('¡Todo listo! Redirigiendo...');
+      const session = await response.json();
       
-      setTimeout(() => navigate('/success', { 
-        state: { 
-          pedido: {
-            ...finalPedido,
-            chosen_slug: chosenSlug,
-            order_id: orderId
-          } 
-        } 
-      }), 2000);
+      if (session.error) throw new Error(session.error);
+
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) throw result.error;
 
     } catch (error) {
-      console.error('Error en el pipeline:', error);
+      console.error('Error en el pipeline de pago:', error);
       setProcessingStep('error');
     }
   };

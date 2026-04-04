@@ -13,6 +13,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
   const [isAnimating, setIsAnimating] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isShaking, setIsShaking] = useState(false);
+  const [isWrong, setIsWrong] = useState(false); // Estado para el fondo de error
 
   const startGame = () => {
     setScene('game');
@@ -22,6 +23,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
     setIsAnimating(false);
     setIsFadingOut(false);
     setIsShaking(false);
+    setIsWrong(false);
   };
 
   const handleOptionClick = (index: number) => {
@@ -34,7 +36,10 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
       setScore(prev => prev + 1);
     } else {
       setIsShaking(true);
-      setTimeout(() => setIsShaking(false), 500);
+      setIsWrong(true);
+      setTimeout(() => {
+        setIsShaking(false);
+      }, 500);
     }
 
     setTimeout(() => {
@@ -45,8 +50,10 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
           setSelectedOption(null);
           setIsAnimating(false);
           setIsFadingOut(false);
+          setIsWrong(false);
         } else {
           setScene('results');
+          setIsWrong(false);
         }
       }, 300);
     }, 1500);
@@ -64,7 +71,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
   };
 
   return (
-    <section className="modulo-ravyn fondo-trivia" style={{ padding: '40px 0', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+    <section className={`modulo-ravyn fondo-trivia ${isWrong ? 'trivia-error-bg' : ''}`} style={{ padding: '40px 0', minHeight: '600px', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.3s ease' }}>
       <div id="trivia-module" className={`trivia-card ${isShaking ? 'shake-anim' : ''}`} style={{ maxWidth: '600px', width: '90%', margin: '0 auto' }}>
         
         {/* SCENE: INTRO */}
@@ -85,7 +92,7 @@ const Trivia: React.FC<TriviaProps> = ({ data }) => {
                 style={{ 
                   width: `${progressPercentage}%`, 
                   height: '10px', 
-                  backgroundColor: '#ff4757', 
+                  backgroundColor: 'var(--cute-accent-pink, #ff4757)', 
                   transition: 'width 0.3s ease' 
                 }}
               ></div>

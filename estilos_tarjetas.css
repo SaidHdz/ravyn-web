@@ -1,5 +1,5 @@
 /* =========================================================
-   MÓDULO: CARTAS DESLIZABLES (SWIPE) - RESTAURACIÓN TOTAL
+   MÓDULO: CARTAS DESLIZABLES (SWIPE) - RECONSTRUCCIÓN TOTAL
    ========================================================= */
 *, *:before, *:after {
     box-sizing: border-box;
@@ -24,14 +24,94 @@
     justify-content: center;
     align-items: center;
     transition: opacity 0.5s ease;
+    z-index: 10;
 }
 
 .escena.activa { opacity: 1; visibility: visible; }
 
-/* --- STACK DE CARTAS (RESTAURADO Y BLINDADO) --- */
+/* --- EL SOBRE (PACK OPENER) - DISEÑO BASE --- */
+.paquete {
+    position: relative;
+    width: 280px; 
+    height: 180px;
+    background: #ffffff !important;
+    border: 4px solid #ff85a2 !important;
+    border-radius: 20px !important;
+    cursor: pointer;
+    z-index: 50;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 20px 50px rgba(255, 133, 162, 0.3) !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.paquete:hover { transform: scale(1.05) translateY(-10px); }
+
+/* El Moño My Melody (Visible por defecto) */
+.paquete::before {
+    content: "🎀" !important;
+    display: block !important;
+    position: absolute !important;
+    top: -45px !important;
+    left: -35px !important;
+    font-size: 5rem !important;
+    filter: drop-shadow(0 5px 15px rgba(255, 133, 162, 0.4)) !important;
+    z-index: 60 !important;
+    transform: rotate(-15deg) !important;
+}
+
+/* Sello de Corazón (Visible por defecto) */
+.paquete .pestillo {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    width: 85px !important;
+    height: 85px !important;
+    background: #ff4757 !important;
+    border: 5px solid #ffffff !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 3.5rem !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 25px rgba(255, 71, 87, 0.5) !important;
+    z-index: 70 !important;
+    animation: heartBeat 1.2s infinite !important;
+}
+
+.paquete .pestillo::after {
+    content: "♥" !important;
+    display: block !important;
+}
+
+/* Tapa del sobre */
+.paquete::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+        linear-gradient(45deg, transparent 48%, #ffe4ec 50%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, #ffe4ec 50%, transparent 52%) !important;
+    background-size: 100% 100% !important;
+    border-radius: 16px !important;
+    z-index: 1 !important;
+    opacity: 0.8 !important;
+}
+
+@keyframes heartBeat {
+    0%, 100% { transform: translate(-50%, -50%) scale(1); }
+    50% { transform: translate(-50%, -50%) scale(1.15); }
+}
+
+/* --- STACK DE CARTAS --- */
 #stack-container {
     position: relative;
-    width: 300px; /* Ancho base ideal para movil y showcase */
+    width: 300px;
     height: 420px; 
     margin: 20px auto;
     perspective: 1000px;
@@ -39,103 +119,57 @@
 
 .carta {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0; width: 100%; height: 100%;
     touch-action: none;
     filter: drop-shadow(0 10px 25px rgba(0,0,0,0.12));
     will-change: transform, opacity;
 }
 
 .carta-inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
     background: #ffffff;
     border-radius: 24px;
     overflow: hidden;
     border: 1px solid rgba(0,0,0,0.05);
-    box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
 }
 
 .image-container {
-    width: 100%;
-    height: 200px; /* Altura fija para consistencia */
-    flex-shrink: 0;
-    overflow: hidden;
+    width: 100%; height: 200px;
+    flex-shrink: 0; overflow: hidden;
     background: #f8f9fa;
 }
 
-.image-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    pointer-events: none;
-}
+.image-container img { width: 100%; height: 100%; object-fit: cover; }
 
 .carta-content {
-    padding: 25px;
-    flex-grow: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    padding: 25px; flex-grow: 1;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
     text-align: center;
 }
 
-.card-title {
-    margin: 0 0 10px 0;
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: #1A4073;
-}
+.card-title { margin: 0 0 10px 0; font-size: 1.4rem; font-weight: 800; color: #1A4073; }
+.card-description { margin: 0; font-size: 1rem; line-height: 1.5; color: #64748b; }
 
-.card-description {
-    margin: 0;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #64748b;
+/* --- TEMA MINECRAFT ADAPTATION --- */
+[data-theme="minecraft"] .paquete {
+    background: #7d5b41 !important;
+    border: 6px solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: 0 15px 0 rgba(0,0,0,0.2) !important;
 }
-
-/* --- PACK OPENER STYLES --- */
-.paquete {
-    position: relative;
-    width: 160px; height: 220px;
-    cursor: pointer;
-    z-index: 5;
-    transition: transform 0.3s ease;
+[data-theme="minecraft"] .paquete::before { content: "" !important; }
+[data-theme="minecraft"] .paquete .pestillo {
+    border-radius: 0 !important;
+    background: #8a8a8a !important;
+    width: 40px !important; height: 60px !important;
 }
-.paquete:hover { transform: scale(1.05); }
+[data-theme="minecraft"] .paquete .pestillo::after { content: "" !important; }
 
-/* --- ADAPTACIONES POR TEMA --- */
-[data-theme="minecraft"] .carta-inner {
-    background-color: #2b323c; border: 4px solid #000;
-    box-shadow: inset -4px -4px 0 rgba(0,0,0,0.4);
-}
-[data-theme="minecraft"] .card-title { color: #3adb3a; font-family: 'VT323', monospace; }
-
-[data-theme="cute-soft"] .carta-inner {
-    border-radius: 40px; border: 4px solid #fff;
-    box-shadow: 0 10px 30px rgba(255, 102, 170, 0.1);
-}
-
-[data-theme="aesthetic"] .carta-inner {
-    background: rgba(30, 30, 35, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-}
-[data-theme="aesthetic"] .card-title { color: #8b5cf6; }
-[data-theme="aesthetic"] .card-description { color: rgba(255,255,255,0.7); }
-
-/* Ajuste móvil extremo */
-@media (max-width: 380px) {
-    #stack-container {
-        width: 280px;
-        height: 400px;
-    }
-    .image-container { height: 180px; }
-    .card-title { font-size: 1.2rem; }
-    .card-description { font-size: 0.9rem; }
+/* ANIMACIONES */
+.abriendo-caja { animation: openCutePack 1s forwards ease-in; }
+@keyframes openCutePack {
+    0% { transform: scale(1); }
+    100% { transform: scale(2); opacity: 0; filter: blur(10px); }
 }
