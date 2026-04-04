@@ -36,11 +36,15 @@ const Viewer: React.FC = () => {
           throw new Error('Experiencia no encontrada');
         }
 
-        console.log('✅ Datos recibidos de Supabase:', data.config_json);
-
-        // 3. PASAMOS LOS DATOS DIRECTAMENTE (Sin el .body)
-        // Según tu Supabase, los datos ya están limpios en config_json
-        setPedidoData(data.config_json);
+        // 3. PASAMOS LOS DATOS CON COMPATIBILIDAD HACIA ATRÁS
+        // Verificamos si los datos están envueltos en un ".body" (pedidos antiguos)
+        if (data.config_json.body) {
+          console.log('✅ Datos recibidos (Formato Antiguo con .body):', data.config_json.body);
+          setPedidoData(data.config_json.body);
+        } else {
+          console.log('✅ Datos recibidos (Formato Nuevo Directo):', data.config_json);
+          setPedidoData(data.config_json);
+        }
 
       } catch (err: any) {
         console.error('❌ Error capturado:', err.message);
