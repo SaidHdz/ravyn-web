@@ -5,6 +5,7 @@ import App from '@/App.tsx'
 import Landing from '@/views/Landing.tsx'
 import ModuleViewer from '@/views/ModuleViewer.tsx'
 import Configurator from '@/views/Configurator.tsx'
+import SuccessPage from '@/views/SuccessPage.tsx'
 import '@@/global.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -16,6 +17,9 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 
         {/* Formulario de Configuración (Arquitecto) */}
         <Route path="/configurator" element={<Configurator />} />
+
+        {/* Ruta de Éxito Post-Pago */}
+        <Route path="/success" element={<SuccessPage />} />
 
         {/* Página para ver un pedido específico */}
 

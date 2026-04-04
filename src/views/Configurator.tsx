@@ -1,15 +1,51 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import imageCompression from 'browser-image-compression';
 import { 
-  ArrowLeft, CheckCircle2, ChevronRight, ChevronLeft, Heart, Palette, Type, 
-  Camera, Plus, Trash2, Calendar, MapPin, Image as ImageIcon, Upload, Clock, Layers, Gamepad2, Check, MousePointer2, Music, Mail, 
-  ShoppingBag, Sparkles, Layout, Pencil, Zap, Hourglass, Image as PhotoFrame, HelpCircle, Users, Eye
+  X,
+  Check,
+  ArrowLeft, 
+  CheckCircle2, 
+  ChevronRight, 
+  ChevronLeft, 
+  Heart, 
+  Palette, 
+  Type, 
+  Camera, 
+  Plus, 
+  Trash2, 
+  Calendar, 
+  MapPin, 
+  Image as ImageIcon, 
+  Upload, 
+  Clock, 
+  Layers, 
+  Gamepad2, 
+  MousePointer2, 
+  Music, 
+  Mail, 
+  ShoppingBag, 
+  Sparkles, 
+  Layout, 
+  Pencil, 
+  Zap, 
+  Hourglass, 
+  Image as PhotoFrame, 
+  HelpCircle, 
+  Users, 
+  Eye, 
+  Loader2, 
+  CloudUpload, 
+  Wand2
 } from 'lucide-react';
 import WrappedFormConfigurator from '@/components/configurator/WrappedFormConfigurator';
 import ThemeManager from '@/components/ThemeManager';
 import LivePreviewModal from '@/components/configurator/LivePreviewModal';
+import { transformFormToLienzo } from '@/utils/mapeadorPedido';
 import '@/styles/landing/configurator.css';
+
+const N8N_WEBHOOK_URL = 'https://webhook.site/117e6717-9967-45fa-befb-b9bab4c20e60'; 
 
 const THEME_OPTIONS = [
   { id: 'y2k-streamer', name: 'Y2K', color: '#ff66cc' },
@@ -158,14 +194,16 @@ const Configurator: React.FC = () => {
 
     if (file.size > 5 * 1024 * 1024) {
       alert('La imagen es demasiado grande. Máximo 5MB.');
-      e.target.value = ''; // Clean up on error
+      try {
+        if (e.target) e.target.value = ''; 
+      } catch (err) {}
       return;
     }
 
     setIsUploading(true);
     setUploadProgress(0);
 
-    // Simulamos una subida "mágica"
+    // Simulamos una subida "mágica" para previsualización inmediata
     const interval = setInterval(() => {
       setUploadProgress(prev => {
         if (prev >= 100) {
@@ -181,13 +219,229 @@ const Configurator: React.FC = () => {
             setUploadProgress(0);
           };
           reader.readAsDataURL(file);
-          // Limpiar input tras subir para poder subir el mismo archivo en caso de error/cancelar
-          e.target.value = '';
+          try {
+            if (e.target) e.target.value = '';
+          } catch (err) {}
           return 100;
         }
         return prev + 10;
       });
     }, 100);
+  };
+
+  const [processingOrder, setProcessingOrder] = useState(false);
+  const [processingStep, setProcessingStep] = useState<'compressing' | 'uploading' | 'generating' | 'success' | 'error'>('compressing');
+  const [uploadProgressText, setUploadProgressText] = useState('');
+
+  const uploadToCloudinary = async (file: File | Blob, fileName: string): Promise<string> => {
+    console.log(`📤 INTENTANDO SUBIR A CLOUDINARY: ${fileName}`);
+    
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', 'fotos-ravyn');
+      
+      const response = await fetch(`https://api.cloudinary.com/v1_1/dswdggrg8/image/upload`, {
+        method: 'POST',
+        body: formData,
+      });
+
+      const data = await response.json();
+      console.log("📤 Respuesta de Cloudinary:", data);
+
+      if (!response.ok) {
+        console.error("❌ Error Cloudinary:", data);
+        throw new Error('Error al subir a Cloudinary: ' + (data.error?.message || 'Unknown error'));
+      }
+      
+      console.log("🔥 SUBIDA EXITOSA:", data.secure_url);
+      return data.secure_url;
+    } catch (err) {
+      console.error("🔥 Fallo crítico en uploadToCloudinary:", err);
+      throw err;
+    }
+  };
+
+  const processOrderAndDeploy = async () => {
+    setProcessingOrder(true);
+    setProcessingStep('compressing');
+    setUploadProgressText('Preparando fotos...');
+
+    try {
+      const finalPedido = transformFormToLienzo(projectConfig, modules);
+      
+      // 1. COMPRESIÓN Y SUBIDA DE IMÁGENES
+      const imageOptions = { maxSizeMB: 0.8, maxWidthOrHeight: 1280, useWebWorker: true };
+      
+      const itemsToUpload: { parent: any; key: string; url: string; name: string }[] = [];
+      
+      // Escaneo profundo para detectar blobs o base64
+      if (finalPedido.historia?.memorias) {
+        finalPedido.historia.memorias.forEach((m, i) => {
+          if (m.photo_url && (m.photo_url.startsWith('blob:') || m.photo_url.startsWith('data:image'))) {
+            itemsToUpload.push({ parent: finalPedido.historia!.memorias[i], key: 'photo_url', url: m.photo_url, name: `historia-${i}` });
+          }
+        });
+      }
+      
+      if (finalPedido.tarjetas?.cartas) {
+        finalPedido.tarjetas.cartas.forEach((c, i) => {
+          if (c.imagen && (c.imagen.startsWith('blob:') || c.imagen.startsWith('data:image'))) {
+            itemsToUpload.push({ parent: finalPedido.tarjetas!.cartas[i], key: 'imagen', url: c.imagen, name: `tarjeta-${i}` });
+          }
+        });
+      }
+
+      if (finalPedido.wrapped?.diapositivas) {
+        finalPedido.wrapped.diapositivas.forEach((d, i) => {
+          if (d.datos?.imagen && (d.datos.imagen.startsWith('blob:') || d.datos.imagen.startsWith('data:image'))) {
+            itemsToUpload.push({ parent: finalPedido.wrapped!.diapositivas[i].datos, key: 'imagen', url: d.datos.imagen, name: `wrapped-${i}` });
+          }
+        });
+      }
+
+      for (let i = 0; i < itemsToUpload.length; i++) {
+        const item = itemsToUpload[i];
+        
+        // EVITAR RE-PROCESAMIENTO: Si ya es una URL de Cloudinary o externa, saltar
+        if (!item.url || item.url.startsWith('https')) continue;
+
+        setProcessingStep('compressing');
+        setUploadProgressText(`Optimizando fotos (${i + 1}/${itemsToUpload.length})...`);
+        
+        // Convertir URL (blob o base64) a Blob real
+        const blob = await fetch(item.url).then(r => r.blob());
+        
+        // SEGURIDAD: Validar que el blob sea una imagen válida
+        if (!(blob instanceof Blob) || !blob.type.startsWith('image')) {
+          console.warn(`⚠️ Saltando archivo no válido: ${item.name}`);
+          continue;
+        }
+
+        console.log(`📸 Procesando archivo ${item.name} de tipo:`, blob.type);
+        
+        const fileType = blob.type || 'image/jpeg';
+        const compressedFile = await imageCompression(
+          new File([blob], `${item.name}.jpg`, { type: fileType }), 
+          imageOptions
+        );
+        
+        setProcessingStep('uploading');
+        setUploadProgressText(`Subiendo a la nube (${i + 1}/${itemsToUpload.length})...`);
+        
+        const secureUrl = await uploadToCloudinary(compressedFile, item.name);
+        
+        // SUSTITUCIÓN REAL EN EL OBJETO
+        item.parent[item.key] = secureUrl;
+      }
+
+      setProcessingStep('generating');
+      setUploadProgressText('Generando tu link mágico...');
+
+      console.log("JSON FINAL PARA N8N (URLs Cloudinary):", finalPedido);
+      console.log("📡 ENVIANDO A WEBHOOK...");
+
+      // 2. ENVÍO AL WEBHOOK
+      try {
+        await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...finalPedido,
+            customer_email: 'customer@example.com', 
+            order_id: `RAV-${Date.now()}`
+          }),
+        });
+      } catch (webhookError) {
+        console.warn("⚠️ Webhook response non-readable (no-cors), assuming success:", webhookError);
+      }
+
+      setProcessingStep('success');
+      setUploadProgressText('¡Todo listo! Redirigiendo...');
+      
+      setTimeout(() => navigate('/success', { 
+        state: { 
+          pedido: {
+            ...finalPedido,
+            order_id: `RAV-${Date.now()}`
+          } 
+        } 
+      }), 2000);
+
+    } catch (error) {
+      console.error('Error en el pipeline:', error);
+      setProcessingStep('error');
+    }
+  };
+
+  const handleFinish = () => {
+    processOrderAndDeploy();
+  };
+
+  const renderProcessingModal = () => {
+    return (
+      <div className="pack-modal-overlay" style={{ zIndex: 10000, background: 'rgba(248, 250, 252, 0.95)', backdropFilter: 'blur(12px)' }}>
+        <motion.div 
+          className="processing-modal-card"
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          style={{ 
+            background: '#ffffff', 
+            padding: '3.5rem 2rem', 
+            borderRadius: '40px', 
+            textAlign: 'center', 
+            maxWidth: '480px', 
+            width: '90%',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.1)',
+            border: '1px solid rgba(0,0,0,0.05)',
+            color: '#0f172a'
+          }}
+        >
+          {processingStep === 'success' ? (
+            <div className="success-step">
+              <div className="success-icon-anim" style={{ background: '#10b981', color: '#fff', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem' }}>
+                <Check size={45} strokeWidth={3} />
+              </div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.75rem', color: '#1A4073' }}>¡Pedido Recibido!</h2>
+              <p style={{ color: '#64748b', fontSize: '1.1rem' }}>{uploadProgressText || 'Preparando tu acceso...'}</p>
+            </div>
+          ) : processingStep === 'error' ? (
+            <div className="error-step">
+              <div style={{ fontSize: '4rem', color: '#ef4444', marginBottom: '1.5rem' }}>[X]</div>
+              <h2 style={{ fontSize: '1.75rem', fontWeight: 800, marginBottom: '0.75rem', color: '#1A4073' }}>Vaya, algo falló</h2>
+              <p style={{ color: '#64748b', marginBottom: '2.5rem' }}>Hubo un error al procesar tus fotos. Por favor intenta de nuevo.</p>
+              <button onClick={() => setProcessingOrder(false)} className="btn-primary" style={{ background: '#ef4444', color: '#fff', padding: '1rem 2rem', borderRadius: '14px', border: 'none', fontWeight: 700, cursor: 'pointer' }}>Reintentar</button>
+            </div>
+          ) : (
+            <div className="loading-steps">
+              <div className="main-loader" style={{ marginBottom: '2.5rem' }}>
+                <Loader2 size={64} className="animate-spin" style={{ color: '#ef4444', margin: '0 auto' }} />
+              </div>
+              <h2 style={{ fontSize: '1.6rem', fontWeight: 800, marginBottom: '2.5rem', color: '#1A4073', letterSpacing: '-0.02em' }}>{uploadProgressText || 'Procesando...'}</h2>
+              
+              <div className="steps-vertical-list" style={{ textAlign: 'left', display: 'flex', flexDirection: 'column', gap: '1.5rem', padding: '0 2rem' }}>
+                <div className="step-item" style={{ display: 'flex', alignItems: 'center', gap: '16px', opacity: processingStep === 'compressing' ? 1 : 0.3, transition: 'all 0.3s' }}>
+                  <div className={`step-dot`} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#10b981', boxShadow: processingStep === 'compressing' ? '0 0 15px rgba(16, 185, 129, 0.5)' : 'none' }}></div>
+                  <Wand2 size={20} style={{ color: '#10b981' }} />
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: '#1e293b' }}>Optimizando recuerdos</span>
+                </div>
+                <div className="step-item" style={{ display: 'flex', alignItems: 'center', gap: '16px', opacity: processingStep === 'uploading' ? 1 : 0.3, transition: 'all 0.3s' }}>
+                  <div className={`step-dot`} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#ef4444', boxShadow: processingStep === 'uploading' ? '0 0 15px rgba(239, 68, 68, 0.5)' : 'none' }}></div>
+                  <CloudUpload size={20} style={{ color: '#ef4444' }} />
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: '#1e293b' }}>Subiendo a la nube</span>
+                </div>
+                <div className="step-item" style={{ display: 'flex', alignItems: 'center', gap: '16px', opacity: processingStep === 'generating' ? 1 : 0.3, transition: 'all 0.3s' }}>
+                  <div className={`step-dot`} style={{ width: '12px', height: '12px', borderRadius: '50%', background: '#f59e0b', boxShadow: processingStep === 'generating' ? '0 0 15px rgba(245, 158, 11, 0.5)' : 'none' }}></div>
+                  <Sparkles size={20} style={{ color: '#f59e0b' }} />
+                  <span style={{ fontSize: '1rem', fontWeight: 600, color: '#1e293b' }}>Generando link mágico</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </motion.div>
+      </div>
+    );
   };
 
   const steps = [
@@ -210,11 +464,6 @@ const Configurator: React.FC = () => {
   const handleBack = () => {
     if (currentStep > 0) setCurrentStep(prev => prev - 1);
     else navigate('/');
-  };
-
-  const handleFinish = () => {
-    console.log('PEDIDO FINALIZADO:', projectConfig);
-    alert('¡Experiencia completada! Redirigiendo al pago...');
   };
 
   // --- Lógica para Módulo HISTORIA ---
@@ -815,7 +1064,7 @@ const Configurator: React.FC = () => {
                 key={editingPreguntaId ? `edit-${editingPreguntaId}` : `new-${projectConfig.trivia.preguntas.length}`}
                 className={`memoria-form-card ${editingPreguntaId ? 'editing' : ''}`}
                 initial={{ opacity: 0, y: 10, scale: 0.98 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
+                animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, y: -10, scale: 0.98 }}
                 transition={{ duration: 0.2 }}
               >
@@ -847,7 +1096,7 @@ const Configurator: React.FC = () => {
                       <div key={idx} className={`option-input-group ${newPregunta.correcta === idx ? 'is-correct' : ''}`}>
                         <button 
                           className="btn-select-correct" 
-                          onClick={() => setNewPregunta({...newPregunta, correcta: idx})}
+                          onClick={(e) => { e.preventDefault(); e.stopPropagation(); setNewPregunta({...newPregunta, correcta: idx}); }}
                           title="Marcar como correcta"
                         >
                           {newPregunta.correcta === idx ? <CheckCircle2 size={18} /> : <div className="circle-placeholder" />}
@@ -1155,7 +1404,7 @@ const Configurator: React.FC = () => {
               {/* Botón de Preview Integrado (Ghost Button) */}
               <button 
                 className="btn-preview-ghost" 
-                onClick={() => setShowPreviewModal(true)}
+                onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowPreviewModal(true); }}
                 style={{ 
                   display: 'flex', 
                   alignItems: 'center', 
@@ -1246,7 +1495,7 @@ const Configurator: React.FC = () => {
                 )}
                 <button 
                   className={`btn-primary theme-${projectConfig.tema}`}
-                  onClick={handleNext}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleNext(); }}
                   style={{ backgroundColor: currentThemeColor }}
                 >
                   {currentStep === steps.length - 1 ? 'Pagar y Construir Experiencia' : 'Siguiente Paso'} 
@@ -1264,6 +1513,8 @@ const Configurator: React.FC = () => {
         projectConfig={projectConfig} 
         activeModules={modules} 
       />
+
+      {processingOrder && renderProcessingModal()}
     </div>
   );
 };
