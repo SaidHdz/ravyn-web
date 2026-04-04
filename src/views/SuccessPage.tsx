@@ -38,6 +38,7 @@ const SuccessPage: React.FC = () => {
         animate={{ opacity: 1, y: 0 }}
         style={{
           background: '#ffffff',
+          border: '1px solid rgba(0, 0, 0, 0.05)',
           padding: '4rem 2rem',
           borderRadius: '40px',
           textAlign: 'center',
@@ -55,7 +56,7 @@ const SuccessPage: React.FC = () => {
           style={{
             width: '90px',
             height: '90px',
-            background: '#10b981',
+            background: '#10b981', 
             borderRadius: '50%',
             display: 'flex',
             alignItems: 'center',

@@ -6,31 +6,24 @@ import Landing from '@/views/Landing.tsx'
 import ModuleViewer from '@/views/ModuleViewer.tsx'
 import Configurator from '@/views/Configurator.tsx'
 import SuccessPage from '@/views/SuccessPage.tsx'
+import Viewer from '@/views/Viewer.tsx'
 import '@@/global.css'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <Routes>
-        {/* Landing Page Principal */}
+        {/* 1. Rutas Estáticas (Prioridad Máxima) */}
         <Route path="/" element={<Landing />} />
-
-        {/* Formulario de Configuración (Arquitecto) */}
         <Route path="/configurator" element={<Configurator />} />
-
-        {/* Ruta de Éxito Post-Pago */}
         <Route path="/success" element={<SuccessPage />} />
-
-        {/* Página para ver un pedido específico */}
-
         <Route path="/experience/:id" element={<App />} />
-        
-        {/* Página de previsualización para el modal de packs */}
         <Route path="/preview" element={<App />} />
-        
-        {/* Rutas de debug para módulos aislados */}
         <Route path="/debug/:moduleType" element={<ModuleViewer />} />
         <Route path="/debug/:theme/:moduleType" element={<ModuleViewer />} />
+
+        {/* 2. Ruta Dinámica por Slug (Fallback / Última opción) */}
+        <Route path="/:slug" element={<Viewer />} />
       </Routes>
     </BrowserRouter>
   </React.StrictMode>,

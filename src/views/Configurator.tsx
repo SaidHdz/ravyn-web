@@ -45,7 +45,9 @@ import LivePreviewModal from '@/components/configurator/LivePreviewModal';
 import { transformFormToLienzo } from '@/utils/mapeadorPedido';
 import '@/styles/landing/configurator.css';
 
-const N8N_WEBHOOK_URL = 'https://webhook.site/117e6717-9967-45fa-befb-b9bab4c20e60'; 
+const N8N_WEBHOOK_URL = 'https://ravyb.app.n8n.cloud/webhook/v1/nueva-experiencia'; 
+
+const RESERVED_SLUGS = ['admin', 'configurator', 'success', 'api'];
 
 const THEME_OPTIONS = [
   { id: 'y2k-streamer', name: 'Y2K', color: '#ff66cc' },
@@ -130,6 +132,36 @@ const Configurator: React.FC = () => {
 
   const [currentStep, setCurrentStep] = useState(0);
   const [showPreviewModal, setShowPreviewModal] = useState(false);
+
+  // Estados para Identidad Digital (Modo Mantenimiento)
+  const [emailCliente, setEmailCliente] = useState('');
+  const [chosenSlug, setChosenSlug] = useState('');
+  const [isSlugAvailable, setIsSlugAvailable] = useState<boolean | null>(null);
+  const [isCheckingSlug, setIsCheckingSlug] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (chosenSlug.length < 3) {
+        setIsSlugAvailable(null);
+        return;
+      }
+      if (RESERVED_SLUGS.includes(chosenSlug.toLowerCase())) {
+        setIsSlugAvailable(false);
+        return;
+      }
+      setIsCheckingSlug(true);
+      setTimeout(() => {
+        setIsSlugAvailable(true);
+        setIsCheckingSlug(false);
+      }, 600);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [chosenSlug]);
+
+  const handleSlugChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    setChosenSlug(val);
+  };
   
   const [projectConfig, setProjectConfig] = useState({
     pareja: '',
@@ -265,17 +297,13 @@ const Configurator: React.FC = () => {
   const processOrderAndDeploy = async () => {
     setProcessingOrder(true);
     setProcessingStep('compressing');
-    setUploadProgressText('Preparando fotos...');
+    setUploadProgressText('Optimizando imágenes...');
 
     try {
       const finalPedido = transformFormToLienzo(projectConfig, modules);
-      
-      // 1. COMPRESIÓN Y SUBIDA DE IMÁGENES
       const imageOptions = { maxSizeMB: 0.8, maxWidthOrHeight: 1280, useWebWorker: true };
-      
       const itemsToUpload: { parent: any; key: string; url: string; name: string }[] = [];
       
-      // Escaneo profundo para detectar blobs o base64
       if (finalPedido.historia?.memorias) {
         finalPedido.historia.memorias.forEach((m, i) => {
           if (m.photo_url && (m.photo_url.startsWith('blob:') || m.photo_url.startsWith('data:image'))) {
@@ -302,21 +330,13 @@ const Configurator: React.FC = () => {
 
       for (let i = 0; i < itemsToUpload.length; i++) {
         const item = itemsToUpload[i];
-        
-        // EVITAR RE-PROCESAMIENTO: Si ya es una URL de Cloudinary o externa, saltar
         if (!item.url || item.url.startsWith('https')) continue;
 
         setProcessingStep('compressing');
         setUploadProgressText(`Optimizando fotos (${i + 1}/${itemsToUpload.length})...`);
         
-        // Convertir URL (blob o base64) a Blob real
         const blob = await fetch(item.url).then(r => r.blob());
-        
-        // SEGURIDAD: Validar que el blob sea una imagen válida
-        if (!(blob instanceof Blob) || !blob.type.startsWith('image')) {
-          console.warn(`⚠️ Saltando archivo no válido: ${item.name}`);
-          continue;
-        }
+        if (!(blob instanceof Blob) || !blob.type.includes('image')) continue;
 
         console.log(`📸 Procesando archivo ${item.name} de tipo:`, blob.type);
         
@@ -330,31 +350,32 @@ const Configurator: React.FC = () => {
         setUploadProgressText(`Subiendo a la nube (${i + 1}/${itemsToUpload.length})...`);
         
         const secureUrl = await uploadToCloudinary(compressedFile, item.name);
-        
-        // SUSTITUCIÓN REAL EN EL OBJETO
         item.parent[item.key] = secureUrl;
       }
 
       setProcessingStep('generating');
       setUploadProgressText('Generando tu link mágico...');
 
-      console.log("JSON FINAL PARA N8N (URLs Cloudinary):", finalPedido);
+      console.log("✅ JSON FINAL (URLS CLOUDINARY):", finalPedido);
       console.log("📡 ENVIANDO A WEBHOOK...");
 
       // 2. ENVÍO AL WEBHOOK
+      const orderId = `RAV-${Date.now()}`;
       try {
         await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
+          headers: { 
+            'Content-Type': 'application/json'
+          },
           body: JSON.stringify({
             ...finalPedido,
-            customer_email: 'customer@example.com', 
-            order_id: `RAV-${Date.now()}`
+            email_cliente: emailCliente, 
+            chosen_slug: chosenSlug,
+            order_id: orderId
           }),
         });
       } catch (webhookError) {
-        console.warn("⚠️ Webhook response non-readable (no-cors), assuming success:", webhookError);
+        console.warn("⚠️ Webhook falló o bloqueó respuesta:", webhookError);
       }
 
       setProcessingStep('success');
@@ -364,7 +385,7 @@ const Configurator: React.FC = () => {
         state: { 
           pedido: {
             ...finalPedido,
-            order_id: `RAV-${Date.now()}`
+            order_id: orderId
           } 
         } 
       }), 2000);
@@ -722,13 +743,6 @@ const Configurator: React.FC = () => {
                   </span>
                 </div>
                 
-                <input 
-                  type="file" 
-                  ref={historiaInputRef}
-                  hidden 
-                  accept="image/png, image/jpeg"
-                  onChange={(e) => handleImageUpload(e, 'historia')} 
-                />
                 <div 
                   className={`upload-placeholder-container ${newMemoria.foto ? 'has-image' : ''} ${isUploading ? 'is-uploading' : ''}`}
                   onClick={(e) => {
@@ -908,14 +922,6 @@ const Configurator: React.FC = () => {
                   {projectConfig.tarjetas.length}/{projectConfig.tarjetas_cantidad}
                 </span>
               </div>
-              
-              <input 
-                type="file" 
-                ref={tarjetasInputRef}
-                hidden 
-                accept="image/png, image/jpeg"
-                onChange={(e) => handleImageUpload(e, 'tarjetas')} 
-              />
               
               <div 
                 className={`upload-placeholder-container ${newTarjeta.imagen ? 'has-image' : ''} ${isUploading ? 'is-uploading' : ''}`}
@@ -1385,6 +1391,7 @@ const Configurator: React.FC = () => {
                   </div>
                 </div>
               </div>
+              
               <div className="summary-modules-list">
                 <h4>Módulos Configurados:</h4>
                 <ul>
@@ -1399,7 +1406,57 @@ const Configurator: React.FC = () => {
                   ))}
                 </ul>
               </div>
-              <div className="summary-total"><span>Inversión Total:</span><span className="total-amount">${total} MXN</span></div>
+
+              {/* Nueva Sección: Identidad Digital */}
+              <div className="digital-identity-section" style={{ marginTop: '2rem', borderTop: '1px solid #eee', paddingTop: '2rem' }}>
+                <h3 style={{ color: '#1A4073', marginBottom: '1.5rem', display: 'flex', alignItems: 'center', gap: '10px', fontSize: '1.2rem' }}>
+                  <Sparkles size={20} color="#ef4444" /> Último Paso: Tu Identidad Digital
+                </h3>
+                
+                <div className="input-group">
+                  <label style={{ fontSize: '0.9rem', color: '#64748b' }}>Correo Electrónico para el Envío</label>
+                  <input 
+                    type="email" 
+                    placeholder="tu@email.com" 
+                    value={emailCliente}
+                    onChange={(e) => setEmailCliente(e.target.value)}
+                    style={{ 
+                      borderColor: emailCliente && !emailCliente.includes('@') ? '#ef4444' : '#1A4073',
+                      padding: '0.8rem',
+                      borderRadius: '12px',
+                      border: '1px solid #cbd5e1',
+                      width: '100%',
+                      marginTop: '0.5rem'
+                    }}
+                  />
+                </div>
+
+                <div className="input-group" style={{ marginTop: '1.5rem' }}>
+                  <label style={{ fontSize: '0.9rem', color: '#64748b' }}>Elige tu link personalizado</label>
+                  <div className="slug-input-wrapper" style={{ display: 'flex', alignItems: 'center', background: '#f1f5f9', borderRadius: '12px', padding: '0 1rem', border: '1px solid #cbd5e1', marginTop: '0.5rem' }}>
+                    <span style={{ color: '#64748b', fontWeight: 600 }}>ravyn.studio/</span>
+                    <input 
+                      type="text" 
+                      placeholder="nombre-de-tu-historia" 
+                      value={chosenSlug}
+                      onChange={handleSlugChange}
+                      style={{ background: 'transparent', border: 'none', padding: '0.8rem 0.5rem', fontWeight: 700, color: '#1A4073', flex: 1, outline: 'none' }}
+                    />
+                  </div>
+                  
+                  <div className="slug-status" style={{ marginTop: '0.5rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    {isCheckingSlug ? (
+                      <span style={{ color: '#64748b', display: 'flex', alignItems: 'center', gap: '5px' }}><Loader2 size={14} className="animate-spin" /> Verificando...</span>
+                    ) : isSlugAvailable === true ? (
+                      <span style={{ color: '#10b981', fontWeight: 600 }}>✅ Disponible</span>
+                    ) : isSlugAvailable === false ? (
+                      <span style={{ color: '#ef4444', fontWeight: 600 }}>❌ No disponible / Reservado</span>
+                    ) : null}
+                  </div>
+                </div>
+              </div>
+
+              <div className="summary-total" style={{ marginTop: '2rem' }}><span>Inversión Total:</span><span className="total-amount">${total} MXN</span></div>
               
               {/* Botón de Preview Integrado (Ghost Button) */}
               <button 
@@ -1512,6 +1569,21 @@ const Configurator: React.FC = () => {
         onClose={() => setShowPreviewModal(false)} 
         projectConfig={projectConfig} 
         activeModules={modules} 
+      />
+
+      <input 
+        type="file" 
+        ref={historiaInputRef}
+        hidden 
+        accept="image/png, image/jpeg"
+        onChange={(e) => handleImageUpload(e, 'historia')} 
+      />
+      <input 
+        type="file" 
+        ref={tarjetasInputRef}
+        hidden 
+        accept="image/png, image/jpeg"
+        onChange={(e) => handleImageUpload(e, 'tarjetas')} 
       />
 
       {processingOrder && renderProcessingModal()}
