@@ -29,3 +29,7 @@ bun.lockb
 
 # Local Netlify folder
 .netlify
+
+# Local executables and locks
+*.exe
+deno.lock
