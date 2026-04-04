@@ -35,7 +35,7 @@ const Viewer: React.FC = () => {
         }
 
         console.log('✅ Datos recibidos de Supabase:', data.payload);
-        setPedidoData(data.payload);
+        setPedidoData(data.payload.body);
 
       } catch (err: any) {
         setError(err.message || 'Error al cargar la experiencia');

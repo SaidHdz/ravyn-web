@@ -176,7 +176,7 @@ const LivePreviewModal: React.FC<LivePreviewModalProps> = ({ isOpen, onClose, pr
                       <span style={{ background: '#27c93f' }}></span>
                     </div>
                     <div className="url-bar-v2" style={{ background: 'rgba(0,0,0,0.3)', color: 'rgba(255,255,255,0.7)', border: '1px solid rgba(255,255,255,0.05)' }}>
-                      ravyn.studio/preview/{pedidoData.bienvenida.pareja.toLowerCase().replace(/\s/g, '-') || 'tu-historia'}
+                      ravynstudio.mx/preview/{pedidoData.bienvenida.pareja.toLowerCase().replace(/\s/g, '-') || 'tu-historia'}
                     </div>
                   </div>
                   <div className="browser-content-v2" style={{ flex: 1, background: 'transparent', padding: 0, margin: 0, overflow: 'hidden' }}>

@@ -1434,7 +1434,7 @@ const Configurator: React.FC = () => {
                 <div className="input-group" style={{ marginTop: '1.5rem' }}>
                   <label style={{ fontSize: '0.9rem', color: '#64748b' }}>Elige tu link personalizado</label>
                   <div className="slug-input-wrapper" style={{ display: 'flex', alignItems: 'center', background: '#f1f5f9', borderRadius: '12px', padding: '0 1rem', border: '1px solid #cbd5e1', marginTop: '0.5rem' }}>
-                    <span style={{ color: '#64748b', fontWeight: 600 }}>ravyn.studio/</span>
+                    <span style={{ color: '#64748b', fontWeight: 600 }}>ravynstudio.mx/</span>
                     <input 
                       type="text" 
                       placeholder="nombre-de-tu-historia" 
