@@ -39,7 +39,8 @@ body.no-anim * {
 }
 
 @media (max-width: 600px) {
-    body { padding: 10px 10px; }
+    body { padding: 0; }
+    .ravyn-canvas { padding-right: 5px; width: 100%; overflow-x: hidden; }
     .header-title { font-size: 2rem !important; margin-bottom: 20px; }
     .gallery-container, .trivia-card, #stack-container { width: 100% !important; margin-bottom: 40px; }
     

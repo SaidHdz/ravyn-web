@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Evasivo as EvasivoType } from '@/types/pedido';
 
@@ -8,7 +8,12 @@ interface EvasivoProps {
 
 const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
   const [esExito, setEsExito] = useState(false);
-  const [noPos, setNoPos] = useState({ left: '70%', top: '20px' });
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 600);
+  
+  // Posición inicial
+  const [noPos, setNoPos] = useState({ left: '0px', top: '0px' });
+  const [initialized, setInitialized] = useState(false);
+  
   const [escalaNo, setEscalaNo] = useState(1.0);
   const [rotation, setRotation] = useState(0);
   const [stretch, setStretch] = useState({ x: 1, y: 1 });
@@ -18,10 +23,37 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
   const btnNoRef = useRef<HTMLDivElement>(null);
   const cardRef = useRef<HTMLDivElement>(null);
 
+  // Inicializar posiciones una vez que el DOM esté listo
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth < 600);
+    window.addEventListener('resize', handleResize);
+
+    if (containerRef.current && btnNoRef.current) {
+      const areaWidth = containerRef.current.offsetWidth;
+      const btnWidth = btnNoRef.current.offsetWidth;
+      
+      if (window.innerWidth < 600) {
+        // Móvil: Centrado horizontalmente (alineado con el SÍ)
+        setNoPos({ 
+          left: `${(areaWidth / 2) - (btnWidth / 2)}px`, 
+          top: '140px' 
+        });
+      } else {
+        // Desktop: A la derecha
+        setNoPos({ 
+          left: `${areaWidth * 0.7 - (btnWidth / 2)}px`, 
+          top: '20px' 
+        });
+      }
+      setInitialized(true);
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const moverBotonNo = (e?: React.MouseEvent | React.PointerEvent) => {
     if (!containerRef.current || !btnSiRef.current || !btnNoRef.current) return;
 
-    // Reducción de escala y rotación
     if (escalaNo > 0.3) setEscalaNo(prev => prev - 0.08);
     setRotation((Math.random() - 0.5) * 30);
 
@@ -30,7 +62,6 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
     const btnWidth = btnNoRef.current.offsetWidth;
     const btnHeight = btnNoRef.current.offsetHeight;
 
-    // Obtener posición del mouse respecto al botón
     let mouseRelX = 0.5;
     let mouseRelY = 0.5;
 
@@ -40,7 +71,6 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
       mouseRelY = (e.clientY - rect.top) / rect.height;
     }
 
-    // LÓGICA DE ESTIRADO (SÓLO JAKE)
     const currentTheme = document.body.getAttribute('data-theme') || '';
     if (currentTheme === 'jake') {
       const isHorizontalEscape = Math.random() > 0.5;
@@ -50,16 +80,13 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
         setStretch({ x: 0.7, y: 1.5 });
       }
       setTimeout(() => setStretch({ x: 1, y: 1 }), 300);
-    } else {
-      setStretch({ x: 1, y: 1 });
     }
 
-    // Definir zonas de huida (opuestas al mouse)
     const minX = mouseRelX < 0.5 ? areaWidth * 0.5 : 0;
-    const maxX = mouseRelX < 0.5 ? areaWidth - btnWidth : areaWidth * 0.5;
+    const maxX = areaWidth - btnWidth;
     
-    const minY = mouseRelY < 0.5 ? areaHeight * 0.5 : 0;
-    const maxY = mouseRelY < 0.5 ? areaHeight - btnHeight : areaHeight * 0.5;
+    const minY = 0;
+    const maxY = areaHeight - btnHeight;
 
     let randomX = 0, randomY = 0;
     let empalmado = true;
@@ -73,23 +100,23 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
     const siBottom = siTop + siRect.height;
 
     while (empalmado && intentos < 50) {
-      randomX = minX + Math.random() * (maxX - minX);
-      randomY = minY + Math.random() * (maxY - minY);
+      randomX = Math.random() * (areaWidth - btnWidth);
+      randomY = Math.random() * (areaHeight - btnHeight);
 
       const currentLeft = parseFloat(noPos.left);
       const currentTop = parseFloat(noPos.top);
       const dist = Math.sqrt(Math.pow(randomX - currentLeft, 2) + Math.pow(randomY - currentTop, 2));
 
-      if (dist < 150 && intentos < 40) {
+      if (dist < 100 && intentos < 40) {
         intentos++;
         continue;
       }
 
       const colisionaConSi = (
-        randomX < siRight + 40 &&
-        randomX + btnWidth > siLeft - 40 &&
-        randomY < siBottom + 40 &&
-        randomY + btnHeight > siTop - 40
+        randomX < siRight + 20 &&
+        randomX + btnWidth > siLeft - 20 &&
+        randomY < siBottom + 20 &&
+        randomY + btnHeight > siTop - 20
       );
 
       if (colisionaConSi) {
@@ -115,6 +142,10 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
       });
     }
   };
+
+  const siStyle: React.CSSProperties = isMobile 
+    ? { position: 'absolute', left: '50%', transform: 'translateX(-50%)', top: '20px', width: '140px', fontSize: '1.2rem' }
+    : { position: 'absolute', left: '15%', top: '20px', width: '130px', fontSize: '1.2rem' };
 
   return (
     <section className="modulo-ravyn" style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
@@ -144,20 +175,20 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
               id="evasivo-contenido" 
               style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}
             >
-              <h2 className="card-title" style={{ fontSize: '2.5rem', marginBottom: '30px' }}>
+              <h2 className="card-title" style={{ fontSize: '2.2rem', marginBottom: '30px' }}>
                 {data.pregunta}
               </h2>
               
               <div 
                 ref={containerRef}
                 id="contenedor-botones" 
-                style={{ position: 'relative', flexGrow: 1, minHeight: '250px', width: '100%' }}
+                style={{ position: 'relative', flexGrow: 1, minHeight: '300px', width: '100%' }}
               >
                 <button 
                   ref={btnSiRef}
                   id="btn-si" 
                   className="option-btn" 
-                  style={{ position: 'absolute', left: '15%', top: '20px', width: '130px', fontSize: '1.2rem' }}
+                  style={siStyle}
                   onClick={manejarSi}
                 >
                   {data.texto_si}
@@ -173,7 +204,8 @@ const Evasivo: React.FC<EvasivoProps> = ({ data }) => {
                     scale: escalaNo,
                     scaleX: stretch.x,
                     scaleY: stretch.y,
-                    rotate: rotation
+                    rotate: rotation,
+                    opacity: initialized ? 1 : 0
                   }}
                   transition={{ 
                     type: "spring", 

@@ -22,9 +22,6 @@ const Contador: React.FC<ContadorProps> = ({ data }) => {
     const actualizarReloj = () => {
       const ahora = new Date();
       const diferenciaBruta = fechaObjetivo.getTime() - ahora.getTime();
-
-      // Usamos el valor absoluto para que funcione tanto como cuenta regresiva 
-      // como para contar tiempo transcurrido desde una fecha pasada
       const diferencia = Math.abs(diferenciaBruta);
       
       const segundosTotales = Math.floor(diferencia / 1000);
@@ -56,41 +53,91 @@ const Contador: React.FC<ContadorProps> = ({ data }) => {
     return () => clearInterval(intervalo);
   }, [data.fecha]);
 
+  const CounterBox = ({ value, label }: { value: string, label: string }) => {
+    return (
+      <div style={{ 
+        background: 'rgba(255, 255, 255, 0.8)', 
+        padding: '20px 10px', 
+        borderRadius: '20px', 
+        backdropFilter: 'blur(8px)',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        border: '1px solid rgba(139, 92, 246, 0.2)', // Borde morado tenue
+        width: '100%',
+        boxShadow: '0 8px 20px rgba(0,0,0,0.05)'
+      }}>
+        <span style={{ 
+          fontSize: '2.8rem', 
+          fontWeight: 900, // Black / Ultra Bold
+          display: 'block', 
+          lineHeight: 1, 
+          letterSpacing: '-1px',
+          color: '#1A4073' // Azul Ravyn
+        }}>
+          {value}
+        </span>
+        <span style={{ 
+          fontSize: '0.75rem', 
+          textTransform: 'uppercase', 
+          fontWeight: 700, 
+          letterSpacing: '1.5px', 
+          marginTop: '6px', 
+          color: '#64748b' 
+        }}>
+          {label}
+        </span>
+      </div>
+    );
+  };
+
   return (
-    <section className="modulo-ravyn" style={{ display: 'flex', justifyContent: 'center', padding: '40px 0' }}>
-      <div className="memory-card" style={{ textAlign: 'center', padding: '40px 20px', maxWidth: '600px', width: '90%', position: 'relative', zIndex: 10 }}>
+    <section className="modulo-ravyn" style={{ display: 'flex', justifyContent: 'center', padding: '60px 0' }}>
+      <div className="memory-card" style={{ 
+        textAlign: 'center', 
+        padding: '50px 25px', 
+        maxWidth: '500px', // Reducido para mayor verticalidad
+        width: '92%', 
+        position: 'relative', 
+        zIndex: 10,
+        borderRadius: '40px',
+        background: 'rgba(255, 255, 255, 0.15)',
+        backdropFilter: 'blur(12px)',
+        border: '1px solid rgba(255, 255, 255, 0.2)'
+      }}>
         
-        <h2 className="card-title" style={{ fontSize: '2.5rem', marginBottom: '10px' }}>{data.titulo}</h2>
-        <p className="card-description" style={{ marginBottom: '30px', fontSize: '1.2rem' }}>{mensajeFinal}</p>
+        <h2 className="card-title" style={{ 
+          fontSize: '2.4rem', 
+          marginBottom: '5px', 
+          fontWeight: 800,
+          color: '#1A4073' 
+        }}>{data.titulo}</h2>
+        
+        <p className="card-description" style={{ 
+          marginBottom: '25px', // Acercado al bloque del contador
+          fontSize: '1.1rem', 
+          fontWeight: 500,
+          color: '#64748b' 
+        }}>{mensajeFinal}</p>
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', flexWrap: 'wrap', marginBottom: '15px' }}>
-          <div style={{ background: 'rgba(0,0,0,0.15)', padding: '15px', borderRadius: '12px', minWidth: '90px', backdropFilter: 'blur(5px)' }}>
-            <span style={{ fontSize: '3rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.anios}</span>
-            <span style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Años</span>
-          </div>
-          <div style={{ background: 'rgba(0,0,0,0.15)', padding: '15px', borderRadius: '12px', minWidth: '90px', backdropFilter: 'blur(5px)' }}>
-            <span style={{ fontSize: '3rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.meses}</span>
-            <span style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Meses</span>
-          </div>
-          <div style={{ background: 'rgba(0,0,0,0.15)', padding: '15px', borderRadius: '12px', minWidth: '90px', backdropFilter: 'blur(5px)' }}>
-            <span style={{ fontSize: '3rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.dias}</span>
-            <span style={{ fontSize: '0.9rem', textTransform: 'uppercase', letterSpacing: '1px' }}>Días</span>
-          </div>
-        </div>
+        <div className="counter-grid-container" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(2, 1fr)', // 2 Columnas
+          gap: '12px',
+          width: '100%'
+        }}>
+          {/* Fila 1: Años y Meses */}
+          <CounterBox value={timeLeft.anios} label="Años" />
+          <CounterBox value={timeLeft.meses} label="Meses" />
 
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', flexWrap: 'wrap' }}>
-          <div style={{ background: 'rgba(0,0,0,0.1)', padding: '10px', borderRadius: '8px', minWidth: '70px' }}>
-            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.horas}</span>
-            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase' }}>Horas</span>
-          </div>
-          <div style={{ background: 'rgba(0,0,0,0.1)', padding: '10px', borderRadius: '8px', minWidth: '70px' }}>
-            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.minutos}</span>
-            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase' }}>Min</span>
-          </div>
-          <div style={{ background: 'rgba(0,0,0,0.1)', padding: '10px', borderRadius: '8px', minWidth: '70px' }}>
-            <span style={{ fontSize: '1.8rem', fontWeight: 'bold', display: 'block', lineHeight: 1 }}>{timeLeft.segundos}</span>
-            <span style={{ fontSize: '0.7rem', textTransform: 'uppercase' }}>Seg</span>
-          </div>
+          {/* Fila 2: Días y Horas */}
+          <CounterBox value={timeLeft.dias} label="Días" />
+          <CounterBox value={timeLeft.horas} label="Horas" />
+
+          {/* Fila 3: Minutos y Segundos */}
+          <CounterBox value={timeLeft.minutos} label="Min" />
+          <CounterBox value={timeLeft.segundos} label="Seg" />
         </div>
 
       </div>

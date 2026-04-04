@@ -385,6 +385,7 @@ const Configurator: React.FC = () => {
         state: { 
           pedido: {
             ...finalPedido,
+            chosen_slug: chosenSlug,
             order_id: orderId
           } 
         } 
