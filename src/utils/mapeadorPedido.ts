@@ -3,15 +3,10 @@ import { Pedido } from '@/types/pedido';
 /**
  * Transforma el estado plano del Formulario (Configurator) 
  * al objeto estructurado (JSON Maestro) que espera LienzoRavyn.
- * 
- * @param formContent El estado `projectConfig` del formulario.
- * @param activeModules Array con los nombres de los módulos seleccionados (ej: ['modulo-historia', ...])
- * @returns Un objeto que cumple estrictamente con la interfaz `Pedido`.
  */
 export const transformFormToLienzo = (formContent: any, activeModules: string[] = []): Pedido => {
   const temaGlobal = formContent.tema || 'neo-japan';
 
-  // 1. Estructura Base: Bienvenida y Configuración Global
   const pedido: Pedido = {
     bienvenida: {
       pareja: formContent.pareja || '',
@@ -23,9 +18,6 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
     }
   };
 
-  // 2. Mapeo Condicional de Módulos
-  // Solo inyectamos los módulos que el usuario ha configurado o seleccionado
-
   if (activeModules.includes('modulo-historia') || formContent.memorias?.length > 0) {
     pedido.historia = {
       config: {
@@ -35,14 +27,9 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
       },
       memorias: (formContent.memorias || []).map((m: any) => ({
         id: String(m.id || Date.now()),
-        // CRÍTICO (Pipeline de Imágenes): El "swap" de URLs ocurre aquí.
-        // Las imágenes actualmente traen un 'blob:http://...' local para la previsualización en el navegador.
-        // Después del pago, se comprimirán y subirán a Cloudinary.
-        // El script de orquestación (processOrderAndDeploy) DEBE buscar esta propiedad 'photo_url' y 
-        // reemplazar el 'blob:' por la 'secure_url' pública de Cloudinary antes de enviar a n8n.
         photo_url: m.foto || '',
         titulo: m.titulo || '',
-        descripcion_corta: '', // Reservado para futura iteración
+        descripcion_corta: '',
         texto_largo: m.texto || '',
         fecha: m.fecha || '',
         lugar: m.lugar || ''
@@ -69,8 +56,6 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
         id: t.id,
         titulo: t.titulo || '',
         contenido: t.contenido || '',
-        // CRÍTICO (Pipeline de Imágenes): Mismo proceso que en historia.
-        // Reemplazar la Blob URL temporal de 'imagen' por la de Cloudinary tras el pago.
         imagen: t.imagen || ''
       }))
     };
@@ -111,28 +96,90 @@ export const transformFormToLienzo = (formContent: any, activeModules: string[] 
       cartas: (formContent.dedicatorias || []).map((d: any) => ({
         id: d.id,
         titulo: d.titulo || '',
-        contenido: d.texto || '', // Mapeo de texto a contenido
+        contenido: d.texto || '',
         cancion: d.musica || ''
       }))
     };
   }
 
-  if (activeModules.includes('modulo-wrapped') || formContent.wrapped) {
-    // ATENCIÓN MÓDULO WRAPPED: Este módulo es altamente visual y estructurado.
-    // 'WrappedFormConfigurator.tsx' debe asegurar que la estructura de 'diapositivas' 
-    // se construya rigurosamente antes de enviarse aquí.
-    // El mapeador recibe el array y se asegura de incluir todas sus propiedades.
+  if (activeModules.includes('modulo-wrapped')) {
+    const w = formContent.wrapped || {};
+    
+    // CONSTRUCCIÓN DINÁMICA DE DIAPOSITIVAS BASADA EN EL FORMULARIO
+    const diapositivas = [
+      {
+        id: 'slide-intro',
+        tipo: 'intro',
+        titulo: 'Nuestro Wrapped',
+        datos: { subtitulo: `Un resumen de nuestra historia, ${formContent.pareja}` }
+      },
+      {
+        id: 'slide-chat',
+        tipo: 'metricas_chat',
+        titulo: 'Nuestras Charlas',
+        datos: {
+          total_mensajes: w.totalMensajes || '0',
+          palabra_top: w.palabraTop || 'Te amo',
+          top_emojis: [w.emojiTop || '❤️', '✨', '🥰']
+        }
+      },
+      {
+        id: 'slide-temas',
+        tipo: 'grafica_barras',
+        titulo: '¿De qué hablamos?',
+        datos: {
+          subtitulo: 'Nuestros temas recurrentes',
+          items: [
+            { nombre: w.tema1 || 'Nosotros', porcentaje: w.tema1Porcentaje || 50 },
+            { nombre: w.tema2 || 'Comida', porcentaje: w.tema2Porcentaje || 30 },
+            { nombre: w.tema3 || 'Planes', porcentaje: w.tema3Porcentaje || 20 }
+          ]
+        }
+      },
+      {
+        id: 'slide-paciencia',
+        tipo: 'grafica_dona',
+        titulo: 'Nivel de Paciencia',
+        datos: {
+          subtitulo: '¿Quién aguantó más?',
+          etiquetas: ['Yo', 'Tú'],
+          valores: [w.pacienciaYo || 50, w.pacienciaTu || 50]
+        }
+      },
+      {
+        id: 'slide-spotify',
+        tipo: 'soundtrack',
+        titulo: 'Nuestra Canción',
+        datos: { spotify_embed_url: w.cancionSpotify || '' }
+      },
+      {
+        id: 'slide-premios',
+        tipo: 'superlativo_custom',
+        titulo: 'Premio al Drama',
+        datos: {
+          icono_award: '🎭',
+          ganador: w.premio1Ganador || 'Ambos',
+          subtitulo: 'Por las mejores escenas de este año'
+        }
+      },
+      {
+        id: 'slide-resumen',
+        tipo: 'resumen',
+        titulo: 'En Resumen',
+        datos: {
+          dias_juntos: w.diasJuntos || '365',
+          total_mensajes: w.totalMensajes || '0',
+          emoji_top: w.emojiTop || '❤️'
+        }
+      }
+    ];
+
     pedido.wrapped = {
       config: {
         tema: temaGlobal,
-        velocidad_slide_segundos: 5
+        velocidad_slide_segundos: 6
       },
-      diapositivas: (formContent.wrapped?.diapositivas || []).map((slide: any) => ({
-        id: slide.id || String(Date.now()),
-        tipo: slide.tipo || 'intro',
-        titulo: slide.titulo || '',
-        datos: slide.datos || {}
-      }))
+      diapositivas: diapositivas
     };
   }
 
