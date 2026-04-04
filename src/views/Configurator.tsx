@@ -246,7 +246,6 @@ const Configurator: React.FC = () => {
     setIsUploading(true);
     setUploadProgress(0);
 
-    // Simulamos una subida "mágica" para previsualización inmediata
     const interval = setInterval(() => {
       setUploadProgress(prev => {
         if (prev >= 100) {
@@ -286,6 +285,7 @@ const Configurator: React.FC = () => {
       const imageOptions = { maxSizeMB: 0.8, maxWidthOrHeight: 1280, useWebWorker: true };
       const itemsToProcess: { parent: any; key: string; url: string; name: string }[] = [];
       
+      // --- Lógica de recolección de imágenes (Historia, Tarjetas, Diapositivas) ---
       if (finalPedido.historia?.memorias) {
         finalPedido.historia.memorias.forEach((m, i) => {
           if (m.photo_url && (m.photo_url.startsWith('blob:') || m.photo_url.startsWith('data:image'))) {
@@ -310,7 +310,7 @@ const Configurator: React.FC = () => {
         });
       }
 
-      // 1. PROCESAMIENTO A BASE64 (Sin subir a Cloudinary aún)
+      // 1. PROCESAMIENTO A BASE64
       for (let i = 0; i < itemsToProcess.length; i++) {
         const item = itemsToProcess[i];
         if (!item.url || item.url.startsWith('https')) continue;
@@ -326,7 +326,6 @@ const Configurator: React.FC = () => {
           imageOptions
         );
         
-        // Convertimos a Base64 para guardar en Supabase
         const base64Data = await fileToBase64(compressedFile);
         item.parent[item.key] = base64Data;
       }
@@ -354,11 +353,14 @@ const Configurator: React.FC = () => {
       setProcessingStep('generating');
       setUploadProgressText('Redirigiendo a pago seguro...');
 
-      // 3. SALTAR A STRIPE CHECKOUT
-      const stripe = await loadStripe(STRIPE_PUBLIC_KEY);
-      if (!stripe) throw new Error('No se pudo cargar Stripe');
+      // 3. SALTAR A STRIPE CHECKOUT (NUEVA LÓGICA 2026)
+      console.log("🚀 ENVIANDO DATOS AL BACKEND:", {
+        draft_id: draftData?.id,
+        email: emailCliente,
+        order_id: orderId,
+        total: total
+      });
 
-      // Llamamos a nuestra función de backend para crear la sesión
       const response = await fetch('/.netlify/functions/create-checkout-session', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -367,24 +369,30 @@ const Configurator: React.FC = () => {
           email: emailCliente,
           order_id: orderId,
           total: total,
-          success_url: `${window.location.origin}/exito?session_id={CHECKOUT_SESSION_ID}`,
-          cancel_url: window.location.href
+          chosen_slug: chosenSlug // Opcional pero recomendado
         }),
       });
 
       const session = await response.json();
+      console.log("📦 RESPUESTA DEL SERVIDOR:", session);
       
-      if (session.error) throw new Error(session.error);
+      if (!response.ok || session.error) {
+        throw new Error(session.error || 'Error al crear la sesión de pago');
+      }
 
-      const result = await stripe.redirectToCheckout({
-        sessionId: session.id,
-      });
+      // --- EL CAMBIO MAESTRO ---
+      if (session.url) {
+        // Mandamos al usuario directo a la pasarela de Stripe
+        window.location.href = session.url;
+      } else {
+        console.error("❌ El servidor no mandó URL. Recibido:", session);
+        throw new Error('No se recibió la URL de redirección de Stripe');
+      }
 
-      if (result.error) throw result.error;
-
-    } catch (error) {
-      console.error('Error en el pipeline de pago:', error);
+    } catch (error: any) {
+      console.error('❌ Error en el pipeline de pago:', error);
       setProcessingStep('error');
+      // Aquí podrías poner un toast o mensaje para que Said sepa qué falló
     }
   };
 
