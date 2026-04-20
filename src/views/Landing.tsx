@@ -1,40 +1,35 @@
-import React, { useEffect } from 'react';
-import { ShoppingCart } from 'lucide-react';
-import ModuleShowcase from '@/components/landing/ModuleShowcase';
-import '@/styles/landing/landing-base.css';
+import { useEffect } from 'react'
+import { useTheme } from '@/hooks/useTheme'
+import Navbar from '@/components/Navbar'
+import Hero from '@/components/sections/Hero'
+import Servicios from '@/components/sections/Servicios'
+import Proceso from '@/components/sections/Proceso'
+import QuienesSomos from '@/components/sections/QuienesSomos'
+import Contacto from '@/components/sections/Contacto'
 
-const Landing: React.FC = () => {
+export default function Landing() {
+  const { theme, toggle } = useTheme()
+
   useEffect(() => {
-    document.title = 'Ravyn Studio';
-  }, []);
+    document.title = 'Ravyn Studio'
+  }, [])
 
   return (
-    <div className="landing-container">
-      {/* Navbar simple */}
-      <nav className="landing-nav">
-        <div className="logo">Ravyn</div>
-        <div className="nav-links">
-          <button className="cart-btn" title="Carrito de compras" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ShoppingCart size={20} strokeWidth={2.5} />
-          </button>
+    <>
+      <Navbar theme={theme} onToggle={toggle} />
+      <Hero />
+      <Servicios />
+      <Proceso />
+      <QuienesSomos />
+      <Contacto />
+      <footer className="footer">
+        <div className="container">
+          <div className="footer-inner">
+            <span className="footer-logo">Ravyn Studio<span>.</span></span>
+            <span className="footer-copy">© {new Date().getFullYear()} Todos los derechos reservados</span>
+          </div>
         </div>
-      </nav>
-
-      {/* Hero Section */}
-      <section className="hero-section">
-        <p className="hero-tagline">No es una página. Es su historia</p>
-        <h1 className="hero-title">Convertimos tus recuerdos<br />en una experiencia interactiva</h1>
-      </section>
-
-      {/* Grid de Módulos (Interactivo) */}
-      <ModuleShowcase />
-
-      {/* Footer / CTA final */}
-      <footer className="landing-footer">
-        <button className="cta-btn-footer">Get in Touch →</button>
       </footer>
-    </div>
-  );
-};
-
-export default Landing;
+    </>
+  )
+}
