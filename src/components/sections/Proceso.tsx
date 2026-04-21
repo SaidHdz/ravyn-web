@@ -1,6 +1,7 @@
 import { motion } from 'motion/react'
 import TiltCard from '@/components/TiltCard'
 import BorderGlow from '@/components/BorderGlow/BorderGlow'
+import SplitText from '../animations/SplitText'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -39,15 +40,13 @@ export default function Proceso() {
   return (
     <section className="section proceso-section">
       <div className="container">
-        <motion.p
+        <SplitText
+          text="Proceso"
           className="section-label"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.4 }}
-        >
-          Proceso
-        </motion.p>
+          delay={50}
+          duration={0.8}
+          tag="p"
+        />
 
         <div className="proceso-grid">
           {pasos.map((p, i) => (

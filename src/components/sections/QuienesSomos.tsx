@@ -1,27 +1,34 @@
 import { motion } from 'motion/react'
 import CountUp from '../CountUp/CountUp'
+import LogoLoop from '../animations/LogoLoop'
+import SplitText from '../animations/SplitText'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+const techLogos = [
+  { src: 'https://cdn.simpleicons.org/tailwindcss/white', alt: 'Tailwind CSS' },
+  { src: 'https://cdn.simpleicons.org/astro/white', alt: 'Astro' },
+  { src: 'https://cdn.simpleicons.org/react/white', alt: 'React' },
+  { src: 'https://cdn.simpleicons.org/n8n/white', alt: 'n8n' },
+]
+
 const stats = [
-  { type: 'countup', to: 10, suffix: '+', label: 'proyectos entregados' },
-  { type: 'text', value: '< 48h', label: 'tiempo de respuesta' },
-  { type: 'countup', to: 4, suffix: '', label: 'servicios especializados' },
+  { type: 'countup', to: 100, suffix: '%', label: 'tasa de éxito' },
+  { type: 'countup', prefix: '< ', to: 48, suffix: 'h', label: 'tiempo de respuesta', highlight: true },
+  { type: 'countup', prefix: '+', to: 500, suffix: 'h', label: 'de automatización' },
 ]
 
 export default function QuienesSomos() {
   return (
     <section className="section quienes-section">
       <div className="container">
-        <motion.p
+        <SplitText
+          text="Nosotros"
           className="section-label"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.4 }}
-        >
-          Nosotros
-        </motion.p>
+          delay={50}
+          duration={0.8}
+          tag="p"
+        />
         <div className="quienes-layout">
           <motion.h2
             className="quienes-heading"
@@ -46,6 +53,19 @@ export default function QuienesSomos() {
             </p>
           </motion.div>
         </div>
+        
+        <div className="mt-16 mb-12">
+          <LogoLoop 
+            logos={techLogos} 
+            speed={60} 
+            direction="left" 
+            logoHeight={40} 
+            gap={80} 
+            fadeOut={true}
+            fadeOutColor="var(--bg)"
+          />
+        </div>
+
         <motion.p
           className="quienes-closing"
           initial={{ opacity: 0, y: 16 }}
@@ -68,11 +88,16 @@ export default function QuienesSomos() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.45, ease, delay: 0.1 + i * 0.08 }}
               >
-                <span className="quienes-stat-value">
-                  {s.type === 'countup'
-                    ? <><CountUp from={0} to={s.to!} duration={1.8} />{s.suffix}</>
-                    : s.value
-                  }
+                <span className={`quienes-stat-value ${s.highlight ? 'text-green-400 drop-shadow-[0_0_15px_rgba(74,222,128,0.5)]' : ''}`}>
+                  {s.type === 'countup' ? (
+                    <>
+                      {s.prefix}
+                      <CountUp from={0} to={s.to!} duration={1.8} />
+                      {s.suffix}
+                    </>
+                  ) : (
+                    s.value
+                  )}
                 </span>
                 <span className="quienes-stat-label">{s.label}</span>
               </motion.div>

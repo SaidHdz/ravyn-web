@@ -1,10 +1,8 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import RotatingText from '@/components/RotatingText/RotatingText'
+import SplitText from '../animations/SplitText'
 
 const ease = [0.16, 1, 0.3, 1] as const
-
-const WA_HREF = 'https://wa.me/526441234567?text=Hola%2C%20me%20gustar%C3%ADa%20saber%20m%C3%A1s%20sobre%20sus%20servicios'
 
 const WhatsAppIcon = () => (
   <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
@@ -19,21 +17,21 @@ const servicios = [
     title: 'Experiencias Web',
     desc: 'Mini-sitios personalizados para eventos, regalos digitales y páginas especiales. Cada entrega es única.',
     tags: ['React', 'Animaciones', 'Diseño custom'],
-    price: 'desde $2,500 MXN',
+    value: 'Impulso de Marca',
   },
   {
     num: '02',
     title: 'Soluciones IoT',
     desc: 'Hardware + software a la medida para automatización, monitoreo remoto y control de procesos industriales.',
     tags: ['Embedded', 'Dashboards', 'Sensores'],
-    price: 'desde $8,000 MXN',
+    value: 'Eficiencia Industrial',
   },
   {
     num: '03',
     title: 'Desarrollo Web & Apps',
     desc: 'Landing pages, sistemas internos y aplicaciones para negocios locales. Rápido de implementar, fácil de mantener.',
     tags: ['Web', 'Mobile', 'APIs'],
-    price: 'desde $5,000 MXN',
+    value: 'Infraestructura Digital',
   },
 ]
 
@@ -43,15 +41,13 @@ export default function Servicios() {
   return (
     <section id="servicios" className="section">
       <div className="container">
-        <motion.p
+        <SplitText
+          text="Servicios"
           className="section-label"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true, margin: '-60px' }}
-          transition={{ duration: 0.4 }}
-        >
-          Servicios
-        </motion.p>
+          delay={50}
+          duration={0.8}
+          tag="p"
+        />
 
         <div className="servicios-list">
           {servicios.map((s, i) => (
@@ -97,12 +93,12 @@ export default function Servicios() {
                 </span>
 
                 <motion.span
-                  className="servicio-price"
-                  animate={active === i ? { scale: 1.07 } : { scale: 1 }}
+                  className="servicio-price font-mono text-[0.7rem] uppercase tracking-wider text-muted"
+                  animate={active === i ? { scale: 1.07, color: 'var(--text)' } : { scale: 1 }}
                   transition={{ duration: 0.22, ease }}
                   style={{ display: 'inline-block' }}
                 >
-                  {s.price}
+                  {s.value}
                 </motion.span>
 
                 <motion.span
@@ -130,34 +126,6 @@ export default function Servicios() {
             </motion.div>
           ))}
         </div>
-
-        <p className="servicios-rotating-text">
-          Deja en nuestras manos tu{' '}
-          <RotatingText
-            texts={['web', 'app', 'sistema', 'automatización']}
-            mainClassName="servicios-rotating-pill"
-            splitLevelClassName="servicios-rotating-split"
-            staggerFrom="last"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '-120%' }}
-            staggerDuration={0.025}
-            transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
-        </p>
-
-        <a
-          href={WA_HREF}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="servicio-cta"
-        >
-          <span className="servicio-cta-label">
-            <WhatsAppIcon />
-            Quiero saber más
-          </span>
-        </a>
       </div>
     </section>
   )
