@@ -60,6 +60,7 @@ export default function Servicios() {
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.4, ease, delay: i * 0.08 }}
               onHoverStart={() => setActive(i)}
+              onClick={() => setActive(active === i ? -1 : i)}
             >
               <div className="servicio-row">
                 <motion.span
@@ -71,14 +72,25 @@ export default function Servicios() {
                   {s.num}
                 </motion.span>
 
-                <motion.span
-                  className="servicio-title"
-                  animate={active === i ? { scale: 1.04 } : { scale: 1 }}
-                  transition={{ duration: 0.22, ease }}
-                  style={{ display: 'inline-block', transformOrigin: 'left center' }}
-                >
-                  {s.title}
-                </motion.span>
+                <div className="servicio-title-group">
+                  <motion.span
+                    className="servicio-title"
+                    animate={active === i ? { scale: 1.04 } : { scale: 1 }}
+                    transition={{ duration: 0.22, ease }}
+                    style={{ display: 'inline-block', transformOrigin: 'left center' }}
+                  >
+                    {s.title}
+                  </motion.span>
+
+                  <motion.span
+                    className="servicio-price font-mono text-[0.7rem] uppercase tracking-wider text-muted"
+                    animate={active === i ? { scale: 1.07, color: 'var(--text)' } : { scale: 1 }}
+                    transition={{ duration: 0.22, ease }}
+                    style={{ display: 'inline-block' }}
+                  >
+                    {s.value}
+                  </motion.span>
+                </div>
 
                 <span className="servicio-line" aria-hidden="true" />
 
@@ -92,15 +104,6 @@ export default function Servicios() {
                     </span>
                   ))}
                 </span>
-
-                <motion.span
-                  className="servicio-price font-mono text-[0.7rem] uppercase tracking-wider text-muted"
-                  animate={active === i ? { scale: 1.07, color: 'var(--text)' } : { scale: 1 }}
-                  transition={{ duration: 0.22, ease }}
-                  style={{ display: 'inline-block' }}
-                >
-                  {s.value}
-                </motion.span>
 
                 <motion.span
                   className="servicio-arrow"
@@ -120,6 +123,16 @@ export default function Servicios() {
                     exit={{ height: 0, opacity: 0, transition: { duration: 0 } }}
                     style={{ overflow: 'hidden' }}
                   >
+                    <div className="servicio-desc-tags">
+                      {s.tags.map((tag, ti) => (
+                        <span
+                          key={tag}
+                          className={`tag-pill tag-pill--${TAG_COLORS[ti % TAG_COLORS.length]}`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                     <p className="servicio-desc-text">{s.desc}</p>
                   </motion.div>
                 )}

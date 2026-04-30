@@ -1,4 +1,5 @@
 import { motion } from 'motion/react'
+import { useState, useEffect } from 'react'
 import TiltCard from '@/components/TiltCard'
 import BorderGlow from '@/components/BorderGlow/BorderGlow'
 import SplitText from '../animations/SplitText'
@@ -43,6 +44,14 @@ const pasos = [
 ]
 
 export default function Proceso() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 600)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 600)
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   return (
     <section className="section proceso-section">
       <div className="container">
@@ -63,7 +72,7 @@ export default function Proceso() {
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, ease, delay: i * 0.08 }}
             >
-              <TiltCard amplitude={10} scaleOnHover={1.04} style={{ height: '100%' }}>
+              <TiltCard amplitude={10} scaleOnHover={1.04} style={{ height: '100%' }} disabled={isMobile}>
                 <BorderGlow
                   glowColor={p.glowColor}
                   colors={p.colors}

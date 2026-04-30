@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
 import TextType from '@/components/TextType/TextType'
 
@@ -38,7 +38,7 @@ const cards = [
 
 type Card = typeof cards[0]
 
-function TiltCard({ card }: { card: Card }) {
+function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useSpring(useMotionValue(0), springConfig)
   const rotateY = useSpring(useMotionValue(0), springConfig)
@@ -53,9 +53,7 @@ function TiltCard({ card }: { card: Card }) {
     rotateY.set((offsetX / (rect.width / 2)) * 14)
   }
 
-  function handleMouseEnter() {
-    scale.set(1.05)
-  }
+  function handleMouseEnter() { scale.set(1.05) }
 
   function handleMouseLeave() {
     scale.set(1)
@@ -65,23 +63,18 @@ function TiltCard({ card }: { card: Card }) {
 
   return (
     <div
-      style={{ perspective: '800px', transform: `translateX(${card.x}px)` }}
-      onMouseMove={handleMouse}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      style={mobile ? undefined : { perspective: '800px', transform: `translateX(${card.x}px)` }}
+      onMouseMove={mobile ? undefined : handleMouse}
+      onMouseEnter={mobile ? undefined : handleMouseEnter}
+      onMouseLeave={mobile ? undefined : handleMouseLeave}
     >
       <motion.div
         ref={ref}
         className={`hero-card ${card.cls}`}
         initial={{ boxShadow: card.restShadow }}
         animate={{ boxShadow: card.restShadow }}
-        whileHover={{ boxShadow: card.hoverShadow, zIndex: 10 }}
-        style={{
-          rotateX,
-          rotateY,
-          scale,
-          transformStyle: 'preserve-3d',
-        }}
+        whileHover={mobile ? undefined : { boxShadow: card.hoverShadow, zIndex: 10 }}
+        style={mobile ? undefined : { rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
         transition={{ duration: 0.32, ease }}
       >
         <span className={`hero-card-dot ${card.dot}`} />
@@ -95,6 +88,14 @@ function TiltCard({ card }: { card: Card }) {
 }
 
 export default function Hero() {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 900)
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 900)
+    window.addEventListener('resize', check, { passive: true })
+    return () => window.removeEventListener('resize', check)
+  }, [])
+
   return (
     <section className="hero">
       <div className="hero-content">
@@ -129,7 +130,7 @@ export default function Hero() {
         <div className="hero-dots" />
         <div className="hero-cards">
           {cards.map((card) => (
-            <TiltCard key={card.cls} card={card} />
+            <TiltCard key={card.cls} card={card} mobile={isMobile} />
           ))}
         </div>
       </div>

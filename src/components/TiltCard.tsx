@@ -9,6 +9,7 @@ interface TiltCardProps {
   style?: React.CSSProperties
   amplitude?: number
   scaleOnHover?: number
+  disabled?: boolean
 }
 
 export default function TiltCard({
@@ -17,6 +18,7 @@ export default function TiltCard({
   style,
   amplitude = 14,
   scaleOnHover = 1.05,
+  disabled = false,
 }: TiltCardProps) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useSpring(useMotionValue(0), springConfig)
@@ -45,9 +47,9 @@ export default function TiltCard({
   return (
     <div
       style={{ perspective: '800px', ...style }}
-      onMouseMove={handleMouse}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
+      onMouseMove={disabled ? undefined : handleMouse}
+      onMouseEnter={disabled ? undefined : handleMouseEnter}
+      onMouseLeave={disabled ? undefined : handleMouseLeave}
     >
       <motion.div
         ref={ref}
