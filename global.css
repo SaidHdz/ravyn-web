@@ -748,6 +748,10 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   flex-direction: column;
   gap: 16px;
 }
+.quienes-logoloop {
+  margin-top: 112px;
+  margin-bottom: 48px;
+}
 .quienes-closing {
   font-size: clamp(1rem, 1.4vw, 1.15rem);
   color: var(--text-secondary);

@@ -7,9 +7,11 @@ const ease = [0.16, 1, 0.3, 1] as const
 
 const techLogos = [
   { src: 'https://cdn.simpleicons.org/tailwindcss/white', alt: 'Tailwind CSS' },
-  { src: 'https://cdn.simpleicons.org/astro/white', alt: 'Astro' },
-  { src: 'https://cdn.simpleicons.org/react/white', alt: 'React' },
-  { src: 'https://cdn.simpleicons.org/n8n/white', alt: 'n8n' },
+  { src: 'https://cdn.simpleicons.org/astro/white',       alt: 'Astro' },
+  { src: 'https://cdn.simpleicons.org/react/white',       alt: 'React' },
+  { src: 'https://cdn.simpleicons.org/n8n/white',         alt: 'n8n' },
+  { src: 'https://cdn.simpleicons.org/vite/white',        alt: 'Vite.js' },
+  { src: 'https://cdn.simpleicons.org/nextdotjs/white',   alt: 'Next.js' },
 ]
 
 const stats = [
@@ -54,13 +56,13 @@ export default function QuienesSomos() {
           </motion.div>
         </div>
         
-        <div className="mt-16 mb-12">
-          <LogoLoop 
-            logos={techLogos} 
-            speed={60} 
-            direction="left" 
-            logoHeight={40} 
-            gap={80} 
+        <div className="quienes-logoloop">
+          <LogoLoop
+            logos={techLogos}
+            speed={60}
+            direction="left"
+            logoHeight={40}
+            gap={80}
             fadeOut={true}
             fadeOutColor="var(--bg)"
           />

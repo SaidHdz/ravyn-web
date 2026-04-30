@@ -15,24 +15,24 @@ const TAG_COLORS = ['blue', 'green', 'amber'] as const
 const servicios = [
   {
     num: '01',
-    title: 'Experiencias Web',
-    desc: 'Mini-sitios personalizados para eventos, regalos digitales y páginas especiales. Cada entrega es única.',
-    tags: ['React', 'Animaciones', 'Diseño custom'],
-    value: 'Impulso de Marca',
+    title: 'Desarrollo Web & Apps',
+    desc: 'Landing pages, sitios corporativos y aplicaciones web a medida. Rápido de implementar, fácil de mantener y diseñado para convertir.',
+    tags: ['React', 'Next.js', 'Diseño custom'],
+    value: 'Desde 6,000 MXN',
   },
   {
     num: '02',
     title: 'Soluciones IoT',
     desc: 'Hardware + software a la medida para automatización, monitoreo remoto y control de procesos industriales.',
-    tags: ['Embedded', 'Dashboards', 'Sensores'],
-    value: 'Eficiencia Industrial',
+    tags: ['Embebidos', 'Dashboards', 'Sensores'],
+    value: 'Desde 8,000 MXN',
   },
   {
     num: '03',
-    title: 'Desarrollo Web & Apps',
-    desc: 'Landing pages, sistemas internos y aplicaciones para negocios locales. Rápido de implementar, fácil de mantener.',
-    tags: ['Web', 'Mobile', 'APIs'],
-    value: 'Infraestructura Digital',
+    title: 'Sistemas de Gestión Personalizados',
+    desc: 'Plataformas internas para administrar tu negocio: inventarios, clientes, reportes y flujos de trabajo automatizados.',
+    tags: ['Web', 'APIs', 'Automatización'],
+    value: 'Desde 10,000 MXN',
   },
 ]
 
@@ -40,7 +40,7 @@ export default function Servicios() {
   const [active, setActive] = useState<number>(0)
 
   return (
-    <section id="servicios" className="section">
+    <section id="servicios" className="section" style={{ paddingBottom: '40px' }}>
       <div className="container">
         <SplitText
           text="Servicios"
