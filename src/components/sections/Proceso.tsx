@@ -12,6 +12,8 @@ const pasos = [
     desc: 'Nos reunimos contigo. Entendemos qué quieres construir, para quién y en cuánto tiempo.',
     glowColor: '213 94 68',
     colors: ['#60a5fa', '#3b82f6', '#93c5fd'],
+    startAngle: 135, // esquina inferior derecha
+    sweepDirection: -1 as const,
   },
   {
     num: '02',
@@ -19,6 +21,7 @@ const pasos = [
     desc: 'Te entregamos un documento con el alcance, diseño preliminar y presupuesto en menos de 48 horas.',
     glowColor: '142 71 65',
     colors: ['#4ade80', '#22c55e', '#86efac'],
+    startAngle: 225, // esquina inferior izquierda
   },
   {
     num: '03',
@@ -26,6 +29,7 @@ const pasos = [
     desc: 'Iteraciones rápidas con comunicación directa. Ves avances reales durante todo el proceso.',
     glowColor: '38 92 50',
     colors: ['#f59e0b', '#d97706', '#fcd34d'],
+    startAngle: 45, // esquina superior derecha
   },
   {
     num: '04',
@@ -33,6 +37,8 @@ const pasos = [
     desc: 'Despliegue, documentación y soporte post-entrega. No desaparecemos después de entregar.',
     glowColor: '252 87 77',
     colors: ['#a78bfa', '#8b5cf6', '#c4b5fd'],
+    startAngle: 315, // esquina superior izquierda
+    sweepDirection: -1 as const,
   },
 ]
 
@@ -67,6 +73,11 @@ export default function Proceso() {
                   edgeSensitivity={5}
                   glowIntensity={3}
                   coneSpread={30}
+                  autoLoop
+                  loopDelay={1000}
+                  initialDelay={i * 500}
+                  startAngle={p.startAngle}
+                  sweepDirection={p.sweepDirection ?? 1}
                 >
                   <div className="proceso-card-content">
                     <span className="proceso-card-num">{p.num}</span>

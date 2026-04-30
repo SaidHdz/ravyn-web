@@ -36,12 +36,13 @@ function buildGradientVars(colors: string[]): Record<string, string> {
 function easeOutCubic(x: number) { return 1 - Math.pow(1 - x, 3) }
 function easeInCubic(x: number) { return x * x * x }
 
-function animateValue({ start = 0, end = 100, duration = 1000, delay = 0, ease = easeOutCubic, onUpdate, onEnd }: {
+function animateValue({ start = 0, end = 100, duration = 1000, delay = 0, ease = easeOutCubic, isCancelled, onUpdate, onEnd }: {
   start?: number; end?: number; duration?: number; delay?: number
-  ease?: (x: number) => number; onUpdate: (v: number) => void; onEnd?: () => void
+  ease?: (x: number) => number; isCancelled?: () => boolean; onUpdate: (v: number) => void; onEnd?: () => void
 }) {
   const t0 = performance.now() + delay
   function tick() {
+    if (isCancelled?.()) return
     const elapsed = performance.now() - t0
     const t = Math.min(elapsed / duration, 1)
     onUpdate(start + (end - start) * ease(t))
@@ -64,6 +65,11 @@ interface BorderGlowProps {
   animated?: boolean
   colors?: string[]
   fillOpacity?: number
+  autoLoop?: boolean
+  loopDelay?: number
+  initialDelay?: number
+  startAngle?: number
+  sweepDirection?: 1 | -1
 }
 
 export default function BorderGlow({
@@ -79,8 +85,17 @@ export default function BorderGlow({
   animated = false,
   colors = ['#60a5fa', '#3b82f6', '#93c5fd'],
   fillOpacity = 0.5,
+  autoLoop = false,
+  loopDelay = 2000,
+  initialDelay = 0,
+  startAngle = 110,
+  sweepDirection = 1,
 }: BorderGlowProps) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const isHoveringRef = useRef(false)
+  const loopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const activeSweepIdRef = useRef(0)
+  const runSweepRef = useRef<() => void>(() => {})
 
   const getCenterOfElement = useCallback((el: HTMLDivElement) => {
     const { width, height } = el.getBoundingClientRect()
@@ -120,6 +135,7 @@ export default function BorderGlow({
     card.style.setProperty('--cursor-angle', `${angle.toFixed(3)}deg`)
   }, [getEdgeProximity, getCursorAngle])
 
+  // One-shot animated prop (original behavior)
   useEffect(() => {
     if (!animated || !cardRef.current) return
     const card = cardRef.current
@@ -138,12 +154,84 @@ export default function BorderGlow({
     })
   }, [animated])
 
+  // Auto-loop sweep
+  useEffect(() => {
+    if (!autoLoop || !cardRef.current) return
+    const card = cardRef.current
+
+    const runSweep = (fadeIn = true) => {
+      if (isHoveringRef.current) return
+      const sweepId = ++activeSweepIdRef.current
+      const isCancelled = () => activeSweepIdRef.current !== sweepId
+
+      card.classList.add('sweep-active')
+      card.style.setProperty('--cursor-angle', `${startAngle}deg`)
+
+      if (fadeIn) {
+        animateValue({ duration: 1000, isCancelled, onUpdate: v => card.style.setProperty('--edge-proximity', String(v)) })
+      } else {
+        card.style.setProperty('--edge-proximity', '100')
+      }
+
+      animateValue({ ease: easeInCubic, duration: 3000, end: 50, isCancelled, onUpdate: v => {
+        card.style.setProperty('--cursor-angle', `${(360 * sweepDirection * (v / 100) + startAngle)}deg`)
+      }})
+      animateValue({ ease: easeOutCubic, delay: 3000, duration: 4500, start: 50, end: 100, isCancelled, onUpdate: v => {
+        card.style.setProperty('--cursor-angle', `${(360 * sweepDirection * (v / 100) + startAngle)}deg`)
+      }, onEnd: () => {
+        if (isCancelled()) return
+        if (!isHoveringRef.current) {
+          loopTimerRef.current = setTimeout(() => runSweep(false), loopDelay)
+        }
+      }})
+    }
+
+    runSweepRef.current = () => runSweep(true)
+    loopTimerRef.current = setTimeout(() => runSweep(true), initialDelay)
+
+    return () => {
+      if (loopTimerRef.current) clearTimeout(loopTimerRef.current)
+      activeSweepIdRef.current++
+    }
+  }, [autoLoop, loopDelay, initialDelay])
+
+  const handlePointerEnter = useCallback(() => {
+    if (!autoLoop) return
+    isHoveringRef.current = true
+    activeSweepIdRef.current++
+    if (loopTimerRef.current) {
+      clearTimeout(loopTimerRef.current)
+      loopTimerRef.current = null
+    }
+    const card = cardRef.current
+    if (!card) return
+    card.classList.remove('sweep-active')
+    card.style.setProperty('--edge-proximity', '0')
+  }, [autoLoop])
+
+  const handlePointerLeave = useCallback(() => {
+    if (!autoLoop) return
+    isHoveringRef.current = false
+    activeSweepIdRef.current++
+    if (loopTimerRef.current) {
+      clearTimeout(loopTimerRef.current)
+      loopTimerRef.current = null
+    }
+    const card = cardRef.current
+    if (!card) return
+    card.classList.remove('sweep-active')
+    card.style.setProperty('--edge-proximity', '0')
+    loopTimerRef.current = setTimeout(() => runSweepRef.current(), loopDelay)
+  }, [autoLoop, loopDelay])
+
   const glowVars = buildGlowVars(glowColor, glowIntensity)
 
   return (
     <div
       ref={cardRef}
       onPointerMove={handlePointerMove}
+      onPointerEnter={handlePointerEnter}
+      onPointerLeave={handlePointerLeave}
       className={`border-glow-card ${className}`}
       style={{
         '--card-bg': backgroundColor,
