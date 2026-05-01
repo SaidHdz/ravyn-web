@@ -123,8 +123,16 @@ export default function Servicios() {
                   <motion.div
                     className="servicio-desc-expand"
                     initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: 'auto', opacity: 1, transition: { duration: 0.28, ease } }}
-                    exit={{ height: 0, opacity: 0, transition: { duration: 0 } }}
+                    animate={{ 
+                      height: 'auto', 
+                      opacity: 1, 
+                      transition: { height: { duration: 0.4, ease }, opacity: { duration: 0.25, delay: 0.1 } } 
+                    }}
+                    exit={{ 
+                      height: 0, 
+                      opacity: 0, 
+                      transition: { height: { duration: 0.35, ease }, opacity: { duration: 0.2 } } 
+                    }}
                     style={{ overflow: 'hidden' }}
                   >
                     <div className="servicio-desc-tags">

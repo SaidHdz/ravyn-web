@@ -609,7 +609,7 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
 .servicio-title-group {
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 32px; /* Aumentado de 18px para dar más aire */
   flex-shrink: 0;
 }
 
@@ -1049,13 +1049,16 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
 
   .servicio-line,
   .servicio-tags-row { display: none; }
-  .servicios-list { height: auto; }
+  .servicios-list { 
+    height: auto; 
+    min-height: 480px; /* Reserva espacio para evitar el salto del contenido inferior */
+  }
 
   /* En móvil: título y precio apilados en columna */
   .servicio-title-group {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: 12px; /* Espacio definido entre título y precio */
     flex: 1;
     min-width: 0;
   }

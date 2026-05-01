@@ -10,8 +10,10 @@ interface MagicBentoItem {
   title: string;
   description: string;
   label: string;
-  icon?: React.ReactNode;
+  icon: React.ReactNode;
+  visual?: React.ReactNode;
 }
+
 
 interface MagicBentoProps {
   items: MagicBentoItem[];
@@ -300,6 +302,11 @@ const MagicBento: React.FC<MagicBentoProps> = ({
             <div className="magic-bento-card__content">
               <h2 className="magic-bento-card__title">{card.title}</h2>
               <p className="magic-bento-card__description">{card.description}</p>
+              {card.visual && (
+                <div className="magic-bento-card__visual">
+                  {card.visual}
+                </div>
+              )}
             </div>
           </ParticleCard>
         ))}
