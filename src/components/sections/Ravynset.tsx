@@ -60,13 +60,10 @@ export default function Ravynset() {
         <div className="mb-16">
           <MagicBento 
             items={pilares}
-            textAutoHide={false}
-            enableStars={true}
             enableSpotlight={true}
             enableBorderGlow={true}
             enableTilt={false}
             enableMagnetism={false}
-            clickEffect={true}
             spotlightRadius={500}
             particleCount={15}
             glowColor="96, 165, 250"
