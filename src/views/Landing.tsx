@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme'
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/sections/Hero'
 import Servicios from '@/components/sections/Servicios'
+import Proyectos from '@/components/sections/Proyectos'
 import Ravynset from '@/components/sections/Ravynset'
 import Proceso from '@/components/sections/Proceso'
 import QuienesSomos from '@/components/sections/QuienesSomos'
@@ -20,6 +21,7 @@ export default function Landing() {
       <Navbar theme={theme} onToggle={toggle} />
       <Hero />
       <Servicios />
+      <Proyectos />
       <Ravynset />
       <Proceso />
       <QuienesSomos />
