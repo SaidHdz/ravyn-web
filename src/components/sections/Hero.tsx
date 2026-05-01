@@ -38,24 +38,32 @@ const cards = [
 
 type Card = typeof cards[0]
 
-function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
+function TiltCard({ card }: { card: Card; mobile: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useSpring(useMotionValue(0), springConfig)
   const rotateY = useSpring(useMotionValue(0), springConfig)
   const scale = useSpring(1, springConfig)
 
-  function handleMouse(e: React.MouseEvent<HTMLDivElement>) {
+  function handleInteraction(clientX: number, clientY: number) {
     if (!ref.current) return
     const rect = ref.current.getBoundingClientRect()
-    const offsetX = e.clientX - rect.left - rect.width / 2
-    const offsetY = e.clientY - rect.top - rect.height / 2
+    const offsetX = clientX - rect.left - rect.width / 2
+    const offsetY = clientY - rect.top - rect.height / 2
     rotateX.set((offsetY / (rect.height / 2)) * -14)
     rotateY.set((offsetX / (rect.width / 2)) * 14)
   }
 
-  function handleMouseEnter() { scale.set(1.05) }
+  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    handleInteraction(e.clientX, e.clientY)
+  }
 
-  function handleMouseLeave() {
+  function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
+    handleInteraction(e.touches[0].clientX, e.touches[0].clientY)
+  }
+
+  function handleStart() { scale.set(1.05) }
+
+  function handleEnd() {
     scale.set(1)
     rotateX.set(0)
     rotateY.set(0)
@@ -63,19 +71,22 @@ function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
 
   return (
     <div
-      style={mobile ? undefined : { perspective: '800px', transform: `translateX(${card.x}px)` }}
-      onMouseMove={mobile ? undefined : handleMouse}
-      onMouseEnter={mobile ? undefined : handleMouseEnter}
-      onMouseLeave={mobile ? undefined : handleMouseLeave}
+      style={{ perspective: '800px', transform: `translateX(${card.x}px)` }}
+      onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
+      onMouseEnter={handleStart}
+      onMouseLeave={handleEnd}
+      onTouchStart={handleStart}
+      onTouchEnd={handleEnd}
     >
       <motion.div
         ref={ref}
         className={`hero-card ${card.cls}`}
         initial={{ boxShadow: card.restShadow }}
         animate={{ boxShadow: card.restShadow }}
-        whileHover={mobile ? undefined : { boxShadow: card.hoverShadow, zIndex: 10 }}
-        whileTap={mobile ? { scale: 1.05, boxShadow: card.hoverShadow, zIndex: 10 } : undefined}
-        style={mobile ? undefined : { rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
+        whileHover={{ boxShadow: card.hoverShadow, zIndex: 10 }}
+        whileTap={{ scale: 1.05, boxShadow: card.hoverShadow, zIndex: 10 }}
+        style={{ rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
         transition={{ duration: 0.32, ease }}
       >
         <span className={`hero-card-dot ${card.dot}`} />

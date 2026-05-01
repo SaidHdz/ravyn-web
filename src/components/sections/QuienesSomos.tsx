@@ -93,7 +93,7 @@ export default function QuienesSomos() {
                 viewport={{ once: true, margin: '-60px' }}
                 transition={{ duration: 0.45, ease, delay: 0.1 + i * 0.08 }}
               >
-                <span className={`quienes-stat-value ${s.highlight ? 'text-green-400 drop-shadow-[0_0_15px_rgba(74,222,128,0.5)]' : ''}`}>
+                <span className="quienes-stat-value">
                   {s.type === 'countup' ? (
                     <>
                       {s.prefix}
