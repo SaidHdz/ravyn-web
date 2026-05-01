@@ -1,7 +1,7 @@
 import { motion } from 'motion/react'
 import MagicBento from '../animations/MagicBento'
 import RotatingText from '@/components/RotatingText/RotatingText'
-import { Globe, Bot, Shield, Zap } from 'lucide-react'
+import { Globe, Bot, Shield, TrendingUp } from 'lucide-react'
 
 
 const ease = [0.16, 1, 0.3, 1] as const

@@ -15,8 +15,6 @@ interface MagicBentoItem {
 
 interface MagicBentoProps {
   items: MagicBentoItem[];
-  textAutoHide?: boolean;
-  enableStars?: boolean;
   enableSpotlight?: boolean;
   enableBorderGlow?: boolean;
   disableAnimations?: boolean;
@@ -24,7 +22,6 @@ interface MagicBentoProps {
   particleCount?: number;
   enableTilt?: boolean;
   glowColor?: string;
-  clickEffect?: boolean;
   enableMagnetism?: boolean;
 }
 

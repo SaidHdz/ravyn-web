@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, Variants } from "framer-motion";
 
 interface LogoWallProps {
   items: { imgUrl: string; altText: string }[];
@@ -24,23 +24,23 @@ const LogoWall = ({
 
   const isVertical = direction === "up" || direction === "down";
   
-  const marqueeVariants = {
+  const marqueeVariants: Variants = {
     animate: {
       x: direction === "left" ? [0, -1000] : direction === "right" ? [-1000, 0] : 0,
       y: direction === "up" ? [0, -1000] : direction === "down" ? [-1000, 0] : 0,
       transition: {
         x: {
           repeat: Infinity,
-          repeatType: "loop" as const,
+          repeatType: "loop",
           duration: speed,
           ease: "linear",
-        } as any,
+        },
         y: {
           repeat: Infinity,
-          repeatType: "loop" as const,
+          repeatType: "loop",
           duration: speed,
           ease: "linear",
-        } as any,
+        },
       },
     },
   };
