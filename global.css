@@ -71,6 +71,36 @@ html[data-theme="dark"] {
   --nav-scrolled-bg: rgba(10, 10, 10, 0.9);
 }
 
+/* ── GLOBAL SCROLLBAR ── */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  backdrop-filter: blur(4px);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(96, 165, 250, 0.3); /* Accent translucido */
+  border-radius: 10px;
+  border: 2px solid transparent;
+  background-clip: content-box;
+  transition: background 0.3s;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(96, 165, 250, 0.6); /* Accent más sólido al pasar el mouse */
+  background-clip: content-box;
+}
+
+/* Firefox support */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 165, 250, 0.3) transparent;
+}
+
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
@@ -455,7 +485,7 @@ button {
 .servicios-list {
   display: flex;
   flex-direction: column;
-  height: 282px;
+  height: 325px;
   overflow: hidden;
 }
 .servicio-item {
@@ -1061,8 +1091,11 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   .quienes-closing { font-size: 2.25rem; line-height: 1.3; }
 
   .section-label {
-    font-size: 2rem;
+    font-size: clamp(1.75rem, 10vw, 2rem);
     margin-bottom: 32px;
+    white-space: normal;
+    word-break: keep-all;
+    overflow-wrap: break-word;
   }
 
   .servicio-title {

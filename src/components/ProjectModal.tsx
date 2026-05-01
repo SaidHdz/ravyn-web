@@ -20,10 +20,15 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
+      document.documentElement.style.overflow = 'hidden'
     } else {
       document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
     }
-    return () => { document.body.style.overflow = '' }
+    return () => { 
+      document.body.style.overflow = ''
+      document.documentElement.style.overflow = ''
+    }
   }, [isOpen])
 
   if (!project) return null
@@ -116,6 +121,21 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               border-radius: 24px;
               overflow: hidden;
               box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+            }
+
+            /* Scrollbar personalizada para el modal */
+            .project-modal-content::-webkit-scrollbar {
+              width: 6px;
+            }
+            .project-modal-content::-webkit-scrollbar-track {
+              background: transparent;
+            }
+            .project-modal-content::-webkit-scrollbar-thumb {
+              background: rgba(255, 255, 255, 0.1);
+              border-radius: 10px;
+            }
+            .project-modal-content::-webkit-scrollbar-thumb:hover {
+              background: rgba(255, 255, 255, 0.2);
             }
 
             .modal-close-btn {
