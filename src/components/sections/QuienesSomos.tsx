@@ -15,9 +15,9 @@ const techLogos = [
 ]
 
 const stats = [
-  { type: 'countup', to: 100, suffix: '%', label: 'tasa de éxito' },
-  { type: 'countup', prefix: '< ', to: 48, suffix: 'h', label: 'tiempo de respuesta', highlight: true },
-  { type: 'countup', prefix: '+', to: 500, suffix: 'h', label: 'de automatización' },
+  { type: 'countup', to: 100, suffix: '%', label: 'tasa de éxito', value: '' },
+  { type: 'countup', prefix: '< ', to: 48, suffix: 'h', label: 'tiempo de respuesta', highlight: true, value: '' },
+  { type: 'countup', prefix: '+', to: 500, suffix: 'h', label: 'de automatización', value: '' },
 ]
 
 export default function QuienesSomos() {

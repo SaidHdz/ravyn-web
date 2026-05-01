@@ -31,13 +31,13 @@ const LogoWall = ({
       transition: {
         x: {
           repeat: Infinity,
-          repeatType: "loop",
+          repeatType: "loop" as const,
           duration: speed,
           ease: "linear",
         },
         y: {
           repeat: Infinity,
-          repeatType: "loop",
+          repeatType: "loop" as const,
           duration: speed,
           ease: "linear",
         },

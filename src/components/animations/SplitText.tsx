@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState, useMemo } from 'react';
+import { useRef, useState, useMemo } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -17,7 +17,7 @@ interface SplitTextProps {
   threshold?: number;
   rootMargin?: string;
   textAlign?: 'left' | 'center' | 'right';
-  tag?: keyof JSX.IntrinsicElements;
+  tag?: keyof React.JSX.IntrinsicElements;
   onLetterAnimationComplete?: () => void;
 }
 
@@ -31,13 +31,12 @@ const SplitText: React.FC<SplitTextProps> = ({
   from = { opacity: 0, y: 40 },
   to = { opacity: 1, y: 0 },
   threshold = 0.1,
-  rootMargin = '-100px',
   textAlign = 'left',
   tag: Tag = 'p',
   onLetterAnimationComplete
 }) => {
   const containerRef = useRef<HTMLElement>(null);
-  const [isInView, setIsInView] = useState(false);
+  const [isInView] = useState(false);
 
   // Dividir el texto manualmente para evitar dependencia de plugin de pago
   const elements = useMemo(() => {
@@ -70,8 +69,10 @@ const SplitText: React.FC<SplitTextProps> = ({
     );
   }, { scope: containerRef, dependencies: [text, isInView] });
 
+  const Component = Tag as any;
+
   return (
-    <Tag
+    <Component
       ref={containerRef}
       className={`split-parent ${className}`}
       style={{ 
@@ -81,7 +82,7 @@ const SplitText: React.FC<SplitTextProps> = ({
         wordWrap: 'break-word'
       }}
     >
-      {elements.map((el) => (
+      {elements.map((el: any) => (
         <span
           key={el.id}
           className="split-item"
@@ -90,7 +91,7 @@ const SplitText: React.FC<SplitTextProps> = ({
           {el.content === ' ' ? '\u00A0' : el.content}
         </span>
       ))}
-    </Tag>
+    </Component>
   );
 };
 

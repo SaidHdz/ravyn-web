@@ -71,7 +71,6 @@ const ParticleCard: React.FC<any> = ({
   particleCount = DEFAULT_PARTICLE_COUNT,
   glowColor = DEFAULT_GLOW_COLOR,
   enableTilt = true,
-  clickEffect = false,
   enableMagnetism = false
 }) => {
   const cardRef = useRef<HTMLDivElement>(null);
@@ -208,8 +207,6 @@ const GlobalSpotlight: React.FC<any> = ({
   spotlightRadius = DEFAULT_SPOTLIGHT_RADIUS,
   glowColor = DEFAULT_GLOW_COLOR
 }) => {
-  const spotlightRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     if (disableAnimations || !gridRef?.current || !enabled) return;
 
@@ -224,8 +221,8 @@ const GlobalSpotlight: React.FC<any> = ({
 
     const handleMouseMove = (e: MouseEvent | TouchEvent) => {
       const isTouch = 'touches' in e;
-      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
-      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+      const clientX = isTouch ? (e as TouchEvent).touches[0].clientX : (e as MouseEvent).clientX;
+      const clientY = isTouch ? (e as TouchEvent).touches[0].clientY : (e as MouseEvent).clientY;
 
       const section = gridRef.current?.closest('.bento-section');
       const rect = section?.getBoundingClientRect();
@@ -272,8 +269,6 @@ const GlobalSpotlight: React.FC<any> = ({
 
 const MagicBento: React.FC<MagicBentoProps> = ({
   items,
-  textAutoHide = false,
-  enableStars = true,
   enableSpotlight = true,
   enableBorderGlow = true,
   disableAnimations = false,
@@ -281,18 +276,9 @@ const MagicBento: React.FC<MagicBentoProps> = ({
   particleCount = DEFAULT_PARTICLE_COUNT,
   enableTilt = true,
   glowColor = DEFAULT_GLOW_COLOR,
-  clickEffect = true,
   enableMagnetism = true
 }) => {
   const gridRef = useRef<HTMLDivElement>(null);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   const shouldDisableAnimations = disableAnimations;
 
@@ -309,7 +295,6 @@ const MagicBento: React.FC<MagicBentoProps> = ({
             particleCount={particleCount}
             glowColor={glowColor}
             enableTilt={enableTilt}
-            clickEffect={clickEffect}
             enableMagnetism={enableMagnetism}
           >
             <div className="magic-bento-card__header">

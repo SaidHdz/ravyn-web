@@ -3,22 +3,9 @@ import { motion, useScroll, useSpring, type Variants } from 'motion/react'
 import { Theme } from '@/hooks/useTheme'
 
 interface NavbarProps {
-  theme: Theme
-  onToggle: () => void
+  theme?: string
+  onToggle?: () => void
 }
-
-const SunIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="4"/>
-    <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
-  </svg>
-)
-
-const MoonIcon = () => (
-  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
-  </svg>
-)
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -27,7 +14,7 @@ const fillVariants: Variants = {
   hover: { clipPath: 'circle(150% at 50% 50%)', transition: { duration: 0.9, ease } },
 }
 
-export default function Navbar({ theme, onToggle }: NavbarProps) {
+export default function Navbar({ }: NavbarProps) {
   const [scrolled, setScrolled] = useState(false)
 
   const { scrollYProgress } = useScroll()
