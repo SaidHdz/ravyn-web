@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState, memo } from 'react';
-import { Link } from 'react-router-dom';
 import { gsap } from 'gsap';
 import './PillNav.css';
 
@@ -17,9 +16,6 @@ interface PillNavProps {
   className?: string;
   ease?: string;
   baseColor?: string;
-  pillColor?: string;
-  hoveredPillTextColor?: string;
-  pillTextColor?: string;
   onMobileMenuClick?: () => void;
   initialLoadAnimation?: boolean;
 }
@@ -31,21 +27,13 @@ const PillNav: React.FC<PillNavProps> = ({
   activeHref,
   className = '',
   ease = 'power3.easeOut',
-  baseColor = '#fff',
-  pillColor = 'transparent',
-  hoveredPillTextColor = '#000',
-  pillTextColor,
   onMobileMenuClick,
   initialLoadAnimation = true
 }) => {
-  const resolvedPillTextColor = pillTextColor ?? baseColor;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const circleRefs = useRef<(HTMLSpanElement | null)[]>([]);
   const tlRefs = useRef<gsap.core.Timeline[]>([]);
   const activeTweenRefs = useRef<gsap.core.Tween[]>([]);
-  const logoImgRef = useRef<HTMLImageElement>(null);
-  const logoTweenRef = useRef<gsap.core.Tween | null>(null);
-  const hamburgerRef = useRef<HTMLButtonElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
   const navItemsRef = useRef<HTMLDivElement>(null);
   const logoRef = useRef<HTMLAnchorElement>(null);
@@ -124,8 +112,6 @@ const PillNav: React.FC<PillNavProps> = ({
     }
     onMobileMenuClick?.();
   };
-
-  const isRouterLink = (href: string) => href.startsWith('/') && !href.includes('#');
 
   return (
     <div className="pill-nav-container">

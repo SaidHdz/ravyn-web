@@ -34,13 +34,13 @@ const LogoWall = ({
           repeatType: "loop" as const,
           duration: speed,
           ease: "linear",
-        },
+        } as any,
         y: {
           repeat: Infinity,
           repeatType: "loop" as const,
           duration: speed,
           ease: "linear",
-        },
+        } as any,
       },
     },
   };

@@ -1,11 +1,10 @@
-import React, { useRef, useEffect, useCallback, useState, memo } from 'react';
+import React, { useRef, useEffect, useCallback, memo } from 'react';
 import { gsap } from 'gsap';
 import './MagicBento.css';
 
 const DEFAULT_PARTICLE_COUNT = 12;
 const DEFAULT_SPOTLIGHT_RADIUS = 300;
 const DEFAULT_GLOW_COLOR = '96, 165, 250'; // Ravyn Accent
-const MOBILE_BREAKPOINT = 768;
 
 interface MagicBentoItem {
   title: string;

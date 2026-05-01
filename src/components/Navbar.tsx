@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { motion, useScroll, useSpring, type Variants } from 'motion/react'
-import { Theme } from '@/hooks/useTheme'
 
 interface NavbarProps {
   theme?: string
