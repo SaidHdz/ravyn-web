@@ -73,21 +73,21 @@ export default function Proceso() {
               transition={{ duration: 0.5, ease, delay: i * 0.08 }}
             >
               <TiltCard amplitude={10} scaleOnHover={1.04} style={{ height: '100%' }} disabled={isMobile}>
-                <BorderGlow
-                  glowColor={p.glowColor}
-                  colors={p.colors}
-                  backgroundColor="var(--bg-surface)"
-                  borderRadius={12}
-                  glowRadius={70}
-                  edgeSensitivity={5}
-                  glowIntensity={3}
-                  coneSpread={30}
-                  autoLoop
-                  loopDelay={1000}
-                  initialDelay={i * 500}
-                  startAngle={p.startAngle}
-                  sweepDirection={p.sweepDirection ?? 1}
-                >
+                  <BorderGlow
+                    glowColor={p.glowColor}
+                    colors={p.colors}
+                    backgroundColor="var(--bg-surface)"
+                    borderRadius={12}
+                    glowRadius={isMobile ? 35 : 70}
+                    edgeSensitivity={5}
+                    glowIntensity={isMobile ? 1.5 : 3}
+                    coneSpread={30}
+                    autoLoop={!isMobile}
+                    loopDelay={1000}
+                    initialDelay={i * 500}
+                    startAngle={p.startAngle}
+                    sweepDirection={p.sweepDirection ?? 1}
+                  >
                   <div className="proceso-card-content">
                     <span className="proceso-card-num">{p.num}</span>
                     <h3 className="proceso-card-title">{p.title}</h3>

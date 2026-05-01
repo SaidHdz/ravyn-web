@@ -74,6 +74,7 @@ function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
         initial={{ boxShadow: card.restShadow }}
         animate={{ boxShadow: card.restShadow }}
         whileHover={mobile ? undefined : { boxShadow: card.hoverShadow, zIndex: 10 }}
+        whileTap={mobile ? { scale: 1.05, boxShadow: card.hoverShadow, zIndex: 10 } : undefined}
         style={mobile ? undefined : { rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
         transition={{ duration: 0.32, ease }}
       >
