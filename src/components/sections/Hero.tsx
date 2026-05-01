@@ -38,7 +38,7 @@ const cards = [
 
 type Card = typeof cards[0]
 
-function TiltCard({ card }: { card: Card; mobile: boolean }) {
+function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
   const ref = useRef<HTMLDivElement>(null)
   const rotateX = useSpring(useMotionValue(0), springConfig)
   const rotateY = useSpring(useMotionValue(0), springConfig)
@@ -71,7 +71,10 @@ function TiltCard({ card }: { card: Card; mobile: boolean }) {
 
   return (
     <div
-      style={{ perspective: '800px', transform: `translateX(${card.x}px)` }}
+      style={{ 
+        perspective: '800px', 
+        transform: mobile ? 'none' : `translateX(${card.x}px)` 
+      }}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
       onMouseEnter={handleStart}

@@ -90,6 +90,15 @@ body {
   position: relative;
   width: 100%;
   min-height: 100vh;
+  /* Evitar selección intrusiva y resaltar al tocar en móviles */
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Permitir selección solo en elementos específicos si fuera necesario, 
+   por ahora desactivado globalmente para evitar el problema de Google Search */
+p, h1, h2, h3, h4, span, div {
+  -webkit-touch-callout: none;
 }
 
 *, *::before, *::after {

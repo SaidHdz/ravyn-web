@@ -78,13 +78,13 @@ export default function Proceso() {
                     colors={p.colors}
                     backgroundColor="var(--bg-surface)"
                     borderRadius={12}
-                    glowRadius={isMobile ? 35 : 70}
+                    glowRadius={isMobile ? 30 : 70}
                     edgeSensitivity={5}
-                    glowIntensity={isMobile ? 1.5 : 3}
+                    glowIntensity={isMobile ? 1.2 : 3}
                     coneSpread={30}
-                    autoLoop={!isMobile}
-                    loopDelay={1000}
-                    initialDelay={i * 500}
+                    autoLoop={true}
+                    loopDelay={isMobile ? 2000 : 1000}
+                    initialDelay={i * 800}
                     startAngle={p.startAngle}
                     sweepDirection={p.sweepDirection ?? 1}
                   >

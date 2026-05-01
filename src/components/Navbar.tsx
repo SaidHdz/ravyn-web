@@ -37,7 +37,7 @@ return (
     <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
       <motion.div className="scroll-progress" style={{ scaleX }} />
 
-      <div className="nav-logo">
+      <div className="nav-logo" onClick={() => scrollTo('root')} style={{ cursor: 'pointer' }}>
         Ravyn Studio<span>.</span>
       </div>
       <div className="nav-links">
