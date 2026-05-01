@@ -1,3 +1,4 @@
+import React, { useState } from 'react'
 import { motion } from 'motion/react'
 import SplitText from '../animations/SplitText'
 import Magnet from '../animations/Magnet'
@@ -5,6 +6,47 @@ import Magnet from '../animations/Magnet'
 const ease = [0.16, 1, 0.3, 1] as const
 
 export default function Contacto() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    interest: 'web',
+    message: ''
+  });
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('loading');
+    
+    try {
+      const response = await fetch('https://n8n.srv1574981.hstgr.cloud/webhook-test/7fbb8c25-6554-4698-b45e-f2329c5d7114', {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (response.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', interest: 'web', message: '' });
+        setTimeout(() => setStatus('idle'), 5000);
+      } else {
+        setStatus('error');
+      }
+    } catch (error) {
+      console.error('Error al enviar:', error);
+      setStatus('error');
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setFormData(prev => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
   return (
     <section id="contacto" className="section">
       <div className="container">
@@ -16,63 +58,152 @@ export default function Contacto() {
           tag="p"
         />
         <div className="contacto-layout">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, ease }}
-          >
-            <div className="flex flex-col items-start mb-6">
-              <SplitText
-                text="¿Tienes un"
-                className="contacto-heading"
-                delay={40}
-                duration={0.6}
-                tag="h2"
-                textAlign="left"
-                splitType="words"
-              />
-              <SplitText
-                text="proyecto?"
-                className="contacto-heading"
-                delay={40}
-                duration={0.6}
-                tag="h2"
-                textAlign="left"
-                splitType="words"
-              />
-            </div>
-            <p className="contacto-sub">
-              Cuéntanos qué quieres construir o lo que necesitas resolver. Respondemos en menos de 24 horas.
-            </p>
-          </motion.div>
+          <div className="contacto-info-col">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.55, ease }}
+            >
+              <div className="flex flex-col items-start mb-6">
+                <SplitText
+                  text="¿Tienes un"
+                  className="contacto-heading"
+                  delay={40}
+                  duration={0.6}
+                  tag="h2"
+                  textAlign="left"
+                  splitType="words"
+                />
+                <SplitText
+                  text="proyecto?"
+                  className="contacto-heading"
+                  delay={40}
+                  duration={0.6}
+                  tag="h2"
+                  textAlign="left"
+                  splitType="words"
+                />
+              </div>
+              <p className="contacto-sub mb-12">
+                Cuéntanos qué quieres construir o lo que necesitas resolver. Respondemos en menos de 24 horas.
+              </p>
+            </motion.div>
 
-          <motion.div
-            className="contacto-options"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            <motion.div
+              className="contacto-options"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.55, ease, delay: 0.15 }}
+            >
+              <Magnet distance={0.15} stiffness={160} damping={15}>
+                <a className="contact-option" href="https://wa.me/528361168007" target="_blank" rel="noopener noreferrer">
+                  <div className="contact-option-body">
+                    <p className="contact-option-label">WhatsApp</p>
+                    <p className="contact-option-value">+52 836 116 8007</p>
+                  </div>
+                  <span className="contact-option-arrow">→</span>
+                </a>
+              </Magnet>
+              
+              <Magnet distance={0.15} stiffness={160} damping={15}>
+                <a className="contact-option" href="mailto:contacto@ravynstudio.mx">
+                  <div className="contact-option-body">
+                    <p className="contact-option-label">Email</p>
+                    <p className="contact-option-value">contacto@ravynstudio.mx</p>
+                  </div>
+                  <span className="contact-option-arrow">→</span>
+                </a>
+              </Magnet>
+            </motion.div>
+          </div>
+
+          <motion.div 
+            className="contacto-form-col"
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.55, ease, delay: 0.1 }}
+            transition={{ duration: 0.6, ease, delay: 0.2 }}
           >
-            <Magnet distance={0.15} stiffness={160} damping={15}>
-              <a className="contact-option" href="https://wa.me/528361168007" target="_blank" rel="noopener noreferrer">
-                <div className="contact-option-body">
-                  <p className="contact-option-label">WhatsApp</p>
-                  <p className="contact-option-value">+52 836 116 8007</p>
-                </div>
-                <span className="contact-option-arrow">→</span>
-              </a>
-            </Magnet>
-            
-            <Magnet distance={0.15} stiffness={160} damping={15}>
-              <a className="contact-option" href="mailto:contacto@ravynstudio.mx">
-                <div className="contact-option-body">
-                  <p className="contact-option-label">Email</p>
-                  <p className="contact-option-value">contacto@ravynstudio.mx</p>
-                </div>
-                <span className="contact-option-arrow">→</span>
-              </a>
-            </Magnet>
+            <form className="contact-form" onSubmit={handleSubmit}>
+              <div className="form-group">
+                <label className="form-label">Nombre</label>
+                <input 
+                  type="text" 
+                  name="name"
+                  className="form-input" 
+                  placeholder="Tu nombre" 
+                  value={formData.name}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+              
+              <div className="form-group">
+                <label className="form-label">Email</label>
+                <input 
+                  type="email" 
+                  name="email"
+                  className="form-input" 
+                  placeholder="tu@email.com" 
+                  value={formData.email}
+                  onChange={handleChange}
+                  required 
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Interés</label>
+                <select 
+                  name="interest"
+                  className="form-input appearance-none" 
+                  style={{ cursor: 'pointer' }}
+                  value={formData.interest}
+                  onChange={handleChange}
+                >
+                  <option value="web">Desarrollo Web / App</option>
+                  <option value="iot">Soluciones IoT</option>
+                  <option value="automation">Automatización / n8n</option>
+                  <option value="other">Otro Proyecto</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Mensaje</label>
+                <textarea 
+                  name="message"
+                  className="form-textarea" 
+                  placeholder="¿Cómo podemos ayudarte?" 
+                  value={formData.message}
+                  onChange={handleChange}
+                  required
+                ></textarea>
+              </div>
+
+              <button 
+                type="submit" 
+                className="btn-primary form-submit"
+                disabled={status === 'loading'}
+              >
+                <motion.span whileHover={{ x: 3 }} className="flex items-center gap-2">
+                  {status === 'loading' ? 'Enviando...' : 
+                   status === 'success' ? '¡Mensaje Enviado!' : 
+                   status === 'error' ? 'Error al enviar' : 'Enviar Mensaje'} 
+                   {status === 'idle' && <span>→</span>}
+                </motion.span>
+              </button>
+
+              {status === 'success' && (
+                <motion.p 
+                  initial={{ opacity: 0, y: 5 }} 
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-green-400 text-xs mt-2 text-center font-mono"
+                >
+                  ¡Recibido! En Ravyn Studio nos ponemos en contacto contigo pronto.
+                </motion.p>
+              )}
+            </form>
           </motion.div>
         </div>
       </div>

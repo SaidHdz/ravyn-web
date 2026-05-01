@@ -901,11 +901,81 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   text-transform: uppercase;
 }
 
+/* ── CONTACT FORM ── */
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.form-input, 
+.form-textarea {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 14px 16px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  width: 100%;
+  appearance: none; /* Reset nativo */
+}
+
+/* Diseño especial para el select */
+select.form-input {
+  cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%238e8e93' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  padding-right: 45px;
+}
+
+select.form-input option {
+  background-color: #141414;
+  color: #f0f0f0;
+  padding: 12px;
+}
+
+.form-input:focus, 
+.form-textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+.form-textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.form-submit {
+  margin-top: 8px;
+  width: 100%; /* Botón al ancho total */
+  justify-content: center;
+  padding: 16px;
+}
+
 /* ── CONTACTO ── */
 .contacto-layout {
   display: grid;
-  grid-template-columns: 3fr 2fr;
-  gap: 80px;
+  grid-template-columns: 1fr 1fr; /* Cambiado a 1fr 1fr para el form */
+  gap: 100px;
   align-items: start;
 }
 .contacto-heading {
@@ -1076,7 +1146,10 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
 
   .quienes-layout { grid-template-columns: 1fr; gap: 48px; }
   .quienes-stats { grid-template-columns: repeat(3, 1fr); }
-  .contacto-layout { grid-template-columns: 1fr; gap: 48px; }
+  .contacto-layout { 
+    grid-template-columns: 1fr; 
+    gap: 60px; 
+  }
   .contacto-sub { max-width: none; }
 
   .footer-inner { flex-direction: column; align-items: flex-start; gap: 8px; }
