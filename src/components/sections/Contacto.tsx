@@ -22,14 +22,26 @@ export default function Contacto() {
             viewport={{ once: true, margin: '-60px' }}
             transition={{ duration: 0.55, ease }}
           >
-            <SplitText
-              text="¿Tienes un proyecto?"
-              className="contacto-heading mb-6"
-              delay={40}
-              duration={0.6}
-              tag="h2"
-              textAlign="left"
-            />
+            <div className="flex flex-col items-start mb-6">
+              <SplitText
+                text="¿Tienes un"
+                className="contacto-heading"
+                delay={40}
+                duration={0.6}
+                tag="h2"
+                textAlign="left"
+                splitType="words"
+              />
+              <SplitText
+                text="proyecto?"
+                className="contacto-heading"
+                delay={40}
+                duration={0.6}
+                tag="h2"
+                textAlign="left"
+                splitType="words"
+              />
+            </div>
             <p className="contacto-sub">
               Cuéntanos qué quieres construir o lo que necesitas resolver. Respondemos en menos de 24 horas.
             </p>

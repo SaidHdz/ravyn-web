@@ -79,7 +79,9 @@ export default function QuienesSomos() {
         </motion.p>
       </div>
       <div className="quienes-stats-strip">
-        <span className="quienes-stats-bg-text" aria-hidden="true">RAVYN</span>
+        <span className="quienes-stats-bg-text" aria-hidden="true">
+          RAVYN<span className="mobile-only-br"><br /></span> STUDIO
+        </span>
         <div className="container">
           <div className="quienes-stats">
             {stats.map((s, i) => (

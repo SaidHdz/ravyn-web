@@ -222,43 +222,47 @@ const GlobalSpotlight: React.FC<any> = ({
     `;
     document.body.appendChild(spotlight);
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMouseMove = (e: MouseEvent | TouchEvent) => {
+      const isTouch = 'touches' in e;
+      const clientX = isTouch ? e.touches[0].clientX : e.clientX;
+      const clientY = isTouch ? e.touches[0].clientY : e.clientY;
+
       const section = gridRef.current?.closest('.bento-section');
       const rect = section?.getBoundingClientRect();
-      const mouseInside = rect && e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+      const mouseInside = rect && clientX >= rect.left && clientX <= rect.right && clientY >= rect.top && clientY <= rect.bottom;
 
       const cards = gridRef.current?.querySelectorAll('.magic-bento-card') as NodeListOf<HTMLElement>;
 
-      if (!mouseInside) {
+      if (!mouseInside && !isTouch) {
         gsap.to(spotlight, { opacity: 0, duration: 0.3 });
         cards.forEach(card => card.style.setProperty('--glow-intensity', '0'));
         return;
       }
 
       const { proximity, fadeDistance } = calculateSpotlightValues(spotlightRadius);
-      let minDistance = Infinity;
 
       cards.forEach(card => {
         const cardRect = card.getBoundingClientRect();
         const centerX = cardRect.left + cardRect.width / 2;
         const centerY = cardRect.top + cardRect.height / 2;
-        const distance = Math.hypot(e.clientX - centerX, e.clientY - centerY) - Math.max(cardRect.width, cardRect.height) / 2;
+        const distance = Math.hypot(clientX - centerX, clientY - centerY) - Math.max(cardRect.width, cardRect.height) / 2;
         const effectiveDistance = Math.max(0, distance);
-        minDistance = Math.min(minDistance, effectiveDistance);
 
         let glowIntensity = 0;
         if (effectiveDistance <= proximity) glowIntensity = 1;
         else if (effectiveDistance <= fadeDistance) glowIntensity = (fadeDistance - effectiveDistance) / (fadeDistance - proximity);
 
-        updateCardGlowProperties(card, e.clientX, e.clientY, glowIntensity, spotlightRadius);
+        updateCardGlowProperties(card, clientX, clientY, glowIntensity, spotlightRadius);
       });
 
-      gsap.to(spotlight, { left: e.clientX, top: e.clientY, opacity: 0.6, duration: 0.1 });
+      gsap.to(spotlight, { left: clientX, top: clientY, opacity: isTouch ? 0.4 : 0.6, duration: 0.1 });
     };
 
     document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('touchmove', handleMouseMove, { passive: true });
     return () => {
       document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('touchmove', handleMouseMove);
       spotlight.remove();
     };
   }, [gridRef, disableAnimations, enabled, spotlightRadius, glowColor]);
@@ -290,7 +294,7 @@ const MagicBento: React.FC<MagicBentoProps> = ({
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const shouldDisableAnimations = disableAnimations || isMobile;
+  const shouldDisableAnimations = disableAnimations;
 
   return (
     <div className="bento-section" ref={gridRef}>

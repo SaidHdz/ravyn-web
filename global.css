@@ -786,14 +786,39 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%) rotate(-8deg);
-  font-size: clamp(18rem, 28vw, 30rem);
+  font-size: clamp(6rem, 20vw, 40rem);
   font-weight: 900;
-  line-height: 1;
+  line-height: 0.8;
   color: rgba(255, 255, 255, 0.04);
   letter-spacing: -0.05em;
   white-space: nowrap;
   pointer-events: none;
   user-select: none;
+  text-align: center;
+  width: 100%;
+  display: block;
+  overflow: hidden; /* Evita que el texto gigante cause scroll horizontal */
+}
+
+/* Manejo del contenido STUDIO */
+.mobile-only-br { display: none; }
+
+@media (min-width: 901px) {
+  /* Ocultar STUDIO en desktop de forma visualmente limpia */
+  .quienes-stats-bg-text {
+    max-height: 1.1em;
+    overflow: hidden;
+  }
+}
+
+@media (max-width: 900px) {
+  .mobile-only-br { display: inline; }
+  .quienes-stats-bg-text {
+    font-size: clamp(6rem, 28vw, 15rem);
+    white-space: normal;
+    width: 100vw;
+    line-height: 0.75;
+  }
 }
 .quienes-stats {
   display: grid;
@@ -834,11 +859,13 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   align-items: start;
 }
 .contacto-heading {
-  font-size: clamp(52px, 7vw, 100px);
+  font-size: clamp(32px, 7vw, 100px);
   font-weight: 700;
   letter-spacing: -0.04em;
-  line-height: 1.0;
+  line-height: 1.1; /* Incrementado ligeramente para evitar cortes */
   color: var(--text);
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 .contacto-sub {
   font-size: 0.9rem;
@@ -972,7 +999,7 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
 
   .servicio-line,
   .servicio-tags-row { display: none; }
-  .servicios-list { height: 325px; }
+  .servicios-list { height: auto; }
 
   /* En móvil: título y precio apilados en columna */
   .servicio-title-group {
@@ -1031,7 +1058,7 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   }
 
   #servicios { padding-top: 20px; }
-  .servicios-list { height: 325px; }
+  .servicios-list { height: auto; }
 
   .proceso-card-content {
     padding: 28px 28px 32px;

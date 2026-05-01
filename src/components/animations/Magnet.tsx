@@ -29,6 +29,18 @@ const Magnet: React.FC<MagnetProps> = ({
     if (!containerRef.current) return;
 
     const { clientX, clientY } = e;
+    updatePosition(clientX, clientY);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    if (!containerRef.current) return;
+
+    const { clientX, clientY } = e.touches[0];
+    updatePosition(clientX, clientY);
+  };
+
+  const updatePosition = (clientX: number, clientY: number) => {
+    if (!containerRef.current) return;
     const { left, top, width, height } = containerRef.current.getBoundingClientRect();
 
     const centerX = left + width / 2;
@@ -50,7 +62,9 @@ const Magnet: React.FC<MagnetProps> = ({
     <motion.div
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onTouchMove={handleTouchMove}
       onMouseLeave={handleMouseLeave}
+      onTouchEnd={handleMouseLeave}
       style={{ x, y, display: 'inline-block' }}
     >
       {children}

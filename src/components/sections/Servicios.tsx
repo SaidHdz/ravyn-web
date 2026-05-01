@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import SplitText from '../animations/SplitText'
 
@@ -38,6 +38,16 @@ const servicios = [
 
 export default function Servicios() {
   const [active, setActive] = useState<number>(0)
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(!window.matchMedia('(hover: hover)').matches)
+    }
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   return (
     <section id="servicios" className="section" style={{ paddingBottom: '40px' }}>
@@ -59,7 +69,7 @@ export default function Servicios() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-60px' }}
               transition={{ duration: 0.4, ease, delay: i * 0.08 }}
-              onHoverStart={() => setActive(i)}
+              onHoverStart={() => !isMobile && setActive(i)}
               onClick={() => setActive(active === i ? -1 : i)}
             >
               <div className="servicio-row">
