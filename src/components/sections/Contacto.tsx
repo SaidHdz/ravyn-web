@@ -19,24 +19,29 @@ export default function Contacto() {
     setStatus('loading');
     
     try {
-      const response = await fetch('https://n8n.srv1574981.hstgr.cloud/webhook-test/7fbb8c25-6554-4698-b45e-f2329c5d7114', {
+      const response = await fetch('https://n8n.srv1574981.hstgr.cloud/webhook/contacto-ravyn', {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json' 
         },
+        mode: 'cors',
         body: JSON.stringify(formData)
       });
       
-      if (response.ok) {
+      // n8n a veces responde con 200 pero sin cuerpo, o con texto plano
+      if (response.ok || response.status === 200) {
         setStatus('success');
         setFormData({ name: '', email: '', interest: 'web', message: '' });
         setTimeout(() => setStatus('idle'), 5000);
       } else {
+        console.error('Respuesta no exitosa:', response.status);
         setStatus('error');
+        setTimeout(() => setStatus('idle'), 4000);
       }
     } catch (error) {
-      console.error('Error al enviar:', error);
+      console.error('Error de red o CORS:', error);
       setStatus('error');
+      setTimeout(() => setStatus('idle'), 4000);
     }
   };
 
