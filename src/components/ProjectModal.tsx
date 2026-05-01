@@ -11,6 +11,9 @@ interface ProjectModalProps {
     description: string
     tech: string[]
     image?: string
+    problem?: string
+    solution?: string
+    result?: string
   } | null
 }
 
@@ -52,41 +55,64 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.5, ease }}
           >
-            <button className="modal-close-btn" onClick={onClose}>
+            {/* Botón de cierre - Fuera del área de scroll para que siempre esté visible */}
+            <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar modal">
               <X size={20} />
             </button>
 
-            <div className="modal-inner">
-              <div className="modal-header">
-                <div className="modal-tag" style={{ color: project.color }}>PROYECTO SELECCIONADO</div>
-                <h2 className="modal-title">{project.title}</h2>
-              </div>
+            {/* Área con scroll */}
+            <div className="modal-scroll-area">
+              <div className="modal-inner">
+                <div className="modal-main-grid">
+                  <div className="modal-content-col">
+                    <div className="modal-header">
+                      <div className="modal-tag" style={{ color: project.color }}>CASO DE ÉXITO</div>
+                      <h2 className="modal-title">{project.title}</h2>
+                    </div>
 
-              <div className="modal-body">
-                <div className="modal-info">
-                  <p className="modal-description">{project.description}</p>
-                  
-                  <div className="modal-tech-section">
-                    <h4 className="tech-heading">Tecnologías</h4>
-                    <div className="tech-stack">
-                      {project.tech.map(t => (
-                        <span key={t} className="tech-pill">{t}</span>
-                      ))}
+                    <div className="modal-info">
+                      {project.problem ? (
+                        <div className="success-case-grid">
+                          <div className="success-item">
+                            <span className="success-label">Problema</span>
+                            <p className="success-text">{project.problem}</p>
+                          </div>
+                          <div className="success-item">
+                            <span className="success-label">Solución</span>
+                            <p className="success-text">{project.solution}</p>
+                          </div>
+                          <div className="success-item highlight">
+                            <span className="success-label" style={{ color: project.color }}>Resultado</span>
+                            <p className="success-result" style={{ color: project.color }}>{project.result}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="modal-description">{project.description}</p>
+                      )}
+                      
+                      <div className="modal-tech-section">
+                        <h4 className="tech-heading">Stack Tecnológico</h4>
+                        <div className="tech-stack">
+                          {project.tech.map(t => (
+                            <span key={t} className="tech-pill">{t}</span>
+                          ))}
+                        </div>
+                      </div>
+
+                      <button className="visit-btn" style={{ '--btn-color': project.color } as any}>
+                        <span>Ver Demo en Vivo</span>
+                        <div className="visit-btn-bg" />
+                      </button>
                     </div>
                   </div>
 
-                  <button className="visit-btn" style={{ '--btn-color': project.color } as any}>
-                    <span>Ver caso de estudio</span>
-                    <div className="visit-btn-bg" />
-                  </button>
-                </div>
-
-                <div className="modal-visual">
-                  <div className="mockup-placeholder" style={{ borderColor: `${project.color}40` }}>
-                    <div className="mockup-content">
-                       <span style={{ opacity: 0.3 }}>Visualización del Proyecto</span>
+                  <div className="modal-visual-col">
+                    <div className="mockup-placeholder" style={{ borderColor: `${project.color}40` }}>
+                      <div className="mockup-content">
+                         <span style={{ opacity: 0.3 }}>Visualización del Sistema</span>
+                      </div>
+                      <div className="mockup-glow" style={{ background: `radial-gradient(circle at 50% 50%, ${project.color}20 0%, transparent 70%)` }} />
                     </div>
-                    <div className="mockup-glow" style={{ background: `radial-gradient(circle at 50% 50%, ${project.color}20 0%, transparent 70%)` }} />
                   </div>
                 </div>
               </div>
@@ -101,7 +127,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               display: flex;
               align-items: center;
               justify-content: center;
-              padding: 20px;
+              padding: 40px 20px; /* Más padding para que no toque los bordes */
             }
 
             .project-modal-backdrop {
@@ -115,49 +141,58 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             .project-modal-content {
               position: relative;
               width: 100%;
-              max-width: 900px;
+              max-width: 1000px;
+              max-height: 85vh; /* Altura máxima controlada */
               background: #141414;
               border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 24px;
-              overflow: hidden;
+              border-radius: 32px; /* Bordes más redondeados */
+              overflow: hidden; /* Importante para que el scroll area no rompa los bordes */
               box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+              display: flex;
+              flex-direction: column;
             }
 
-            /* Scrollbar personalizada para el modal */
-            .project-modal-content::-webkit-scrollbar {
+            .modal-scroll-area {
+              width: 100%;
+              height: 100%;
+              overflow-x: hidden;
+              overflow-y: auto;
+            }
+
+            /* Scrollbar personalizada para el área de scroll */
+            .modal-scroll-area::-webkit-scrollbar {
               width: 6px;
             }
-            .project-modal-content::-webkit-scrollbar-track {
+            .modal-scroll-area::-webkit-scrollbar-track {
               background: transparent;
             }
-            .project-modal-content::-webkit-scrollbar-thumb {
+            .modal-scroll-area::-webkit-scrollbar-thumb {
               background: rgba(255, 255, 255, 0.1);
               border-radius: 10px;
-            }
-            .project-modal-content::-webkit-scrollbar-thumb:hover {
-              background: rgba(255, 255, 255, 0.2);
             }
 
             .modal-close-btn {
               position: absolute;
               top: 24px;
               right: 24px;
-              width: 40px;
-              height: 40px;
+              width: 44px;
+              height: 44px;
               border-radius: 50%;
-              background: rgba(255, 255, 255, 0.03);
-              border: 1px solid rgba(255, 255, 255, 0.1);
+              background: #141414; /* Mismo que el fondo para que no se vea el contenido debajo */
+              border: 1px solid rgba(255, 255, 255, 0.15);
               color: white;
               display: flex;
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              z-index: 10;
+              z-index: 100; /* Siempre por encima */
               transition: all 0.2s;
+              box-shadow: 0 4px 12px rgba(0,0,0,0.2);
             }
             .modal-close-btn:hover {
               background: rgba(255, 255, 255, 0.08);
-              transform: rotate(90deg);
+              transform: rotate(90deg) scale(1.1);
+              border-color: rgba(255, 255, 255, 0.3);
             }
 
             .modal-inner {
@@ -172,30 +207,74 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             }
 
             .modal-title {
-              font-size: clamp(2rem, 4vw, 3.5rem);
+              font-size: clamp(2.2rem, 5vw, 3.8rem);
               font-weight: 700;
-              margin-bottom: 40px;
+              margin-bottom: 50px;
+              letter-spacing: -0.03em;
+            }
+
+            .modal-main-grid {
+              display: grid;
+              grid-template-columns: 1.1fr 0.9fr; /* Ligera ventaja a la info para legibilidad */
+              gap: 80px;
+              align-items: start;
+            }
+
+            .modal-content-col {
+              display: flex;
+              flex-direction: column;
+            }
+
+            .modal-visual-col {
+              position: sticky;
+              top: 0;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .success-case-grid {
+              display: flex;
+              flex-direction: column;
+              gap: 32px;
+              margin-bottom: 48px;
+            }
+
+            .success-item {
+              display: flex;
+              flex-direction: column;
+              gap: 8px;
+            }
+
+            .success-label {
+              font-family: var(--font-mono);
+              font-size: 0.65rem;
+              text-transform: uppercase;
+              letter-spacing: 0.1em;
+              color: #58585e;
+            }
+
+            .success-text {
+              font-size: 1.1rem;
+              color: #f0f0f0;
+              line-height: 1.5;
+            }
+
+            .success-result {
+              font-size: 1.8rem;
+              font-weight: 700;
               letter-spacing: -0.02em;
             }
 
-            .modal-body {
-              display: grid;
-              grid-template-columns: 1fr 1.2fr;
-              gap: 60px;
-            }
-
-            .modal-description {
-              font-size: 1.05rem;
-              color: #9a9a9f;
-              line-height: 1.7;
-              margin-bottom: 40px;
+            .modal-tech-section {
+              margin-top: 20px;
             }
 
             .tech-heading {
-              font-size: 0.8rem;
+              font-size: 0.75rem;
               text-transform: uppercase;
               letter-spacing: 0.05em;
-              color: white;
+              color: #58585e;
               margin-bottom: 16px;
             }
 
@@ -207,12 +286,12 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             }
 
             .tech-pill {
-              padding: 6px 14px;
+              padding: 5px 12px;
               background: rgba(255, 255, 255, 0.03);
               border: 1px solid rgba(255, 255, 255, 0.08);
               border-radius: 100px;
-              font-size: 0.75rem;
-              color: #f0f0f0;
+              font-size: 0.7rem;
+              color: #9a9a9f;
             }
 
             .visit-btn {
@@ -237,23 +316,23 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             }
             .visit-btn:hover .visit-btn-bg { opacity: 0.25; }
 
-            .modal-visual {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            }
-
             .mockup-placeholder {
               width: 100%;
-              aspect-ratio: 4/3;
+              aspect-ratio: 9/16;
               background: #0d0d0d;
               border: 1px solid;
-              border-radius: 16px;
+              border-radius: 24px;
               position: relative;
               display: flex;
               align-items: center;
               justify-content: center;
               overflow: hidden;
+            }
+            
+            @media (max-width: 900px) {
+              .mockup-placeholder {
+                aspect-ratio: 16/9;
+              }
             }
 
             .mockup-content {
@@ -269,9 +348,21 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
             @media (max-width: 768px) {
               .modal-inner { padding: 40px 24px; }
-              .modal-body { grid-template-columns: 1fr; gap: 40px; }
-              .modal-title { margin-bottom: 20px; }
-              .project-modal-content { max-height: 90vh; overflow-y: auto; }
+              .modal-main-grid { 
+                grid-template-columns: 1fr; 
+                gap: 40px; 
+              }
+              .modal-visual-col {
+                position: static;
+                order: 2; /* Asegura que la imagen vaya debajo */
+              }
+              .modal-content-col {
+                order: 1;
+              }
+              .modal-title { margin-bottom: 30px; font-size: 2.2rem; }
+              .project-modal-content { max-height: 85vh; border-radius: 24px; }
+              .success-result { font-size: 1.5rem; }
+              .modal-close-btn { top: 16px; right: 16px; width: 38px; height: 38px; }
             }
           `}</style>
         </div>

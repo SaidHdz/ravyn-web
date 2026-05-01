@@ -11,11 +11,14 @@ const proyectos = [
     id: 'ravynset',
     title: 'Ravynset',
     color: '#10b981', // Verde esmeralda para salud/automatización
-    description: 'Sistema integral de automatización para clínicas. Gestiona citas automáticamente, realiza seguimiento post-consulta por WhatsApp y aumenta la reputación en Google Maps. Incluye CRM especializado y landing page optimizada.',
+    description: 'Sistema integral de automatización para clínicas.',
+    problem: 'Dependencia total de llamadas telefónicas, alta tasa de inasistencia (no-show) y falta de seguimiento post-consulta.',
+    solution: 'Implementación de agendado online 24/7 sincronizado con WhatsApp y recordatorios automáticos inteligentes.',
+    result: '+68% reducción de ausentismo y agendado 100% autónomo.',
     tech: ['React', 'n8n', 'Node.js', 'WhatsApp API', 'CRM'],
     papers: [
-      <div className="paper-label">CRM & Ads</div>,
-      <div className="paper-label">WhatsApp Bot</div>,
+      <div className="paper-label">Success Case</div>,
+      <div className="paper-label">Automation</div>,
       <div className="paper-label project-main-name">Ravynset</div>,
     ]
   },
