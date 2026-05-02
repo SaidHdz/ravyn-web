@@ -114,7 +114,7 @@ export default function Hero() {
   return (
     <section className="hero">
       <div className="hero-content">
-        <h1 className="hero-title">
+        <h1 className="hero-title" style={{ minHeight: '2.2em' }}>
           <TextType
             as="span"
             text="De la idea al producto."

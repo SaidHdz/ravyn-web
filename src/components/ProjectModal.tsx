@@ -63,7 +63,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             {/* Área con scroll */}
             <div className="modal-scroll-area">
               <div className="modal-inner">
-                <div className="modal-main-grid">
+                <div className="modal-content-wrapper">
                   <div className="modal-content-col">
                     <div className="modal-header">
                       <div className="modal-tag" style={{ color: project.color }}>CASO DE ÉXITO</div>
@@ -98,20 +98,6 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                           ))}
                         </div>
                       </div>
-
-                      <button className="visit-btn" style={{ '--btn-color': project.color } as any}>
-                        <span>Ver Demo en Vivo</span>
-                        <div className="visit-btn-bg" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="modal-visual-col">
-                    <div className="mockup-placeholder" style={{ borderColor: `${project.color}40` }}>
-                      <div className="mockup-content">
-                         <span style={{ opacity: 0.3 }}>Visualización del Sistema</span>
-                      </div>
-                      <div className="mockup-glow" style={{ background: `radial-gradient(circle at 50% 50%, ${project.color}20 0%, transparent 70%)` }} />
                     </div>
                   </div>
                 </div>

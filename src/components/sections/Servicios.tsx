@@ -44,7 +44,7 @@ export default function Servicios() {
   }, [])
 
   return (
-    <section id="servicios" className="section" style={{ paddingBottom: '40px' }}>
+    <section id="servicios" className="section servicios-section-custom">
       <div className="container">
         <SplitText
           text="Servicios"
@@ -153,6 +153,20 @@ export default function Servicios() {
           ))}
         </div>
       </div>
+      <style>{`
+        .servicios-section-custom {
+          padding-bottom: 40px;
+          min-height: 600px;
+        }
+        .servicios-list {
+          min-height: 400px;
+        }
+        @media (max-width: 768px) {
+          .servicios-section-custom {
+            min-height: auto;
+          }
+        }
+      `}</style>
     </section>
   )
 }

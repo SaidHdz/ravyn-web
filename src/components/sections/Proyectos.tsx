@@ -60,7 +60,7 @@ export default function Proyectos() {
   }, [])
 
   return (
-    <section id="proyectos" className="section" style={{ overflow: 'visible', paddingTop: '160px' }}>
+    <section id="proyectos" className="section projects-section-custom">
       <div className="container">
         <SplitText
           text="Nuestros Proyectos"
@@ -112,6 +112,17 @@ export default function Proyectos() {
       />
 
       <style>{`
+        .projects-section-custom {
+          overflow: visible;
+          padding-top: 160px;
+        }
+
+        @media (max-width: 768px) {
+          .projects-section-custom {
+            padding-top: 40px;
+          }
+        }
+
         .proyectos-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));

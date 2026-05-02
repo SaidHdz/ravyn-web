@@ -53,7 +53,7 @@ export default function Ravynset() {
             viewport={{ once: true }}
             transition={{ duration: 0.6, ease }}
           >
-            Reducimos el ausentismo en tu clínica <span className="text-green-400">hasta un 68%</span> mediante automatización industrial.
+            Reducimos el ausentismo en tu clínica <span className="text-green-400">hasta un 68%</span> mediante automatización clínica inteligente.
           </motion.h2>
         </div>
 

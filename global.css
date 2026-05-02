@@ -1222,3 +1222,27 @@ select.form-input option {
     word-break: break-all;
   }
 }
+
+/* ── SMALL MOBILE FIXES (e.g. Samsung S22 @ 360px) ── */
+@media (max-width: 375px) {
+  .hero-title {
+    font-size: clamp(38px, 12vw, 44px);
+  }
+
+  .section-label {
+    font-size: clamp(1.5rem, 8vw, 1.75rem); /* Reducido para evitar cortes en 360px */
+    letter-spacing: -0.04em;
+  }
+
+  .quienes-heading {
+    font-size: clamp(28px, 8vw, 32px);
+  }
+
+  .contacto-heading {
+    font-size: clamp(30px, 10vw, 40px);
+  }
+
+  .servicios-rotating-text {
+    font-size: clamp(1.2rem, 6vw, 2rem);
+  }
+}
