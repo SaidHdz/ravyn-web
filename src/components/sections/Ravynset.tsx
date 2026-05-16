@@ -45,15 +45,12 @@ export default function RavynsetCTA() {
                 <div className="promo-actions">
                   <Link to="/ravynset" className="promo-link-wrapper">
                     <motion.button
-                      className="btn-primary nav-cta"
-                      initial="rest"
-                      whileHover="hover"
-                      style={{ padding: '16px 40px', fontSize: '1.1rem', background: 'transparent', border: '1px solid var(--text)' }}
+                      className="ravynset-cta-solid"
+                      whileHover={{ scale: 1.03, filter: 'brightness(1.1)' }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
                     >
-                      <motion.span className="hero-btn-fill" variants={fillVariants} style={{ background: 'var(--text)' }} />
-                      <span className="hero-btn-label" style={{ color: 'inherit', position: 'relative', zIndex: 1 }}>
-                        Ver cómo funciona →
-                      </span>
+                      Ver cómo funciona →
                     </motion.button>
                   </Link>
                 </div>
@@ -101,8 +98,8 @@ export default function RavynsetCTA() {
         }
 
         .ravynset-cta-solid {
-          background: #D97706;
-          color: #fff;
+          background: #D97706; /* El mismo color del borde animado (Dorado/Ámbar) */
+          color: #fff; /* Texto blanco solicitado */
           padding: 18px 48px;
           border-radius: 100vw;
           font-size: 1.15rem;
@@ -110,6 +107,9 @@ export default function RavynsetCTA() {
           border: none;
           box-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.4);
           cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         @media (max-width: 900px) {
@@ -122,8 +122,10 @@ export default function RavynsetCTA() {
           .promo-link-wrapper {
             width: 100%;
           }
-          .nav-cta {
+          .ravynset-cta-solid {
             width: 100%;
+            padding: 16px 32px;
+            font-size: 1.1rem;
           }
         }
       `}</style>
