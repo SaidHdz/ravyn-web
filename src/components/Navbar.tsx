@@ -26,6 +26,8 @@ export default function Navbar({ }: NavbarProps) {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
+  const [visible, setVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
   
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 180,
@@ -62,6 +64,28 @@ export default function Navbar({ }: NavbarProps) {
     }
   ]
 
+  // Lógica de Ocultar/Mostrar Navbar según Scroll (Mobile optimized)
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY
+      
+      if (currentScrollY < 10) {
+        setVisible(true)
+      } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
+        // Scrolling down
+        setVisible(false)
+        setIsUserMenuOpen(false) // Cerrar menú al ocultar barra
+      } else {
+        // Scrolling up
+        setVisible(true)
+      }
+      setLastScrollY(currentScrollY)
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [lastScrollY])
+
   // Cerrar menú al hacer clic fuera
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
@@ -77,7 +101,9 @@ export default function Navbar({ }: NavbarProps) {
 
   return (
     <>
-      <nav className="nav-gooey-wrapper">
+      <nav 
+        className={`nav-gooey-wrapper ${visible ? 'is-visible' : 'is-hidden'}`}
+      >
         <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
         
         <div className="nav-gooey-container">
@@ -104,7 +130,6 @@ export default function Navbar({ }: NavbarProps) {
               initialActiveIndex={0}
             />
 
-            {/* Menú de Usuario Flotante */}
             <div className="nav-user-menu-anchor">
               <AnimatePresence>
                 {isUserMenuOpen && user && (
@@ -185,6 +210,16 @@ export default function Navbar({ }: NavbarProps) {
           width: 100%;
           overflow: visible; 
           background: transparent;
+          transition: transform 0.4s var(--ease-out);
+          will-change: transform;
+        }
+
+        .nav-gooey-wrapper.is-hidden {
+          transform: translateY(-100%);
+        }
+
+        .nav-gooey-wrapper.is-visible {
+          transform: translateY(0);
         }
 
         .nav-gooey-container {
@@ -223,7 +258,6 @@ export default function Navbar({ }: NavbarProps) {
           pointer-events: none;
         }
 
-        /* Restauración y Centrado del Menú de Usuario */
         .nav-user-menu-floating {
           position: absolute;
           top: 20px;
@@ -358,9 +392,6 @@ export default function Navbar({ }: NavbarProps) {
         @media (max-width: 768px) {
           .nav-gooey-wrapper {
             height: 80px;
-            transform: translate3d(0,0,0);
-            backface-visibility: hidden;
-            top: 0;
           }
           
           .nav-gooey-container {
