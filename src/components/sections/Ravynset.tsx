@@ -1,91 +1,126 @@
 import { motion } from 'motion/react'
-import MagicBento from '../animations/MagicBento'
-import RotatingText from '@/components/RotatingText/RotatingText'
-import { Globe, Bot, Shield, TrendingUp } from 'lucide-react'
-
+import { Link } from 'react-router-dom'
+import BorderGlow from '../BorderGlow/BorderGlow'
+import BlurText from '../animations/BlurText'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
-const pilares = [
-  {
-    icon: <Globe className="w-5 h-5 text-blue-400" />,
-    title: "Web de Autoridad",
-    description: "Construimos confianza instantánea mediante interfaces de alto nivel que posicionan tu marca.",
-    label: "Confianza"
-  },
-  {
-    icon: <Bot className="w-5 h-5 text-green-400" />,
-    title: "Asistente Digital n8n",
-    description: "Eficacia 24/7 automatizando tareas repetitivas y atención al cliente sin errores.",
-    label: "Eficacia"
-  },
-  {
-    icon: <TrendingUp className="w-5 h-5 text-amber-400" />,
-    title: "MedicalSheet",
-    description: "Sistemas diseñados específicamente para potenciar tus ventas y optimizar la gestión médica.",
-    label: "Ventas"
-  },
-  {
-    icon: <Shield className="w-5 h-5 text-purple-400" />,
-    title: "Sistema de Reputación",
-    description: "Domina tu mercado local asegurando una imagen impecable y feedback constante de pacientes.",
-    label: "Dominio Local"
-  }
-]
-
-export default function Ravynset() {
+export default function RavynsetCTA() {
   return (
-    <section className="section bg-black pb-24 overflow-hidden">
+    <section id="ravynset" className="section ravynset-promo-section">
       <div className="container">
-        <div className="max-w-4xl mb-16">
-          <motion.p
-            className="text-blue-400 font-mono text-lg md:text-xl uppercase tracking-[0.2em] mb-8"
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8, ease }}
+        >
+          <BorderGlow
+            glowColor="45 100 60"
+            colors={['#F59E0B', '#D97706', '#FBBF24']}
+            backgroundColor="var(--bg-surface)"
+            borderRadius={32}
+            glowRadius={60}
+            edgeSensitivity={30}
+            glowIntensity={1.5}
+            animated={true}
           >
-            Nuestra Metodología — Ravynset
-          </motion.p>
-          <motion.h2 
-            className="text-5xl md:text-7xl font-bold text-white leading-tight mb-10"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease }}
-          >
-            Reducimos el ausentismo en tu clínica <span className="text-green-400">hasta un 68%</span> mediante automatización clínica inteligente.
-          </motion.h2>
-        </div>
-
-        <div className="mb-16">
-          <MagicBento 
-            items={pilares}
-            enableSpotlight={true}
-            enableBorderGlow={true}
-            enableTilt={false}
-            enableMagnetism={false}
-            spotlightRadius={500}
-            particleCount={15}
-            glowColor="96, 165, 250"
-          />
-        </div>
-
-        <p className="servicios-rotating-text !mt-0 text-center">
-          Deja en nuestras manos tu{' '}
-          <RotatingText
-            texts={['web', 'app', 'sistema', 'automatización']}
-            mainClassName="servicios-rotating-pill"
-            splitLevelClassName="servicios-rotating-split"
-            staggerFrom="last"
-            initial={{ y: '100%' }}
-            animate={{ y: 0 }}
-            exit={{ y: '-120%' }}
-            staggerDuration={0.025}
-            transition={{ type: 'spring', damping: 30, stiffness: 400 }}
-            rotationInterval={2000}
-          />
-        </p>
+            <div className="ravynset-promo-card">
+              <div className="promo-content">
+                <BlurText
+                  text="¿Pierdes citas cada semana?"
+                  className="promo-title"
+                  delay={50}
+                  animateBy="words"
+                />
+                <p className="promo-text">
+                  Automatizamos tu agenda, tus recordatorios y tu reputación en Google. 
+                  Tú solo atiendes pacientes.
+                </p>
+                <div className="promo-actions">
+                  <Link to="/ravynset" className="promo-link-wrapper">
+                    <motion.button
+                      className="ravynset-cta-solid"
+                      whileHover={{ scale: 1.03, brightness: 1.1 }}
+                      whileTap={{ scale: 0.98 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      Ver cómo funciona →
+                    </motion.button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </BorderGlow>
+        </motion.div>
       </div>
+
+      <style>{`
+        .ravynset-promo-section {
+          padding: 100px 0;
+        }
+
+        .ravynset-promo-card {
+          padding: 80px 60px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+        }
+
+        .promo-title {
+          font-family: var(--font-sans);
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
+          font-weight: 800;
+          color: var(--text);
+          margin-bottom: 24px;
+          letter-spacing: -0.04em;
+          line-height: 1.1;
+          justify-content: center;
+        }
+
+        .promo-text {
+          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+          color: var(--text-secondary);
+          line-height: 1.6;
+          margin-bottom: 48px;
+          max-width: 700px;
+        }
+
+        .promo-link-wrapper {
+          display: inline-block;
+          text-decoration: none;
+        }
+
+        .ravynset-cta-solid {
+          background: #D97706; /* Ámbar sólido */
+          color: #fff;
+          padding: 18px 48px;
+          border-radius: 100vw;
+          font-size: 1.15rem;
+          font-weight: 700;
+          border: none;
+          box-shadow: 0 10px 30px -5px rgba(217, 119, 6, 0.4);
+          cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+          .ravynset-promo-card {
+            padding: 60px 24px;
+          }
+          .promo-actions {
+            width: 100%;
+          }
+          .promo-link-wrapper {
+            width: 100%;
+          }
+          .ravynset-cta-solid {
+            width: 100%;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+          }
+        }
+      `}</style>
     </section>
   )
 }

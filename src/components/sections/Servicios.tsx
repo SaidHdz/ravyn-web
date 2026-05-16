@@ -61,7 +61,7 @@ export default function Servicios() {
               className={`servicio-item${active === i ? ' is-active' : ''}`}
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
+              viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.4, ease, delay: i * 0.08 }}
               onHoverStart={() => !isMobile && setActive(i)}
               onClick={() => setActive(active === i ? -1 : i)}
@@ -156,10 +156,15 @@ export default function Servicios() {
       <style>{`
         .servicios-section-custom {
           padding-bottom: 40px;
-          min-height: 600px;
+          min-height: 850px; /* Altura mínima aumentada para estabilizar */
         }
         .servicios-list {
-          min-height: 400px;
+          min-height: 600px; /* Altura mínima para la lista */
+        }
+        @media (max-width: 1024px) {
+          .servicios-section-custom {
+            min-height: 950px;
+          }
         }
         @media (max-width: 768px) {
           .servicios-section-custom {

@@ -1,5 +1,5 @@
-import { useRef, useState, useEffect } from 'react'
 import { motion, useMotionValue, useSpring } from 'motion/react'
+import { useState, useEffect } from 'react'
 import TextType from '@/components/TextType/TextType'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -69,12 +69,14 @@ function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
     rotateY.set(0)
   }
 
+  const wrapperStyle: React.CSSProperties = {
+    perspective: '800px',
+    transform: mobile ? 'none' : `translateX(${card.x}px)`
+  }
+
   return (
     <div
-      style={{ 
-        perspective: '800px', 
-        transform: mobile ? 'none' : `translateX(${card.x}px)` 
-      }}
+      style={wrapperStyle}
       onMouseMove={handleMouseMove}
       onTouchMove={handleTouchMove}
       onMouseEnter={handleStart}
@@ -101,6 +103,8 @@ function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
     </div>
   )
 }
+
+import { useRef } from 'react'
 
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 900)
@@ -149,6 +153,14 @@ export default function Hero() {
           ))}
         </div>
       </div>
+      
+      <style>{`
+        @media (max-width: 900px) {
+          .hero {
+            padding-top: 160px !important; /* Espacio extra arriba para no chocar con header */
+          }
+        }
+      `}</style>
     </section>
   )
 }

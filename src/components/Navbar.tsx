@@ -1,5 +1,6 @@
-import { useEffect, useState } from 'react'
+import GooeyNav from './animations/GooeyNav'
 import { motion, useScroll, useSpring, type Variants } from 'motion/react'
+import { Link, useLocation } from 'react-router-dom'
 
 interface NavbarProps {
   theme?: string
@@ -9,56 +10,235 @@ interface NavbarProps {
 const ease = [0.16, 1, 0.3, 1] as const
 
 const fillVariants: Variants = {
-  rest:  { clipPath: 'circle(0% at 50% 50%)',   transition: { duration: 0.5, ease } },
-  hover: { clipPath: 'circle(150% at 50% 50%)', transition: { duration: 0.9, ease } },
+  rest:  { clipPath: 'circle(0% at 50% 50%)',   transition: { duration: 0.4, ease } },
+  hover: { clipPath: 'circle(150% at 50% 50%)', transition: { duration: 0.7, ease } },
 }
 
 export default function Navbar({ }: NavbarProps) {
-  const [scrolled, setScrolled] = useState(false)
-
   const { scrollYProgress } = useScroll()
+  const location = useLocation()
+  
   const scaleX = useSpring(scrollYProgress, {
     stiffness: 180,
     damping: 30,
     restDelta: 0.001,
   })
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
+  const isRavynset = location.pathname === '/ravynset'
 
-  const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' })
-  }
+  const navItems = isRavynset 
+    ? [
+        { label: 'Home', href: '/ravynset' },
+        { label: 'Planes', href: '#planes' }
+      ]
+    : [
+        { label: 'Home', href: '/' },
+        { label: 'Contacto', href: '#contacto' }
+      ]
 
-return (
-    <nav className={`nav${scrolled ? ' scrolled' : ''}`}>
-      <motion.div className="scroll-progress" style={{ scaleX }} />
-
-      <div className="nav-logo" onClick={() => scrollTo('root')} style={{ cursor: 'pointer' }}>
-        Ravyn Studio<span>.</span>
-      </div>
-      <div className="nav-links">
-        {/* <button
-          className="theme-toggle"
-          onClick={onToggle}
-          title={theme === 'dark' ? 'Cambiar a modo claro' : 'Cambiar a modo oscuro'}
+  return (
+    <nav className="nav-gooey-wrapper">
+      <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
+      
+      <div className="nav-gooey-container">
+        {/* Logo: Solo visible en desktop */}
+        <Link 
+          to={isRavynset ? "/ravynset" : "/"} 
+          className={`nav-logo-simple desktop-only ${!isRavynset ? 'is-active-root' : ''}`}
+          onClick={(e) => {
+            if (location.pathname === '/' || location.pathname === '/ravynset') {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }}
         >
-          {theme === 'dark' ? <SunIcon /> : <MoonIcon />}
-        </button> */}
-        <motion.button
-          className="btn-primary nav-cta"
-          initial="rest"
-          whileHover="hover"
-          onClick={() => scrollTo('contacto')}
-          style={{ padding: '8px 18px', fontSize: '0.82rem' }}
+          {isRavynset ? 'Ravynset' : 'Ravyn'}<span>.</span>
+        </Link>
+        
+        <div className="nav-center-menu">
+          <GooeyNav
+            key={location.pathname}
+            items={navItems}
+            particleCount={12}
+            particleDistances={[60, 5]}
+            particleR={80}
+            initialActiveIndex={0}
+          />
+        </div>
+
+        <Link 
+          to={isRavynset ? "/" : "/ravynset"} 
+          className="nav-cta-link"
         >
-          <motion.span className="hero-btn-fill" variants={fillVariants} />
-          <span className="hero-btn-label">Hablemos</span>
-        </motion.button>
+          <motion.button
+            className={`nav-cta-premium ${isRavynset ? 'is-ravyn-back-btn' : ''}`}
+            initial="rest"
+            whileHover="hover"
+            whileTap="rest"
+          >
+            <motion.span className="cta-btn-fill" variants={fillVariants} />
+            <span className="cta-btn-label">
+              {isRavynset ? 'Ravyn' : 'Ravynset'}
+            </span>
+          </motion.button>
+        </Link>
       </div>
+
+      <style>{`
+        .nav-gooey-wrapper {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 999;
+          height: 100px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          pointer-events: none;
+        }
+
+        .nav-gooey-container {
+          display: flex;
+          align-items: center;
+          gap: 2rem;
+          background: var(--bg-surface);
+          padding: 0.5rem 1.5rem;
+          border-radius: 100vw;
+          border: 1px solid var(--border);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          pointer-events: auto;
+          margin-top: 1rem;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .nav-center-menu {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          position: relative;
+          z-index: 5;
+        }
+
+        .nav-logo-simple {
+          font-size: 1.2rem;
+          font-weight: 700;
+          letter-spacing: -0.03em;
+          color: var(--text);
+          cursor: pointer;
+          position: relative;
+          display: flex;
+          z-index: 10;
+        }
+
+        .nav-logo-simple span {
+          color: var(--accent);
+        }
+
+        .nav-logo-simple.is-active-root::after {
+           content: '';
+           position: absolute;
+           bottom: -4px;
+           left: 0;
+           width: 100%;
+           height: 2px;
+           background: var(--accent);
+           border-radius: 2px;
+        }
+
+        .nav-cta-link {
+          text-decoration: none;
+          z-index: 10;
+          display: flex;
+        }
+
+        .nav-cta-premium {
+          position: relative;
+          padding: 10px 24px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          border: 1px solid transparent;
+          background: rgba(255, 255, 255, 0.05);
+          color: #fff;
+          border-radius: 100vw;
+          overflow: hidden;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.3s ease;
+        }
+
+        .cta-btn-fill {
+          position: absolute;
+          inset: 0;
+          background: #fff;
+          z-index: 0;
+          pointer-events: none;
+        }
+
+        .cta-btn-label {
+          position: relative;
+          z-index: 1;
+          color: #fff;
+          transition: color 0.3s ease;
+        }
+
+        .nav-cta-premium:hover .cta-btn-label {
+          color: #000;
+        }
+
+        @media (max-width: 768px) {
+          .nav-gooey-wrapper {
+            height: 80px;
+          }
+          
+          .nav-gooey-container {
+            gap: 0.3rem;
+            padding: 0.3rem 0.5rem;
+            width: auto;
+            max-width: 95vw;
+            margin-top: 0.5rem;
+            justify-content: center;
+          }
+
+          .desktop-only {
+            display: none !important;
+          }
+
+          .nav-center-menu {
+             flex-shrink: 1;
+             min-width: 0;
+          }
+
+          .nav-cta-premium {
+            padding: 8px 12px;
+            font-size: 0.72rem;
+            flex-shrink: 0;
+            /* Forzamos fondo transparente en móvil para evitar el bug del fill blanco */
+            background: rgba(255, 255, 255, 0.08) !important;
+          }
+
+          /* Desactivamos la capa de relleno en móvil si está causando el fondo blanco persistente */
+          .nav-cta-premium .cta-btn-fill {
+             display: none !important;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .nav-gooey-container {
+            gap: 0.2rem;
+          }
+          .nav-center-menu {
+            transform: scale(0.8);
+          }
+          .nav-cta-premium {
+            padding: 7px 10px;
+            font-size: 0.68rem;
+          }
+        }
+      `}</style>
     </nav>
   )
 }
