@@ -71,8 +71,9 @@ export default function Navbar({ }: NavbarProps) {
           className="nav-cta-link"
         >
           <motion.button
-            className={`nav-cta-premium ${isRavynset ? 'is-ravyn-back-btn' : ''}`}
+            className={`nav-cta-premium ${isRavynset ? 'is-ravynset-active' : ''}`}
             initial="rest"
+            animate={isRavynset ? "hover" : "rest"}
             whileHover="hover"
             whileTap="rest"
           >
@@ -195,12 +196,15 @@ export default function Navbar({ }: NavbarProps) {
           }
           
           .nav-gooey-container {
-            gap: 0.3rem;
-            padding: 0.3rem 0.5rem;
+            gap: 0.4rem;
+            padding: 0.4rem 0.6rem;
             width: auto;
-            max-width: 95vw;
+            max-width: 98vw;
             margin-top: 0.5rem;
             justify-content: center;
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            backdrop-filter: blur(12px);
           }
 
           .desktop-only {
@@ -208,7 +212,7 @@ export default function Navbar({ }: NavbarProps) {
           }
 
           .nav-center-menu {
-             flex-shrink: 1;
+             flex-shrink: 0; /* Evita colapso */
              min-width: 0;
           }
 
@@ -216,19 +220,22 @@ export default function Navbar({ }: NavbarProps) {
             padding: 8px 12px;
             font-size: 0.72rem;
             flex-shrink: 0;
-            /* Forzamos fondo transparente en móvil para evitar el bug del fill blanco */
             background: rgba(255, 255, 255, 0.08) !important;
           }
 
-          /* Desactivamos la capa de relleno en móvil si está causando el fondo blanco persistente */
           .nav-cta-premium .cta-btn-fill {
              display: none !important;
+          }
+          
+          .nav-center-menu {
+            transform: scale(0.9);
           }
         }
 
         @media (max-width: 480px) {
           .nav-gooey-container {
             gap: 0.2rem;
+            padding: 0.3rem 0.5rem;
           }
           .nav-center-menu {
             transform: scale(0.8);

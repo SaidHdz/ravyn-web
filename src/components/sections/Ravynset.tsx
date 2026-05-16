@@ -1,9 +1,14 @@
-import { motion } from 'motion/react'
+import { motion, type Variants } from 'motion/react'
 import { Link } from 'react-router-dom'
 import BorderGlow from '../BorderGlow/BorderGlow'
 import BlurText from '../animations/BlurText'
 
 const ease = [0.16, 1, 0.3, 1] as const
+
+const fillVariants: Variants = {
+  rest:  { clipPath: 'circle(0% at 50% 50%)',   transition: { duration: 0.5, ease } },
+  hover: { clipPath: 'circle(150% at 50% 50%)', transition: { duration: 0.9, ease } },
+}
 
 export default function RavynsetCTA() {
   return (
@@ -40,12 +45,15 @@ export default function RavynsetCTA() {
                 <div className="promo-actions">
                   <Link to="/ravynset" className="promo-link-wrapper">
                     <motion.button
-                      className="ravynset-cta-solid"
-                      whileHover={{ scale: 1.03, brightness: 1.1 }}
-                      whileTap={{ scale: 0.98 }}
-                      transition={{ duration: 0.2 }}
+                      className="btn-primary nav-cta"
+                      initial="rest"
+                      whileHover="hover"
+                      style={{ padding: '16px 40px', fontSize: '1.1rem', background: 'transparent', border: '1px solid var(--text)' }}
                     >
-                      Ver cómo funciona →
+                      <motion.span className="hero-btn-fill" variants={fillVariants} style={{ background: 'var(--text)' }} />
+                      <span className="hero-btn-label" style={{ color: 'inherit', position: 'relative', zIndex: 1 }}>
+                        Ver cómo funciona →
+                      </span>
                     </motion.button>
                   </Link>
                 </div>
@@ -93,7 +101,7 @@ export default function RavynsetCTA() {
         }
 
         .ravynset-cta-solid {
-          background: #D97706; /* Ámbar sólido */
+          background: #D97706;
           color: #fff;
           padding: 18px 48px;
           border-radius: 100vw;
@@ -114,10 +122,8 @@ export default function RavynsetCTA() {
           .promo-link-wrapper {
             width: 100%;
           }
-          .ravynset-cta-solid {
+          .nav-cta {
             width: 100%;
-            padding: 16px 32px;
-            font-size: 1.1rem;
           }
         }
       `}</style>

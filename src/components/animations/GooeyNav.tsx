@@ -106,11 +106,16 @@ const GooeyNav = ({
       const containerRect = containerRef.current.getBoundingClientRect();
       const pos = element.getBoundingClientRect();
 
+      // IMPORTANTE: Si el contenedor tiene transform: scale(), getBoundingClientRect devuelve pixeles visuales.
+      // Debemos dividir por el factor de escala para obtener pixeles CSS reales del padre.
+      const scaleX = containerRect.width / containerRef.current.offsetWidth || 1;
+      const scaleY = containerRect.height / containerRef.current.offsetHeight || 1;
+
       const styles = {
-        left: `${pos.left - containerRect.left}px`,
-        top: `${pos.top - containerRect.top}px`,
-        width: `${pos.width}px`,
-        height: `${pos.height}px`
+        left: `${(pos.left - containerRect.left) / scaleX}px`,
+        top: `${(pos.top - containerRect.top) / scaleY}px`,
+        width: `${pos.width / scaleX}px`,
+        height: `${pos.height / scaleY}px`
       };
       
       Object.assign(filterRef.current.style, styles);

@@ -1,10 +1,7 @@
-import { motion } from 'motion/react'
-import { Globe, Calendar, Users, Star, CheckCircle2 } from 'lucide-react'
+import { Globe, Calendar, Users, Star } from 'lucide-react'
 import BlurText from '../animations/BlurText'
 import SpotlightCard from '../animations/SpotlightCard'
 import GradientText from '../animations/GradientText'
-
-const ease = [0.16, 1, 0.3, 1] as const
 
 const problemas = [
   {
@@ -41,13 +38,7 @@ export default function RavynsetProblema() {
 
         <div className="problemas-grid-container">
           {problemas.map((prob, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, ease, delay: i * 0.1 }}
-            >
+            <div key={i}>
               <SpotlightCard 
                 className="problema-card-spotlight" 
                 spotlightColor="rgba(96, 165, 250, 0.2)"
@@ -57,27 +48,21 @@ export default function RavynsetProblema() {
                   {prob.text}
                 </p>
               </SpotlightCard>
-            </motion.div>
+            </div>
           ))}
         </div>
 
         <div className="solucion-wrapper">
-          <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, ease, delay: 0.2 }}
-            className="flex items-center gap-4 md:gap-6 flex-wrap justify-center"
-          >
+          <div className="flex items-center gap-4 md:gap-6 flex-wrap justify-center">
             <GradientText
               colors={["#40ffaa", "#4ade80", "#40ffaa", "#22c55e", "#40ffaa"]}
               animationSpeed={3}
               showBorder={false}
-              className="text-lg md:text-3xl font-bold text-center"
+              className="text-xl md:text-3xl font-bold text-center"
             >
               RavynSet resuelve todo eso — de forma automática.
             </GradientText>
-          </motion.div>
+          </div>
         </div>
       </div>
 

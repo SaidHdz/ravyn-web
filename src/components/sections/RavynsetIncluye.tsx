@@ -1,9 +1,6 @@
-import { motion } from 'motion/react'
 import MagicBento from '../animations/MagicBento'
 import { Globe, Calendar, Users, Star } from 'lucide-react'
 import BlurText from '../animations/BlurText'
-
-const ease = [0.16, 1, 0.3, 1] as const
 
 const funcionalidades = [
   {

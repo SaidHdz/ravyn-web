@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from 'react';
 import './BorderGlow.css';
 
-interface BorderGlowProps {
+export interface BorderGlowProps {
   children: React.ReactNode;
   className?: string;
   edgeSensitivity?: number;
@@ -14,6 +14,11 @@ interface BorderGlowProps {
   animated?: boolean;
   colors?: string[];
   fillOpacity?: number;
+  autoLoop?: boolean; // Añadido para soportar las props pasadas en Proceso
+  loopDelay?: number; // Añadido para soportar las props pasadas en Proceso
+  initialDelay?: number; // Añadido para soportar las props pasadas en Proceso
+  startAngle?: number; // Añadido para soportar las props pasadas en Proceso
+  sweepDirection?: number; // Añadido para soportar las props pasadas en Proceso
 }
 
 function parseHSL(hslStr: string) {
@@ -76,6 +81,12 @@ const BorderGlow = ({
   animated = false,
   colors = ['#c084fc', '#f472b6', '#38bdf8'],
   fillOpacity = 0.5,
+  // Props ignoradas por ahora pero añadidas a la interfaz para evitar errores de compilación
+  autoLoop: _autoLoop,
+  loopDelay: _loopDelay,
+  initialDelay: _initialDelay,
+  startAngle: _startAngle,
+  sweepDirection: _sweepDirection
 }: BorderGlowProps) => {
   const cardRef = useRef<HTMLDivElement>(null);
 
