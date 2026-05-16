@@ -1,14 +1,9 @@
-import { motion, type Variants } from 'motion/react'
+import { motion } from 'motion/react'
 import { Link } from 'react-router-dom'
 import BorderGlow from '../BorderGlow/BorderGlow'
 import BlurText from '../animations/BlurText'
 
 const ease = [0.16, 1, 0.3, 1] as const
-
-const fillVariants: Variants = {
-  rest:  { clipPath: 'circle(0% at 50% 50%)',   transition: { duration: 0.5, ease } },
-  hover: { clipPath: 'circle(150% at 50% 50%)', transition: { duration: 0.9, ease } },
-}
 
 export default function RavynsetCTA() {
   return (
