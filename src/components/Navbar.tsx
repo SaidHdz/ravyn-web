@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import GooeyNav from './animations/GooeyNav'
 import { motion, useScroll, useSpring, AnimatePresence, type Variants } from 'motion/react'
 import { Link, useLocation } from 'react-router-dom'
@@ -62,87 +62,105 @@ export default function Navbar({ }: NavbarProps) {
     }
   ]
 
+  // Cerrar menú al hacer clic fuera
+  useEffect(() => {
+    const closeMenu = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest('.nav-user-menu-anchor') && !(e.target as HTMLElement).closest('.nav-center-menu')) {
+        setIsUserMenuOpen(false);
+      }
+    };
+    if (isUserMenuOpen) {
+      document.addEventListener('click', closeMenu);
+    }
+    return () => document.removeEventListener('click', closeMenu);
+  }, [isUserMenuOpen]);
+
   return (
-    <nav className="nav-gooey-wrapper">
-      <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
-      
-      <div className="nav-gooey-container">
-        <Link 
-          to={isRavynset ? "/ravynset" : "/"} 
-          className={`nav-logo-simple desktop-only ${!isRavynset ? 'is-active-root' : ''}`}
-          onClick={(e) => {
-            if (location.pathname === '/' || location.pathname === '/ravynset') {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }
-          }}
-        >
-          {isRavynset ? 'Ravynset' : 'Ravyn'}<span>.</span>
-        </Link>
+    <>
+      <nav className="nav-gooey-wrapper">
+        <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
         
-        <div className="nav-center-menu">
-          <GooeyNav
-            key={location.pathname + (user ? '-logged' : '-guest')}
-            items={navItems}
-            particleCount={12}
-            particleDistances={[60, 5]}
-            particleR={80}
-            initialActiveIndex={0}
-          />
-
-          <div className="nav-user-menu-anchor">
-            <AnimatePresence>
-              {isUserMenuOpen && user && (
-                <motion.div 
-                  className="nav-user-menu-floating"
-                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                >
-                  <div className="user-menu-header">
-                    <span className="user-email">{user.email}</span>
-                  </div>
-                  <div className="user-menu-divider" />
-                  <button 
-                    className="user-menu-item" 
-                    type="button" 
-                    onClick={() => {
-                      setIsAccountModalOpen(true);
-                      setIsUserMenuOpen(false);
-                    }}
-                  >
-                    <Settings className="w-4 h-4" />
-                    Mi Cuenta
-                  </button>
-                  <button className="user-menu-item logout" type="button" onClick={() => { signOut(); setIsUserMenuOpen(false); }}>
-                    <LogOut className="w-4 h-4" />
-                    Cerrar Sesión
-                  </button>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-
-        <Link 
-          to={isRavynset ? "/" : "/ravynset"} 
-          className="nav-cta-link"
-        >
-          <motion.button
-            className={`nav-cta-premium ${isRavynset ? 'is-ravynset-active' : ''}`}
-            initial="rest"
-            whileHover="hover"
-            whileTap="rest"
-            type="button"
+        <div className="nav-gooey-container">
+          <Link 
+            to={isRavynset ? "/ravynset" : "/"} 
+            className={`nav-logo-simple desktop-only ${!isRavynset ? 'is-active-root' : ''}`}
+            onClick={(e) => {
+              if (location.pathname === '/' || location.pathname === '/ravynset') {
+                e.preventDefault();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }}
           >
-            <motion.span className="cta-btn-fill" variants={fillVariants} />
-            <span className="cta-btn-label">
-              {isRavynset ? 'Ravyn' : 'Ravynset'}
-            </span>
-          </motion.button>
-        </Link>
-      </div>
+            {isRavynset ? 'Ravynset' : 'Ravyn'}<span>.</span>
+          </Link>
+          
+          <div className="nav-center-menu">
+            <GooeyNav
+              key={location.pathname + (user ? '-logged' : '-guest')}
+              items={navItems}
+              particleCount={12}
+              particleDistances={[60, 5]}
+              particleR={80}
+              initialActiveIndex={0}
+            />
 
+            {/* Menú de Usuario Flotante */}
+            <div className="nav-user-menu-anchor">
+              <AnimatePresence>
+                {isUserMenuOpen && user && (
+                  <motion.div 
+                    className="nav-user-menu-floating"
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <div className="user-menu-header">
+                      <span className="user-email">{user.email}</span>
+                    </div>
+                    <div className="user-menu-divider" />
+                    <button 
+                      className="user-menu-item" 
+                      type="button" 
+                      onClick={() => {
+                        setIsAccountModalOpen(true);
+                        setIsUserMenuOpen(false);
+                      }}
+                    >
+                      <Settings className="w-4 h-4" />
+                      Mi Cuenta
+                    </button>
+                    <button className="user-menu-item logout" type="button" onClick={() => { signOut(); setIsUserMenuOpen(false); }}>
+                      <LogOut className="w-4 h-4" />
+                      Cerrar Sesión
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          <Link 
+            to={isRavynset ? "/" : "/ravynset"} 
+            className="nav-cta-link"
+          >
+            <motion.button
+              className={`nav-cta-premium ${isRavynset ? 'is-ravynset-active' : ''}`}
+              initial="rest"
+              whileHover="hover"
+              whileTap="rest"
+              type="button"
+            >
+              <motion.span className="cta-btn-fill" variants={fillVariants} />
+              <span className="cta-btn-label">
+                {isRavynset ? 'Ravyn' : 'Ravynset'}
+              </span>
+            </motion.button>
+          </Link>
+        </div>
+      </nav>
+
+      {/* MODALES FUERA DEL WRAPPER DE LA NAVBAR PARA EVITAR CLIPPING */}
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
@@ -159,14 +177,15 @@ export default function Navbar({ }: NavbarProps) {
           top: 0;
           left: 0;
           right: 0;
-          z-index: 999;
+          z-index: 500; 
           height: 100px;
           display: flex;
           align-items: center;
           justify-content: center;
           pointer-events: none;
-          width: 100vw;
-          overflow: hidden;
+          width: 100%;
+          overflow: visible; 
+          background: transparent;
         }
 
         .nav-gooey-container {
@@ -184,6 +203,7 @@ export default function Navbar({ }: NavbarProps) {
           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
           max-width: 95%;
           box-sizing: border-box;
+          flex-shrink: 1;
         }
 
         .nav-center-menu {
@@ -194,36 +214,36 @@ export default function Navbar({ }: NavbarProps) {
           z-index: 5;
         }
 
+        /* Ancla invisible que ocupa todo el ancho debajo del nav central */
         .nav-user-menu-anchor {
           position: absolute;
           top: 100%;
-          right: 20px; /* Ajuste para centrar bajo el icono */
-          width: 0;
+          left: 0;
+          right: 0;
           height: 0;
           display: flex;
           justify-content: center;
           pointer-events: none;
         }
 
+        /* Menú Flotante: Fondo Sólido y Altura Automática Corregida */
         .nav-user-menu-floating {
           position: relative;
-          top: 15px;
-          display: flex;
-          flex-direction: column;
-          height: auto;
-          min-height: min-content;
-          background: #111111;
+          top: 20px;
+          background: #0d0d0d; /* Fondo sólido oscuro base */
           border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
+          border-radius: 24px;
           padding: 12px;
           min-width: 220px;
-          box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          z-index: 1000;
+          width: max-content;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+          backdrop-filter: blur(25px);
+          -webkit-backdrop-filter: blur(25px);
+          z-index: 10000;
           pointer-events: auto;
-          left: 50%;
-          transform: translateX(-50%);
+          overflow: hidden; /* Garantiza que el fondo respete los bordes */
         }
 
         .nav-logo-simple {
@@ -249,8 +269,7 @@ export default function Navbar({ }: NavbarProps) {
           font-size: 0.85rem;
           color: var(--text-secondary);
           display: block;
-          overflow: hidden;
-          text-overflow: ellipsis;
+          white-space: nowrap;
         }
 
         .user-menu-divider {
@@ -274,6 +293,7 @@ export default function Navbar({ }: NavbarProps) {
           background: transparent;
           border: none;
           cursor: pointer;
+          white-space: nowrap;
         }
 
         .user-menu-item:hover {
@@ -330,16 +350,23 @@ export default function Navbar({ }: NavbarProps) {
           color: #000;
         }
 
+        .nav-cta-premium.is-ravynset-active {
+           background: rgba(255, 255, 255, 0.15);
+        }
+
         @media (max-width: 768px) {
           .nav-gooey-wrapper {
             height: 80px;
+            transform: translate3d(0,0,0);
+            backface-visibility: hidden;
+            top: 0;
           }
           
           .nav-gooey-container {
             gap: 0.5rem;
             padding: 0.4rem 0.8rem;
             width: auto;
-            max-width: 92vw;
+            max-width: 95%;
             margin-top: 0.5rem;
             justify-content: space-between;
           }
@@ -360,14 +387,10 @@ export default function Navbar({ }: NavbarProps) {
             min-width: 0;
           }
 
-          .nav-user-menu-anchor {
-             right: 25px;
-          }
-
           .nav-user-menu-floating {
-             background: #0d0d0d !important;
-             min-width: 180px;
-             height: auto !important;
+             background: #0a0a0a;
+             min-width: 200px;
+             border-radius: 20px;
           }
         }
 
@@ -385,6 +408,6 @@ export default function Navbar({ }: NavbarProps) {
           }
         }
       `}</style>
-    </nav>
+    </>
   )
 }

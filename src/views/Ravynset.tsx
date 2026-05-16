@@ -19,7 +19,7 @@ export default function RavynsetPage() {
   return (
     <>
       <Navbar theme={theme} onToggle={toggle} />
-      <main>
+      <main style={{ overflowX: 'hidden' }}>
         <RavynsetHero />
         <RavynsetProblema />
         <RavynsetIncluye />

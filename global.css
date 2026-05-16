@@ -866,7 +866,7 @@ html[data-theme="dark"] .tag-pill--amber { color: #fcd34d; }
   .quienes-stats-bg-text {
     font-size: clamp(6rem, 28vw, 15rem);
     white-space: normal;
-    width: 100vw;
+    width: 100%;
     line-height: 0.75;
   }
 }

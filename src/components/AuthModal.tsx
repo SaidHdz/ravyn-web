@@ -21,14 +21,30 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
 
-  // Bloquear scroll del body al abrir el modal
+  // BLOQUEO DE SCROLL AGRESIVO
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
-    } else {
-      document.body.style.overflow = 'unset'
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+      document.body.style.position = 'fixed'; 
+      document.body.style.width = '100%';
+      document.body.style.top = `-${window.scrollY}px`;
+      
+      return () => {
+        const scrollY = document.body.style.top;
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = originalStyle;
+        document.body.style.paddingRight = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
-    return () => { document.body.style.overflow = 'unset' }
   }, [isOpen])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -45,7 +61,6 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         if (error) throw error
         onClose()
       } else {
-        // Registro de nueva clínica (Admin) según documentación
         const { error } = await supabase.auth.signUp({
           email,
           password,
@@ -61,7 +76,6 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
         if (error) throw error
         
         setError('¡Registro exitoso! Por favor verifica tu correo electrónico.')
-        // No cerramos el modal para que lea el mensaje de éxito o instrucción
       }
     } catch (err: any) {
       setError(err.message || 'Ocurrió un error inesperado')
@@ -83,139 +97,141 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           />
           <motion.div 
             className="auth-modal-container"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
             transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           >
-            <button className="auth-modal-close" onClick={onClose} type="button">
+            <button className="auth-modal-close" onClick={onClose} type="button" aria-label="Cerrar">
               <X className="w-5 h-5" />
             </button>
 
-            <div className="auth-modal-content">
-              <div className="auth-modal-header">
-                <h2 className="text-3xl font-bold text-white mb-2">
-                  {view === 'login' ? 'Bienvenido de nuevo' : 'Crea tu cuenta'}
-                </h2>
-                <p className="text-white/50">
-                  {view === 'login' 
-                    ? 'Inicia sesión para gestionar tu suscripción.' 
-                    : 'Registra tu clínica y comienza a automatizar.'}
-                </p>
-              </div>
+            <div className="auth-modal-scroll-area">
+              <div className="auth-modal-content">
+                <div className="auth-modal-header">
+                  <h2 className="auth-header-title">
+                    {view === 'login' ? 'Bienvenido' : 'Crea tu cuenta'}
+                  </h2>
+                  <p className="auth-header-sub">
+                    {view === 'login' 
+                      ? 'Inicia sesión para gestionar tu suscripción.' 
+                      : 'Registra tu clínica y comienza a automatizar.'}
+                  </p>
+                </div>
 
-              {error && (
-                <motion.div 
-                  className={`auth-error-badge ${error.includes('exitoso') ? 'is-success' : ''}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                >
-                  {error}
-                </motion.div>
-              )}
-
-              <form onSubmit={handleSubmit} className="auth-form">
-                {view === 'signup' && (
-                  <>
-                    <div className="form-group">
-                      <label>Nombre del Dr. / Propietario</label>
-                      <div className="input-wrapper">
-                        <User className="w-4 h-4 input-icon" />
-                        <input 
-                          type="text" 
-                          placeholder="Tu nombre completo" 
-                          value={fullName}
-                          onChange={(e) => setFullName(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Nombre del Negocio / Clínica</label>
-                      <div className="input-wrapper">
-                        <Building2 className="w-4 h-4 input-icon" />
-                        <input 
-                          type="text" 
-                          placeholder="Ej. Clínica Dental Ravyn" 
-                          value={clinicName}
-                          onChange={(e) => setClinicName(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                    <div className="form-group">
-                      <label>Teléfono de contacto</label>
-                      <div className="input-wrapper">
-                        <Phone className="w-4 h-4 input-icon" />
-                        <input 
-                          type="tel" 
-                          placeholder="10 dígitos" 
-                          value={clinicPhone}
-                          onChange={(e) => setClinicPhone(e.target.value)}
-                          required
-                        />
-                      </div>
-                    </div>
-                  </>
+                {error && (
+                  <motion.div 
+                    className={`auth-error-badge ${error.includes('exitoso') ? 'is-success' : ''}`}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                  >
+                    {error}
+                  </motion.div>
                 )}
 
-                <div className="form-group">
-                  <label>Correo electrónico</label>
-                  <div className="input-wrapper">
-                    <Mail className="w-4 h-4 input-icon" />
-                    <input 
-                      type="email" 
-                      placeholder="correo@ejemplo.com" 
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label>Contraseña</label>
-                  <div className="input-wrapper">
-                    <Lock className="w-4 h-4 input-icon" />
-                    <input 
-                      type={showPassword ? 'text' : 'password'} 
-                      placeholder="••••••••" 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button 
-                      type="button" 
-                      className="password-toggle"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
-                    </button>
-                  </div>
-                </div>
-
-                <button type="submit" className="auth-submit-btn" disabled={loading}>
-                  {loading ? (
-                    <Loader2 className="w-5 h-5 animate-spin" />
-                  ) : (
+                <form onSubmit={handleSubmit} className="auth-form">
+                  {view === 'signup' && (
                     <>
-                      {view === 'login' ? 'Entrar' : 'Registrar mi clínica'}
-                      <ArrowRight className="w-5 h-5" />
+                      <div className="form-group">
+                        <label>Nombre del Propietario</label>
+                        <div className="input-wrapper">
+                          <User className="w-4 h-4 input-icon" />
+                          <input 
+                            type="text" 
+                            placeholder="Tu nombre completo" 
+                            value={fullName}
+                            onChange={(e) => setFullName(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Nombre de la Clínica</label>
+                        <div className="input-wrapper">
+                          <Building2 className="w-4 h-4 input-icon" />
+                          <input 
+                            type="text" 
+                            placeholder="Ej. Clínica Dental Ravyn" 
+                            value={clinicName}
+                            onChange={(e) => setClinicName(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
+                      <div className="form-group">
+                        <label>Teléfono</label>
+                        <div className="input-wrapper">
+                          <Phone className="w-4 h-4 input-icon" />
+                          <input 
+                            type="tel" 
+                            placeholder="10 dígitos" 
+                            value={clinicPhone}
+                            onChange={(e) => setClinicPhone(e.target.value)}
+                            required
+                          />
+                        </div>
+                      </div>
                     </>
                   )}
-                </button>
-              </form>
 
-              <div className="auth-modal-footer">
-                <button 
-                  type="button"
-                  onClick={() => setView(view === 'login' ? 'signup' : 'login')}
-                  className="auth-view-toggle-btn"
-                >
-                  {view === 'login' 
-                    ? '¿No tienes cuenta? Regístrate aquí' 
-                    : '¿Ya tienes cuenta? Inicia sesión'}
-                </button>
+                  <div className="form-group">
+                    <label>Correo electrónico</label>
+                    <div className="input-wrapper">
+                      <Mail className="w-4 h-4 input-icon" />
+                      <input 
+                        type="email" 
+                        placeholder="correo@ejemplo.com" 
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label>Contraseña</label>
+                    <div className="input-wrapper">
+                      <Lock className="w-4 h-4 input-icon" />
+                      <input 
+                        type={showPassword ? 'text' : 'password'} 
+                        placeholder="••••••••" 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                      />
+                      <button 
+                        type="button" 
+                        className="password-toggle"
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                      </button>
+                    </div>
+                  </div>
+
+                  <button type="submit" className="auth-submit-btn" disabled={loading}>
+                    {loading ? (
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <>
+                        {view === 'login' ? 'Entrar' : 'Registrar mi clínica'}
+                        <ArrowRight className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+                </form>
+
+                <div className="auth-modal-footer">
+                  <button 
+                    type="button"
+                    onClick={() => setView(view === 'login' ? 'signup' : 'login')}
+                    className="auth-view-toggle-btn"
+                  >
+                    {view === 'login' 
+                      ? '¿No tienes cuenta? Regístrate aquí' 
+                      : '¿Ya tienes cuenta? Inicia sesión'}
+                  </button>
+                </div>
               </div>
             </div>
           </motion.div>
@@ -223,10 +239,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
           <style>{`
             .auth-modal-overlay {
               position: fixed;
-              inset: 0;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100dvh; /* Altura dinámica para móviles */
               z-index: 10000;
               display: flex;
-              align-items: center;
+              align-items: center; 
               justify-content: center;
               padding: 20px;
               pointer-events: auto;
@@ -235,48 +254,68 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             .auth-modal-backdrop {
               position: absolute;
               inset: 0;
-              background: rgba(0, 0, 0, 0.85);
-              backdrop-filter: blur(10px);
+              background: rgba(0, 0, 0, 0.9);
+              backdrop-filter: blur(12px);
               z-index: 0;
             }
 
             .auth-modal-container {
               position: relative;
-              background: #111;
-              border: 1px solid var(--border);
+              background: #0a0a0a;
+              border: 1px solid rgba(255,255,255,0.1);
               width: 100%;
-              max-width: 460px;
-              border-radius: 32px;
-              overflow-y: auto;
-              max-height: 90vh;
-              box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+              max-width: 440px;
+              max-height: 85vh; /* Limitamos un poco más para asegurar que se vea que flota */
+              border-radius: 28px;
+              box-shadow: 0 40px 100px -10px rgba(0, 0, 0, 0.8);
               z-index: 1;
               pointer-events: auto;
+              display: flex;
+              flex-direction: column;
+              overflow: hidden;
+              /* Eliminamos transformaciones de posición iniciales */
+              margin: auto; 
+            }
+
+            .auth-modal-scroll-area {
+              flex: 1;
+              overflow-y: auto;
+              padding: 40px;
+              /* Scroll suave en iOS */
+              -webkit-overflow-scrolling: touch;
             }
 
             .auth-modal-close {
               position: absolute;
-              top: 24px;
-              right: 24px;
+              top: 16px;
+              right: 16px;
               color: var(--text-muted);
               transition: color 0.2s;
               z-index: 10;
-              background: none;
+              background: rgba(255,255,255,0.05);
               border: none;
               cursor: pointer;
               padding: 8px;
-            }
-
-            .auth-modal-close:hover {
-              color: var(--text);
+              border-radius: 50%;
             }
 
             .auth-modal-content {
-              padding: 48px;
+              display: flex;
+              flex-direction: column;
             }
 
-            .auth-modal-header {
-              margin-bottom: 32px;
+            .auth-header-title {
+              font-size: 1.75rem;
+              font-weight: 700;
+              color: #fff;
+              margin-bottom: 6px;
+              letter-spacing: -0.02em;
+            }
+
+            .auth-header-sub {
+              font-size: 0.9rem;
+              color: var(--text-secondary);
+              margin-bottom: 24px;
             }
 
             .auth-error-badge {
@@ -285,8 +324,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               color: #f87171;
               padding: 12px 16px;
               border-radius: 12px;
-              font-size: 0.9rem;
-              margin-bottom: 24px;
+              font-size: 0.85rem;
+              margin-bottom: 20px;
             }
 
             .auth-error-badge.is-success {
@@ -295,37 +334,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               color: #4ade80;
             }
 
-            .auth-form {
-              display: flex;
-              flex-direction: column;
-              gap: 20px;
-            }
+            .auth-form { display: flex; flex-direction: column; gap: 14px; }
+            .form-group { display: flex; flex-direction: column; gap: 6px; }
+            .form-group label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-left: 2px; }
 
-            .form-group {
-              display: flex;
-              flex-direction: column;
-              gap: 8px;
-            }
-
-            .form-group label {
-              font-size: 0.85rem;
-              font-weight: 600;
-              color: var(--text-secondary);
-              margin-left: 4px;
-            }
-
-            .input-wrapper {
-              position: relative;
-              display: flex;
-              align-items: center;
-            }
-
-            .input-icon {
-              position: absolute;
-              left: 16px;
-              color: var(--text-muted);
-            }
-
+            .input-wrapper { position: relative; display: flex; align-items: center; }
+            .input-icon { position: absolute; left: 16px; color: var(--text-muted); pointer-events: none; }
+            
             .password-toggle {
               position: absolute;
               right: 16px;
@@ -333,85 +348,58 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               background: none;
               border: none;
               cursor: pointer;
-              transition: color 0.2s;
               padding: 4px;
-            }
-
-            .password-toggle:hover {
-              color: var(--text);
             }
 
             .input-wrapper input {
               width: 100%;
-              background: #1a1a1a;
-              border: 1px solid var(--border);
-              border-radius: 16px;
-              padding: 14px 44px;
+              background: #141414;
+              border: 1px solid rgba(255,255,255,0.08);
+              border-radius: 12px;
+              padding: 12px 44px;
               color: #fff;
-              font-size: 1rem;
-              transition: all 0.2s;
-            }
-
-            .input-wrapper input:focus {
-              border-color: var(--accent);
-              outline: none;
-              box-shadow: 0 0 0 4px var(--accent-dim);
+              font-size: 0.95rem;
             }
 
             .auth-submit-btn {
               background: #fff;
               color: #000;
-              padding: 16px;
-              border-radius: 16px;
+              padding: 14px;
+              border-radius: 12px;
               font-weight: 700;
-              font-size: 1rem;
+              font-size: 0.95rem;
               display: flex;
               align-items: center;
               justify-content: center;
-              gap: 12px;
-              margin-top: 12px;
-              transition: all 0.3s;
+              gap: 10px;
+              margin-top: 8px;
               border: none;
               cursor: pointer;
             }
 
-            .auth-submit-btn:hover:not(:disabled) {
-              opacity: 0.9;
-              transform: translateY(-2px);
-            }
-
-            .auth-submit-btn:disabled {
-              opacity: 0.5;
-              cursor: not-allowed;
-            }
-
-            .auth-modal-footer {
-              margin-top: 32px;
-              text-align: center;
-            }
+            .auth-modal-footer { margin-top: 20px; text-align: center; }
 
             .auth-view-toggle-btn {
               background: none;
               border: none;
               color: #fff; 
               font-weight: 500;
-              font-size: 0.95rem;
+              font-size: 0.85rem;
               cursor: pointer;
-              transition: opacity 0.2s;
             }
 
-            .auth-view-toggle-btn:hover {
-              opacity: 0.7;
-            }
-
-            @media (max-width: 480px) {
-              .auth-modal-content {
-                padding: 32px 24px;
+            @media (max-width: 768px) {
+              .auth-modal-overlay { 
+                padding: 16px; 
+                align-items: center !important; /* Forzamos el centrado */
               }
-              .auth-modal-container {
-                max-height: 100vh;
-                border-radius: 0;
+              .auth-modal-container { 
+                max-width: 100%; 
+                margin: auto !important; 
+                max-height: 80dvh; /* Más pequeño para asegurar centrado visual */
               }
+              .auth-modal-scroll-area { padding: 32px 20px; }
+              .auth-header-title { font-size: 1.5rem; }
             }
           `}</style>
         </div>

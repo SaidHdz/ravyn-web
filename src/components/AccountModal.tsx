@@ -15,11 +15,9 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const [paymentMethod, setPaymentMethod] = useState<'transfer' | 'card'>('transfer')
   const [loadingData, setLoadingData] = useState(true)
   
-  // Datos reales de Supabase
   const [clinic, setClinic] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
 
-  // Estados para la tarjeta 3D
   const [cardName, setCardName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
   const [cardExpiry, setCardExpiry] = useState('')
@@ -28,23 +26,36 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const [rotate, setRotate] = useState({ x: 0, y: 0 });
 
-  // Bloquear scroll del body al abrir el modal
+  // BLOQUEO DE SCROLL AGRESIVO
   useEffect(() => {
     if (isOpen) {
-      document.body.style.overflow = 'hidden'
-      fetchUserData()
-    } else {
-      document.body.style.overflow = 'unset'
-      setView('overview') 
+      const originalStyle = window.getComputedStyle(document.body).overflow;
+      const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden';
+      document.body.style.paddingRight = `${scrollBarWidth}px`;
+      document.body.style.position = 'fixed'; // Bloqueo total en iOS
+      document.body.style.width = '100%';
+      document.body.style.top = `-${window.scrollY}px`;
+      
+      return () => {
+        const scrollY = document.body.style.top;
+        document.documentElement.style.overflow = '';
+        document.body.style.overflow = originalStyle;
+        document.body.style.paddingRight = '';
+        document.body.style.position = '';
+        document.body.style.width = '';
+        document.body.style.top = '';
+        window.scrollTo(0, parseInt(scrollY || '0') * -1);
+      }
     }
-    return () => { document.body.style.overflow = 'unset' }
-  }, [isOpen, user])
+  }, [isOpen])
 
   const fetchUserData = async () => {
     if (!user) return
     setLoadingData(true)
     try {
-      // Obtener perfil y clínica asociada
       const { data, error } = await supabase
         .from('users')
         .select('*, clinics(*)')
@@ -52,7 +63,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
         .single()
 
       if (error) throw error
-      
       setProfile(data)
       setClinic(data.clinics)
     } catch (err) {
@@ -62,7 +72,10 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
     }
   }
 
-  // Lógica de rotación 3D para la tarjeta
+  useEffect(() => {
+    if (isOpen && user) fetchUserData()
+  }, [isOpen, user])
+
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!cardRef.current) return;
     const card = cardRef.current;
@@ -80,7 +93,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
     setRotate({ x: 0, y: 0 });
   };
 
-  // Validaciones y formateo de inputs
   const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const val = e.target.value.replace(/\D/g, '').slice(0, 16);
     setCardNumber(val);
@@ -109,7 +121,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
     }, 1500)
   }
 
-  // Mapeo de datos para la UI
   const displayData = {
     businessName: clinic?.name || "Cargando...",
     contactName: profile?.full_name || user?.user_metadata?.full_name || "Usuario",
@@ -122,6 +133,13 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const paymentHistory = [
     { date: "01 Mayo 2026", concept: `Plan ${displayData.plan}`, amount: displayData.plan === 'Completo' ? "$1,400 MXN" : "$900 MXN", status: "Pagado" },
   ]
+
+  const systemStatus = {
+    webUrl: displayData.subdomain ? `https://${displayData.subdomain}.ravynset.com` : '#',
+    crm: "activo",
+    whatsapp: "activo",
+    reputation: "activo"
+  }
 
   return (
     <AnimatePresence>
@@ -166,7 +184,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
               ) : view === 'overview' ? (
                 <div className="account-grid">
                   
-                  {/* Sección 1 — Resumen de cuenta */}
                   <div className="account-card section-resumen">
                     <div className="card-header">
                       <User className="w-5 h-5 text-accent" />
@@ -193,7 +210,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     </div>
                   </div>
 
-                  {/* Sección 2 — Suscripción activa */}
                   <div className="account-card section-suscripcion">
                     <div className="card-header">
                       <CreditCard className="w-5 h-5 text-accent" />
@@ -229,7 +245,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     </div>
                   </div>
 
-                  {/* Sección 5 — Mi sistema */}
                   <div className="account-card section-sistema">
                     <div className="card-header">
                       <Layout className="w-5 h-5 text-accent" />
@@ -238,7 +253,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     <div className="card-body flex flex-col h-full">
                       <div className="system-links mb-6">
                         <a 
-                          href={displayData.subdomain ? `https://${displayData.subdomain}.ravynset.com` : '#'} 
+                          href={systemStatus.webUrl} 
                           target="_blank" 
                           rel="noreferrer" 
                           className={`system-link ${!displayData.subdomain && 'opacity-50 pointer-events-none'}`}
@@ -265,7 +280,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     </div>
                   </div>
 
-                  {/* Sección 3 — Historial de pagos */}
                   <div className="account-card section-historial lg:col-span-2">
                     <div className="card-header">
                       <History className="w-5 h-5 text-accent" />
@@ -303,7 +317,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     </div>
                   </div>
 
-                  {/* Sección 4 — Método de pago */}
                   <div className="account-card section-pago">
                     <div className="card-header">
                       <AlertCircle className="w-5 h-5 text-amber-400" />
@@ -315,7 +328,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                           <div className="bank-data flex flex-col gap-3">
                             <div className="data-row flex justify-between items-center">
                               <span className="text-muted">Método:</span>
-                              <strong className="text-white ml-2 text-right">Transferencia</strong>
+                              <strong className="text-white ml-2 text-right">Transferencia SPEI</strong>
                             </div>
                             <div className="data-row flex justify-between items-center">
                               <span className="text-muted">Banco:</span>
@@ -379,7 +392,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
 
                 </div>
               ) : (
-                /* VISTA: AÑADIR TARJETA */
                 <div className="add-card-view">
                   <div className="add-card-grid">
                     <div className="card-preview-section">
@@ -489,18 +501,18 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
           </motion.div>
 
           <style>{`
-            .account-modal-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2vh; pointer-events: auto; overflow-x: hidden; }
+            .account-modal-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2vh; pointer-events: auto; overflow: hidden; }
             .account-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(25px); z-index: 0; }
             .account-modal-container { position: relative; width: 95vw; height: 90vh; background: #080808; border: 1px solid var(--border); border-radius: 32px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 50px 150px -20px rgba(0,0,0,0.8); z-index: 1; pointer-events: auto; max-width: 1600px; }
-            .account-modal-header { padding: 20px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); flex-shrink: 0; }
+            .account-modal-header { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); flex-shrink: 0; }
             .btn-back { color: var(--text-muted); transition: color 0.2s; background: none; border: none; cursor: pointer; padding: 8px; }
             .btn-back:hover { color: var(--text); }
-            .account-modal-title { font-size: 1.4rem; font-weight: 700; color: var(--text); }
+            .account-modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text); }
             .account-modal-close { color: var(--text-muted); transition: color 0.2s; cursor: pointer; background: none; border: none; padding: 8px; }
             .account-modal-close:hover { color: var(--text); }
             .account-modal-content { flex: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
             .account-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-            .account-card { background: #111; border: 1px solid var(--border); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; transition: border-color 0.3s; min-width: 0; width: 100%; box-sizing: border-box; }
+            .account-card { background: #111; border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; transition: border-color 0.3s; min-width: 0; width: 100%; box-sizing: border-box; }
             .account-card:hover { border-color: rgba(255,255,255,0.1); }
             .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
             .card-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
