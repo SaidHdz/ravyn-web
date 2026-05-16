@@ -87,8 +87,8 @@ export default function Servicios() {
                   </motion.span>
 
                   <motion.span
-                    className="servicio-price font-mono text-[0.7rem] uppercase tracking-wider text-muted"
-                    animate={active === i ? { scale: 1.07, color: 'var(--text)' } : { scale: 1 }}
+                    className="servicio-price font-mono text-[0.7rem] uppercase tracking-wider"
+                    animate={active === i ? { scale: 1.07, color: 'var(--text)' } : { scale: 1, color: '#fff' }}
                     transition={{ duration: 0.22, ease }}
                     style={{ display: 'inline-block' }}
                   >

@@ -10,17 +10,17 @@ const problemas = [
   {
     icon: <Globe className="w-6 h-6 text-blue-400" />,
     text: "Pacientes que no llegan a su cita y nunca avisaron",
-    bgText: "REAGENDAR"
+    bgText: "FALTAS"
   },
   {
     icon: <Calendar className="w-6 h-6 text-green-400" />,
     text: "Tu recepcionista llamando uno por uno para confirmar",
-    bgText: "LLAMADAS"
+    bgText: "TIEMPO"
   },
   {
     icon: <Users className="w-6 h-6 text-purple-400" />,
     text: "Pacientes que no saben dónde estás ni pueden agendar en línea",
-    bgText: "ONLINE"
+    bgText: "PRESENCIA"
   },
   {
     icon: <Star className="w-6 h-6 text-amber-400" />,

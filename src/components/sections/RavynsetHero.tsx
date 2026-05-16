@@ -49,9 +49,6 @@ export default function RavynsetHero() {
             <button className="btn-primary py-4 px-8 text-base" onClick={() => document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })}>
               Ver planes →
             </button>
-            <button className="btn-secondary py-4 px-8 text-base" onClick={() => document.getElementById('contacto')?.scrollIntoView({ behavior: 'smooth' })}>
-              Hablar con nosotros
-            </button>
           </motion.div>
         </div>
       </div>
@@ -88,9 +85,9 @@ export default function RavynsetHero() {
 
         .ravynset-hero-tag {
           font-family: var(--font-sans);
-          font-size: 1.1rem;
-          font-weight: 500;
-          letter-spacing: -0.01em;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 0.25em;
           padding: 8px 0;
           background: transparent;
           border: none;
@@ -132,7 +129,7 @@ export default function RavynsetHero() {
 
         @media (max-width: 768px) {
           .ravynset-hero {
-            padding-top: 100px !important; /* Compactado a 100px en móvil */
+            padding-top: 100px !important;
             padding-bottom: 60px;
             min-height: auto;
           }
