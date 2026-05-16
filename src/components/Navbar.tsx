@@ -63,29 +63,33 @@ export default function Navbar({ }: NavbarProps) {
       }
     }
   ]
+// Lógica de Ocultar/Mostrar Navbar según Scroll (Solo Móvil)
+useEffect(() => {
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY
+    const isMobile = window.innerWidth <= 768
 
-  // Lógica de Ocultar/Mostrar Navbar según Scroll (Mobile optimized)
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
-      
-      if (currentScrollY < 10) {
-        setVisible(true)
-      } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
-        // Scrolling down
-        setVisible(false)
-        setIsUserMenuOpen(false) // Cerrar menú al ocultar barra
-      } else {
-        // Scrolling up
-        setVisible(true)
-      }
+    if (!isMobile) {
+      setVisible(true)
       setLastScrollY(currentScrollY)
+      return
     }
 
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [lastScrollY])
-
+    if (currentScrollY < 10) {
+      setVisible(true)
+    } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
+      // Scrolling down
+      setVisible(false)
+      setIsUserMenuOpen(false)
+    } else {
+      // Scrolling up
+      setVisible(true)
+    }
+    setLastScrollY(currentScrollY)
+  }
+  window.addEventListener('scroll', handleScroll, { passive: true })
+  return () => window.removeEventListener('scroll', handleScroll)
+}, [lastScrollY])
   // Cerrar menú al hacer clic fuera
   useEffect(() => {
     const closeMenu = (e: MouseEvent) => {
@@ -101,9 +105,7 @@ export default function Navbar({ }: NavbarProps) {
 
   return (
     <>
-      <nav 
-        className={`nav-gooey-wrapper ${visible ? 'is-visible' : 'is-hidden'}`}
-      >
+      <nav className={`nav-gooey-wrapper ${visible ? 'is-visible' : 'is-hidden'}`}>
         <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
         
         <div className="nav-gooey-container">
@@ -138,7 +140,7 @@ export default function Navbar({ }: NavbarProps) {
                     initial={{ opacity: 0, y: 10, scale: 0.95, x: "-50%" }}
                     animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
                     exit={{ opacity: 0, y: 10, scale: 0.95, x: "-50%" }}
-                    transition={{ duration: 0.2 }}
+                    transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     <div className="user-menu-header">
                       <span className="user-email">{user.email}</span>
@@ -210,17 +212,11 @@ export default function Navbar({ }: NavbarProps) {
           width: 100%;
           overflow: visible; 
           background: transparent;
-          transition: transform 0.4s var(--ease-out);
-          will-change: transform;
+          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .nav-gooey-wrapper.is-hidden {
-          transform: translateY(-100%);
-        }
-
-        .nav-gooey-wrapper.is-visible {
-          transform: translateY(0);
-        }
+        .nav-gooey-wrapper.is-hidden { transform: translateY(-110%); }
+        .nav-gooey-wrapper.is-visible { transform: translateY(0); }
 
         .nav-gooey-container {
           display: flex;
@@ -252,7 +248,6 @@ export default function Navbar({ }: NavbarProps) {
           position: absolute;
           top: 100%;
           left: 50%;
-          transform: translateX(-50%);
           width: 0;
           height: 0;
           pointer-events: none;
@@ -261,16 +256,15 @@ export default function Navbar({ }: NavbarProps) {
         .nav-user-menu-floating {
           position: absolute;
           top: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          display: flex !important;
-          flex-direction: column !important;
-          height: max-content !important;
-          background: #0d0d0d !important; 
+          background: #0d0d0d; 
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 24px;
-          padding: 12px !important;
+          padding: 16px;
           min-width: 220px;
+          width: max-content;
+          display: flex !important;
+          flex-direction: column !important;
+          height: auto !important; /* Forzado altura dinámica */
           box-shadow: 0 20px 50px rgba(0,0,0,0.7);
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
@@ -289,29 +283,11 @@ export default function Navbar({ }: NavbarProps) {
           z-index: 10;
         }
 
-        .nav-logo-simple span {
-          color: var(--accent);
-        }
+        .nav-logo-simple span { color: var(--accent); }
 
-        .user-menu-header {
-          padding: 8px 16px 12px;
-          flex-shrink: 0;
-        }
-
-        .user-email {
-          font-size: 0.85rem;
-          color: var(--text-secondary);
-          display: block;
-          overflow: hidden;
-          text-overflow: ellipsis;
-        }
-
-        .user-menu-divider {
-          height: 1px;
-          background: rgba(255,255,255,0.08);
-          margin: 4px 8px;
-          flex-shrink: 0;
-        }
+        .user-menu-header { padding: 4px 8px 12px; }
+        .user-email { font-size: 0.85rem; color: var(--text-secondary); display: block; white-space: nowrap; }
+        .user-menu-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0 12px; }
 
         .user-menu-item {
           width: 100%;
@@ -328,26 +304,14 @@ export default function Navbar({ }: NavbarProps) {
           background: transparent;
           border: none;
           cursor: pointer;
+          white-space: nowrap;
           flex-shrink: 0;
         }
 
-        .user-menu-item:hover {
-          background: rgba(255,255,255,0.05);
-          color: var(--accent);
-        }
+        .user-menu-item:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
+        .user-menu-item.logout:hover { color: #f87171; background: rgba(239, 68, 68, 0.1); }
 
-        .user-menu-item.logout:hover {
-          color: #f87171;
-          background: rgba(239, 68, 68, 0.1);
-        }
-
-        .nav-cta-link {
-          text-decoration: none;
-          z-index: 10;
-          display: flex;
-          flex-shrink: 0;
-        }
-
+        .nav-cta-link { text-decoration: none; z-index: 10; display: flex; flex-shrink: 0; }
         .nav-cta-premium {
           position: relative;
           padding: 10px 24px;
@@ -366,78 +330,23 @@ export default function Navbar({ }: NavbarProps) {
           white-space: nowrap;
         }
 
-        .cta-btn-fill {
-          position: absolute;
-          inset: 0;
-          background: #fff;
-          z-index: 0;
-          pointer-events: none;
-        }
-
-        .cta-btn-label {
-          position: relative;
-          z-index: 1;
-          color: #fff;
-          transition: color 0.3s ease;
-        }
-
-        .nav-cta-premium:hover .cta-btn-label {
-          color: #000;
-        }
-
-        .nav-cta-premium.is-ravynset-active {
-           background: rgba(255, 255, 255, 0.15);
-        }
+        .cta-btn-fill { position: absolute; inset: 0; background: #fff; z-index: 0; pointer-events: none; }
+        .cta-btn-label { position: relative; z-index: 1; color: #fff; transition: color 0.3s ease; }
+        .nav-cta-premium:hover .cta-btn-label { color: #000; }
 
         @media (max-width: 768px) {
-          .nav-gooey-wrapper {
-            height: 80px;
-          }
-          
-          .nav-gooey-container {
-            gap: 0.5rem;
-            padding: 0.4rem 0.8rem;
-            width: auto;
-            max-width: 95%;
-            margin-top: 0.5rem;
-            justify-content: space-between;
-          }
-
-          .desktop-only {
-            display: none !important;
-          }
-
-          .nav-cta-premium {
-            padding: 8px 12px;
-            font-size: 0.7rem;
-            flex-shrink: 0;
-          }
-
-          .nav-center-menu {
-            transform: scale(0.9);
-            flex-shrink: 1;
-            min-width: 0;
-          }
-
-          .nav-user-menu-floating {
-             background: #0a0a0a !important;
-             min-width: 200px;
-             border-radius: 20px;
-          }
+          .nav-gooey-wrapper { height: 80px; transform: translate3d(0,0,0); backface-visibility: hidden; }
+          .nav-gooey-container { gap: 0.5rem; padding: 0.4rem 0.8rem; width: auto; max-width: 95%; margin-top: 0.5rem; justify-content: space-between; }
+          .desktop-only { display: none !important; }
+          .nav-cta-premium { padding: 8px 12px; font-size: 0.7rem; flex-shrink: 0; }
+          .nav-center-menu { transform: scale(0.9); flex-shrink: 1; min-width: 0; }
+          .nav-user-menu-floating { background: #0a0a0a !important; min-width: 200px; border-radius: 20px; padding: 12px !important; }
         }
 
         @media (max-width: 480px) {
-          .nav-gooey-container {
-            gap: 0.3rem;
-            padding: 0.3rem 0.5rem;
-          }
-          .nav-center-menu {
-            transform: scale(0.8);
-          }
-          .nav-cta-premium {
-            padding: 7px 10px;
-            font-size: 0.65rem;
-          }
+          .nav-gooey-container { gap: 0.3rem; padding: 0.3rem 0.5rem; }
+          .nav-center-menu { transform: scale(0.8); }
+          .nav-cta-premium { padding: 7px 10px; font-size: 0.65rem; }
         }
       `}</style>
     </>

@@ -35,7 +35,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
       document.documentElement.style.overflow = 'hidden';
       document.body.style.overflow = 'hidden';
       document.body.style.paddingRight = `${scrollBarWidth}px`;
-      document.body.style.position = 'fixed'; // Bloqueo total en iOS
+      document.body.style.position = 'fixed'; 
       document.body.style.width = '100%';
       document.body.style.top = `-${window.scrollY}px`;
       
@@ -65,6 +65,9 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
       if (error) throw error
       setProfile(data)
       setClinic(data.clinics)
+      
+      // Persistencia segura: Si la clínica tiene datos de tarjeta (simulado por ahora)
+      // En producción esto vendría de Stripe a través de la tabla clinics
     } catch (err) {
       console.error('Error fetching account data:', err)
     } finally {
@@ -114,10 +117,13 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const handleSaveCard = (e: React.FormEvent) => {
     e.preventDefault()
     setIsSavingCard(true)
+    
+    // PERSISTENCIA SEGURA: No guardamos en frontend, simulamos actualización en Supabase
     setTimeout(() => {
       setIsSavingCard(false)
       setPaymentMethod('card')
       setView('overview')
+      // Aquí iría el supabase.from('clinics').update({ has_card: true, card_last4: cardNumber.slice(-4) })
     }, 1500)
   }
 
@@ -179,7 +185,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
               {loadingData ? (
                 <div className="flex items-center justify-center h-full flex-col gap-4">
                   <Loader2 className="w-8 h-8 animate-spin text-accent" />
-                  <p className="text-white/50 animate-pulse">Sincronizando con Ravyn CRM...</p>
+                  <p className="text-white/50 animate-pulse font-mono text-sm tracking-widest uppercase">Sincronizando con Ravyn CRM...</p>
                 </div>
               ) : view === 'overview' ? (
                 <div className="account-grid">
@@ -276,7 +282,13 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                           <span className="status-dot active">activo</span>
                         </div>
                       </div>
-                      <button className="btn-crm mt-auto pt-6" type="button">Ir al CRM</button>
+                      <button 
+                        className="btn-crm mt-auto pt-6" 
+                        type="button" 
+                        onClick={() => window.open('https://www.ravyn-crm.cloud', '_blank')}
+                      >
+                        Ir al CRM
+                      </button>
                     </div>
                   </div>
 
@@ -362,7 +374,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                               <span className="linked-card-chip" />
                             </div>
                             <div className="linked-card-body relative z-10">
-                              <p className="linked-card-number text-[1rem]">•••• •••• •••• {cardNumber.slice(-4) || '4242'}</p>
+                              <p className="linked-card-number text-[1.1rem] leading-none">•••• •••• •••• {cardNumber.slice(-4) || '4242'}</p>
                               <div className="flex justify-between items-end mt-5">
                                 <div>
                                   <p className="linked-card-label">Titular</p>
@@ -408,7 +420,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                         >
                           <div className="card-inner-content" style={{ transform: 'translateZ(60px)' }}>
                             <div className="card-chip mb-8" />
-                            <div className="card-number-display mb-8 text-[1rem]">
+                            <div className="card-number-display mb-8 text-[1.1rem]">
                               {cardNumber.replace(/(\d{4})/g, '$1 ').trim() || '•••• •••• •••• ••••'}
                             </div>
                             <div className="flex justify-between items-end">
