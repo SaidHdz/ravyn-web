@@ -110,9 +110,9 @@ export default function Navbar({ }: NavbarProps) {
                 {isUserMenuOpen && user && (
                   <motion.div 
                     className="nav-user-menu-floating"
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                    initial={{ opacity: 0, y: 10, scale: 0.95, x: "-50%" }}
+                    animate={{ opacity: 1, y: 0, scale: 1, x: "-50%" }}
+                    exit={{ opacity: 0, y: 10, scale: 0.95, x: "-50%" }}
                     transition={{ duration: 0.2 }}
                   >
                     <div className="user-menu-header">
@@ -160,7 +160,6 @@ export default function Navbar({ }: NavbarProps) {
         </div>
       </nav>
 
-      {/* MODALES FUERA DEL WRAPPER DE LA NAVBAR PARA EVITAR CLIPPING */}
       <AuthModal 
         isOpen={isAuthModalOpen} 
         onClose={() => setIsAuthModalOpen(false)} 
@@ -214,36 +213,35 @@ export default function Navbar({ }: NavbarProps) {
           z-index: 5;
         }
 
-        /* Ancla invisible que ocupa todo el ancho debajo del nav central */
         .nav-user-menu-anchor {
           position: absolute;
           top: 100%;
-          left: 0;
-          right: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 0;
           height: 0;
-          display: flex;
-          justify-content: center;
           pointer-events: none;
         }
 
-        /* Menú Flotante: Fondo Sólido y Altura Automática Corregida */
+        /* Restauración y Centrado del Menú de Usuario */
         .nav-user-menu-floating {
-          position: relative;
+          position: absolute;
           top: 20px;
-          background: #0d0d0d; /* Fondo sólido oscuro base */
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex !important;
+          flex-direction: column !important;
+          height: max-content !important;
+          background: #0d0d0d !important; 
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 24px;
-          padding: 12px;
+          padding: 12px !important;
           min-width: 220px;
-          width: max-content;
-          display: flex;
-          flex-direction: column;
           box-shadow: 0 20px 50px rgba(0,0,0,0.7);
           backdrop-filter: blur(25px);
           -webkit-backdrop-filter: blur(25px);
           z-index: 10000;
           pointer-events: auto;
-          overflow: hidden; /* Garantiza que el fondo respete los bordes */
         }
 
         .nav-logo-simple {
@@ -263,19 +261,22 @@ export default function Navbar({ }: NavbarProps) {
 
         .user-menu-header {
           padding: 8px 16px 12px;
+          flex-shrink: 0;
         }
 
         .user-email {
           font-size: 0.85rem;
           color: var(--text-secondary);
           display: block;
-          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
         }
 
         .user-menu-divider {
           height: 1px;
           background: rgba(255,255,255,0.08);
           margin: 4px 8px;
+          flex-shrink: 0;
         }
 
         .user-menu-item {
@@ -293,7 +294,7 @@ export default function Navbar({ }: NavbarProps) {
           background: transparent;
           border: none;
           cursor: pointer;
-          white-space: nowrap;
+          flex-shrink: 0;
         }
 
         .user-menu-item:hover {
@@ -388,7 +389,7 @@ export default function Navbar({ }: NavbarProps) {
           }
 
           .nav-user-menu-floating {
-             background: #0a0a0a;
+             background: #0a0a0a !important;
              min-width: 200px;
              border-radius: 20px;
           }
