@@ -35,7 +35,6 @@ export default function Navbar({ }: NavbarProps) {
 
   const isRavynset = location.pathname === '/ravynset'
 
-  // Items base de navegación
   const baseItems = isRavynset 
     ? [
         { label: 'Home', href: '/ravynset' },
@@ -46,7 +45,6 @@ export default function Navbar({ }: NavbarProps) {
         { label: 'Contacto', href: '#contacto' }
       ]
 
-  // Añadimos el icono de perfil al final de los navItems para que GooeyNav lo maneje
   const navItems = [
     ...baseItems,
     { 
@@ -92,37 +90,38 @@ export default function Navbar({ }: NavbarProps) {
             initialActiveIndex={0}
           />
 
-          {/* Menú de Usuario (desplegable) */}
-          <AnimatePresence>
-            {isUserMenuOpen && user && (
-              <motion.div 
-                className="nav-user-menu-floating"
-                initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: 10, scale: 0.95 }}
-              >
-                <div className="user-menu-header">
-                  <span className="user-email">{user.email}</span>
-                </div>
-                <div className="user-menu-divider" />
-                <button 
-                  className="user-menu-item" 
-                  type="button" 
-                  onClick={() => {
-                    setIsAccountModalOpen(true);
-                    setIsUserMenuOpen(false);
-                  }}
+          <div className="nav-user-menu-anchor">
+            <AnimatePresence>
+              {isUserMenuOpen && user && (
+                <motion.div 
+                  className="nav-user-menu-floating"
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.95 }}
                 >
-                  <Settings className="w-4 h-4" />
-                  Mi Cuenta
-                </button>
-                <button className="user-menu-item logout" type="button" onClick={() => { signOut(); setIsUserMenuOpen(false); }}>
-                  <LogOut className="w-4 h-4" />
-                  Cerrar Sesión
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                  <div className="user-menu-header">
+                    <span className="user-email">{user.email}</span>
+                  </div>
+                  <div className="user-menu-divider" />
+                  <button 
+                    className="user-menu-item" 
+                    type="button" 
+                    onClick={() => {
+                      setIsAccountModalOpen(true);
+                      setIsUserMenuOpen(false);
+                    }}
+                  >
+                    <Settings className="w-4 h-4" />
+                    Mi Cuenta
+                  </button>
+                  <button className="user-menu-item logout" type="button" onClick={() => { signOut(); setIsUserMenuOpen(false); }}>
+                    <LogOut className="w-4 h-4" />
+                    Cerrar Sesión
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
         <Link 
@@ -132,7 +131,6 @@ export default function Navbar({ }: NavbarProps) {
           <motion.button
             className={`nav-cta-premium ${isRavynset ? 'is-ravynset-active' : ''}`}
             initial="rest"
-            animate={isRavynset ? "hover" : "rest"}
             whileHover="hover"
             whileTap="rest"
             type="button"
@@ -184,18 +182,44 @@ export default function Navbar({ }: NavbarProps) {
           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
 
-        .nav-left-section {
-          display: flex;
-          align-items: center;
-          gap: 1.5rem;
-        }
-
         .nav-center-menu {
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
           z-index: 5;
+        }
+
+        .nav-user-menu-anchor {
+          position: absolute;
+          top: 100%;
+          right: 32px; 
+          width: 0;
+          height: 0;
+          display: flex;
+          justify-content: center;
+          pointer-events: none;
+        }
+
+        .nav-user-menu-floating {
+          position: absolute;
+          top: 15px;
+          left: 50%;
+          transform: translateX(-50%); 
+          display: flex !important;
+          flex-direction: column !important;
+          height: auto !important;
+          min-height: min-content !important;
+          background: #111111 !important;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          border-radius: 20px;
+          padding: 16px !important; 
+          min-width: 220px;
+          box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
+          backdrop-filter: blur(20px);
+          -webkit-backdrop-filter: blur(20px);
+          z-index: 1000;
+          pointer-events: auto;
         }
 
         .nav-logo-simple {
@@ -213,33 +237,9 @@ export default function Navbar({ }: NavbarProps) {
           color: var(--accent);
         }
 
-        .nav-logo-simple.is-active-root::after {
-           content: '';
-           position: absolute;
-           bottom: -4px;
-           left: 0;
-           width: 100%;
-           height: 2px;
-           background: var(--accent);
-           border-radius: 2px;
-        }
-
-        .nav-user-menu-floating {
-          position: absolute;
-          top: calc(100% + 15px);
-          right: 0;
-          background: var(--bg-surface);
-          border: 1px solid var(--border);
-          border-radius: 20px;
-          padding: 8px;
-          min-width: 220px;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-          backdrop-filter: blur(15px);
-          z-index: 100;
-        }
-
         .user-menu-header {
-          padding: 12px 16px;
+          padding: 4px 8px 12px;
+          text-align: center;
         }
 
         .user-email {
@@ -252,35 +252,37 @@ export default function Navbar({ }: NavbarProps) {
 
         .user-menu-divider {
           height: 1px;
-          background: var(--border);
-          margin: 4px 8px;
+          background: rgba(255,255,255,0.1);
+          margin: 4px 0 12px;
+          width: 100%;
         }
 
         .user-menu-item {
           width: 100%;
           display: flex;
           align-items: center;
-          gap: 10px;
-          padding: 10px 16px;
+          gap: 12px;
+          padding: 12px 16px;
           border-radius: 12px;
           font-size: 0.9rem;
           font-weight: 500;
-          color: var(--text);
+          color: #fff;
           transition: all 0.2s;
           text-align: left;
-          background: none;
+          background: transparent;
           border: none;
           cursor: pointer;
+          margin-bottom: 4px;
         }
 
         .user-menu-item:hover {
-          background: var(--bg-raised);
+          background: rgba(255,255,255,0.08);
           color: var(--accent);
         }
 
         .user-menu-item.logout:hover {
           color: #f87171;
-          background: rgba(239, 68, 68, 0.05);
+          background: rgba(239, 68, 68, 0.1);
         }
 
         .nav-cta-link {
@@ -289,21 +291,22 @@ export default function Navbar({ }: NavbarProps) {
           display: flex;
         }
 
+        /* Restauración del diseño del botón */
         .nav-cta-premium {
           position: relative;
           padding: 10px 24px;
           font-size: 0.85rem;
           font-weight: 700;
-          border: 1px solid transparent;
+          border: 1px solid rgba(255, 255, 255, 0.1);
           background: rgba(255, 255, 255, 0.05);
-          color: #fff;
-          border-radius: 100vw;
+          color: #fff !important; /* Forzado texto blanco solicitado */
+          border-radius: 100vw !important; /* Forzado redondeado solicitado */
           overflow: hidden;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
-          transition: background 0.3s ease;
+          transition: all 0.3s ease;
         }
 
         .cta-btn-fill {
@@ -325,6 +328,10 @@ export default function Navbar({ }: NavbarProps) {
           color: #000;
         }
 
+        .nav-cta-premium.is-ravynset-active {
+           background: rgba(255, 255, 255, 0.15);
+        }
+
         @media (max-width: 768px) {
           .nav-gooey-wrapper {
             height: 80px;
@@ -337,9 +344,6 @@ export default function Navbar({ }: NavbarProps) {
             max-width: 98vw;
             margin-top: 0.5rem;
             justify-content: center;
-            background: var(--bg-surface);
-            border: 1px solid var(--border);
-            backdrop-filter: blur(12px);
           }
 
           .desktop-only {
@@ -347,10 +351,11 @@ export default function Navbar({ }: NavbarProps) {
           }
 
           .nav-cta-premium {
-            padding: 8px 12px;
+            padding: 8px 16px;
             font-size: 0.72rem;
             flex-shrink: 0;
             background: rgba(255, 255, 255, 0.08) !important;
+            border-radius: 100vw !important; /* Garantiza redondeado en móvil */
           }
 
           .nav-cta-premium .cta-btn-fill {
@@ -362,10 +367,18 @@ export default function Navbar({ }: NavbarProps) {
             flex-shrink: 1;
           }
 
+          .nav-user-menu-anchor {
+             right: 32px;
+          }
+
           .nav-user-menu-floating {
-             right: 50%;
-             transform: translateX(50%);
-             top: calc(100% + 10px);
+             background: #0d0d0d !important;
+             min-width: 180px;
+             padding: 12px !important;
+             display: flex !important;
+             flex-direction: column !important;
+             height: auto !important;
+             min-height: 180px; 
           }
         }
 
@@ -378,8 +391,11 @@ export default function Navbar({ }: NavbarProps) {
             transform: scale(0.8);
           }
           .nav-cta-premium {
-            padding: 7px 10px;
+            padding: 7px 12px;
             font-size: 0.68rem;
+          }
+          .nav-user-menu-anchor {
+            right: 50%;
           }
         }
       `}</style>

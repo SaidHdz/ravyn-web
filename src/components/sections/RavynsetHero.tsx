@@ -84,7 +84,7 @@ export default function RavynsetHero() {
         }
 
         .ravynset-hero-tag {
-          font-family: var(--font-sans);
+          font-family: var(--font-mono);
           font-size: 0.85rem;
           text-transform: uppercase;
           letter-spacing: 0.25em;
@@ -142,7 +142,10 @@ export default function RavynsetHero() {
             width: 100%;
           }
           .ravynset-hero-tag {
-            font-size: 0.95rem;
+            /* Mismo estilo que PC: mono + espaciado */
+            font-family: var(--font-mono) !important;
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
           }
         }
         
