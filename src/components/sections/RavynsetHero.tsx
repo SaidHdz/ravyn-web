@@ -87,8 +87,8 @@ export default function RavynsetHero() {
         }
 
         .ravynset-hero-tag {
-          font-family: var(--font-sans); /* Cambiado de var(--font-mono) a var(--font-sans) */
-          font-size: 1.1rem; /* Ajustado para coincidir con escala de subtítulos */
+          font-family: var(--font-sans);
+          font-size: 1.1rem;
           font-weight: 500;
           letter-spacing: -0.01em;
           padding: 8px 0;
@@ -132,7 +132,7 @@ export default function RavynsetHero() {
 
         @media (max-width: 768px) {
           .ravynset-hero {
-            padding-top: 160px !important;
+            padding-top: 100px !important; /* Compactado a 100px en móvil */
             padding-bottom: 60px;
             min-height: auto;
           }

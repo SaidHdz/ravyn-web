@@ -1,5 +1,5 @@
 import { motion, useMotionValue, useSpring } from 'motion/react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import TextType from '@/components/TextType/TextType'
 
 const ease = [0.16, 1, 0.3, 1] as const
@@ -104,8 +104,6 @@ function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
   )
 }
 
-import { useRef } from 'react'
-
 export default function Hero() {
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 900)
 
@@ -157,7 +155,7 @@ export default function Hero() {
       <style>{`
         @media (max-width: 900px) {
           .hero {
-            padding-top: 160px !important; /* Espacio extra arriba para no chocar con header */
+            padding-top: 100px !important; /* Compactado a 100px para móvil */
           }
         }
       `}</style>

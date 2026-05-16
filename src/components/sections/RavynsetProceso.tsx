@@ -121,13 +121,13 @@ export default function RavynsetProceso() {
           flex-direction: column;
           gap: 20px;
           height: 100%;
-          min-height: 380px;
+          min-height: 280px; /* Reducido de 380px para evitar espacio muerto */
           position: relative;
         }
 
         .proceso-card-num-huge {
           font-family: var(--font-sans);
-          font-size: 4rem;
+          font-size: 3.5rem;
           font-weight: 900;
           line-height: 1;
           color: var(--text);
@@ -159,10 +159,11 @@ export default function RavynsetProceso() {
         @media (max-width: 768px) {
           .proceso-grid-fixed {
             grid-template-columns: 1fr;
-            gap: 32px;
+            gap: 24px;
           }
           .proceso-card-content-minimal {
             min-height: auto;
+            padding: 32px 24px;
           }
         }
       `}</style>
