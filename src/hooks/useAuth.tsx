@@ -1,44 +1,47 @@
-import React, { createContext, useContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
 import { User, Session } from '@supabase/supabase-js'
+import { supabase } from '../lib/supabase'
 
 interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
   signOut: () => Promise<void>
-  login: (email: string, pass: string) => Promise<boolean>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
-  const [session] = useState<Session | null>(null)
-  const [loading] = useState(false)
+  const [session, setSession] = useState<Session | null>(null)
+  const [loading, setLoading] = useState(true)
 
-  // Simulación de login con usuario de prueba
-  const login = async (email: string, pass: string): Promise<boolean> => {
-    if (email === 'test@ravyn.mx' && pass === 'test') {
-      setUser({
-        id: 'test-user-id',
-        email: 'test@ravyn.mx',
-        user_metadata: { full_name: 'Usuario Test' },
-        app_metadata: {},
-        aud: 'authenticated',
-        created_at: new Date().toISOString()
-      } as User)
-      return true
-    }
-    return false
-  }
+  useEffect(() => {
+    // Verificar sesión activa inicial
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+      setLoading(false)
+    })
+
+    // Escuchar cambios en el estado de autenticación
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+      setUser(session?.user ?? null)
+      setLoading(false)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
 
   const signOut = async () => {
+    await supabase.auth.signOut()
     setUser(null)
-    console.log('Cierre de sesión simulado')
+    setSession(null)
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut, login }}>
+    <AuthContext.Provider value={{ user, session, loading, signOut }}>
       {children}
     </AuthContext.Provider>
   )

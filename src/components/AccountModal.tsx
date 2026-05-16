@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'motion/react'
 import { X, User, CreditCard, History, Layout, ExternalLink, Download, AlertCircle, PlusCircle, ArrowLeft, Loader2 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState, useRef } from 'react'
+import { supabase } from '@/lib/supabase'
 
 interface AccountModalProps {
   isOpen: boolean
@@ -12,7 +13,12 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const { user } = useAuth()
   const [view, setView] = useState<'overview' | 'add-card'>('overview')
   const [paymentMethod, setPaymentMethod] = useState<'transfer' | 'card'>('transfer')
+  const [loadingData, setLoadingData] = useState(true)
   
+  // Datos reales de Supabase
+  const [clinic, setClinic] = useState<any>(null)
+  const [profile, setProfile] = useState<any>(null)
+
   // Estados para la tarjeta 3D
   const [cardName, setCardName] = useState('')
   const [cardNumber, setCardNumber] = useState('')
@@ -26,12 +32,35 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
+      fetchUserData()
     } else {
       document.body.style.overflow = 'unset'
       setView('overview') 
     }
     return () => { document.body.style.overflow = 'unset' }
-  }, [isOpen])
+  }, [isOpen, user])
+
+  const fetchUserData = async () => {
+    if (!user) return
+    setLoadingData(true)
+    try {
+      // Obtener perfil y clínica asociada
+      const { data, error } = await supabase
+        .from('users')
+        .select('*, clinics(*)')
+        .eq('id', user.id)
+        .single()
+
+      if (error) throw error
+      
+      setProfile(data)
+      setClinic(data.clinics)
+    } catch (err) {
+      console.error('Error fetching account data:', err)
+    } finally {
+      setLoadingData(false)
+    }
+  }
 
   // Lógica de rotación 3D para la tarjeta
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -80,34 +109,19 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
     }, 1500)
   }
 
-  // Datos de ejemplo
-  const accountData = {
-    businessName: "Clínica Dental Ravyn", 
-    contactName: user?.user_metadata?.full_name || "Usuario de Prueba",
-    email: user?.email || "test@ravyn.mx",
-    phone: "+52 899 123 4567"
-  }
-
-  const subscription = {
-    plan: "Plan Completo",
-    status: "active",
-    startDate: "01 Marzo 2026",
-    nextBilling: "01 Junio 2026",
-    amount: "$1,400"
+  // Mapeo de datos para la UI
+  const displayData = {
+    businessName: clinic?.name || "Cargando...",
+    contactName: profile?.full_name || user?.user_metadata?.full_name || "Usuario",
+    email: clinic?.email || user?.email || "",
+    phone: clinic?.phone || "No registrado",
+    plan: clinic?.plan || "Esencial",
+    subdomain: clinic?.subdomain || ""
   }
 
   const paymentHistory = [
-    { date: "01 Mayo 2026", concept: "Plan Completo", amount: "$1,400 MXN", status: "Pagado" },
-    { date: "01 Abril 2026", concept: "Plan Completo", amount: "$1,400 MXN", status: "Pagado" },
-    { date: "01 Marzo 2026", concept: "Plan Completo", amount: "$1,400 MXN", status: "Pagado" },
+    { date: "01 Mayo 2026", concept: `Plan ${displayData.plan}`, amount: displayData.plan === 'Completo' ? "$1,400 MXN" : "$900 MXN", status: "Pagado" },
   ]
-
-  const systemStatus = {
-    webUrl: "https://clinicatest.ravynset.com",
-    crm: "activo",
-    whatsapp: "activo",
-    reputation: "activo"
-  }
 
   return (
     <AnimatePresence>
@@ -144,7 +158,12 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
             </div>
 
             <div className="account-modal-content">
-              {view === 'overview' ? (
+              {loadingData ? (
+                <div className="flex items-center justify-center h-full flex-col gap-4">
+                  <Loader2 className="w-8 h-8 animate-spin text-accent" />
+                  <p className="text-white/50 animate-pulse">Sincronizando con Ravyn CRM...</p>
+                </div>
+              ) : view === 'overview' ? (
                 <div className="account-grid">
                   
                   {/* Sección 1 — Resumen de cuenta */}
@@ -156,19 +175,19 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     <div className="card-body">
                       <div className="data-group">
                         <label>Negocio</label>
-                        <p>{accountData.businessName}</p>
+                        <p>{displayData.businessName}</p>
                       </div>
                       <div className="data-group">
                         <label>Contacto</label>
-                        <p>{accountData.contactName}</p>
+                        <p>{displayData.contactName}</p>
                       </div>
                       <div className="data-group">
                         <label>Email</label>
-                        <p>{accountData.email}</p>
+                        <p>{displayData.email}</p>
                       </div>
                       <div className="data-group">
                         <label>Teléfono</label>
-                        <p>{accountData.phone}</p>
+                        <p>{displayData.phone}</p>
                       </div>
                       <button className="btn-edit mt-4" type="button">Editar datos</button>
                     </div>
@@ -183,22 +202,24 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     <div className="card-body flex flex-col h-full">
                       <div className="plan-status-row">
                         <div className="plan-info">
-                          <span className="plan-name">{subscription.plan}</span>
+                          <span className="plan-name">Plan {displayData.plan}</span>
                           <span className="status-badge success mt-2">Activa</span>
                         </div>
                         <div className="price-info text-right">
-                          <span className="amount text-accent">{subscription.amount} MXN</span>
+                          <span className="amount text-accent">
+                            {displayData.plan === 'Completo' ? "$1,400" : "$900"} MXN
+                          </span>
                           <span className="period">/ mes</span>
                         </div>
                       </div>
                       <div className="billing-details mt-8">
                         <div className="detail-item">
                           <span className="label">Fecha de inicio</span>
-                          <strong className="value">{subscription.startDate}</strong>
+                          <strong className="value">01 Marzo 2026</strong>
                         </div>
                         <div className="detail-item mt-3">
                           <span className="label">Próximo cobro</span>
-                          <strong className="value">{subscription.nextBilling}</strong>
+                          <strong className="value">01 Junio 2026</strong>
                         </div>
                       </div>
                       <div className="actions-row mt-auto pt-8">
@@ -216,7 +237,12 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                     </div>
                     <div className="card-body flex flex-col h-full">
                       <div className="system-links mb-6">
-                        <a href={systemStatus.webUrl} target="_blank" rel="noreferrer" className="system-link">
+                        <a 
+                          href={displayData.subdomain ? `https://${displayData.subdomain}.ravynset.com` : '#'} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          className={`system-link ${!displayData.subdomain && 'opacity-50 pointer-events-none'}`}
+                        >
                           <span>Ver mi sitio web</span>
                           <ExternalLink className="w-4 h-4" />
                         </a>
@@ -289,7 +315,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                           <div className="bank-data flex flex-col gap-3">
                             <div className="data-row flex justify-between items-center">
                               <span className="text-muted">Método:</span>
-                              <strong className="text-white ml-2 text-right">Transferencia SPEI</strong>
+                              <strong className="text-white ml-2 text-right">Transferencia</strong>
                             </div>
                             <div className="data-row flex justify-between items-center">
                               <span className="text-muted">Banco:</span>
@@ -301,11 +327,11 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                             </div>
                             <div className="data-row flex justify-between items-center">
                               <span className="text-muted">CLABE:</span>
-                              <strong className="font-mono text-white ml-2 text-sm text-right">0123 4567 8901 2345 67</strong>
+                              <strong className="font-mono text-white ml-2 text-[0.8rem] text-right">0123 4567 8901 2345 67</strong>
                             </div>
                           </div>
                           <div className="payment-instructions mt-4 bg-white/5 p-4 rounded-xl text-sm leading-relaxed border border-white/5">
-                            <p>Concepto: <strong>{accountData.businessName}</strong></p>
+                            <p>Concepto: <strong>{displayData.businessName}</strong></p>
                           </div>
                           <div className="mt-auto pt-6">
                             <button className="btn-action-white-text" type="button" onClick={() => setView('add-card')}>
@@ -322,7 +348,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                               <CreditCard className="w-6 h-6 text-white/80" />
                               <span className="linked-card-chip" />
                             </div>
-                            <div className="linked-card-body relative z-10 mt-2">
+                            <div className="linked-card-body relative z-10">
                               <p className="linked-card-number text-[1rem]">•••• •••• •••• {cardNumber.slice(-4) || '4242'}</p>
                               <div className="flex justify-between items-end mt-5">
                                 <div>
@@ -476,65 +502,78 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
             .account-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
             .account-card { background: #111; border: 1px solid var(--border); border-radius: 20px; padding: 28px; display: flex; flex-direction: column; transition: border-color 0.3s; min-width: 0; width: 100%; box-sizing: border-box; }
             .account-card:hover { border-color: rgba(255,255,255,0.1); }
-            .card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 24px; }
+            .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
             .card-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
-            .data-group { margin-bottom: 16px; }
-            .data-group label { font-size: 0.7rem; color: var(--text-muted); display: block; margin-bottom: 2px; }
-            .data-group p { font-size: 0.95rem; font-weight: 500; color: var(--text); }
-            .btn-edit { font-size: 0.8rem; font-weight: 600; color: var(--accent); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
-            .plan-name { font-size: 1.3rem; font-weight: 800; color: var(--text); }
-            .status-badge.success { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 0.6rem; padding: 3px 8px; border-radius: 100vw; font-weight: 800; }
-            .price-info .amount { display: block; font-size: 1.15rem; font-weight: 700; color: #fff; line-height: 1; }
-            .detail-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; }
+            .data-group { margin-bottom: 20px; }
+            .data-group label { font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
+            .data-group p { font-size: 1rem; font-weight: 500; color: var(--text); }
+            .btn-edit { font-size: 0.85rem; font-weight: 600; color: var(--accent); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
+            .plan-name { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+            .status-badge.success { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 0.65rem; padding: 4px 10px; border-radius: 100vw; font-weight: 800; }
+            .price-info .amount { display: block; font-size: 1.25rem; font-weight: 700; color: #fff; line-height: 1; }
+            .price-info .period { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; display: block; }
+            .detail-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
             .detail-item .label { color: var(--text-muted); }
             .detail-item .value { color: var(--text); font-weight: 500; }
-            .actions-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-            .btn-action-white-text { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 10px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 10px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+            .actions-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+            .btn-action-white-text { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
             .btn-action-white-text:hover { background: rgba(255, 255, 255, 0.1); }
-            .btn-cancel { font-size: 0.8rem; font-weight: 600; color: #ef4444; background: rgba(239, 68, 68, 0.05); padding: 10px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.1); cursor: pointer; flex: 1; }
-            .system-link { display: flex; align-items: center; gap: 6px; color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.85rem; }
-            .status-item { display: flex; justify-content: space-between; font-size: 0.85rem; color: var(--text-secondary); }
-            .status-dot.active::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; display: inline-block; margin-right: 6px; box-shadow: 0 0 8px #4ade80; }
-            .btn-crm { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.02); font-size: 0.85rem; }
+            .btn-cancel { font-size: 0.85rem; font-weight: 600; color: #ef4444; background: rgba(239, 68, 68, 0.05); padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.1); cursor: pointer; }
+            .system-link { display: flex; align-items: center; gap: 8px; color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+            .status-item { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary); }
+            .status-dot.active::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 8px #4ade80; }
+            .btn-crm { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.02); font-size: 0.9rem; }
+            
             .history-table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-            .history-table { width: 100%; border-collapse: collapse; min-width: 450px; }
-            .history-table th { text-align: left; font-size: 0.7rem; color: var(--text-muted); padding: 10px; border-bottom: 1px solid var(--border); }
-            .history-table td { padding: 14px 10px; font-size: 0.85rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+            .history-table { width: 100%; border-collapse: collapse; min-width: 500px; }
+            .history-table th { text-align: left; font-size: 0.75rem; color: var(--text-muted); padding: 12px; border-bottom: 1px solid var(--border); }
+            .history-table td { padding: 16px 12px; font-size: 0.9rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+            
+            .status-text { color: #4ade80; font-weight: 600; }
+            .btn-download { color: #fff; background: none; border: none; cursor: pointer; padding: 8px; opacity: 0.7; transition: opacity 0.2s; }
+            .btn-download:hover { opacity: 1; }
 
-            .linked-card-premium { background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
-            .linked-card-header { display: flex; justify-content: space-between; margin-bottom: 16px; }
-            .linked-card-chip { width: 32px; height: 22px; background: linear-gradient(135deg, #d4af37 0%, #f9d71c 100%); border-radius: 4px; opacity: 0.9; }
-            .linked-card-number { font-family: var(--font-mono); color: #fff; letter-spacing: 0.1em; }
-            .linked-card-label { font-size: 0.6rem; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 2px; }
-            .linked-card-val { font-size: 0.8rem; color: #fff; font-family: var(--font-mono); }
+            .linked-card-premium { background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 24px; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
+            .linked-card-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
+            .linked-card-chip { width: 36px; height: 26px; background: linear-gradient(135deg, #d4af37 0%, #f9d71c 100%); border-radius: 6px; opacity: 0.9; box-shadow: inset 0 1px 2px rgba(255,255,255,0.5); }
+            .linked-card-number { font-family: var(--font-mono); font-size: 1.15rem; color: #fff; letter-spacing: 0.12em; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+            .linked-card-label { font-size: 0.65rem; color: rgba(255,255,255,0.4); text-transform: uppercase; margin-bottom: 4px; letter-spacing: 0.05em; }
+            .linked-card-val { font-size: 0.9rem; color: #fff; font-family: var(--font-mono); font-weight: 500; }
 
             .add-card-view { max-width: 900px; margin: 0 auto; padding-top: 20px; width: 100%; box-sizing: border-box; }
-            .add-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-            .card-3d-body { width: 100%; height: 210px; background: linear-gradient(135deg, #222 0%, #000 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 16px; padding: 24px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); position: relative; }
+            .add-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; width: 100%; }
+            .card-3d-body { width: 100%; height: 230px; background: linear-gradient(135deg, #222 0%, #000 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 28px; box-shadow: 0 40px 80px rgba(0,0,0,0.6); transition: transform 0.1s ease-out; position: relative; }
             .card-inner-content { transform: translateZ(50px); }
-            .card-chip { width: 40px; height: 28px; background: linear-gradient(135deg, #d4af37 0%, #f9d71c 100%); border-radius: 5px; }
-            .card-number-display { font-family: var(--font-mono); color: #fff; white-space: nowrap; }
+            .card-chip { width: 44px; height: 32px; background: linear-gradient(135deg, #d4af37 0%, #f9d71c 100%); border-radius: 6px; opacity: 0.8; box-shadow: inset 0 1px 2px rgba(255,255,255,0.5); }
+            .card-number-display { font-family: var(--font-mono); font-size: 1.1rem; letter-spacing: 0.1em; color: #fff; white-space: nowrap; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+            .card-label { font-size: 0.6rem; text-transform: uppercase; color: rgba(255,255,255,0.4); }
+            .card-value { font-family: var(--font-mono); font-size: 0.9rem; color: #fff; }
             
-            .card-form { display: flex; flex-direction: column; gap: 16px; width: 100%; }
-            .form-group label { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 4px; display: block; }
-            .form-group input { background: #1a1a1a; border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; color: #fff; font-size: 0.9rem; width: 100%; box-sizing: border-box; }
-            .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-            .btn-save-card { background: #fff; color: #000; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; border: none; }
-            .btn-cancel-card { background: transparent; color: var(--text); padding: 12px; border-radius: 10px; border: 1px solid var(--border); cursor: pointer; }
+            .card-form { display: flex; flex-direction: column; gap: 20px; width: 100%; }
+            .form-group label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; display: block; }
+            .form-group input { background: #1a1a1a; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: #fff; width: 100%; box-sizing: border-box; transition: border 0.2s; }
+            .form-group input:focus { border-color: var(--accent); outline: none; }
+            .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+            
+            .btn-save-card { background: #fff; color: #000; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; transition: opacity 0.2s; }
+            .btn-save-card:hover:not(:disabled) { opacity: 0.9; }
+            
+            .btn-cancel-card { background: transparent; color: var(--text); padding: 14px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; }
+            .btn-cancel-card:hover:not(:disabled) { background: rgba(255,255,255,0.05); }
 
-            @media (max-width: 1100px) { .account-grid { grid-template-columns: 1fr 1fr; } }
+            @media (max-width: 1100px) { .account-grid { grid-template-columns: 1fr 1fr; } .add-card-grid { grid-template-columns: 1fr; gap: 40px; } }
             @media (max-width: 768px) { 
               .account-modal-overlay { padding: 0; align-items: flex-start; }
               .account-modal-container { width: 100vw; height: 100vh; height: 100svh; border-radius: 0; border: none; }
               .account-modal-header { padding: 16px 20px; }
-              .account-modal-content { padding: 16px; width: 100%; box-sizing: border-box; }
-              .account-grid { grid-template-columns: 1fr; gap: 12px; width: 100%; margin: 0; }
-              .account-card { padding: 20px; width: 100%; max-width: 100%; margin: 0; box-sizing: border-box; }
-              .add-card-grid { grid-template-columns: 1fr; gap: 20px; }
-              .card-preview-section { transform: scale(0.85); margin-bottom: -10px; width: 100%; }
-              .price-info { text-align: left; margin-top: 8px; }
-              .actions-row { flex-direction: row; gap: 10px; width: 100%; }
-              .actions-row button { flex: 1; padding: 12px 8px; font-size: 0.75rem; }
+              .account-modal-content { padding: 20px; }
+              .account-grid { grid-template-columns: 1fr; gap: 16px; }
+              .account-card { padding: 24px; width: 100%; box-sizing: border-box; }
+              .actions-row { flex-direction: column; gap: 12px; }
+              .btn-action-white-text, .btn-cancel { width: 100%; }
+              .price-info { text-align: left; margin-top: 10px; }
+              .add-card-grid { gap: 30px; }
+              .card-preview-section { transform: scale(0.85); margin-bottom: -20px; }
             }
           `}</style>
         </div>

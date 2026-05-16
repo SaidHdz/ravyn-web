@@ -165,6 +165,8 @@ export default function Navbar({ }: NavbarProps) {
           align-items: center;
           justify-content: center;
           pointer-events: none;
+          width: 100vw;
+          overflow: hidden;
         }
 
         .nav-gooey-container {
@@ -180,6 +182,8 @@ export default function Navbar({ }: NavbarProps) {
           pointer-events: auto;
           margin-top: 1rem;
           box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          max-width: 95%;
+          box-sizing: border-box;
         }
 
         .nav-center-menu {
@@ -193,7 +197,7 @@ export default function Navbar({ }: NavbarProps) {
         .nav-user-menu-anchor {
           position: absolute;
           top: 100%;
-          right: 32px; 
+          right: 20px; /* Ajuste para centrar bajo el icono */
           width: 0;
           height: 0;
           display: flex;
@@ -202,24 +206,24 @@ export default function Navbar({ }: NavbarProps) {
         }
 
         .nav-user-menu-floating {
-          position: absolute;
+          position: relative;
           top: 15px;
-          left: 50%;
-          transform: translateX(-50%); 
-          display: flex !important;
-          flex-direction: column !important;
-          height: auto !important;
-          min-height: min-content !important;
-          background: #111111 !important;
+          display: flex;
+          flex-direction: column;
+          height: auto;
+          min-height: min-content;
+          background: #111111;
           border: 1px solid rgba(255, 255, 255, 0.1);
           border-radius: 20px;
-          padding: 16px !important; 
+          padding: 12px;
           min-width: 220px;
           box-shadow: 0 20px 40px -10px rgba(0,0,0,0.5);
           backdrop-filter: blur(20px);
           -webkit-backdrop-filter: blur(20px);
           z-index: 1000;
           pointer-events: auto;
+          left: 50%;
+          transform: translateX(-50%);
         }
 
         .nav-logo-simple {
@@ -238,8 +242,7 @@ export default function Navbar({ }: NavbarProps) {
         }
 
         .user-menu-header {
-          padding: 4px 8px 12px;
-          text-align: center;
+          padding: 8px 16px 12px;
         }
 
         .user-email {
@@ -252,9 +255,8 @@ export default function Navbar({ }: NavbarProps) {
 
         .user-menu-divider {
           height: 1px;
-          background: rgba(255,255,255,0.1);
-          margin: 4px 0 12px;
-          width: 100%;
+          background: rgba(255,255,255,0.08);
+          margin: 4px 8px;
         }
 
         .user-menu-item {
@@ -272,11 +274,10 @@ export default function Navbar({ }: NavbarProps) {
           background: transparent;
           border: none;
           cursor: pointer;
-          margin-bottom: 4px;
         }
 
         .user-menu-item:hover {
-          background: rgba(255,255,255,0.08);
+          background: rgba(255,255,255,0.05);
           color: var(--accent);
         }
 
@@ -289,9 +290,9 @@ export default function Navbar({ }: NavbarProps) {
           text-decoration: none;
           z-index: 10;
           display: flex;
+          flex-shrink: 0;
         }
 
-        /* Restauración del diseño del botón */
         .nav-cta-premium {
           position: relative;
           padding: 10px 24px;
@@ -299,14 +300,15 @@ export default function Navbar({ }: NavbarProps) {
           font-weight: 700;
           border: 1px solid rgba(255, 255, 255, 0.1);
           background: rgba(255, 255, 255, 0.05);
-          color: #fff !important; /* Forzado texto blanco solicitado */
-          border-radius: 100vw !important; /* Forzado redondeado solicitado */
+          color: #fff !important;
+          border-radius: 100vw !important;
           overflow: hidden;
           cursor: pointer;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
+          white-space: nowrap;
         }
 
         .cta-btn-fill {
@@ -328,22 +330,18 @@ export default function Navbar({ }: NavbarProps) {
           color: #000;
         }
 
-        .nav-cta-premium.is-ravynset-active {
-           background: rgba(255, 255, 255, 0.15);
-        }
-
         @media (max-width: 768px) {
           .nav-gooey-wrapper {
             height: 80px;
           }
           
           .nav-gooey-container {
-            gap: 0.4rem;
-            padding: 0.4rem 0.6rem;
+            gap: 0.5rem;
+            padding: 0.4rem 0.8rem;
             width: auto;
-            max-width: 98vw;
+            max-width: 92vw;
             margin-top: 0.5rem;
-            justify-content: center;
+            justify-content: space-between;
           }
 
           .desktop-only {
@@ -351,51 +349,39 @@ export default function Navbar({ }: NavbarProps) {
           }
 
           .nav-cta-premium {
-            padding: 8px 16px;
-            font-size: 0.72rem;
+            padding: 8px 12px;
+            font-size: 0.7rem;
             flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.08) !important;
-            border-radius: 100vw !important; /* Garantiza redondeado en móvil */
           }
 
-          .nav-cta-premium .cta-btn-fill {
-             display: none !important;
-          }
-          
           .nav-center-menu {
             transform: scale(0.9);
             flex-shrink: 1;
+            min-width: 0;
           }
 
           .nav-user-menu-anchor {
-             right: 32px;
+             right: 25px;
           }
 
           .nav-user-menu-floating {
              background: #0d0d0d !important;
              min-width: 180px;
-             padding: 12px !important;
-             display: flex !important;
-             flex-direction: column !important;
              height: auto !important;
-             min-height: 180px; 
           }
         }
 
         @media (max-width: 480px) {
           .nav-gooey-container {
-            gap: 0.2rem;
+            gap: 0.3rem;
             padding: 0.3rem 0.5rem;
           }
           .nav-center-menu {
             transform: scale(0.8);
           }
           .nav-cta-premium {
-            padding: 7px 12px;
-            font-size: 0.68rem;
-          }
-          .nav-user-menu-anchor {
-            right: 50%;
+            padding: 7px 10px;
+            font-size: 0.65rem;
           }
         }
       `}</style>

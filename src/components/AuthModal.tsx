@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { X, Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff } from 'lucide-react'
-import { useAuth } from '../hooks/useAuth'
+import { X, Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, Building2, Phone } from 'lucide-react'
+import { supabase } from '../lib/supabase'
 
 interface AuthModalProps {
   isOpen: boolean
@@ -13,12 +13,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   const [view, setView] = useState<'login' | 'signup'>(initialView)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [name, setName] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [clinicName, setClinicName] = useState('')
+  const [clinicPhone, setClinicPhone] = useState('')
+  
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [showPassword, setShowPassword] = useState(false)
-  
-  const { login } = useAuth()
 
   // Bloquear scroll del body al abrir el modal
   useEffect(() => {
@@ -34,25 +35,39 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
     e.preventDefault()
     setLoading(true)
     setError(null)
-    
-    // Simulación de demora y validación de usuario test
-    setTimeout(async () => {
+
+    try {
       if (view === 'login') {
-        const success = await login(email, password)
-        if (success) {
-          setLoading(false)
-          onClose()
-        } else {
-          setError('Credenciales incorrectas (Test: test@ravyn.mx / test)')
-          setLoading(false)
-        }
-      } else {
-        // Simulación de registro
-        console.log('Registro simulado para:', name)
-        setLoading(false)
+        const { error } = await supabase.auth.signInWithPassword({
+          email,
+          password
+        })
+        if (error) throw error
         onClose()
+      } else {
+        // Registro de nueva clínica (Admin) según documentación
+        const { error } = await supabase.auth.signUp({
+          email,
+          password,
+          options: {
+            data: {
+              full_name: fullName,
+              clinic_name: clinicName,
+              clinic_phone: clinicPhone,
+              clinic_email: email
+            }
+          }
+        })
+        if (error) throw error
+        
+        setError('¡Registro exitoso! Por favor verifica tu correo electrónico.')
+        // No cerramos el modal para que lea el mensaje de éxito o instrucción
       }
-    }, 1000)
+    } catch (err: any) {
+      setError(err.message || 'Ocurrió un error inesperado')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -85,13 +100,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                 <p className="text-white/50">
                   {view === 'login' 
                     ? 'Inicia sesión para gestionar tu suscripción.' 
-                    : 'Únete a Ravyn y profesionaliza tu negocio.'}
+                    : 'Registra tu clínica y comienza a automatizar.'}
                 </p>
               </div>
 
               {error && (
                 <motion.div 
-                  className="auth-error-badge"
+                  className={`auth-error-badge ${error.includes('exitoso') ? 'is-success' : ''}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                 >
@@ -101,19 +116,47 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
               <form onSubmit={handleSubmit} className="auth-form">
                 {view === 'signup' && (
-                  <div className="form-group">
-                    <label>Nombre completo</label>
-                    <div className="input-wrapper">
-                      <User className="w-4 h-4 input-icon" />
-                      <input 
-                        type="text" 
-                        placeholder="Tu nombre" 
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                      />
+                  <>
+                    <div className="form-group">
+                      <label>Nombre del Dr. / Propietario</label>
+                      <div className="input-wrapper">
+                        <User className="w-4 h-4 input-icon" />
+                        <input 
+                          type="text" 
+                          placeholder="Tu nombre completo" 
+                          value={fullName}
+                          onChange={(e) => setFullName(e.target.value)}
+                          required
+                        />
+                      </div>
                     </div>
-                  </div>
+                    <div className="form-group">
+                      <label>Nombre del Negocio / Clínica</label>
+                      <div className="input-wrapper">
+                        <Building2 className="w-4 h-4 input-icon" />
+                        <input 
+                          type="text" 
+                          placeholder="Ej. Clínica Dental Ravyn" 
+                          value={clinicName}
+                          onChange={(e) => setClinicName(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>Teléfono de contacto</label>
+                      <div className="input-wrapper">
+                        <Phone className="w-4 h-4 input-icon" />
+                        <input 
+                          type="tel" 
+                          placeholder="10 dígitos" 
+                          value={clinicPhone}
+                          onChange={(e) => setClinicPhone(e.target.value)}
+                          required
+                        />
+                      </div>
+                    </div>
+                  </>
                 )}
 
                 <div className="form-group">
@@ -122,7 +165,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     <Mail className="w-4 h-4 input-icon" />
                     <input 
                       type="email" 
-                      placeholder="test@ravyn.mx" 
+                      placeholder="correo@ejemplo.com" 
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
@@ -156,7 +199,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <>
-                      {view === 'login' ? 'Entrar' : 'Registrarme'}
+                      {view === 'login' ? 'Entrar' : 'Registrar mi clínica'}
                       <ArrowRight className="w-5 h-5" />
                     </>
                   )}
@@ -186,7 +229,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               align-items: center;
               justify-content: center;
               padding: 20px;
-              pointer-events: auto; /* Asegura que el overlay capture eventos */
+              pointer-events: auto;
             }
 
             .auth-modal-backdrop {
@@ -199,15 +242,16 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
             .auth-modal-container {
               position: relative;
-              background: #111; /* Fondo oscuro sólido para el modal */
+              background: #111;
               border: 1px solid var(--border);
               width: 100%;
-              max-width: 440px;
+              max-width: 460px;
               border-radius: 32px;
-              overflow: hidden;
+              overflow-y: auto;
+              max-height: 90vh;
               box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-              z-index: 1; /* Por encima del backdrop */
-              pointer-events: auto; /* Asegura que el contenido sea clicable */
+              z-index: 1;
+              pointer-events: auto;
             }
 
             .auth-modal-close {
@@ -243,6 +287,12 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               border-radius: 12px;
               font-size: 0.9rem;
               margin-bottom: 24px;
+            }
+
+            .auth-error-badge.is-success {
+              background: rgba(34, 197, 94, 0.1);
+              border-color: rgba(34, 197, 94, 0.2);
+              color: #4ade80;
             }
 
             .auth-form {
@@ -357,6 +407,10 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             @media (max-width: 480px) {
               .auth-modal-content {
                 padding: 32px 24px;
+              }
+              .auth-modal-container {
+                max-height: 100vh;
+                border-radius: 0;
               }
             }
           `}</style>
