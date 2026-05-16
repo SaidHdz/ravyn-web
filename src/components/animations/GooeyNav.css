@@ -37,32 +37,50 @@
     box-shadow 0.3s ease;
   box-shadow: 0 0 0.5px 1.5px transparent;
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .gooey-nav-container nav ul li a {
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.6em 1.2em;
   text-decoration: none;
   color: inherit;
   font-weight: 600;
   font-size: 0.9rem;
   white-space: nowrap;
+  min-height: 100%;
 }
 
-.gooey-nav-container nav ul li.active {
-  color: var(--bg);
+/* Ajuste específico para el item de icono de perfil */
+.gooey-nav-container nav ul li.nav-item-icon a {
+  padding: 0.6em;
+  min-width: 40px;
 }
 
-.gooey-nav-container nav ul li.active::after {
+/* Estado activo: El texto debe cambiar a negro cuando el fondo es blanco */
+.gooey-nav-container nav ul li.active a {
+  color: #000;
+}
+
+.gooey-nav-container nav ul li::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 100vw;
-  background: var(--text);
-  opacity: 1;
-  transform: scale(1);
+  background: var(--text); /* Color blanco del indicador */
+  opacity: 0;
+  transform: scale(0);
   transition: all 0.3s ease;
   z-index: -1;
+}
+
+.gooey-nav-container nav ul li.active::after {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .gooey-nav-container .effect {
@@ -79,20 +97,15 @@
 }
 
 .gooey-nav-container .effect.text {
-  color: var(--text);
+  color: #000; /* Texto del indicador siempre negro */
   transition: color 0.3s ease;
   font-weight: 600;
   font-size: 0.9rem;
   box-sizing: border-box;
   white-space: nowrap;
-  padding: 0 1.2em;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.gooey-nav-container .effect.text.active {
-  color: var(--bg);
 }
 
 .gooey-nav-container .effect.filter {
@@ -103,7 +116,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--text);
+  background: #fff; /* Fondo blanco del efecto líquido */
   transform: scale(0);
   opacity: 0;
   z-index: -1;
@@ -203,16 +216,19 @@
 
 @media (max-width: 768px) {
   .gooey-nav-container nav ul {
-    gap: 0.8em; /* Gap aumentado para evitar colisiones visuales */
-    padding: 0.3em;
+    gap: 0.3em;
+    padding: 0.25em;
     width: max-content;
   }
   .gooey-nav-container nav ul li a {
-    padding: 0.5em 1em;
-    font-size: 0.85rem;
+    padding: 0.4em 0.8em;
+    font-size: 0.8rem;
+  }
+  .gooey-nav-container nav ul li.nav-item-icon a {
+    padding: 0.4em;
+    min-width: 32px;
   }
   .gooey-nav-container .effect.text {
-    font-size: 0.85rem;
-    padding: 0 1em;
+    font-size: 0.8rem;
   }
 }

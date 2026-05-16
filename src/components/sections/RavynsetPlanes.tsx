@@ -3,6 +3,9 @@ import { Check, X } from 'lucide-react'
 import BlurText from '../animations/BlurText'
 import ShinyText from '../animations/ShinyText'
 import BorderGlow from '../BorderGlow/BorderGlow'
+import { useAuth } from '@/hooks/useAuth'
+import { useState } from 'react'
+import AuthModal from '../AuthModal'
 
 const ease = [0.16, 1, 0.3, 1] as const
 
@@ -50,6 +53,18 @@ const planes = [
 ]
 
 export default function RavynsetPlanes() {
+  const { user } = useAuth()
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
+
+  const handlePlanClick = (planId: string) => {
+    if (!user) {
+      setIsAuthModalOpen(true)
+    } else {
+      // Proceder al checkout de Stripe
+      console.log('Procediendo al pago del plan:', planId)
+    }
+  }
+
   return (
     <section id="planes" className="section ravynset-planes">
       <div className="container">
@@ -86,7 +101,7 @@ export default function RavynsetPlanes() {
                 borderRadius={32}
                 glowRadius={60}
                 edgeSensitivity={20}
-                glowIntensity={plan.recommended ? 2.0 : 1.2}
+                glowIntensity={1.5}
                 animated={true}
                 className="plan-border-glow"
               >
@@ -121,8 +136,11 @@ export default function RavynsetPlanes() {
                     ))}
                   </ul>
 
-                  <button className={`plan-button ${plan.recommended ? 'btn-primary' : 'btn-secondary'}`} 
-                          style={plan.recommended ? { background: '#D97706', color: '#fff' } : {}}>
+                  <button 
+                    className={`plan-button ${plan.recommended ? 'btn-primary' : 'btn-secondary'}`} 
+                    style={plan.recommended ? { background: '#D97706', color: '#fff' } : {}}
+                    onClick={() => handlePlanClick(plan.id)}
+                  >
                     {plan.cta}
                   </button>
                 </div>
@@ -131,6 +149,12 @@ export default function RavynsetPlanes() {
           ))}
         </div>
       </div>
+
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)}
+        initialView="signup"
+      />
 
       <style>{`
         .ravynset-planes {
@@ -247,6 +271,8 @@ export default function RavynsetPlanes() {
           display: flex;
           align-items: center;
           transition: all 0.3s ease;
+          border: 1px solid var(--border);
+          cursor: pointer;
         }
 
         @media (max-width: 768px) {

@@ -26,14 +26,14 @@ export default function Landing() {
         <div className="services-group">
           <Servicios />
           
-          {/* Sección de Confianza: Compactada y vinculada a Servicios */}
-          <section className="section section-trust-integrated">
+          {/* Sección de Confianza: Diseño Original Restaurado y Centrado */}
+          <section className="section section-trust-restored">
             <div className="container">
-              <div className="trust-phrase-original">
-                <span className="trust-phrase-text">Deja en nuestras manos tu</span>
+              <div className="trust-phrase-layout">
+                <span className="trust-static-text">Deja en nuestras manos tu</span>
                 <RotatingText
                   texts={['web', 'app', 'sistema', 'automatización']}
-                  mainClassName="trust-rotating-pill"
+                  mainClassName="trust-pill"
                   staggerFrom={"last"}
                   initial={{ y: "100%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
@@ -60,42 +60,42 @@ export default function Landing() {
           background: transparent;
         }
 
-        .section-trust-integrated {
-          padding-top: 0 !important;
-          padding-bottom: 80px !important;
-          margin-top: -100px; /* Reducción drástica del espacio muerto */
-          position: relative;
-          z-index: 2;
+        .section-trust-restored {
+          padding: 100px 0 160px; /* Espaciado generoso para impacto */
+          margin-top: -60px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .trust-phrase-original {
+        .trust-phrase-layout {
           display: flex;
           flex-wrap: wrap;
           align-items: center;
-          justify-content: center;
-          gap: 0.25em 0.4em;
+          justify-content: center; /* Centrado original */
+          gap: 0.3em 0.5em;
           text-align: center;
-          max-width: 1400px;
-          margin: 0 auto;
         }
 
-        .trust-phrase-text {
-          font-size: clamp(1.8rem, 4vw, 4.2rem);
+        .trust-static-text {
+          font-family: var(--font-sans);
+          font-size: clamp(1.8rem, 5vw, 4rem); /* 30% más pequeño que 6rem */
           font-weight: 800;
           letter-spacing: -0.04em;
           color: var(--text-secondary);
-          line-height: 1.1;
+          line-height: 1;
         }
 
-        .trust-rotating-pill {
-          font-size: clamp(1.8rem, 4vw, 4.2rem);
+        .trust-pill {
+          font-family: var(--font-sans);
+          font-size: clamp(1.8rem, 5vw, 4rem);
           font-weight: 800;
           letter-spacing: -0.04em;
           background: var(--accent);
           color: #000;
-          padding: 0.1em 0.35em;
+          padding: 0.1em 0.4em;
           border-radius: 0.15em;
-          line-height: 1.1;
+          line-height: 1;
           display: inline-flex;
           align-items: center;
           justify-content: center;
@@ -103,27 +103,14 @@ export default function Landing() {
           box-shadow: 0 10px 40px -10px var(--accent-glow);
         }
 
-        @media (max-width: 1024px) {
-           .section-trust-integrated {
-             margin-top: -60px;
-           }
-        }
-
         @media (max-width: 768px) {
-          .section-trust-integrated {
-            padding-bottom: 60px !important;
-            margin-top: -40px;
+          .section-trust-restored {
+            padding: 60px 0 100px;
+            margin-top: -20px;
           }
-          .trust-phrase-original {
+          .trust-phrase-layout {
             flex-direction: column;
-            gap: 0.3em;
-          }
-          .trust-phrase-text {
-             font-size: clamp(1.6rem, 8vw, 2.5rem);
-          }
-          .trust-rotating-pill {
-             font-size: clamp(1.6rem, 8vw, 2.5rem);
-             padding: 0.1em 0.3em;
+            gap: 0.4em;
           }
         }
       `}</style>

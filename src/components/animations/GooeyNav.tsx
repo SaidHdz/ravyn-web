@@ -3,8 +3,10 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import './GooeyNav.css';
 
 interface GooeyNavItem {
-  label: string;
+  label: string | React.ReactNode;
   href: string;
+  isIcon?: boolean;
+  onClick?: (e: React.MouseEvent) => void;
 }
 
 interface GooeyNavProps {
@@ -99,15 +101,12 @@ const GooeyNav = ({
   const updateEffectPosition = (element: HTMLElement) => {
     if (!containerRef.current || !filterRef.current || !textRef.current) return;
     
-    // Forzamos un pequeño retraso para asegurar que las dimensiones de layout sean definitivas
     setTimeout(() => {
       if (!containerRef.current || !filterRef.current || !textRef.current) return;
       
       const containerRect = containerRef.current.getBoundingClientRect();
       const pos = element.getBoundingClientRect();
 
-      // IMPORTANTE: Si el contenedor tiene transform: scale(), getBoundingClientRect devuelve pixeles visuales.
-      // Debemos dividir por el factor de escala para obtener pixeles CSS reales del padre.
       const scaleX = containerRect.width / containerRef.current.offsetWidth || 1;
       const scaleY = containerRect.height / containerRef.current.offsetHeight || 1;
 
@@ -123,16 +122,23 @@ const GooeyNav = ({
       
       const link = element.querySelector('a');
       if (link) {
-        textRef.current.innerText = link.innerText;
+        textRef.current.innerHTML = link.innerHTML;
+        textRef.current.style.display = 'flex';
+        textRef.current.style.alignItems = 'center';
+        textRef.current.style.justifyContent = 'center';
       }
     }, 50);
   };
 
-  const handleClick = (e: React.MouseEvent<HTMLAnchorElement> | { currentTarget: HTMLElement }, index: number, href: string) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement> | { currentTarget: HTMLElement }, index: number, href: string, onClick?: (e: any) => void) => {
     const target = e.currentTarget as HTMLElement;
     const liEl = target.tagName === 'A' ? target.parentElement! : target;
     
-    if (target.tagName === 'A') {
+    if (onClick) {
+      onClick(e);
+      setActiveIndex(index); // Habilitamos la actualización para todos, incluyendo iconos
+      updateEffectPosition(liEl);
+    } else if (target.tagName === 'A') {
       const mouseEvent = e as React.MouseEvent<HTMLAnchorElement>;
       mouseEvent.preventDefault();
       
@@ -157,10 +163,9 @@ const GooeyNav = ({
       } else {
         navigate(href);
       }
+      setActiveIndex(index);
+      updateEffectPosition(liEl);
     }
-
-    setActiveIndex(index);
-    updateEffectPosition(liEl);
 
     if (filterRef.current) {
       const particles = filterRef.current.querySelectorAll('.particle');
@@ -183,7 +188,7 @@ const GooeyNav = ({
       e.preventDefault();
       const liEl = e.currentTarget.parentElement;
       if (liEl) {
-        handleClick({ currentTarget: liEl }, index, items[index].href);
+        handleClick({ currentTarget: liEl }, index, items[index].href, items[index].onClick);
       }
     }
   };
@@ -220,8 +225,12 @@ const GooeyNav = ({
       <nav>
         <ul ref={navRef}>
           {items.map((item, index) => (
-            <li key={item.label} className={activeIndex === index ? 'active' : ''}>
-              <a href={item.href} onClick={e => handleClick(e, index, item.href)} onKeyDown={e => handleKeyDown(e, index)}>
+            <li key={index} className={`${activeIndex === index ? 'active' : ''} ${item.isIcon ? 'nav-item-icon' : ''}`}>
+              <a 
+                href={item.href} 
+                onClick={e => handleClick(e, index, item.href, item.onClick)} 
+                onKeyDown={e => handleKeyDown(e, index)}
+              >
                 {item.label}
               </a>
             </li>
