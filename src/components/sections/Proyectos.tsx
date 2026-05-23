@@ -16,6 +16,7 @@ const proyectos = [
     solution: 'Implementación de agenda inteligente 24/7 sincronizada con WhatsApp, CRM de pacientes y motor automático de reseñas en Google.',
     result: 'Agendado 100% autónomo y gestión centralizada de pacientes mediante CRM, mejorando la organización de la clínica.',
     tech: ['React', 'n8n', 'WhatsApp API', 'Google Maps API', 'CRM'],
+    images: [],
     papers: [
       <div className="paper-label">Caso de Éxito</div>,
       <div className="paper-label">Healthcare SaaS</div>,
@@ -30,7 +31,12 @@ const proyectos = [
     problem: 'Los adultos mayores sufren caídas y golpes en la cabeza sin que cuidadores o familiares sean notificados a tiempo, aumentando el riesgo de lesiones graves.',
     solution: 'Wearable integrado con sensores de impacto que detectan y miden la intensidad de los golpes, enviando alertas automáticas.',
     result: '1er Lugar Innovatec Local 2026 — Área de Salud.',
-    tech: ['IoT', 'Sensores de impacto', 'App Móvil', 'Alertas en tiempo real'],
+    tech: ['IoT', 'Sensores de impacto', 'App Móvil', 'Alertas en tiempo real', 'Expo', 'Three.js'],
+    images: [
+      '/projects/shield-sense/Home.jpg',
+      '/projects/shield-sense/Alertas.jpg',
+      '/projects/shield-sense/Ajustes.jpg'
+    ],
     papers: [
       <div className="paper-label">Caso de Éxito</div>,
       <div className="paper-label">Innovatec Local — 1er Lugar</div>,
@@ -45,7 +51,13 @@ const proyectos = [
     problem: 'Los médicos destinan gran parte de su tiempo a escribir notas clínicas durante la consulta, reduciendo la atención al paciente y aumentando la carga administrativa.',
     solution: 'Plataforma que transcribe y digitaliza automáticamente las notas clínicas mediante voz durante la consulta, generando expedientes estructurados sin intervención manual.',
     result: '2do Lugar Innovatec Local 2026 — Área de Salud. 4 médicos en fase piloto reportaron menos tiempo dedicado a documentación, liberando más atención al paciente.',
-    tech: ['Speech-to-Text', 'IA', 'Web App', 'Expediente Digital'],
+    tech: ['Speech-to-Text', 'IA', 'Web App', 'Expediente Digital', 'Expo', 'n8n', 'Supabase'],
+    images: [
+      '/projects/klino/Home.jpg',
+      '/projects/klino/Expedientes.jpg',
+      '/projects/klino/Hardware.jpg',
+      '/projects/klino/Ajustes.jpg'
+    ],
     papers: [
       <div className="paper-label">Caso de Éxito</div>,
       <div className="paper-label">Innovatec Local — 2do Lugar</div>,

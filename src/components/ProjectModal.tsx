@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
-import { X } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ProjectModalProps {
   isOpen: boolean
@@ -10,7 +10,7 @@ interface ProjectModalProps {
     color: string
     description: string
     tech: string[]
-    image?: string
+    images?: string[]
     problem?: string
     solution?: string
     result?: string
@@ -19,11 +19,88 @@ interface ProjectModalProps {
 
 const ease = [0.16, 1, 0.3, 1] as const
 
+// Componente para enmarcar las capturas en un iPhone
+function IPhoneMockup({ children, color }: { children: React.ReactNode, color: string }) {
+  return (
+    <div className="iphone-frame">
+      <div className="iphone-inner">
+        <div className="iphone-notch" />
+        <div className="iphone-screen-content">
+          {children}
+        </div>
+      </div>
+      <div className="iphone-glow" style={{ background: `radial-gradient(circle at center, ${color}20 0%, transparent 70%)` }} />
+      
+      <style>{`
+        .iphone-frame {
+          position: relative;
+          width: 280px;
+          height: 580px;
+          background: #000;
+          border-radius: 44px;
+          padding: 8px;
+          border: 1px solid rgba(255,255,255,0.1);
+          box-shadow: 
+            0 0 0 4px #1a1a1a,
+            0 30px 60px -10px rgba(0,0,0,0.8);
+          margin: 0 auto;
+        }
+
+        .iphone-inner {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background: #000;
+          border-radius: 36px;
+          overflow: hidden;
+          border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .iphone-notch {
+          position: absolute;
+          top: 0;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 120px;
+          height: 25px;
+          background: #000;
+          border-bottom-left-radius: 15px;
+          border-bottom-right-radius: 15px;
+          z-index: 20;
+        }
+
+        .iphone-screen-content {
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
+
+        .iphone-glow {
+          position: absolute;
+          inset: -40px;
+          pointer-events: none;
+          z-index: -1;
+        }
+
+        @media (max-width: 768px) {
+          .iphone-frame {
+            width: 240px;
+            height: 500px;
+          }
+        }
+      `}</style>
+    </div>
+  )
+}
+
 export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
+  const [activeImageIdx, setActiveImageIdx] = useState(0)
+
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
+      setActiveImageIdx(0)
     } else {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
@@ -35,6 +112,21 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
   }, [isOpen])
 
   if (!project) return null
+
+  // Mejorar contraste de colores si es necesario (especialmente el morado de Klino)
+  const displayColor = project.color === '#8b5cf6' ? '#a78bfa' : project.color
+
+  const nextImage = () => {
+    if (project.images) {
+      setActiveImageIdx((prev) => (prev + 1) % project.images!.length)
+    }
+  }
+
+  const prevImage = () => {
+    if (project.images) {
+      setActiveImageIdx((prev) => (prev - 1 + project.images!.length) % project.images!.length)
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -55,18 +147,16 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.5, ease }}
           >
-            {/* Botón de cierre - Fuera del área de scroll para que siempre esté visible */}
             <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar modal">
               <X size={20} />
             </button>
 
-            {/* Área con scroll */}
             <div className="modal-scroll-area">
               <div className="modal-inner">
-                <div className="modal-content-wrapper">
+                <div className="modal-main-grid">
                   <div className="modal-content-col">
                     <div className="modal-header">
-                      <div className="modal-tag" style={{ color: project.color }}>CASO DE ÉXITO</div>
+                      <div className="modal-tag" style={{ color: displayColor }}>CASO DE ÉXITO</div>
                       <h2 className="modal-title">{project.title}</h2>
                     </div>
 
@@ -82,8 +172,8 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                             <p className="success-text">{project.solution}</p>
                           </div>
                           <div className="success-item highlight">
-                            <span className="success-label" style={{ color: project.color }}>Resultado</span>
-                            <p className="success-result" style={{ color: project.color }}>{project.result}</p>
+                            <span className="success-label" style={{ color: displayColor }}>Resultado</span>
+                            <p className="success-result" style={{ color: displayColor }}>{project.result}</p>
                           </div>
                         </div>
                       ) : (
@@ -100,6 +190,60 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                       </div>
                     </div>
                   </div>
+
+                  <div className="modal-visual-col">
+                    <div className="visual-container">
+                      {project.images && project.images.length > 0 ? (
+                        <div className="mockup-navigation-wrapper">
+                          <div className="mockup-tabs">
+                            {project.images.map((img, idx) => {
+                              // Obtener nombre del archivo para la pestaña
+                              const name = img.split('/').pop()?.split('.')[0] || `Captura ${idx + 1}`
+                              return (
+                                <button 
+                                  key={idx}
+                                  className={`tab-btn ${activeImageIdx === idx ? 'active' : ''}`}
+                                  onClick={() => setActiveImageIdx(idx)}
+                                  style={{ 
+                                    '--active-color': displayColor 
+                                  } as any}
+                                >
+                                  {name}
+                                </button>
+                              )
+                            })}
+                          </div>
+
+                          <div className="mockup-display">
+                            <IPhoneMockup color={displayColor}>
+                              <AnimatePresence mode="wait">
+                                <motion.img 
+                                  key={activeImageIdx}
+                                  src={project.images[activeImageIdx]} 
+                                  alt={`${project.title} view ${activeImageIdx + 1}`}
+                                  className="mockup-img"
+                                  initial={{ opacity: 0, x: 20 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -20 }}
+                                  transition={{ duration: 0.4, ease }}
+                                />
+                              </AnimatePresence>
+                            </IPhoneMockup>
+
+                            <div className="nav-controls">
+                              <button className="nav-arrow" onClick={prevImage}><ChevronLeft size={24} /></button>
+                              <button className="nav-arrow" onClick={nextImage}><ChevronRight size={24} /></button>
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="mockup-placeholder" style={{ borderColor: `${displayColor}30` }}>
+                          <div className="mockup-content">Preview soon</div>
+                          <div className="mockup-glow" style={{ background: `radial-gradient(circle at center, ${displayColor}20 0%, transparent 70%)` }} />
+                        </div>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -113,27 +257,27 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               display: flex;
               align-items: center;
               justify-content: center;
-              padding: 40px 20px; /* Más padding para que no toque los bordes */
+              padding: 20px;
             }
 
             .project-modal-backdrop {
               position: absolute;
               inset: 0;
-              background: rgba(10, 10, 10, 0.85);
-              backdrop-filter: blur(12px);
-              -webkit-backdrop-filter: blur(12px);
+              background: rgba(8, 8, 8, 0.9);
+              backdrop-filter: blur(16px);
+              -webkit-backdrop-filter: blur(16px);
             }
 
             .project-modal-content {
               position: relative;
               width: 100%;
-              max-width: 1000px;
-              max-height: 85vh; /* Altura máxima controlada */
-              background: #141414;
+              max-width: 1100px;
+              max-height: 90vh;
+              background: #0f0f0f;
               border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 32px; /* Bordes más redondeados */
-              overflow: hidden; /* Importante para que el scroll area no rompa los bordes */
-              box-shadow: 0 40px 100px rgba(0, 0, 0, 0.6);
+              border-radius: 36px;
+              overflow: hidden;
+              box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
               display: flex;
               flex-direction: column;
             }
@@ -145,210 +289,222 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               overflow-y: auto;
             }
 
-            /* Scrollbar personalizada para el área de scroll */
-            .modal-scroll-area::-webkit-scrollbar {
-              width: 6px;
-            }
-            .modal-scroll-area::-webkit-scrollbar-track {
-              background: transparent;
-            }
-            .modal-scroll-area::-webkit-scrollbar-thumb {
-              background: rgba(255, 255, 255, 0.1);
-              border-radius: 10px;
+            .modal-inner {
+              padding: 80px 60px;
             }
 
             .modal-close-btn {
               position: absolute;
-              top: 24px;
-              right: 24px;
-              width: 44px;
-              height: 44px;
+              top: 32px; /* Más margen solicitado */
+              right: 32px;
+              width: 48px;
+              height: 48px;
               border-radius: 50%;
-              background: #141414; /* Mismo que el fondo para que no se vea el contenido debajo */
-              border: 1px solid rgba(255, 255, 255, 0.15);
+              background: rgba(255,255,255,0.03);
+              border: 1px solid rgba(255, 255, 255, 0.1);
               color: white;
               display: flex;
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              z-index: 100; /* Siempre por encima */
-              transition: all 0.2s;
-              box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+              z-index: 100;
+              transition: all 0.3s var(--ease-out);
             }
             .modal-close-btn:hover {
               background: rgba(255, 255, 255, 0.08);
-              transform: rotate(90deg) scale(1.1);
-              border-color: rgba(255, 255, 255, 0.3);
-            }
-
-            .modal-inner {
-              padding: 60px;
-            }
-
-            .modal-tag {
-              font-family: var(--font-mono);
-              font-size: 0.7rem;
-              letter-spacing: 0.15em;
-              margin-bottom: 12px;
-            }
-
-            .modal-title {
-              font-size: clamp(2.2rem, 5vw, 3.8rem);
-              font-weight: 700;
-              margin-bottom: 50px;
-              letter-spacing: -0.03em;
+              transform: rotate(90deg) scale(1.05);
+              border-color: rgba(255, 255, 255, 0.2);
             }
 
             .modal-main-grid {
               display: grid;
-              grid-template-columns: 1.1fr 0.9fr; /* Ligera ventaja a la info para legibilidad */
+              grid-template-columns: 1fr 1fr;
               gap: 80px;
               align-items: start;
             }
 
             .modal-content-col {
-              display: flex;
-              flex-direction: column;
+              position: sticky; /* Columna fija solicitada */
+              top: 0;
             }
 
-            .modal-visual-col {
-              position: sticky;
-              top: 0;
+            .modal-tag {
+              font-family: var(--font-mono);
+              font-size: 0.75rem;
+              font-weight: 500;
+              letter-spacing: 0.2em;
+              margin-bottom: 16px;
+            }
+
+            .modal-title {
+              font-size: clamp(2.5rem, 5vw, 4rem);
+              font-weight: 700;
+              margin-bottom: 48px;
+              letter-spacing: -0.04em;
+              line-height: 1;
+            }
+
+            .visual-container {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+            }
+
+            .mockup-navigation-wrapper {
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 40px;
+            }
+
+            .mockup-tabs {
+              display: flex;
+              gap: 12px;
+              flex-wrap: wrap;
+              justify-content: center;
+            }
+
+            .tab-btn {
+              padding: 8px 16px;
+              background: rgba(255,255,255,0.02);
+              border: 1px solid rgba(255,255,255,0.06);
+              border-radius: 100px;
+              font-size: 0.8rem;
+              font-weight: 600;
+              color: #7a7a7a;
+              cursor: pointer;
+              transition: all 0.3s;
+              text-transform: capitalize;
+            }
+            .tab-btn.active {
+              background: var(--active-color);
+              border-color: var(--active-color);
+              color: #000;
+            }
+
+            .mockup-display {
+              position: relative;
+              display: flex;
+              align-items: center;
+              gap: 20px;
+            }
+
+            .mockup-img {
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              display: block;
+            }
+
+            .nav-controls {
+              position: absolute;
+              top: 50%;
+              left: -80px;
+              right: -80px;
+              display: flex;
+              justify-content: space-between;
+              pointer-events: none;
+              transform: translateY(-50%);
+            }
+
+            .nav-arrow {
+              width: 50px;
+              height: 50px;
+              border-radius: 50%;
+              background: rgba(255,255,255,0.03);
+              border: 1px solid rgba(255,255,255,0.08);
+              color: #fff;
               display: flex;
               align-items: center;
               justify-content: center;
+              cursor: pointer;
+              pointer-events: auto;
+              transition: all 0.3s;
+            }
+            .nav-arrow:hover {
+              background: rgba(255,255,255,0.08);
+              transform: scale(1.1);
             }
 
             .success-case-grid {
               display: flex;
               flex-direction: column;
-              gap: 32px;
-              margin-bottom: 48px;
-            }
-
-            .success-item {
-              display: flex;
-              flex-direction: column;
-              gap: 8px;
+              gap: 40px;
+              margin-bottom: 60px;
             }
 
             .success-label {
               font-family: var(--font-mono);
-              font-size: 0.65rem;
+              font-size: 0.7rem;
               text-transform: uppercase;
-              letter-spacing: 0.1em;
-              color: #58585e;
+              letter-spacing: 0.15em;
+              color: #555;
+              margin-bottom: 8px;
+              display: block;
             }
 
             .success-text {
-              font-size: 1.1rem;
-              color: #f0f0f0;
-              line-height: 1.5;
+              font-size: 1.15rem;
+              color: #ccc;
+              line-height: 1.6;
             }
 
             .success-result {
               font-size: 1.8rem;
               font-weight: 700;
               letter-spacing: -0.02em;
-            }
-
-            .modal-tech-section {
-              margin-top: 20px;
+              line-height: 1.2;
             }
 
             .tech-heading {
               font-size: 0.75rem;
               text-transform: uppercase;
-              letter-spacing: 0.05em;
-              color: #58585e;
-              margin-bottom: 16px;
+              letter-spacing: 0.1em;
+              color: #555;
+              margin-bottom: 20px;
             }
 
             .tech-stack {
               display: flex;
               flex-wrap: wrap;
-              gap: 8px;
-              margin-bottom: 48px;
+              gap: 10px;
             }
 
             .tech-pill {
-              padding: 5px 12px;
+              padding: 6px 16px;
               background: rgba(255, 255, 255, 0.03);
               border: 1px solid rgba(255, 255, 255, 0.08);
               border-radius: 100px;
-              font-size: 0.7rem;
-              color: #9a9a9f;
-            }
-
-            .visit-btn {
-              position: relative;
-              padding: 16px 32px;
-              background: transparent;
-              border: 1px solid var(--btn-color);
-              color: white;
-              font-weight: 600;
-              border-radius: 12px;
-              overflow: hidden;
-              cursor: pointer;
-            }
-
-            .visit-btn span { position: relative; z-index: 1; }
-            .visit-btn-bg {
-              position: absolute;
-              inset: 0;
-              background: var(--btn-color);
-              opacity: 0.1;
-              transition: opacity 0.3s;
-            }
-            .visit-btn:hover .visit-btn-bg { opacity: 0.25; }
-
-            .mockup-placeholder {
-              width: 100%;
-              aspect-ratio: 9/16;
-              background: #0d0d0d;
-              border: 1px solid;
-              border-radius: 24px;
-              position: relative;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              overflow: hidden;
-            }
-            
-            @media (max-width: 900px) {
-              .mockup-placeholder {
-                aspect-ratio: 16/9;
-              }
-            }
-
-            .mockup-content {
-              font-family: var(--font-mono);
               font-size: 0.8rem;
+              color: #888;
             }
 
-            .mockup-glow {
-              position: absolute;
-              inset: 0;
-              pointer-events: none;
-            }
-
-            @media (max-width: 768px) {
-              .modal-inner { padding: 40px 24px; }
-              .modal-main-grid { 
-                grid-template-columns: 1fr; 
-                gap: 40px; 
+            @media (max-width: 1200px) {
+              .nav-controls {
+                left: -20px;
+                right: -20px;
               }
-              .modal-visual-col {
-                position: static;
-                order: 2; /* Asegura que la imagen vaya debajo */
+              .nav-arrow {
+                background: rgba(0,0,0,0.5);
+                backdrop-filter: blur(10px);
+              }
+            }
+
+            @media (max-width: 900px) {
+              .modal-main-grid {
+                grid-template-columns: 1fr;
+                gap: 60px;
               }
               .modal-content-col {
-                order: 1;
+                position: static;
               }
-              .modal-title { margin-bottom: 30px; font-size: 2.2rem; }
-              .project-modal-content { max-height: 85vh; border-radius: 24px; }
-              .success-result { font-size: 1.5rem; }
-              .modal-close-btn { top: 16px; right: 16px; width: 38px; height: 38px; }
+              .modal-inner {
+                padding: 60px 30px;
+              }
+              .nav-controls {
+                display: none;
+              }
             }
           `}</style>
         </div>
@@ -356,3 +512,4 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     </AnimatePresence>
   )
 }
+
