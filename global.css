@@ -351,6 +351,7 @@ button {
 /* ── HERO ── */
 .hero {
   min-height: 100svh;
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
@@ -1099,7 +1100,6 @@ select.form-input option {
     grid-template-columns: 1fr;
     min-height: auto;
     padding-top: 120px;
-    padding-bottom: 80px;
   }
   .hero-visual {
     min-height: auto;

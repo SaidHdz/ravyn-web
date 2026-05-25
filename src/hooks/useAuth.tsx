@@ -1,12 +1,22 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { User, Session } from '@supabase/supabase-js'
+import { User, Session, AuthError } from '@supabase/supabase-js'
 import { supabase } from '../lib/supabase'
+
+interface SignUpMetadata {
+  full_name?: string
+  clinic_name?: string
+  clinic_phone?: string
+  clinic_email?: string
+}
 
 interface AuthContextType {
   user: User | null
   session: Session | null
   loading: boolean
-  signOut: () => Promise<void>
+  signIn: (email: string, password: string) => Promise<{ error: AuthError | null }>
+  signUp: (email: string, password: string, metadata?: SignUpMetadata) => Promise<{ error: AuthError | null }>
+  resetPassword: (email: string) => Promise<{ error: AuthError | null }>
+  signOut: () => Promise<{ error: AuthError | null }>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -17,31 +27,66 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Verificar sesión activa inicial
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session)
-      setUser(session?.user ?? null)
-      setLoading(false)
-    })
+    let mounted = true
 
-    // Escuchar cambios en el estado de autenticación
+    supabase.auth.getSession()
+      .then(({ data: { session }, error }) => {
+        if (!mounted) return
+        if (error) console.error('[auth] getSession error:', error)
+        setSession(session)
+        setUser(session?.user ?? null)
+        setLoading(false)
+      })
+      .catch((err) => {
+        if (!mounted) return
+        console.error('[auth] getSession threw:', err)
+        setLoading(false)
+      })
+
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session)
       setUser(session?.user ?? null)
       setLoading(false)
     })
 
-    return () => subscription.unsubscribe()
+    return () => {
+      mounted = false
+      subscription.unsubscribe()
+    }
   }, [])
 
+  const signIn = async (email: string, password: string) => {
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
+    return { error }
+  }
+
+  const signUp = async (email: string, password: string, metadata?: SignUpMetadata) => {
+    const { error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: metadata,
+        emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+      },
+    })
+    return { error }
+  }
+
+  const resetPassword = async (email: string) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: typeof window !== 'undefined' ? `${window.location.origin}/reset-password` : undefined,
+    })
+    return { error }
+  }
+
   const signOut = async () => {
-    await supabase.auth.signOut()
-    setUser(null)
-    setSession(null)
+    const { error } = await supabase.auth.signOut()
+    if (error) console.error('[auth] signOut error:', error)
+    return { error }
   }
 
   return (
-    <AuthContext.Provider value={{ user, session, loading, signOut }}>
+    <AuthContext.Provider value={{ user, session, loading, signIn, signUp, resetPassword, signOut }}>
       {children}
     </AuthContext.Provider>
   )

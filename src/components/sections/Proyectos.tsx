@@ -11,10 +11,10 @@ const proyectos = [
     id: 'ravynset',
     title: 'Ravynset',
     color: '#10b981', // Verde esmeralda para salud/automatización
-    description: 'Sistema de gestión integral para clínicas que automatiza la agenda, recordatorios por WhatsApp y reputación en Google Maps.',
-    problem: 'Pérdida constante de citas por inasistencia, carga administrativa excesiva en recepción y falta de presencia digital profesional.',
-    solution: 'Implementación de agenda inteligente 24/7 sincronizada con WhatsApp, CRM de pacientes y motor automático de reseñas en Google.',
-    result: 'Agendado 100% autónomo y gestión centralizada de pacientes mediante CRM, mejorando la organización de la clínica.',
+    description: 'CRM para clínicas que centraliza la gestión de citas y pacientes en un solo lugar, con agenda inteligente y comunicación automática por WhatsApp.',
+    problem: 'La gestión de citas y pacientes vive dispersa entre cuadernos, WhatsApp del recepcionista y hojas de Excel. Las clínicas pierden tiempo, citas y seguimiento de pacientes por no tener un sistema central.',
+    solution: 'Un CRM diseñado específicamente para clínicas: agenda 24/7 sincronizada con WhatsApp, expedientes de pacientes centralizados y motor automático de reseñas en Google Maps para construir reputación digital sin esfuerzo manual.',
+    result: 'Plataforma diseñada para resolver los puntos reales de fricción en la operación diaria de una clínica.',
     tech: ['React', 'n8n', 'WhatsApp API', 'Google Maps API', 'CRM'],
     images: [],
     papers: [
@@ -27,10 +27,10 @@ const proyectos = [
     id: 'shield-sense',
     title: 'Shield Sense',
     color: '#3b82f6',
-    description: 'Wearable inteligente para la detección de impactos en adultos mayores, con alertas en tiempo real para cuidadores.',
-    problem: 'Los adultos mayores sufren caídas y golpes en la cabeza sin que cuidadores o familiares sean notificados a tiempo, aumentando el riesgo de lesiones graves.',
-    solution: 'Wearable integrado con sensores de impacto que detectan y miden la intensidad de los golpes, enviando alertas automáticas.',
-    result: '1er Lugar Innovatec Local 2026 — Área de Salud.',
+    description: 'Wearable IoT integrado en un gorro que detecta impactos en la cabeza de adultos mayores y alerta al cuidador en tiempo real.',
+    problem: 'Los golpes en la cabeza son la lesión más peligrosa en caídas de adultos mayores, pero los wearables tradicionales (relojes, pulseras) detectan el movimiento del cuerpo, no el impacto real en el cráneo. Cuando un cuidador se entera, ya pasaron minutos críticos.',
+    solution: 'Sensores de impacto colocados directamente sobre la cabeza, integrados de forma discreta en un gorro. Detectan la intensidad del golpe y envían la alerta vía Bluetooth al celular del cuidador — funciona sin internet, ideal para hogares y zonas con conectividad limitada.',
+    result: '1er Lugar Innovatec Local 2026 — Área de Salud. Prototipo funcional reconocido por jurado médico y técnico como solución diferenciada frente a wearables convencionales.',
     tech: ['IoT', 'Sensores de impacto', 'App Móvil', 'Alertas en tiempo real', 'Expo', 'Three.js'],
     images: [
       '/projects/shield-sense/Home.jpg',
@@ -47,10 +47,10 @@ const proyectos = [
     id: 'klino',
     title: 'Klino',
     color: '#8b5cf6',
-    description: 'Plataforma que digitaliza notas clínicas mediante voz durante la consulta médica, reduciendo el tiempo administrativo y permitiendo al médico enfocarse en el paciente.',
-    problem: 'Los médicos destinan gran parte de su tiempo a escribir notas clínicas durante la consulta, reduciendo la atención al paciente y aumentando la carga administrativa.',
-    solution: 'Plataforma que transcribe y digitaliza automáticamente las notas clínicas mediante voz durante la consulta, generando expedientes estructurados sin intervención manual.',
-    result: '2do Lugar Innovatec Local 2026 — Área de Salud. 4 médicos en fase piloto reportaron menos tiempo dedicado a documentación, liberando más atención al paciente.',
+    description: 'App móvil que transcribe la consulta médica por voz y genera la nota clínica estructurada conforme a NOM-004 y NOM-024, sin escritura manual.',
+    problem: 'El médico pasa gran parte de la consulta escribiendo en lugar de mirar al paciente. La documentación clínica es obligatoria por normativa, pero le roba al médico lo más valioso: la atención.',
+    solution: 'Klino escucha la consulta y genera automáticamente la nota clínica completa — antecedentes personales, familiares patológicos y no patológicos, exploración física — en formato estructurado conforme a NOM-004 y NOM-024. El médico habla con su paciente; Klino documenta.',
+    result: '2do Lugar Innovatec Local 2026 — Área de Salud. Piloto en curso con médicos, con análisis de impacto en tiempo de documentación y calidad de la nota clínica.',
     tech: ['Speech-to-Text', 'IA', 'Web App', 'Expediente Digital', 'Expo', 'n8n', 'Supabase'],
     images: [
       '/projects/klino/Home.jpg',
@@ -143,11 +143,18 @@ export default function Proyectos() {
 
         .proyectos-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-          gap: 160px 40px;
-          margin-top: 200px;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 40px;
+          margin-top: 120px;
           justify-items: center;
           padding-bottom: 80px;
+        }
+
+        @media (max-width: 1024px) {
+          .proyectos-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 120px 40px;
+          }
         }
 
         .folder-container {

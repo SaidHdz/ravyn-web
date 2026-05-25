@@ -4,7 +4,7 @@ import Navbar from '@/components/Navbar'
 import Hero from '@/components/sections/Hero'
 import Servicios from '@/components/sections/Servicios'
 import Proyectos from '@/components/sections/Proyectos'
-import Ravynset from '@/components/sections/Ravynset'
+import SolucionPersonalizada from '@/components/sections/SolucionPersonalizada'
 import Proceso from '@/components/sections/Proceso'
 import QuienesSomos from '@/components/sections/QuienesSomos'
 import Contacto from '@/components/sections/Contacto'
@@ -25,7 +25,9 @@ export default function Landing() {
         <Hero />
         <div className="services-group">
           <Servicios />
-          
+
+          <SolucionPersonalizada />
+
           {/* Sección de Confianza: Diseño Original Restaurado y Centrado */}
           <section className="section section-trust-restored">
             <div className="container">
@@ -48,7 +50,6 @@ export default function Landing() {
           </section>
         </div>
 
-        <Ravynset />
         <Proyectos />
         <Proceso />
         <QuienesSomos />
@@ -61,7 +62,7 @@ export default function Landing() {
         }
 
         .section-trust-restored {
-          padding: 100px 0 160px; /* Espaciado generoso para impacto */
+          padding: 100px 0 0;
           margin-top: -60px;
           display: flex;
           align-items: center;
@@ -75,12 +76,13 @@ export default function Landing() {
           justify-content: center; /* Centrado original */
           gap: 0.3em 0.5em;
           text-align: center;
+          min-height: clamp(3.5rem, 7vw, 6rem); /* Reserva 2 líneas para evitar layout shift cuando aparece "automatización" */
         }
 
         .trust-static-text {
           font-family: var(--font-sans);
-          font-size: clamp(1.8rem, 5vw, 4rem); /* 30% más pequeño que 6rem */
-          font-weight: 800;
+          font-size: clamp(1.4rem, 3.2vw, 2.5rem);
+          font-weight: 700;
           letter-spacing: -0.04em;
           color: var(--text-secondary);
           line-height: 1;
@@ -88,8 +90,8 @@ export default function Landing() {
 
         .trust-pill {
           font-family: var(--font-sans);
-          font-size: clamp(1.8rem, 5vw, 4rem);
-          font-weight: 800;
+          font-size: clamp(1.4rem, 3.2vw, 2.5rem);
+          font-weight: 700;
           letter-spacing: -0.04em;
           background: var(--accent);
           color: #000;
@@ -100,12 +102,12 @@ export default function Landing() {
           align-items: center;
           justify-content: center;
           overflow: hidden;
-          box-shadow: 0 10px 40px -10px var(--accent-glow);
+          box-shadow: 0 4px 16px -6px var(--accent-glow);
         }
 
         @media (max-width: 768px) {
           .section-trust-restored {
-            padding: 60px 0 100px;
+            padding: 60px 0 0;
             margin-top: -20px;
           }
           .trust-phrase-layout {

@@ -151,11 +151,65 @@ export default function Hero() {
           ))}
         </div>
       </div>
-      
+
+      <a href="#servicios" className="hero-scroll-hint" aria-label="Desliza para ver más">
+        <span className="hero-scroll-hint-text">Desliza para ver más</span>
+        <span className="hero-scroll-hint-arrow" aria-hidden="true">↓</span>
+      </a>
+
       <style>{`
         @media (max-width: 900px) {
           .hero {
             padding-top: 100px !important; /* Compactado a 100px para móvil */
+          }
+        }
+
+        .hero-scroll-hint {
+          position: absolute;
+          bottom: 24px;
+          left: 50%;
+          transform: translateX(-50%);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 6px;
+          color: var(--text-muted);
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.15em;
+          text-transform: uppercase;
+          text-decoration: none;
+          opacity: 0.7;
+          transition: opacity 0.2s ease, color 0.2s ease;
+          animation: hero-scroll-bounce 2.2s ease-in-out infinite;
+          z-index: 5;
+        }
+
+        .hero-scroll-hint:hover {
+          opacity: 1;
+          color: var(--text);
+        }
+
+        .hero-scroll-hint-arrow {
+          font-size: 0.95rem;
+          line-height: 1;
+        }
+
+        @keyframes hero-scroll-bounce {
+          0%, 100% { transform: translate(-50%, 0); }
+          50% { transform: translate(-50%, 6px); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-scroll-hint {
+            animation: none;
+          }
+        }
+
+        @media (max-width: 600px) {
+          .hero-scroll-hint {
+            bottom: 16px;
+            font-size: 0.65rem;
           }
         }
       `}</style>

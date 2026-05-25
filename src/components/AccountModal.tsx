@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'motion/react'
-import { X, User, CreditCard, History, Layout, ExternalLink, Download, AlertCircle, PlusCircle, ArrowLeft, Loader2 } from 'lucide-react'
+import { X, User, CreditCard, History, Layout, ExternalLink, Download, AlertCircle, PlusCircle, ArrowLeft, Loader2, RefreshCw } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useEffect, useState, useRef } from 'react'
 import { supabase } from '@/lib/supabase'
+import { translateAuthError } from '@/lib/authErrors'
 
 interface AccountModalProps {
   isOpen: boolean
@@ -14,7 +15,8 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const [view, setView] = useState<'overview' | 'add-card'>('overview')
   const [paymentMethod, setPaymentMethod] = useState<'transfer' | 'card'>('transfer')
   const [loadingData, setLoadingData] = useState(true)
-  
+  const [fetchError, setFetchError] = useState<string | null>(null)
+
   const [clinic, setClinic] = useState<any>(null)
   const [profile, setProfile] = useState<any>(null)
 
@@ -55,6 +57,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const fetchUserData = async () => {
     if (!user) return
     setLoadingData(true)
+    setFetchError(null)
     try {
       const { data, error } = await supabase
         .from('users')
@@ -65,11 +68,9 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
       if (error) throw error
       setProfile(data)
       setClinic(data.clinics)
-      
-      // Persistencia segura: Si la clínica tiene datos de tarjeta (simulado por ahora)
-      // En producción esto vendría de Stripe a través de la tabla clinics
     } catch (err) {
       console.error('Error fetching account data:', err)
+      setFetchError(translateAuthError(err))
     } finally {
       setLoadingData(false)
     }
@@ -128,10 +129,10 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   }
 
   const displayData = {
-    businessName: clinic?.name || "Cargando...",
+    businessName: clinic?.name || user?.user_metadata?.clinic_name || "Sin registrar",
     contactName: profile?.full_name || user?.user_metadata?.full_name || "Usuario",
     email: clinic?.email || user?.email || "",
-    phone: clinic?.phone || "No registrado",
+    phone: clinic?.phone || user?.user_metadata?.clinic_phone || "No registrado",
     plan: clinic?.plan || "Esencial",
     subdomain: clinic?.subdomain || ""
   }
@@ -186,6 +187,22 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                 <div className="flex items-center justify-center h-full flex-col gap-4">
                   <Loader2 className="w-8 h-8 animate-spin text-accent" />
                   <p className="text-white/50 animate-pulse font-mono text-sm tracking-widest uppercase">Sincronizando con Ravyn CRM...</p>
+                </div>
+              ) : fetchError ? (
+                <div className="flex items-center justify-center h-full flex-col gap-4 max-w-md mx-auto text-center px-6">
+                  <AlertCircle className="w-10 h-10 text-amber-400" />
+                  <div>
+                    <h3 className="text-white text-lg font-semibold mb-2">No pudimos cargar tu cuenta</h3>
+                    <p className="text-white/60 text-sm">{fetchError}</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={fetchUserData}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black text-sm font-semibold hover:opacity-90 transition-opacity cursor-pointer border-none"
+                  >
+                    <RefreshCw className="w-4 h-4" />
+                    Reintentar
+                  </button>
                 </div>
               ) : view === 'overview' ? (
                 <div className="account-grid">

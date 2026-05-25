@@ -167,10 +167,9 @@ export default function Contacto() {
                   value={formData.interest}
                   onChange={handleChange}
                 >
-                  <option value="web">Desarrollo Web / App</option>
+                  <option value="web">Desarrollo web y de apps</option>
                   <option value="iot">Soluciones IoT</option>
-                  <option value="automation">Automatización / n8n</option>
-                  <option value="other">Otro Proyecto</option>
+                  <option value="automation">Automatización de procesos manuales</option>
                 </select>
               </div>
 
