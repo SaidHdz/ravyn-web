@@ -1,132 +1,112 @@
-import { useState, useEffect, useRef } from 'react'
-import GooeyNav from './animations/GooeyNav'
+import { useState, useEffect } from 'react'
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react'
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { LogOut, Settings, ChevronDown, LogIn } from 'lucide-react'
+import { Link, useLocation } from 'react-router-dom'
+import { LogOut, Settings, LogIn, Menu, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import AuthModal from './AuthModal'
 import AccountModal from './AccountModal'
 
-interface NavbarProps {
-  theme?: string
-  onToggle?: () => void
-}
+const navLinks = [
+  { label: 'Studio', anchor: 'studio' },
+  { label: 'Labs',   anchor: 'labs'   },
+]
 
-export default function Navbar({ }: NavbarProps) {
+export default function Navbar() {
   const { scrollYProgress } = useScroll()
   const location = useLocation()
-  const navigate = useNavigate()
   const { user, signOut } = useAuth()
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
-  const [isAccountModalOpen, setIsAccountModalOpen] = useState(false)
-  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false)
-  const [isServiciosOpen, setIsServiciosOpen] = useState(false)
-  const [visible, setVisible] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
-  const serviciosAnchorRef = useRef<HTMLDivElement>(null)
 
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 180,
-    damping: 30,
-    restDelta: 0.001,
-  })
+  const [scrolled,          setScrolled]          = useState(false)
+  const [visible,           setVisible]           = useState(true)
+  const [lastScrollY,       setLastScrollY]       = useState(0)
+  const [mobileOpen,        setMobileOpen]        = useState(false)
+  const [isAuthModalOpen,   setIsAuthModalOpen]   = useState(false)
+  const [isAccountOpen,     setIsAccountOpen]     = useState(false)
+  const [isUserMenuOpen,    setIsUserMenuOpen]    = useState(false)
 
-  const isRavynset = location.pathname === '/ravynset'
-  const isKlino = location.pathname === '/klino'
-  const isSubapp = isRavynset || isKlino
+  const scaleX = useSpring(scrollYProgress, { stiffness: 180, damping: 30, restDelta: 0.001 })
 
-  const navItems = [
-    { label: 'Home', href: '/' },
-    { label: 'Contacto', href: '#contacto' },
-    {
-      label: (
-        <span className="nav-servicios-label">
-          Servicios <ChevronDown className="w-3.5 h-3.5" strokeWidth={2.5} />
-        </span>
-      ),
-      href: '#servicios-menu',
-      isIcon: false,
-      onClick: (e: React.MouseEvent) => {
-        e.preventDefault()
-        setIsServiciosOpen(v => !v)
-        setIsUserMenuOpen(false)
-      },
-    },
-  ]
+  const isSubapp = location.pathname === '/ravynset' || location.pathname === '/klino'
 
-  // Hide/show on scroll (mobile only)
+  const resolveHref = (anchor: string) =>
+    isSubapp ? `/#${anchor}` : `#${anchor}`
+
+  // Scroll hide/show + scrolled state
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY
+    const onScroll = () => {
+      const y = window.scrollY
+      setScrolled(y > 16)
+
       const isMobile = window.innerWidth <= 768
+      if (!isMobile) { setVisible(true); setLastScrollY(y); return }
 
-      if (!isMobile) {
+      if (y < 10) {
         setVisible(true)
-        setLastScrollY(currentScrollY)
-        return
-      }
-
-      if (currentScrollY < 10) {
-        setVisible(true)
-      } else if (currentScrollY > lastScrollY && currentScrollY > 70) {
+      } else if (y > lastScrollY && y > 70) {
         setVisible(false)
         setIsUserMenuOpen(false)
-        setIsServiciosOpen(false)
+        setMobileOpen(false)
       } else {
         setVisible(true)
       }
-      setLastScrollY(currentScrollY)
+      setLastScrollY(y)
     }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
   }, [lastScrollY])
 
-  // Close menus on outside click
+  // Close user menu on outside click
   useEffect(() => {
-    const closeMenu = (e: MouseEvent) => {
-      const target = e.target as HTMLElement
-      if (!target.closest('.nav-user-menu-anchor') && !target.closest('.nav-login-trigger')) {
-        setIsUserMenuOpen(false)
-      }
-      if (!target.closest('.nav-servicios-anchor') && !target.closest('.nav-center-menu')) {
-        setIsServiciosOpen(false)
-      }
+    if (!isUserMenuOpen) return
+    const close = (e: MouseEvent) => {
+      const t = e.target as HTMLElement
+      if (!t.closest('.nb-user-anchor')) setIsUserMenuOpen(false)
     }
-    if (isUserMenuOpen || isServiciosOpen) {
-      document.addEventListener('click', closeMenu)
-    }
-    return () => document.removeEventListener('click', closeMenu)
-  }, [isUserMenuOpen, isServiciosOpen])
+    document.addEventListener('click', close)
+    return () => document.removeEventListener('click', close)
+  }, [isUserMenuOpen])
 
-  // Close dropdowns on route change
+  // Lock body scroll when mobile menu is open
   useEffect(() => {
-    setIsServiciosOpen(false)
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
+  // Close everything on route change
+  useEffect(() => {
+    setMobileOpen(false)
     setIsUserMenuOpen(false)
   }, [location.pathname])
 
-  const handleLoginClick = () => {
-    if (user) {
-      setIsUserMenuOpen(v => !v)
-      setIsServiciosOpen(false)
-    } else {
-      setIsAuthModalOpen(true)
-    }
-  }
-
-  const goToService = (path: string) => {
-    setIsServiciosOpen(false)
-    navigate(path)
+  const handleAuthClick = () => {
+    if (user) setIsUserMenuOpen(v => !v)
+    else setIsAuthModalOpen(true)
   }
 
   return (
     <>
-      <nav className={`nav-gooey-wrapper ${visible ? 'is-visible' : 'is-hidden'}`}>
-        <motion.div className="scroll-progress" style={{ scaleX, zIndex: 1000 }} />
+      {/* Scroll progress bar */}
+      <motion.div
+        style={{ scaleX, transformOrigin: '0% 50%' }}
+        className="fixed top-0 left-0 right-0 h-[2px] bg-radish z-[600]"
+      />
 
-        <div className="nav-gooey-container">
+      {/* Nav bar */}
+      <motion.nav
+        animate={{ y: visible ? 0 : '-100%' }}
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className={`nb-nav fixed top-0 left-0 right-0 z-[500] h-[72px] transition-[background,border-color,backdrop-filter] duration-300 ${
+          scrolled
+            ? 'bg-[rgba(250,246,238,0.92)] backdrop-blur-[14px] border-b border-[rgba(16,52,42,0.08)]'
+            : 'bg-transparent border-b border-transparent'
+        }`}
+      >
+        <div className="w-full max-w-[1200px] mx-auto h-full px-[var(--pad-x)] flex items-center justify-between">
+        {/* Left: Logo + nav links grouped */}
+        <div className="flex items-center gap-8">
           <Link
             to="/"
-            className="nav-logo-simple desktop-only"
+            className="nb-logo flex-shrink-0"
             onClick={(e) => {
               if (location.pathname === '/') {
                 e.preventDefault()
@@ -134,352 +114,166 @@ export default function Navbar({ }: NavbarProps) {
               }
             }}
           >
-            Ravyn<span>.</span>
+            <img
+              src="/brand/logo-light.png"
+              alt="Ravyn"
+              className="h-[34px] w-auto block"
+            />
           </Link>
 
-          <div className="nav-center-menu">
-            <GooeyNav
-              key={location.pathname + (user ? '-logged' : '-guest')}
-              items={navItems}
-              particleCount={12}
-              particleDistances={[60, 5]}
-              particleR={80}
-              initialActiveIndex={isSubapp ? 2 : 0}
-            />
-
-            <div className="nav-servicios-anchor" ref={serviciosAnchorRef}>
-              <AnimatePresence>
-                {isServiciosOpen && (
-                  <motion.div
-                    className="nav-dropdown-floating nav-servicios-floating"
-                    initial={{ opacity: 0, y: 10, scale: 0.95, x: '-50%' }}
-                    animate={{ opacity: 1, y: 0, scale: 1, x: '-50%' }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95, x: '-50%' }}
-                    transition={{ duration: 0.2, ease: 'easeOut' }}
-                  >
-                    <button
-                      className={`dropdown-item ${isRavynset ? 'is-active' : ''}`}
-                      type="button"
-                      onClick={() => goToService('/ravynset')}
-                    >
-                      <span className="dropdown-item-title">Ravynset</span>
-                      <span className="dropdown-item-desc">Sistema de gestión para clínicas</span>
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+          <div className="hidden md:flex items-center gap-6">
+            {navLinks.map(({ label, anchor }) => (
+              <a
+                key={anchor}
+                href={resolveHref(anchor)}
+                className="nb-link text-[0.95rem] font-medium text-[var(--text-secondary)] hover:text-[var(--text)] transition-colors duration-150"
+              >
+                {label}
+              </a>
+            ))}
           </div>
+        </div>
 
-          <div className="nav-login-wrapper">
+        {/* Right side: CTA + auth */}
+        <div className="flex items-center gap-3">
+          {/* CTA — hidden on smallest screens */}
+          <a
+            href={resolveHref('contacto')}
+            className="btn-primary nb-sm-up"
+          >
+            Siembra tu proyecto →
+          </a>
+
+          {/* Auth button */}
+          <div className="nb-user-anchor relative">
             {user ? (
               <button
                 type="button"
-                className="nav-login-trigger is-logged"
-                onClick={handleLoginClick}
-                aria-label="Cuenta"
+                onClick={handleAuthClick}
                 title={user.email}
+                aria-label="Cuenta"
+                className="w-[36px] h-[36px] rounded-full bg-[var(--color-pine)] text-[var(--color-cream)] text-[0.8rem] font-bold flex items-center justify-center transition-transform duration-150 hover:scale-105"
               >
-                <span className="nav-avatar">
-                  {(user.email?.[0] ?? '?').toUpperCase()}
-                </span>
+                {(user.email?.[0] ?? '?').toUpperCase()}
               </button>
             ) : (
               <button
                 type="button"
-                className="nav-login-trigger is-guest"
-                onClick={handleLoginClick}
+                onClick={handleAuthClick}
                 aria-label="Iniciar sesión"
+                className="btn-secondary nb-sm-up items-center gap-[6px]"
               >
-                <LogIn className="w-4 h-4" strokeWidth={2.25} />
-                <span className="nav-login-label">Entrar</span>
+                <LogIn className="w-[14px] h-[14px]" strokeWidth={2.25} />
+                Entrar
               </button>
             )}
 
-            <div className="nav-user-menu-anchor">
-              <AnimatePresence>
-                {isUserMenuOpen && user && (
-                  <motion.div
-                    className="nav-dropdown-floating nav-user-menu-floating"
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.2, ease: 'easeOut' }}
+            {/* User dropdown */}
+            <AnimatePresence>
+              {isUserMenuOpen && user && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                  transition={{ duration: 0.18, ease: 'easeOut' }}
+                  className="absolute top-[calc(100%+10px)] right-0 bg-[var(--color-pine)] border border-[rgba(250,246,238,0.12)] rounded-[18px] p-2 min-w-[220px] flex flex-col gap-1 shadow-[0_20px_50px_rgba(16,52,42,0.35)] z-[10000]"
+                >
+                  <div className="px-3 pt-1 pb-3">
+                    <span className="block text-[0.8rem] text-[var(--color-muted)] whitespace-nowrap">{user.email}</span>
+                  </div>
+                  <div className="h-px bg-[rgba(250,246,238,0.10)] mx-1 mb-1" />
+                  <button
+                    type="button"
+                    onClick={() => { setIsAccountOpen(true); setIsUserMenuOpen(false) }}
+                    className="flex items-center gap-3 px-3 py-3 rounded-xl text-[0.88rem] font-medium text-[var(--color-cream)] hover:bg-[rgba(250,246,238,0.06)] hover:text-[var(--color-radish)] transition-colors duration-150 text-left"
                   >
-                    <div className="user-menu-header">
-                      <span className="user-email">{user.email}</span>
-                    </div>
-                    <div className="user-menu-divider" />
-                    <button
-                      className="user-menu-item"
-                      type="button"
-                      onClick={() => {
-                        setIsAccountModalOpen(true)
-                        setIsUserMenuOpen(false)
-                      }}
-                    >
-                      <Settings className="w-4 h-4" />
-                      Mi Cuenta
-                    </button>
-                    <button
-                      className="user-menu-item logout"
-                      type="button"
-                      onClick={() => {
-                        signOut()
-                        setIsUserMenuOpen(false)
-                      }}
-                    >
-                      <LogOut className="w-4 h-4" />
-                      Cerrar Sesión
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
+                    <Settings className="w-4 h-4 flex-shrink-0" />
+                    Mi Cuenta
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => { signOut(); setIsUserMenuOpen(false) }}
+                    className="flex items-center gap-3 px-3 py-3 rounded-xl text-[0.88rem] font-medium text-[var(--color-cream)] hover:bg-[rgba(224,67,107,0.12)] hover:text-[var(--color-radish)] transition-colors duration-150 text-left"
+                  >
+                    <LogOut className="w-4 h-4 flex-shrink-0" />
+                    Cerrar Sesión
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
+
+          {/* Mobile hamburger */}
+          <button
+            type="button"
+            onClick={() => setMobileOpen(v => !v)}
+            aria-label={mobileOpen ? 'Cerrar menú' : 'Abrir menú'}
+            className="md:hidden w-[36px] h-[36px] flex items-center justify-center text-[var(--text)] rounded-[var(--radius-md)] transition-colors duration-150 hover:bg-[var(--bg-hover)]"
+          >
+            {mobileOpen
+              ? <X className="w-5 h-5" strokeWidth={2} />
+              : <Menu className="w-5 h-5" strokeWidth={2} />
+            }
+          </button>
         </div>
-      </nav>
+        </div>
+      </motion.nav>
 
-      <AuthModal isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
-      <AccountModal isOpen={isAccountModalOpen} onClose={() => setIsAccountModalOpen(false)} />
+      {/* Mobile overlay menu */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="fixed inset-0 z-[450] bg-[var(--color-cream)] flex flex-col pt-[88px] px-[var(--pad-x)] pb-10"
+          >
+            <nav className="flex flex-col gap-1 flex-1">
+              {navLinks.map(({ label, anchor }, i) => (
+                <motion.a
+                  key={anchor}
+                  href={resolveHref(anchor)}
+                  initial={{ opacity: 0, y: 16 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: i * 0.06 + 0.05, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                  onClick={() => setMobileOpen(false)}
+                  className="block font-display font-semibold text-[2.4rem] leading-[1.1] tracking-[-0.03em] text-[var(--text)] py-3 border-b border-[var(--border)]"
+                >
+                  {label}
+                </motion.a>
+              ))}
+            </nav>
 
-      <style>{`
-        .nav-gooey-wrapper {
-          position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          z-index: 500;
-          height: 100px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          pointer-events: none;
-          width: 100%;
-          overflow: visible;
-          background: transparent;
-          transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+            <motion.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.18, duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col gap-3"
+            >
+              <a
+                href={resolveHref('contacto')}
+                onClick={() => setMobileOpen(false)}
+                className="btn-primary justify-center text-center text-[0.95rem] py-[14px]"
+              >
+                Siembra tu proyecto →
+              </a>
+              {!user && (
+                <button
+                  type="button"
+                  onClick={() => { setMobileOpen(false); setIsAuthModalOpen(true) }}
+                  className="btn-secondary justify-center text-[0.95rem] py-[14px]"
+                >
+                  Entrar
+                </button>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-        .nav-gooey-wrapper.is-hidden { transform: translateY(-110%); }
-        .nav-gooey-wrapper.is-visible { transform: translateY(0); }
-
-        .nav-gooey-container {
-          display: flex;
-          align-items: center;
-          gap: 2rem;
-          background: var(--bg-surface);
-          padding: 0.5rem 1.5rem;
-          border-radius: 100vw;
-          border: 1px solid var(--border);
-          backdrop-filter: blur(12px);
-          -webkit-backdrop-filter: blur(12px);
-          pointer-events: auto;
-          margin-top: 1rem;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-          max-width: 95%;
-          box-sizing: border-box;
-          flex-shrink: 1;
-        }
-
-        .nav-center-menu {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          z-index: 5;
-        }
-
-        .nav-servicios-label {
-          display: inline-flex;
-          align-items: center;
-          gap: 4px;
-        }
-
-        .nav-servicios-anchor,
-        .nav-user-menu-anchor {
-          position: absolute;
-          top: 100%;
-          left: 50%;
-          width: 0;
-          height: 0;
-          pointer-events: none;
-        }
-
-        .nav-dropdown-floating {
-          position: absolute;
-          top: 16px;
-          background: #0d0d0d;
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          border-radius: 20px;
-          padding: 8px;
-          min-width: 240px;
-          width: max-content;
-          display: flex;
-          flex-direction: column;
-          gap: 2px;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.7);
-          backdrop-filter: blur(25px);
-          -webkit-backdrop-filter: blur(25px);
-          z-index: 10000;
-          pointer-events: auto;
-        }
-
-        .nav-servicios-floating {
-          left: 0;
-        }
-
-        .nav-user-menu-floating {
-          right: 0;
-          left: auto;
-          transform: none !important;
-          min-width: 220px;
-        }
-
-        .dropdown-item {
-          display: flex;
-          flex-direction: column;
-          align-items: flex-start;
-          gap: 2px;
-          width: 100%;
-          padding: 12px 14px;
-          border-radius: 14px;
-          background: transparent;
-          border: none;
-          color: #fff;
-          text-align: left;
-          cursor: pointer;
-          transition: background 0.2s, color 0.2s;
-        }
-
-        .dropdown-item:hover { background: rgba(255,255,255,0.06); }
-        .dropdown-item.is-active { background: rgba(255,255,255,0.04); }
-        .dropdown-item.is-active .dropdown-item-title { color: var(--accent); }
-
-        .dropdown-item-title { font-size: 0.95rem; font-weight: 600; line-height: 1.2; }
-        .dropdown-item-desc { font-size: 0.78rem; color: var(--text-secondary); line-height: 1.2; }
-
-        .nav-logo-simple {
-          font-size: 1.2rem;
-          font-weight: 700;
-          letter-spacing: -0.03em;
-          color: var(--text);
-          cursor: pointer;
-          position: relative;
-          display: flex;
-          z-index: 10;
-        }
-        .nav-logo-simple span { color: var(--accent); }
-
-        .nav-login-wrapper {
-          position: relative;
-          display: flex;
-          align-items: center;
-          flex-shrink: 0;
-          z-index: 10;
-        }
-
-        .nav-login-trigger {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          gap: 6px;
-          height: 38px;
-          border-radius: 100vw;
-          cursor: pointer;
-          transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
-          font-family: inherit;
-        }
-
-        .nav-login-trigger.is-guest {
-          padding: 0 14px 0 12px;
-          background: rgba(255,255,255,0.05);
-          border: 1px solid rgba(255,255,255,0.12);
-          color: #fff;
-          font-size: 0.82rem;
-          font-weight: 600;
-          letter-spacing: -0.01em;
-        }
-
-        .nav-login-trigger.is-guest:hover {
-          background: #fff;
-          color: #000;
-          border-color: #fff;
-        }
-
-        .nav-login-trigger.is-logged {
-          width: 38px;
-          height: 38px;
-          padding: 0;
-          background: var(--accent);
-          border: 1px solid var(--accent);
-          color: #000;
-        }
-
-        .nav-login-trigger.is-logged:hover {
-          transform: scale(1.05);
-          box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
-        }
-
-        .nav-avatar {
-          font-size: 0.9rem;
-          font-weight: 700;
-          letter-spacing: 0;
-          line-height: 1;
-          color: #000;
-          text-transform: uppercase;
-        }
-
-        .nav-login-label {
-          line-height: 1;
-        }
-
-        .user-menu-header { padding: 4px 8px 12px; }
-        .user-email { font-size: 0.85rem; color: var(--text-secondary); display: block; white-space: nowrap; }
-        .user-menu-divider { height: 1px; background: rgba(255,255,255,0.08); margin: 4px 0 8px; }
-
-        .user-menu-item {
-          width: 100%;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px 14px;
-          border-radius: 12px;
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: #fff;
-          transition: all 0.2s;
-          text-align: left;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-
-        .user-menu-item:hover { background: rgba(255,255,255,0.05); color: var(--accent); }
-        .user-menu-item.logout:hover { color: #f87171; background: rgba(239, 68, 68, 0.1); }
-
-        @media (max-width: 768px) {
-          .nav-gooey-wrapper { height: 80px; transform: translate3d(0,0,0); backface-visibility: hidden; }
-          .nav-gooey-container { gap: 0.5rem; padding: 0.4rem 0.8rem; width: auto; max-width: 95%; margin-top: 0.5rem; justify-content: space-between; }
-          .desktop-only { display: none !important; }
-          .nav-center-menu { transform: scale(0.9); flex-shrink: 1; min-width: 0; }
-          .nav-login-trigger { height: 34px; }
-          .nav-login-trigger.is-logged { width: 34px; }
-          .nav-login-trigger.is-guest { padding: 0 12px 0 10px; font-size: 0.78rem; }
-          .nav-login-label { display: inline; }
-          .nav-dropdown-floating { background: #0a0a0a !important; min-width: 200px; border-radius: 18px; padding: 8px !important; }
-        }
-
-        @media (max-width: 480px) {
-          .nav-gooey-container { gap: 0.3rem; padding: 0.3rem 0.5rem; }
-          .nav-center-menu { transform: scale(0.8); }
-          .nav-login-trigger { height: 32px; }
-          .nav-login-trigger.is-logged { width: 32px; }
-          .nav-login-trigger.is-guest { padding: 0 10px; }
-          .nav-login-label { display: none; }
-        }
-      `}</style>
+      <AuthModal    isOpen={isAuthModalOpen} onClose={() => setIsAuthModalOpen(false)} />
+      <AccountModal isOpen={isAccountOpen}   onClose={() => setIsAccountOpen(false)}   />
     </>
   )
 }

@@ -1,170 +1,156 @@
 import { motion } from 'motion/react'
-import { useState, useEffect } from 'react'
-import TiltCard from '@/components/TiltCard'
-import BorderGlow from '@/components/BorderGlow/BorderGlow'
-import BlurText from '../animations/BlurText'
 
-const ease = [0.16, 1, 0.3, 1] as const
+const ease = [0.22, 1, 0.36, 1] as const
+const viewport = { once: true, amount: 0.4 }
 
 const pasos = [
-  {
-    num: '01',
-    title: 'Confirmas',
-    desc: 'Eliges tu plan y nos escribes por WhatsApp o el formulario de contacto. Te respondemos el mismo día.',
-    glowColor: '213 94 68',
-    colors: ['#60a5fa', '#3b82f6', '#93c5fd'],
-    startAngle: 135,
-    sweepDirection: -1 as const,
-  },
-  {
-    num: '02',
-    title: 'Kickoff',
-    desc: 'Una sesión de 30 minutos. Nos compartes tu logo, colores, servicios y datos de tu clínica. Eso es todo lo que necesitamos.',
-    glowColor: '142 71 65',
-    colors: ['#4ade80', '#22c55e', '#86efac'],
-    startAngle: 225,
-  },
-  {
-    num: '03',
-    title: 'Construimos',
-    desc: 'En 2 a 4 semanas tu web, CRM y automatizaciones quedan listos y probados. Tú solo esperas.',
-    glowColor: '38 92 50',
-    colors: ['#f59e0b', '#d97706', '#fcd34d'],
-    startAngle: 45,
-  },
-  {
-    num: '04',
-    title: 'Go live',
-    desc: 'Lanzamos juntos. Las primeras 2 semanas tienes soporte prioritario por si surge cualquier ajuste.',
-    glowColor: '252 87 77',
-    colors: ['#a78bfa', '#8b5cf6', '#c4b5fd'],
-    startAngle: 315,
-    sweepDirection: -1 as const,
-  },
+  { num: '01', title: 'Confirmas', desc: 'Eliges tu plan y nos contactas. Te respondemos el mismo día para iniciar.' },
+  { num: '02', title: 'Kickoff', desc: 'Una llamada corta de 30 minutos. Nos compartes tu logo, colores y lista de servicios.' },
+  { num: '03', title: 'Construimos', desc: 'En 2 a 4 semanas tu CRM y automatizaciones quedan listas y probadas. Tú solo esperas.' },
+  { num: '04', title: 'Go live', desc: 'Lanzamos juntos. Y no desaparecemos, cuentas con nuestro soporte continuo.' },
 ]
 
 export default function RavynsetProceso() {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 600)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 600)
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
   return (
-    <section id="proceso" className="section ravynset-proceso overflow-hidden">
-      <div className="container">
-        <div className="mb-20 text-left">
-          <BlurText
-            text="Proceso"
-            className="section-label"
-            delay={50}
-            animateBy="letters"
-            direction="top"
-          />
-        </div>
+    <section id="proceso" className="rproc">
+      <div className="container rproc-inner">
+        <motion.span
+          className="rproc-label"
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.4, ease }}
+        >
+          Cómo empezamos
+        </motion.span>
+        <motion.h2
+          className="rproc-heading"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.6, ease, delay: 0.06 }}
+        >
+          Del primer mensaje<br />al sistema en vivo.
+        </motion.h2>
 
-        <div className="proceso-grid-fixed">
+        <div className="rproc-timeline">
+          <motion.span
+            className="rproc-stem"
+            aria-hidden="true"
+            initial={{ scaleY: 0 }}
+            whileInView={{ scaleY: 1 }}
+            viewport={{ once: true, amount: 0.2 }}
+            transition={{ duration: 0.8, ease: [0, 0, 0.2, 1], delay: 0.1 }}
+          />
           {pasos.map((p, i) => (
             <motion.div
               key={p.num}
-              initial={{ opacity: 0, y: 16 }}
+              className="rproc-node"
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, ease, delay: i * 0.08 }}
-              className="proceso-card-wrapper-fixed"
+              viewport={{ once: true, amount: 0.4 }}
+              transition={{ duration: 0.5, ease, delay: 0.35 + i * 0.12 }}
             >
-              <TiltCard amplitude={10} scaleOnHover={1.04} style={{ height: '100%' }} disabled={isMobile}>
-                  <BorderGlow
-                    glowColor={p.glowColor}
-                    colors={p.colors}
-                    backgroundColor="var(--bg-surface)"
-                    borderRadius={24}
-                    glowRadius={isMobile ? 30 : 70}
-                    edgeSensitivity={5}
-                    glowIntensity={isMobile ? 1.2 : 3}
-                    coneSpread={30}
-                    autoLoop={true}
-                    loopDelay={isMobile ? 2000 : 1000}
-                    initialDelay={i * 800}
-                    startAngle={p.startAngle}
-                    sweepDirection={p.sweepDirection ?? 1}
-                  >
-                  <div className="proceso-card-content-minimal">
-                    <span className="proceso-card-num-huge">{p.num}</span>
-                    <h3 className="proceso-card-title-new">{p.title}</h3>
-                    <p className="proceso-card-desc-new">{p.desc}</p>
-                  </div>
-                </BorderGlow>
-              </TiltCard>
+              <div className="rproc-rail">
+                <span className="rproc-marker" />
+                <span className="rproc-num">{p.num}</span>
+              </div>
+              <div className="rproc-content">
+                <h3 className="rproc-name">{p.title}</h3>
+                <p className="rproc-desc">{p.desc}</p>
+              </div>
             </motion.div>
           ))}
         </div>
       </div>
+
       <style>{`
-        .ravynset-proceso {
-          padding: 120px 0 160px;
-          background: transparent;
+        .rproc { padding: clamp(80px, 12vh, 130px) 0; background: var(--color-cream); }
+        .rproc-inner { max-width: 680px; }
+        .rproc-label {
+          display: block;
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 24px;
         }
-
-        .proceso-grid-fixed {
+        .rproc-heading {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(32px, 4.2vw, 52px);
+          line-height: 1.04;
+          letter-spacing: -0.03em;
+          color: var(--color-pine);
+          margin-bottom: 64px;
+        }
+        .rproc-timeline { position: relative; padding-left: 60px; }
+        .rproc-stem {
+          position: absolute;
+          left: 75px;
+          top: 10px;
+          bottom: 10px;
+          width: 2px;
+          background: var(--color-pine);
+          transform-origin: top center;
+          z-index: 1;
+        }
+        .rproc-node {
+          position: relative;
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
-          gap: 24px;
-          width: 100%;
+          grid-template-columns: 32px 1fr;
+          gap: 28px;
+          padding-bottom: 48px;
         }
-
-        .proceso-card-content-minimal {
-          padding: 40px 32px;
+        .rproc-node:last-child { padding-bottom: 0; }
+        .rproc-rail {
           display: flex;
           flex-direction: column;
-          gap: 20px;
-          height: 100%;
-          min-height: 280px; /* Reducido de 380px para evitar espacio muerto */
+          align-items: center;
           position: relative;
+          z-index: 2;
         }
-
-        .proceso-card-num-huge {
-          font-family: var(--font-sans);
-          font-size: 3.5rem;
-          font-weight: 900;
-          line-height: 1;
-          color: var(--text);
-          opacity: 0.05;
+        .rproc-marker {
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background: var(--color-cream);
+          border: 2px solid var(--color-pine);
+          margin-top: 4px;
+        }
+        .rproc-num {
           position: absolute;
-          top: 20px;
-          right: 20px;
-        }
-
-        .proceso-card-title-new {
-          font-size: 1.5rem;
+          right: 100%;
+          margin-right: 16px;
+          top: 0;
+          font-family: var(--font-mono);
+          font-size: 1.4rem;
           font-weight: 700;
-          color: var(--text);
+          color: var(--color-radish);
+          line-height: 1;
+        }
+        .rproc-content { padding-top: 1px; max-width: 480px; }
+        .rproc-name {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(22px, 2.6vw, 28px);
           letter-spacing: -0.02em;
+          color: var(--color-pine);
+          line-height: 1.1;
+          margin-bottom: 8px;
         }
-
-        .proceso-card-desc-new {
-          font-size: 1rem;
-          line-height: 1.6;
+        .rproc-desc {
+          font-family: var(--font-sans);
+          font-size: 0.92rem;
           color: var(--text-secondary);
+          line-height: 1.65;
         }
-
-        @media (max-width: 1100px) {
-          .proceso-grid-fixed {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .proceso-grid-fixed {
-            grid-template-columns: 1fr;
-            gap: 24px;
-          }
-          .proceso-card-content-minimal {
-            min-height: auto;
-            padding: 32px 24px;
-          }
+        @media (max-width: 600px) {
+          .rproc-timeline { padding-left: 48px; }
+          .rproc-stem { left: 63px; }
+          .rproc-heading { margin-bottom: 48px; }
+          .rproc-node { gap: 20px; padding-bottom: 40px; }
         }
       `}</style>
     </section>

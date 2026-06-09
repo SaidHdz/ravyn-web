@@ -1,107 +1,160 @@
-import MagicBento from '../animations/MagicBento'
-import { Globe, Calendar, Users, Star } from 'lucide-react'
-import BlurText from '../animations/BlurText'
+import { motion } from 'motion/react'
 
-const funcionalidades = [
+const ease = [0.22, 1, 0.36, 1] as const
+const viewport = { once: true, amount: 0.3 }
+
+const funciones = [
   {
-    icon: <Globe className="w-6 h-6 text-blue-400" />,
-    title: "Web de autoridad",
-    description: "Diseño personalizado con tu identidad, SEO local para aparecer en Google y formulario de agendamiento integrado. Tu primera impresión, profesional desde el día uno.",
-    label: "Identidad"
+    num: '01',
+    title: 'Web y Agenda 24/7',
+    desc: 'Diseño con tu identidad. Tus pacientes agendan en línea y se sincroniza directo con tu Google Calendar.',
   },
   {
-    icon: <Calendar className="w-6 h-6 text-green-400" />,
-    title: "Agenda inteligente",
-    description: "Tus pacientes agendan 24/7 desde tu web. Confirmaciones y recordatorios por WhatsApp automáticos. Sincronización directa con tu Google Calendar — tu agenda de siempre, solo mejorada.",
-    label: "Automatización"
+    num: '02',
+    title: 'Recordatorios automáticos',
+    desc: 'El sistema envía confirmaciones y recordatorios por WhatsApp para que tus pacientes no olviden su cita.',
   },
   {
-    icon: <Users className="w-6 h-6 text-purple-400" />,
-    title: "CRM completo",
-    description: "Panel de control con todas tus citas, historial de pacientes, creación y modificación de citas, recordatorios manuales cuando los necesites y gestión de usuarios para tu equipo.",
-    label: "Gestión"
+    num: '03',
+    title: 'Expediente centralizado',
+    desc: 'Panel de control con todas tus citas, historial de pacientes y datos de contacto en un solo lugar.',
   },
   {
-    icon: <Star className="w-6 h-6 text-amber-400" />,
-    title: "Motor de reputación",
-    description: "Mensaje automático de agradecimiento al paciente tras su visita, con invitación directa a dejar su reseña en Google Maps. Más reseñas reales, más pacientes nuevos.",
-    label: "Reputación"
-  }
+    num: '04',
+    title: 'Motor de reputación',
+    desc: 'Mensajes automáticos de agradecimiento post-visita con invitación a dejar reseña en Google Maps.',
+  },
 ]
 
 export default function RavynsetIncluye() {
   return (
-    <section className="section ravynset-incluye">
-      <div className="container">
-        <div className="max-w-4xl mb-24 text-left">
-          <BlurText
-            text="Conoce RavynSet"
-            className="section-label"
-            delay={50}
-            animateBy="letters"
-            direction="top"
-          />
+    <section id="incluye" className="rinc">
+      <div className="container rinc-grid">
+
+        <div className="rinc-left">
+          <motion.span
+            className="rinc-label"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.4, ease }}
+          >
+            Qué incluye
+          </motion.span>
+          <motion.h2
+            className="rinc-heading"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.6, ease, delay: 0.06 }}
+          >
+            Cuatro herramientas.<br />Una sola plataforma.
+          </motion.h2>
+          <motion.p
+            className="rinc-intro"
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={viewport}
+            transition={{ duration: 0.55, ease, delay: 0.14 }}
+          >
+            Ravynset unifica tu agenda, la información de tus pacientes y tus recordatorios en un solo flujo. Sin integraciones extrañas.
+          </motion.p>
         </div>
 
-        <div className="magic-bento-wrapper ravynset-bento">
-          <MagicBento 
-            items={funcionalidades}
-            enableSpotlight={true}
-            enableBorderGlow={true}
-            glowColor="96, 165, 250"
-          />
+        <div className="rinc-list">
+          {funciones.map((f, i) => (
+            <motion.div
+              key={f.num}
+              className="rinc-row"
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={viewport}
+              transition={{ duration: 0.5, ease, delay: i * 0.08 }}
+            >
+              <div className="rinc-row-text">
+                <h3 className="rinc-row-title">{f.title}</h3>
+                <p className="rinc-row-desc">{f.desc}</p>
+              </div>
+              <span className="rinc-row-num">{f.num}</span>
+            </motion.div>
+          ))}
         </div>
+
       </div>
 
       <style>{`
-        .ravynset-incluye {
-          padding: 120px 0;
-          background: transparent;
+        .rinc { padding: clamp(80px, 12vh, 130px) 0; background: var(--color-cream); }
+        .rinc-grid {
+          display: grid;
+          grid-template-columns: 40% 1fr;
+          gap: clamp(40px, 6vw, 88px);
+          align-items: start;
         }
-        
-        .magic-bento-wrapper {
-          position: relative;
-          z-index: 1;
+        .rinc-left { position: sticky; top: 100px; }
+        .rinc-label {
+          display: block;
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 24px;
         }
-
-        /* Layout personalizado: 3 arriba, 1 largo abajo */
-        @media (min-width: 1024px) {
-          .ravynset-bento .card-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
-
-          /* Solo para las 3 de arriba */
-          .ravynset-bento .magic-bento-card:nth-child(-n+3) {
-            aspect-ratio: 4/5 !important;
-            min-height: 320px !important;
-          }
-
-          .ravynset-bento .magic-bento-card:nth-child(1) {
-            grid-column: 1 !important;
-            grid-row: 1 !important;
-          }
-          .ravynset-bento .magic-bento-card:nth-child(2) {
-            grid-column: 2 !important;
-            grid-row: 1 !important;
-          }
-          .ravynset-bento .magic-bento-card:nth-child(3) {
-            grid-column: 3 !important;
-            grid-row: 1 !important;
-          }
-
-          /* Tarjeta larga de abajo */
-          .ravynset-bento .magic-bento-card:nth-child(4) {
-            grid-column: 1 / span 3 !important;
-            grid-row: 2 !important;
-            aspect-ratio: auto !important;
-            min-height: 180px !important;
-          }
+        .rinc-heading {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(32px, 4.2vw, 52px);
+          line-height: 1.04;
+          letter-spacing: -0.03em;
+          color: var(--color-pine);
         }
-
-        @media (max-width: 768px) {
-          .ravynset-incluye {
-            padding: 80px 0;
-          }
+        .rinc-intro {
+          font-family: var(--font-sans);
+          font-size: clamp(15px, 1.3vw, 16px);
+          color: var(--text-secondary);
+          line-height: 1.7;
+          max-width: 320px;
+          margin-top: 24px;
+        }
+        .rinc-list { display: flex; flex-direction: column; }
+        .rinc-row {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 24px;
+          padding: 28px 0;
+          border-top: 1px solid rgba(16, 52, 42, 0.12);
+        }
+        .rinc-row:last-of-type { border-bottom: 1px solid rgba(16, 52, 42, 0.12); }
+        .rinc-row-title {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(20px, 2.4vw, 26px);
+          letter-spacing: -0.02em;
+          color: var(--color-pine);
+          line-height: 1.15;
+        }
+        .rinc-row-desc {
+          font-family: var(--font-sans);
+          font-size: 0.92rem;
+          color: var(--text-secondary);
+          line-height: 1.6;
+          max-width: 360px;
+          margin-top: 8px;
+        }
+        .rinc-row-num {
+          font-family: var(--font-mono);
+          font-size: 0.74rem;
+          letter-spacing: 0.08em;
+          color: var(--text-muted);
+          flex-shrink: 0;
+          padding-top: 6px;
+        }
+        @media (max-width: 860px) {
+          .rinc-grid { grid-template-columns: 1fr; gap: 44px; }
+          .rinc-left { position: static; }
+          .rinc-intro { max-width: none; }
+          .rinc-row-desc { max-width: none; }
         }
       `}</style>
     </section>

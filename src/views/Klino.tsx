@@ -1,40 +1,31 @@
 import { useEffect } from 'react'
-import { useTheme } from '@/hooks/useTheme'
 import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import KlinoHero from '@/components/sections/KlinoHero'
 import KlinoProblema from '@/components/sections/KlinoProblema'
 import KlinoIncluye from '@/components/sections/KlinoIncluye'
-import KlinoPlanes from '@/components/sections/KlinoPlanes'
 import KlinoProceso from '@/components/sections/KlinoProceso'
+import KlinoPlanes from '@/components/sections/KlinoPlanes'
 import KlinoFAQ from '@/components/sections/KlinoFAQ'
 
 export default function KlinoPage() {
-  const { theme, toggle } = useTheme()
-
   useEffect(() => {
-    document.title = 'Klino | Ravyn Studio'
+    document.title = 'Klino — Nota clínica por voz · Ravyn Labs'
     window.scrollTo(0, 0)
   }, [])
 
   return (
     <>
-      <Navbar theme={theme} onToggle={toggle} />
-      <main style={{ overflowX: 'hidden' }}>
+      <Navbar />
+      <main className="pt-[64px]" style={{ overflowX: 'hidden' }}>
         <KlinoHero />
         <KlinoProblema />
         <KlinoIncluye />
-        <KlinoPlanes />
         <KlinoProceso />
+        <KlinoPlanes />
         <KlinoFAQ />
       </main>
-      <footer className="footer">
-        <div className="container">
-          <div className="footer-inner">
-            <span className="footer-logo">Ravyn Studio<span>.</span></span>
-            <span className="footer-copy">© {new Date().getFullYear()} Todos los derechos reservados</span>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </>
   )
 }

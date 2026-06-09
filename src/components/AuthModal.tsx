@@ -427,13 +427,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
             .auth-modal-container {
               position: relative;
-              background: #0a0a0a;
-              border: 1px solid rgba(255,255,255,0.1);
+              background: var(--color-cream);
+              border: 1px solid var(--border);
               width: 100%;
               max-width: 440px;
               max-height: 90vh;
               border-radius: 28px;
-              box-shadow: 0 40px 100px -10px rgba(0, 0, 0, 0.8);
+              box-shadow: 0 40px 100px -10px rgba(16, 52, 42, 0.15);
               z-index: 1;
               pointer-events: auto;
               display: flex;
@@ -445,7 +445,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             .auth-modal-scroll-area {
               flex: 1;
               overflow-y: auto;
-              padding: 40px;
+              padding: 40px 32px;
               -webkit-overflow-scrolling: touch;
             }
 
@@ -456,13 +456,13 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               color: var(--text-muted);
               transition: color 0.2s, background 0.2s;
               z-index: 10;
-              background: rgba(255,255,255,0.05);
-              border: none;
+              background: var(--bg-surface);
+              border: 1px solid var(--border);
               cursor: pointer;
               padding: 8px;
               border-radius: 50%;
             }
-            .auth-modal-close:hover:not(:disabled) { color: #fff; background: rgba(255,255,255,0.1); }
+            .auth-modal-close:hover:not(:disabled) { color: var(--color-pine); background: var(--bg-hover); }
             .auth-modal-close:disabled { opacity: 0.4; cursor: not-allowed; }
 
             .auth-modal-content { display: flex; flex-direction: column; }
@@ -479,13 +479,14 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               padding: 0;
               margin-bottom: 12px;
             }
-            .auth-back-btn:hover:not(:disabled) { color: #fff; }
+            .auth-back-btn:hover:not(:disabled) { color: var(--color-pine); }
             .auth-back-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
             .auth-header-title {
+              font-family: var(--font-display);
               font-size: 1.75rem;
-              font-weight: 700;
-              color: #fff;
+              font-weight: 600;
+              color: var(--color-pine);
               margin-bottom: 6px;
               letter-spacing: -0.02em;
             }
@@ -541,26 +542,29 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
               padding: 4px;
               transition: color 0.2s;
             }
-            .password-toggle:hover { color: #fff; }
+            .password-toggle:hover { color: var(--color-pine); }
 
             .input-wrapper input {
               width: 100%;
-              background: #141414;
-              border: 1px solid rgba(255,255,255,0.08);
+              background: #fff;
+              border: 1px solid rgba(16, 52, 42, 0.15);
               border-radius: 12px;
               padding: 12px 44px;
-              color: #fff;
+              color: var(--text);
+              font-family: var(--font-sans);
               font-size: 0.95rem;
               transition: border-color 0.2s;
             }
-            .input-wrapper input:focus { outline: none; border-color: var(--accent); }
+            .input-wrapper input::placeholder { color: var(--text-muted); opacity: 0.6; }
+            .input-wrapper input:focus { outline: none; border-color: var(--color-pine); }
             .input-wrapper input:disabled { cursor: not-allowed; }
 
             .auth-row-right { display: flex; justify-content: flex-end; margin-top: -4px; }
             .auth-link-btn {
               background: none;
               border: none;
-              color: var(--accent);
+              color: var(--color-pine);
+              font-family: var(--font-sans);
               font-size: 0.78rem;
               font-weight: 600;
               cursor: pointer;
@@ -569,27 +573,28 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             .auth-link-btn:hover { text-decoration: underline; }
 
             .auth-submit-btn {
-              background: #fff;
-              color: #000;
+              background: var(--color-radish);
+              color: var(--color-cream);
               padding: 14px;
-              border-radius: 12px;
-              font-weight: 700;
+              border-radius: 100vw;
+              font-family: var(--font-sans);
+              font-weight: 600;
               font-size: 0.95rem;
               display: flex;
               align-items: center;
               justify-content: center;
               gap: 10px;
               margin-top: 8px;
-              border: none;
+              border: 1px solid var(--color-radish);
               cursor: pointer;
               min-height: 50px;
               position: relative;
               overflow: hidden;
               transition: opacity 0.2s, transform 0.1s;
             }
-            .auth-submit-btn:hover:not(:disabled) { opacity: 0.92; }
+            .auth-submit-btn:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
             .auth-submit-btn:active:not(:disabled) { transform: scale(0.99); }
-            .auth-submit-btn:disabled { cursor: progress; opacity: 0.85; }
+            .auth-submit-btn:disabled { cursor: progress; opacity: 0.85; transform: none; }
             .auth-submit-inner { display: inline-flex; align-items: center; gap: 10px; }
 
             .auth-modal-footer { margin-top: 20px; text-align: center; }
@@ -597,14 +602,15 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             .auth-view-toggle-btn {
               background: none;
               border: none;
-              color: #fff;
+              color: var(--color-pine);
+              font-family: var(--font-sans);
               font-weight: 500;
               font-size: 0.85rem;
               cursor: pointer;
               padding: 4px 8px;
-              transition: color 0.2s;
+              transition: opacity 0.2s;
             }
-            .auth-view-toggle-btn:hover:not(:disabled) { color: var(--accent); }
+            .auth-view-toggle-btn:hover:not(:disabled) { opacity: 0.7; }
             .auth-view-toggle-btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
             @media (max-width: 768px) {

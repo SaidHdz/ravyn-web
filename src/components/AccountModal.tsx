@@ -63,11 +63,15 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
         .from('users')
         .select('*, clinics(*)')
         .eq('id', user.id)
-        .single()
+        .maybeSingle()
 
-      if (error) throw error
-      setProfile(data)
-      setClinic(data.clinics)
+      // PGRST116 (0 filas) NO es fatal: el usuario existe en auth.users pero
+      // aún no se ha creado su fila en public.users (falta el trigger en DB).
+      // Caemos a user_metadata para que la pantalla siga funcionando.
+      if (error && error.code !== 'PGRST116') throw error
+
+      setProfile(data ?? null)
+      setClinic(data?.clinics ?? null)
     } catch (err) {
       console.error('Error fetching account data:', err)
       setFetchError(translateAuthError(err))
@@ -532,47 +536,49 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
           <style>{`
             .account-modal-overlay { position: fixed; inset: 0; z-index: 10000; display: flex; align-items: center; justify-content: center; padding: 2vh; pointer-events: auto; overflow: hidden; }
             .account-modal-backdrop { position: absolute; inset: 0; background: rgba(0, 0, 0, 0.92); backdrop-filter: blur(25px); z-index: 0; }
-            .account-modal-container { position: relative; width: 95vw; height: 90vh; background: #080808; border: 1px solid var(--border); border-radius: 32px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 50px 150px -20px rgba(0,0,0,0.8); z-index: 1; pointer-events: auto; max-width: 1600px; }
-            .account-modal-header { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: rgba(255,255,255,0.02); flex-shrink: 0; }
+            .account-modal-container { position: relative; width: 95vw; height: 90vh; background: var(--color-cream); border: 1px solid var(--border); border-radius: 32px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 40px 100px -10px rgba(16, 52, 42, 0.15); z-index: 1; pointer-events: auto; max-width: 1600px; }
+            .account-modal-header { padding: 24px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; background: transparent; flex-shrink: 0; }
             .btn-back { color: var(--text-muted); transition: color 0.2s; background: none; border: none; cursor: pointer; padding: 8px; }
-            .btn-back:hover { color: var(--text); }
-            .account-modal-title { font-size: 1.5rem; font-weight: 700; color: var(--text); }
+            .btn-back:hover { color: var(--color-pine); }
+            .account-modal-title { font-size: 1.5rem; font-weight: 700; color: var(--color-pine); }
             .account-modal-close { color: var(--text-muted); transition: color 0.2s; cursor: pointer; background: none; border: none; padding: 8px; }
-            .account-modal-close:hover { color: var(--text); }
-            .account-modal-content { flex: 1; overflow-y: auto; padding: 40px; box-sizing: border-box; }
+            .account-modal-close:hover { color: var(--color-pine); }
+            .account-modal-content { flex: 1; overflow-y: auto; padding: 40px 32px; box-sizing: border-box; }
             .account-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; max-width: 1400px; margin: 0 auto; width: 100%; box-sizing: border-box; }
-            .account-card { background: #111; border: 1px solid var(--border); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; transition: border-color 0.3s; min-width: 0; width: 100%; box-sizing: border-box; }
-            .account-card:hover { border-color: rgba(255,255,255,0.1); }
+            .account-card { background: #fff; border: 1px solid rgba(16,52,42,0.15); border-radius: 20px; padding: 32px; display: flex; flex-direction: column; transition: border-color 0.3s; min-width: 0; width: 100%; box-sizing: border-box; }
+            .account-card:hover { border-color: var(--color-pine); }
             .card-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
             .card-header h3 { font-size: 1rem; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.05em; }
             .data-group { margin-bottom: 20px; }
             .data-group label { font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 4px; }
             .data-group p { font-size: 1rem; font-weight: 500; color: var(--text); }
             .btn-edit { font-size: 0.85rem; font-weight: 600; color: var(--accent); background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0; }
-            .plan-name { font-size: 1.4rem; font-weight: 800; color: var(--text); }
-            .status-badge.success { background: rgba(34, 197, 94, 0.1); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 0.65rem; padding: 4px 10px; border-radius: 100vw; font-weight: 800; }
-            .price-info .amount { display: block; font-size: 1.25rem; font-weight: 700; color: #fff; line-height: 1; }
+            .plan-name { font-size: 1.4rem; font-weight: 800; color: var(--color-pine); }
+            .status-badge.success { background: rgba(34, 197, 94, 0.1); color: #16a34a; border: 1px solid rgba(34, 197, 94, 0.2); font-size: 0.65rem; padding: 4px 10px; border-radius: 100vw; font-weight: 800; }
+            .price-info .amount { display: block; font-size: 1.25rem; font-weight: 700; color: var(--color-pine); line-height: 1; }
             .price-info .period { font-size: 0.85rem; color: var(--text-muted); margin-top: 4px; display: block; }
             .detail-item { display: flex; justify-content: space-between; align-items: center; font-size: 0.9rem; }
             .detail-item .label { color: var(--text-muted); }
             .detail-item .value { color: var(--text); font-weight: 500; }
             .actions-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-            .btn-action-white-text { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: rgba(255, 255, 255, 0.05); color: #fff; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
-            .btn-action-white-text:hover { background: rgba(255, 255, 255, 0.1); }
-            .btn-cancel { font-size: 0.85rem; font-weight: 600; color: #ef4444; background: rgba(239, 68, 68, 0.05); padding: 10px 20px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.1); cursor: pointer; }
+            .btn-action-white-text { width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 12px; background: var(--color-radish); color: var(--color-cream); border: 1px solid var(--color-radish); border-radius: 100vw; font-size: 0.9rem; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+            .btn-action-white-text:hover { opacity: 0.92; transform: translateY(-1px); }
+            .btn-cancel { font-size: 0.85rem; font-weight: 600; color: var(--text); background: transparent; padding: 10px 20px; border-radius: 100vw; border: 1px solid var(--border-strong); cursor: pointer; transition: background 0.2s; }
+            .btn-cancel:hover { background: var(--bg-hover); }
             .system-link { display: flex; align-items: center; gap: 8px; color: var(--accent); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
             .status-item { display: flex; justify-content: space-between; font-size: 0.9rem; color: var(--text-secondary); }
-            .status-dot.active::before { content: ''; width: 6px; height: 6px; background: #4ade80; border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 8px #4ade80; }
-            .btn-crm { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; color: var(--text); font-weight: 600; cursor: pointer; background: rgba(255,255,255,0.02); font-size: 0.9rem; }
+            .status-dot.active::before { content: ''; width: 6px; height: 6px; background: var(--color-sprout); border-radius: 50%; display: inline-block; margin-right: 8px; box-shadow: 0 0 4px var(--color-sprout); }
+            .btn-crm { width: 100%; padding: 12px; border: 1px solid var(--border-strong); border-radius: 100vw; color: var(--color-pine); font-weight: 600; cursor: pointer; background: transparent; font-size: 0.9rem; transition: background 0.2s; }
+            .btn-crm:hover { background: var(--bg-hover); }
             
             .history-table-wrapper { width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
             .history-table { width: 100%; border-collapse: collapse; min-width: 500px; }
-            .history-table th { text-align: left; font-size: 0.75rem; color: var(--text-muted); padding: 12px; border-bottom: 1px solid var(--border); }
-            .history-table td { padding: 16px 12px; font-size: 0.9rem; border-bottom: 1px solid var(--border); color: var(--text-secondary); }
+            .history-table th { text-align: left; font-size: 0.75rem; color: var(--text-muted); padding: 12px; border-bottom: 1px solid rgba(16,52,42,0.12); }
+            .history-table td { padding: 16px 12px; font-size: 0.9rem; border-bottom: 1px solid rgba(16,52,42,0.12); color: var(--text-secondary); }
             
-            .status-text { color: #4ade80; font-weight: 600; }
-            .btn-download { color: #fff; background: none; border: none; cursor: pointer; padding: 8px; opacity: 0.7; transition: opacity 0.2s; }
-            .btn-download:hover { opacity: 1; }
+            .status-text { color: var(--color-sprout); font-weight: 600; }
+            .btn-download { color: var(--text-muted); background: none; border: none; cursor: pointer; padding: 8px; opacity: 0.7; transition: opacity 0.2s, color 0.2s; }
+            .btn-download:hover { opacity: 1; color: var(--color-pine); }
 
             .linked-card-premium { background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0.02) 100%); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 24px; box-shadow: inset 0 1px 1px rgba(255,255,255,0.05), 0 10px 30px rgba(0,0,0,0.5); backdrop-filter: blur(10px); }
             .linked-card-header { display: flex; justify-content: space-between; margin-bottom: 24px; }
@@ -592,15 +598,15 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
             
             .card-form { display: flex; flex-direction: column; gap: 20px; width: 100%; }
             .form-group label { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 6px; display: block; }
-            .form-group input { background: #1a1a1a; border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; color: #fff; width: 100%; box-sizing: border-box; transition: border 0.2s; }
-            .form-group input:focus { border-color: var(--accent); outline: none; }
+            .form-group input { background: #fff; border: 1px solid rgba(16,52,42,0.15); border-radius: 12px; padding: 12px 14px; color: var(--text); width: 100%; box-sizing: border-box; transition: border-color 0.2s; font-family: var(--font-sans); }
+            .form-group input:focus { border-color: var(--color-pine); outline: none; }
             .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
             
-            .btn-save-card { background: #fff; color: #000; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; display: flex; justify-content: center; align-items: center; transition: opacity 0.2s; }
-            .btn-save-card:hover:not(:disabled) { opacity: 0.9; }
+            .btn-save-card { background: var(--color-radish); color: var(--color-cream); padding: 14px; border-radius: 100vw; font-weight: 600; cursor: pointer; border: 1px solid var(--color-radish); display: flex; justify-content: center; align-items: center; transition: opacity 0.2s, transform 0.1s; }
+            .btn-save-card:hover:not(:disabled) { opacity: 0.92; transform: translateY(-1px); }
             
-            .btn-cancel-card { background: transparent; color: var(--text); padding: 14px; border-radius: 12px; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border); cursor: pointer; transition: all 0.2s; display: flex; justify-content: center; align-items: center; }
-            .btn-cancel-card:hover:not(:disabled) { background: rgba(255,255,255,0.05); }
+            .btn-cancel-card { background: transparent; color: var(--text); padding: 14px; border-radius: 100vw; font-weight: 600; font-size: 0.95rem; border: 1px solid var(--border-strong); cursor: pointer; transition: background 0.2s; display: flex; justify-content: center; align-items: center; }
+            .btn-cancel-card:hover:not(:disabled) { background: var(--bg-hover); }
 
             @media (max-width: 1100px) { .account-grid { grid-template-columns: 1fr 1fr; } .add-card-grid { grid-template-columns: 1fr; gap: 40px; } }
             @media (max-width: 768px) { 

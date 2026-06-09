@@ -1,9 +1,8 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
-import BlurText from '../animations/BlurText'
 
-const ease = [0.16, 1, 0.3, 1] as const
+const ease = [0.22, 1, 0.36, 1] as const
 
 const faqs = [
   {
@@ -28,7 +27,7 @@ const faqs = [
   },
   {
     pregunta: "¿Qué pasa si algo deja de funcionar?",
-    respuesta: "Tienes soporte directo por WhatsApp con nuestro equipo en Reynosa, Tamaulipas. Respondemos el mismo día en horario de oficina. La mensualidad cubre el mantenimiento continuo del sistema."
+    respuesta: "Tienes soporte directo por WhatsApp con nuestro equipo en México. Respondemos el mismo día en horario de oficina. La mensualidad cubre el mantenimiento continuo del sistema."
   },
   {
     pregunta: "¿Qué incluye la mensualidad exactamente?",
@@ -43,35 +42,33 @@ export default function RavynsetFAQ() {
   const leftCol = faqs.slice(0, midIndex)
   const rightCol = faqs.slice(midIndex)
 
-  const renderFaqItem = (faq: any, globalIndex: number) => (
-    <motion.div 
+  const renderItem = (faq: (typeof faqs)[0], globalIndex: number) => (
+    <motion.div
       key={globalIndex}
-      className="faq-item"
+      className="rfaq-item"
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5, ease, delay: globalIndex * 0.05 }}
     >
-      <button 
-        className={`faq-question ${activeIndex === globalIndex ? 'is-active' : ''}`}
+      <button
+        className={`rfaq-question ${activeIndex === globalIndex ? 'is-active' : ''}`}
         onClick={() => setActiveIndex(activeIndex === globalIndex ? null : globalIndex)}
       >
-        <span className="faq-question-text">{faq.pregunta}</span>
-        <ChevronDown className="faq-icon" />
+        <span className="rfaq-question-text">{faq.pregunta}</span>
+        <ChevronDown className="rfaq-icon" />
       </button>
-      
+
       <AnimatePresence initial={false}>
         {activeIndex === globalIndex && (
           <motion.div
-            className="faq-answer-wrapper"
+            className="rfaq-answer-wrapper"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.4, ease }}
           >
-            <div className="faq-answer">
-              {faq.respuesta}
-            </div>
+            <div className="rfaq-answer">{faq.respuesta}</div>
           </motion.div>
         )}
       </AnimatePresence>
@@ -79,130 +76,80 @@ export default function RavynsetFAQ() {
   )
 
   return (
-    <section className="section ravynset-faq">
+    <section className="rfaq">
       <div className="container">
-        <div className="mb-20">
-          <BlurText
-            text="Preguntas frecuentes"
-            className="section-label"
-            delay={50}
-            animateBy="letters"
-            direction="top"
-          />
-        </div>
+        <motion.span
+          className="rfaq-label"
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.4, ease }}
+        >
+          Preguntas frecuentes
+        </motion.span>
 
-        <div className="faq-grid-custom">
-          <div className="faq-column">
-            {leftCol.map((faq, i) => renderFaqItem(faq, i))}
-          </div>
-          <div className="faq-column">
-            {rightCol.map((faq, i) => renderFaqItem(faq, i + midIndex))}
-          </div>
+        <div className="rfaq-grid">
+          <div className="rfaq-col">{leftCol.map((f, i) => renderItem(f, i))}</div>
+          <div className="rfaq-col">{rightCol.map((f, i) => renderItem(f, i + midIndex))}</div>
         </div>
       </div>
 
       <style>{`
-        .ravynset-faq {
-          padding: 120px 0 160px;
-          background: transparent;
-          min-height: 800px;
+        .rfaq { padding: clamp(80px, 12vh, 130px) 0 clamp(100px, 14vh, 150px); background: var(--color-cream); }
+        .rfaq-label {
+          display: block;
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.18em;
+          text-transform: uppercase;
+          color: var(--text-muted);
+          margin-bottom: 48px;
         }
-
-        .faq-grid-custom {
+        .rfaq-grid {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 0 80px;
           align-items: start;
         }
-
-        .faq-column {
-          display: flex;
-          flex-direction: column;
-        }
-
-        .faq-item {
-          border-bottom: 1px solid var(--border);
-        }
-
-        .faq-question {
+        .rfaq-col { display: flex; flex-direction: column; }
+        .rfaq-item { border-bottom: 1px solid rgba(16, 52, 42, 0.12); }
+        .rfaq-question {
           width: 100%;
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 28px 0;
+          padding: 24px 0;
           text-align: left;
-          font-size: clamp(0.95rem, 1.2vw, 1.15rem);
+          font-family: var(--font-display);
+          font-size: clamp(1rem, 1.3vw, 1.15rem);
           font-weight: 600;
-          color: var(--text);
+          letter-spacing: -0.01em;
+          color: var(--color-pine);
           background: transparent;
           cursor: pointer;
-          transition: color 0.3s ease;
+          transition: color 0.3s;
           gap: 15px;
         }
-        
-        .faq-question-text {
-          max-width: 90%;
-        }
-
-        .faq-question:hover {
-          color: var(--accent);
-        }
-
-        .faq-question.is-active {
-          color: var(--accent);
-        }
-
-        .faq-icon {
-          width: 18px;
-          height: 18px;
+        .rfaq-question-text { max-width: 90%; }
+        .rfaq-question:hover, .rfaq-question.is-active { color: var(--color-radish); }
+        .rfaq-icon {
+          width: 17px;
+          height: 17px;
           transition: transform 0.4s var(--ease-out);
-          opacity: 0.5;
+          opacity: 0.4;
           flex-shrink: 0;
         }
-
-        .faq-question.is-active .faq-icon {
-          transform: rotate(180deg);
-          opacity: 1;
-        }
-
-        .faq-answer-wrapper {
-          overflow: hidden;
-        }
-
-        .faq-answer {
-          padding-bottom: 24px;
+        .rfaq-question.is-active .rfaq-icon { transform: rotate(180deg); opacity: 1; }
+        .rfaq-answer-wrapper { overflow: hidden; }
+        .rfaq-answer {
+          padding-bottom: 22px;
+          font-family: var(--font-sans);
           color: var(--text-secondary);
-          font-size: 0.95rem;
-          line-height: 1.6;
+          font-size: 0.92rem;
+          line-height: 1.65;
         }
-
         @media (max-width: 1024px) {
-          .faq-grid-custom {
-            grid-template-columns: 1fr;
-            gap: 0;
-          }
-          .ravynset-faq {
-            min-height: auto;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .ravynset-faq {
-            padding: 60px 0;
-          }
-          .faq-question {
-            padding: 20px 0;
-          }
-          .faq-answer {
-            font-size: 0.9rem;
-          }
-        }
-        
-        /* Ajuste extremo para dispositivos muy pequeños */
-        @media (max-width: 320px) {
-          .faq-question {
-             font-size: 0.85rem;
-          }
+          .rfaq-grid { grid-template-columns: 1fr; gap: 0; }
         }
       `}</style>
     </section>

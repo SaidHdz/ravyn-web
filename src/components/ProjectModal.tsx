@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
+import { Link } from 'react-router-dom'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
 
 interface ProjectModalProps {
@@ -14,12 +15,13 @@ interface ProjectModalProps {
     problem?: string
     solution?: string
     result?: string
+    pageHref?: string | null
   } | null
 }
 
-const ease = [0.16, 1, 0.3, 1] as const
+const ease = [0.22, 1, 0.36, 1] as const
 
-// Componente para enmarcar las capturas en un iPhone
+// Marco de iPhone para las capturas — el frame negro lee como producto real sobre cream
 function IPhoneMockup({ children, color }: { children: React.ReactNode, color: string }) {
   return (
     <div className="iphone-frame">
@@ -29,23 +31,21 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
           {children}
         </div>
       </div>
-      <div className="iphone-glow" style={{ background: `radial-gradient(circle at center, ${color}20 0%, transparent 70%)` }} />
-      
+      <div className="iphone-glow" style={{ background: `radial-gradient(circle at center, ${color}22 0%, transparent 70%)` }} />
+
       <style>{`
         .iphone-frame {
           position: relative;
           width: 280px;
           height: 580px;
-          background: #000;
+          background: var(--color-pine);
           border-radius: 44px;
           padding: 8px;
-          border: 1px solid rgba(255,255,255,0.1);
-          box-shadow: 
-            0 0 0 4px #1a1a1a,
-            0 30px 60px -10px rgba(0,0,0,0.8);
+          box-shadow:
+            0 0 0 3px rgba(16,52,42,0.9),
+            0 30px 60px -12px rgba(16,52,42,0.4);
           margin: 0 auto;
         }
-
         .iphone-inner {
           position: relative;
           width: 100%;
@@ -53,9 +53,7 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
           background: #000;
           border-radius: 36px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.05);
         }
-
         .iphone-notch {
           position: absolute;
           top: 0;
@@ -63,30 +61,24 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
           transform: translateX(-50%);
           width: 120px;
           height: 25px;
-          background: #000;
+          background: var(--color-pine);
           border-bottom-left-radius: 15px;
           border-bottom-right-radius: 15px;
           z-index: 20;
         }
-
         .iphone-screen-content {
           width: 100%;
           height: 100%;
           position: relative;
         }
-
         .iphone-glow {
           position: absolute;
           inset: -40px;
           pointer-events: none;
           z-index: -1;
         }
-
         @media (max-width: 768px) {
-          .iphone-frame {
-            width: 240px;
-            height: 500px;
-          }
+          .iphone-frame { width: 240px; height: 500px; }
         }
       `}</style>
     </div>
@@ -105,152 +97,157 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
     }
-    return () => { 
+    return () => {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
     }
   }, [isOpen])
 
+  // Cerrar con ESC
+  useEffect(() => {
+    if (!isOpen) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [isOpen, onClose])
+
   if (!project) return null
 
-  // Mejorar contraste de colores si es necesario (especialmente el morado de Klino)
-  const displayColor = project.color === '#8b5cf6' ? '#a78bfa' : project.color
+  const accent = project.color
+  const hasImages = project.images && project.images.length > 0
 
   const nextImage = () => {
-    if (project.images) {
-      setActiveImageIdx((prev) => (prev + 1) % project.images!.length)
-    }
+    if (project.images) setActiveImageIdx((p) => (p + 1) % project.images!.length)
   }
-
   const prevImage = () => {
-    if (project.images) {
-      setActiveImageIdx((prev) => (prev - 1 + project.images!.length) % project.images!.length)
-    }
+    if (project.images) setActiveImageIdx((p) => (p - 1 + project.images!.length) % project.images!.length)
   }
 
   return (
     <AnimatePresence>
       {isOpen && (
-        <div className="project-modal-overlay">
-          <motion.div 
-            className="project-modal-backdrop"
+        <div className="pm-overlay">
+          <motion.div
+            className="pm-backdrop"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
           />
-          
-          <motion.div 
-            className="project-modal-content"
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+
+          <motion.div
+            className="pm-content"
+            initial={{ opacity: 0, scale: 0.96, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 10 }}
-            transition={{ duration: 0.5, ease }}
+            exit={{ opacity: 0, scale: 0.97, y: 8 }}
+            transition={{ duration: 0.45, ease }}
           >
-            <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar modal">
-              <X size={20} />
+            <button className="pm-close" onClick={onClose} aria-label="Cerrar">
+              <X size={18} strokeWidth={2.25} />
             </button>
 
-            <div className="modal-scroll-area">
-              <div className="modal-inner">
-                <div className="modal-main-grid">
-                  <div className="modal-content-col">
-                    <div className="modal-header">
-                      <div className="modal-tag" style={{ color: displayColor }}>CASO DE ÉXITO</div>
-                      <h2 className="modal-title">{project.title}</h2>
-                    </div>
+            <div className="pm-scroll">
+              <div className="pm-inner">
+                <div className="pm-grid">
 
-                    <div className="modal-info">
-                      {project.problem ? (
-                        <div className="success-case-grid">
-                          <div className="success-item">
-                            <span className="success-label">Problema</span>
-                            <p className="success-text">{project.problem}</p>
-                          </div>
-                          <div className="success-item">
-                            <span className="success-label">Solución</span>
-                            <p className="success-text">{project.solution}</p>
-                          </div>
-                          <div className="success-item highlight">
-                            <span className="success-label" style={{ color: displayColor }}>Resultado</span>
-                            <p className="success-result" style={{ color: displayColor }}>{project.result}</p>
-                          </div>
+                  {/* Columna de contenido */}
+                  <div className="pm-col-content">
+                    <div className="pm-tag" style={{ color: accent }}>
+                      Ravyn Labs · Caso de estudio
+                    </div>
+                    <h2 className="pm-title">{project.title}</h2>
+
+                    {project.problem ? (
+                      <div className="pm-case">
+                        <div className="pm-case-item">
+                          <span className="pm-case-label">Problema</span>
+                          <p className="pm-case-text">{project.problem}</p>
                         </div>
-                      ) : (
-                        <p className="modal-description">{project.description}</p>
-                      )}
-                      
-                      <div className="modal-tech-section">
-                        <h4 className="tech-heading">Stack Tecnológico</h4>
-                        <div className="tech-stack">
-                          {project.tech.map(t => (
-                            <span key={t} className="tech-pill">{t}</span>
-                          ))}
+                        <div className="pm-case-item">
+                          <span className="pm-case-label">Solución</span>
+                          <p className="pm-case-text">{project.solution}</p>
+                        </div>
+                        <div className="pm-case-item">
+                          <span className="pm-case-label" style={{ color: accent }}>Resultado</span>
+                          <p className="pm-case-result" style={{ color: accent }}>{project.result}</p>
                         </div>
                       </div>
+                    ) : (
+                      <p className="pm-description">{project.description}</p>
+                    )}
+
+                    <div className="pm-tech">
+                      <h4 className="pm-tech-heading">Stack</h4>
+                      <div className="pm-tech-stack">
+                        {project.tech.map(t => (
+                          <span key={t} className="pm-tech-pill">{t}</span>
+                        ))}
+                      </div>
                     </div>
+
+                    {project.pageHref && (
+                      <Link to={project.pageHref} className="pm-cta" onClick={onClose}>
+                        Ver sitio completo <span aria-hidden="true">→</span>
+                      </Link>
+                    )}
                   </div>
 
-                  <div className="modal-visual-col">
-                    <div className="visual-container">
-                      {project.images && project.images.length > 0 ? (
-                        <div className="mockup-navigation-wrapper">
-                          <div className="mockup-tabs">
-                            {project.images.map((img, idx) => {
-                              // Obtener nombre del archivo para la pestaña
-                              const name = img.split('/').pop()?.split('.')[0] || `Captura ${idx + 1}`
-                              return (
-                                <button 
-                                  key={idx}
-                                  className={`tab-btn ${activeImageIdx === idx ? 'active' : ''}`}
-                                  onClick={() => setActiveImageIdx(idx)}
-                                  style={{ 
-                                    '--active-color': displayColor 
-                                  } as any}
-                                >
-                                  {name}
-                                </button>
-                              )
-                            })}
-                          </div>
+                  {/* Columna visual */}
+                  <div className="pm-col-visual">
+                    {hasImages ? (
+                      <div className="pm-mockup-wrap">
+                        <div className="pm-tabs">
+                          {project.images!.map((img, idx) => {
+                            const name = img.split('/').pop()?.split('.')[0] || `Vista ${idx + 1}`
+                            return (
+                              <button
+                                key={idx}
+                                className={`pm-tab ${activeImageIdx === idx ? 'is-active' : ''}`}
+                                onClick={() => setActiveImageIdx(idx)}
+                                style={{ '--accent': accent } as React.CSSProperties}
+                              >
+                                {name}
+                              </button>
+                            )
+                          })}
+                        </div>
 
-                          <div className="mockup-display">
-                            <IPhoneMockup color={displayColor}>
-                              <AnimatePresence mode="wait">
-                                <motion.img 
-                                  key={activeImageIdx}
-                                  src={project.images[activeImageIdx]} 
-                                  alt={`${project.title} view ${activeImageIdx + 1}`}
-                                  className="mockup-img"
-                                  initial={{ opacity: 0, x: 20 }}
-                                  animate={{ opacity: 1, x: 0 }}
-                                  exit={{ opacity: 0, x: -20 }}
-                                  transition={{ duration: 0.4, ease }}
-                                />
-                              </AnimatePresence>
-                            </IPhoneMockup>
+                        <div className="pm-mockup-display">
+                          <IPhoneMockup color={accent}>
+                            <AnimatePresence mode="wait">
+                              <motion.img
+                                key={activeImageIdx}
+                                src={project.images![activeImageIdx]}
+                                alt={`${project.title} vista ${activeImageIdx + 1}`}
+                                className="pm-mockup-img"
+                                initial={{ opacity: 0, x: 16 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                exit={{ opacity: 0, x: -16 }}
+                                transition={{ duration: 0.35, ease }}
+                              />
+                            </AnimatePresence>
+                          </IPhoneMockup>
 
-                            <div className="nav-controls">
-                              <button className="nav-arrow" onClick={prevImage}><ChevronLeft size={24} /></button>
-                              <button className="nav-arrow" onClick={nextImage}><ChevronRight size={24} /></button>
-                            </div>
+                          <div className="pm-nav">
+                            <button className="pm-nav-arrow" onClick={prevImage} aria-label="Anterior"><ChevronLeft size={22} /></button>
+                            <button className="pm-nav-arrow" onClick={nextImage} aria-label="Siguiente"><ChevronRight size={22} /></button>
                           </div>
                         </div>
-                      ) : (
-                        <div className="mockup-placeholder" style={{ borderColor: `${displayColor}30` }}>
-                          <div className="mockup-content">Preview soon</div>
-                          <div className="mockup-glow" style={{ background: `radial-gradient(circle at center, ${displayColor}20 0%, transparent 70%)` }} />
-                        </div>
-                      )}
-                    </div>
+                      </div>
+                    ) : (
+                      <div className="pm-placeholder" style={{ borderColor: `${accent}40` }}>
+                        <span className="pm-placeholder-text">Vista previa pronto</span>
+                      </div>
+                    )}
                   </div>
+
                 </div>
               </div>
             </div>
           </motion.div>
 
           <style>{`
-            .project-modal-overlay {
+            .pm-overlay {
               position: fixed;
               inset: 0;
               z-index: 1000;
@@ -259,252 +256,258 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               justify-content: center;
               padding: 20px;
             }
-
-            .project-modal-backdrop {
+            .pm-backdrop {
               position: absolute;
               inset: 0;
-              background: rgba(8, 8, 8, 0.9);
-              backdrop-filter: blur(16px);
-              -webkit-backdrop-filter: blur(16px);
+              background: rgba(16, 52, 42, 0.55);
+              backdrop-filter: blur(10px);
+              -webkit-backdrop-filter: blur(10px);
             }
-
-            .project-modal-content {
+            .pm-content {
               position: relative;
               width: 100%;
-              max-width: 1100px;
+              max-width: 1080px;
               max-height: 90vh;
-              background: #0f0f0f;
-              border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 36px;
+              background: var(--color-cream);
+              border: 1px solid rgba(16, 52, 42, 0.10);
+              border-radius: var(--radius-lg);
               overflow: hidden;
-              box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+              box-shadow: 0 40px 90px rgba(16, 52, 42, 0.30);
               display: flex;
               flex-direction: column;
             }
-
-            .modal-scroll-area {
+            .pm-scroll {
               width: 100%;
               height: 100%;
-              overflow-x: hidden;
               overflow-y: auto;
+              overflow-x: hidden;
             }
+            .pm-inner { padding: clamp(32px, 5vw, 72px) clamp(24px, 5vw, 60px); }
 
-            .modal-inner {
-              padding: 80px 60px;
-            }
-
-            .modal-close-btn {
+            .pm-close {
               position: absolute;
-              top: 32px; /* Más margen solicitado */
-              right: 32px;
-              width: 48px;
-              height: 48px;
+              top: 24px;
+              right: 24px;
+              width: 44px;
+              height: 44px;
               border-radius: 50%;
-              background: rgba(255,255,255,0.03);
-              border: 1px solid rgba(255, 255, 255, 0.1);
-              color: white;
+              background: var(--color-cream);
+              border: 1px solid rgba(16, 52, 42, 0.15);
+              color: var(--color-pine);
               display: flex;
               align-items: center;
               justify-content: center;
               cursor: pointer;
               z-index: 100;
-              transition: all 0.3s var(--ease-out);
+              transition: background 0.25s, transform 0.25s, border-color 0.25s;
             }
-            .modal-close-btn:hover {
-              background: rgba(255, 255, 255, 0.08);
-              transform: rotate(90deg) scale(1.05);
-              border-color: rgba(255, 255, 255, 0.2);
+            .pm-close:hover {
+              background: var(--color-cream-2);
+              border-color: var(--color-pine);
+              transform: rotate(90deg);
             }
 
-            .modal-main-grid {
+            .pm-grid {
               display: grid;
               grid-template-columns: 1fr 1fr;
-              gap: 80px;
+              gap: clamp(40px, 5vw, 72px);
               align-items: start;
             }
+            .pm-col-content { position: sticky; top: 0; }
 
-            .modal-content-col {
-              position: sticky; /* Columna fija solicitada */
-              top: 0;
+            .pm-tag {
+              font-family: var(--font-mono);
+              font-size: 0.7rem;
+              font-weight: 500;
+              letter-spacing: 0.16em;
+              text-transform: uppercase;
+              margin-bottom: 14px;
+            }
+            .pm-title {
+              font-family: var(--font-display);
+              font-weight: 600;
+              font-size: clamp(2.4rem, 5vw, 3.6rem);
+              color: var(--color-pine);
+              letter-spacing: -0.03em;
+              line-height: 1;
+              margin-bottom: 40px;
             }
 
-            .modal-tag {
+            .pm-case {
+              display: flex;
+              flex-direction: column;
+              gap: 32px;
+              margin-bottom: 44px;
+            }
+            .pm-case-label {
+              display: block;
               font-family: var(--font-mono);
-              font-size: 0.75rem;
-              font-weight: 500;
-              letter-spacing: 0.2em;
+              font-size: 0.66rem;
+              text-transform: uppercase;
+              letter-spacing: 0.15em;
+              color: var(--text-muted);
+              margin-bottom: 8px;
+            }
+            .pm-case-text {
+              font-family: var(--font-sans);
+              font-size: 1rem;
+              color: var(--text-secondary);
+              line-height: 1.6;
+            }
+            .pm-case-result {
+              font-family: var(--font-display);
+              font-weight: 600;
+              font-size: 1.5rem;
+              letter-spacing: -0.02em;
+              line-height: 1.2;
+            }
+            .pm-description {
+              font-family: var(--font-sans);
+              font-size: 1.05rem;
+              color: var(--text-secondary);
+              line-height: 1.65;
+              margin-bottom: 44px;
+            }
+
+            .pm-tech-heading {
+              font-family: var(--font-mono);
+              font-size: 0.66rem;
+              text-transform: uppercase;
+              letter-spacing: 0.12em;
+              color: var(--text-muted);
               margin-bottom: 16px;
             }
-
-            .modal-title {
-              font-size: clamp(2.5rem, 5vw, 4rem);
-              font-weight: 700;
-              margin-bottom: 48px;
-              letter-spacing: -0.04em;
-              line-height: 1;
+            .pm-tech-stack {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+            }
+            .pm-tech-pill {
+              font-family: var(--font-mono);
+              padding: 6px 14px;
+              background: var(--color-cream-2);
+              border: 1px solid rgba(16, 52, 42, 0.12);
+              border-radius: var(--radius-pill);
+              font-size: 0.75rem;
+              color: var(--color-pine);
             }
 
-            .visual-container {
-              width: 100%;
+            .pm-cta {
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+              margin-top: 40px;
+              font-family: var(--font-sans);
+              font-size: 0.88rem;
+              font-weight: 600;
+              color: var(--color-cream);
+              background: var(--color-radish);
+              padding: 12px 24px;
+              border-radius: var(--radius-pill);
+              text-decoration: none;
+              transition: opacity 0.2s, transform 0.2s;
+            }
+            .pm-cta span { transition: transform 0.22s ease; }
+            .pm-cta:hover { opacity: 0.9; transform: translateY(-1px); }
+            .pm-cta:hover span { transform: translateX(4px); }
+
+            .pm-col-visual {
               display: flex;
               justify-content: center;
             }
-
-            .mockup-navigation-wrapper {
+            .pm-mockup-wrap {
               width: 100%;
               display: flex;
               flex-direction: column;
               align-items: center;
-              gap: 40px;
+              gap: 32px;
             }
-
-            .mockup-tabs {
+            .pm-tabs {
               display: flex;
-              gap: 12px;
+              gap: 8px;
               flex-wrap: wrap;
               justify-content: center;
             }
-
-            .tab-btn {
-              padding: 8px 16px;
-              background: rgba(255,255,255,0.02);
-              border: 1px solid rgba(255,255,255,0.06);
-              border-radius: 100px;
-              font-size: 0.8rem;
-              font-weight: 600;
-              color: #7a7a7a;
+            .pm-tab {
+              font-family: var(--font-mono);
+              padding: 7px 14px;
+              background: transparent;
+              border: 1px solid rgba(16, 52, 42, 0.15);
+              border-radius: var(--radius-pill);
+              font-size: 0.72rem;
+              color: var(--text-secondary);
               cursor: pointer;
-              transition: all 0.3s;
+              transition: all 0.25s;
               text-transform: capitalize;
             }
-            .tab-btn.active {
-              background: var(--active-color);
-              border-color: var(--active-color);
-              color: #000;
+            .pm-tab.is-active {
+              background: var(--accent);
+              border-color: var(--accent);
+              color: var(--color-cream);
             }
 
-            .mockup-display {
+            .pm-mockup-display {
               position: relative;
               display: flex;
               align-items: center;
-              gap: 20px;
             }
-
-            .mockup-img {
+            .pm-mockup-img {
               width: 100%;
               height: 100%;
               object-fit: cover;
               display: block;
             }
-
-            .nav-controls {
+            .pm-nav {
               position: absolute;
               top: 50%;
-              left: -80px;
-              right: -80px;
+              left: -68px;
+              right: -68px;
               display: flex;
               justify-content: space-between;
               pointer-events: none;
               transform: translateY(-50%);
             }
-
-            .nav-arrow {
-              width: 50px;
-              height: 50px;
+            .pm-nav-arrow {
+              width: 44px;
+              height: 44px;
               border-radius: 50%;
-              background: rgba(255,255,255,0.03);
-              border: 1px solid rgba(255,255,255,0.08);
-              color: #fff;
+              background: var(--color-cream);
+              border: 1px solid rgba(16, 52, 42, 0.15);
+              color: var(--color-pine);
               display: flex;
               align-items: center;
               justify-content: center;
               cursor: pointer;
               pointer-events: auto;
-              transition: all 0.3s;
+              transition: background 0.25s, transform 0.25s;
             }
-            .nav-arrow:hover {
-              background: rgba(255,255,255,0.08);
-              transform: scale(1.1);
-            }
+            .pm-nav-arrow:hover { background: var(--color-cream-2); transform: scale(1.08); }
 
-            .success-case-grid {
+            .pm-placeholder {
+              width: 100%;
+              min-height: 420px;
               display: flex;
-              flex-direction: column;
-              gap: 40px;
-              margin-bottom: 60px;
+              align-items: center;
+              justify-content: center;
+              border: 1px dashed;
+              border-radius: var(--radius-lg);
             }
-
-            .success-label {
+            .pm-placeholder-text {
               font-family: var(--font-mono);
-              font-size: 0.7rem;
-              text-transform: uppercase;
-              letter-spacing: 0.15em;
-              color: #555;
-              margin-bottom: 8px;
-              display: block;
-            }
-
-            .success-text {
-              font-size: 1.15rem;
-              color: #ccc;
-              line-height: 1.6;
-            }
-
-            .success-result {
-              font-size: 1.8rem;
-              font-weight: 700;
-              letter-spacing: -0.02em;
-              line-height: 1.2;
-            }
-
-            .tech-heading {
-              font-size: 0.75rem;
-              text-transform: uppercase;
-              letter-spacing: 0.1em;
-              color: #555;
-              margin-bottom: 20px;
-            }
-
-            .tech-stack {
-              display: flex;
-              flex-wrap: wrap;
-              gap: 10px;
-            }
-
-            .tech-pill {
-              padding: 6px 16px;
-              background: rgba(255, 255, 255, 0.03);
-              border: 1px solid rgba(255, 255, 255, 0.08);
-              border-radius: 100px;
               font-size: 0.8rem;
-              color: #888;
+              color: var(--text-muted);
+              letter-spacing: 0.08em;
             }
 
-            @media (max-width: 1200px) {
-              .nav-controls {
-                left: -20px;
-                right: -20px;
-              }
-              .nav-arrow {
-                background: rgba(0,0,0,0.5);
-                backdrop-filter: blur(10px);
-              }
+            @media (max-width: 1180px) {
+              .pm-nav { left: -16px; right: -16px; }
+              .pm-nav-arrow { background: rgba(250, 246, 238, 0.85); backdrop-filter: blur(6px); }
             }
-
             @media (max-width: 900px) {
-              .modal-main-grid {
-                grid-template-columns: 1fr;
-                gap: 60px;
-              }
-              .modal-content-col {
-                position: static;
-              }
-              .modal-inner {
-                padding: 60px 30px;
-              }
-              .nav-controls {
-                display: none;
-              }
+              .pm-grid { grid-template-columns: 1fr; gap: 48px; }
+              .pm-col-content { position: static; }
+              .pm-col-visual { order: -1; }
+              .pm-nav { display: none; }
             }
           `}</style>
         </div>
@@ -512,4 +515,3 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     </AnimatePresence>
   )
 }
-

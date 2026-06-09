@@ -1,216 +1,206 @@
-import { motion, useMotionValue, useSpring } from 'motion/react'
-import { useState, useEffect, useRef } from 'react'
-import TextType from '@/components/TextType/TextType'
+import { motion } from 'motion/react'
+import RotatingText from '@/components/animations/RotatingText'
 
-const ease = [0.16, 1, 0.3, 1] as const
-
-const springConfig = { damping: 30, stiffness: 100, mass: 2 }
-
-const cards = [
-  {
-    cls: 'hero-card--green',
-    dot: 'green',
-    title: 'Desarrollo web a la medida',
-    meta: 'Sitios, sistemas y experiencias web construidos desde cero para cada proyecto.',
-    x: 38,
-    restShadow:  '0 4px 20px rgba(74,222,128,0.10), 0 1px 6px rgba(74,222,128,0.06)',
-    hoverShadow: '0 22px 64px rgba(74,222,128,0.22), 0 8px 24px rgba(74,222,128,0.12)',
-  },
-  {
-    cls: 'hero-card--blue',
-    dot: 'blue',
-    title: 'Sistemas IoT automatizados',
-    meta: 'Hardware y software integrados para monitoreo y control en tiempo real.',
-    x: -14,
-    restShadow:  '0 4px 20px rgba(96,165,250,0.10), 0 1px 6px rgba(96,165,250,0.06)',
-    hoverShadow: '0 22px 64px rgba(96,165,250,0.22), 0 8px 24px rgba(96,165,250,0.12)',
-  },
-  {
-    cls: 'hero-card--amber',
-    dot: 'amber',
-    title: 'Sistemas de gestión para negocios',
-    meta: 'Apps internas que reemplazan hojas de cálculo y eliminan procesos manuales.',
-    x: 38,
-    restShadow:  '0 4px 20px rgba(245,158,11,0.10), 0 1px 6px rgba(245,158,11,0.06)',
-    hoverShadow: '0 22px 64px rgba(245,158,11,0.22), 0 8px 24px rgba(245,158,11,0.12)',
-  },
-]
-
-type Card = typeof cards[0]
-
-function TiltCard({ card, mobile }: { card: Card; mobile: boolean }) {
-  const ref = useRef<HTMLDivElement>(null)
-  const rotateX = useSpring(useMotionValue(0), springConfig)
-  const rotateY = useSpring(useMotionValue(0), springConfig)
-  const scale = useSpring(1, springConfig)
-
-  function handleInteraction(clientX: number, clientY: number) {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const offsetX = clientX - rect.left - rect.width / 2
-    const offsetY = clientY - rect.top - rect.height / 2
-    rotateX.set((offsetY / (rect.height / 2)) * -14)
-    rotateY.set((offsetX / (rect.width / 2)) * 14)
-  }
-
-  function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
-    handleInteraction(e.clientX, e.clientY)
-  }
-
-  function handleTouchMove(e: React.TouchEvent<HTMLDivElement>) {
-    handleInteraction(e.touches[0].clientX, e.touches[0].clientY)
-  }
-
-  function handleStart() { scale.set(1.05) }
-
-  function handleEnd() {
-    scale.set(1)
-    rotateX.set(0)
-    rotateY.set(0)
-  }
-
-  const wrapperStyle: React.CSSProperties = {
-    perspective: '800px',
-    transform: mobile ? 'none' : `translateX(${card.x}px)`
-  }
-
-  return (
-    <div
-      style={wrapperStyle}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleTouchMove}
-      onMouseEnter={handleStart}
-      onMouseLeave={handleEnd}
-      onTouchStart={handleStart}
-      onTouchEnd={handleEnd}
-    >
-      <motion.div
-        ref={ref}
-        className={`hero-card ${card.cls}`}
-        initial={{ boxShadow: card.restShadow }}
-        animate={{ boxShadow: card.restShadow }}
-        whileHover={{ boxShadow: card.hoverShadow, zIndex: 10 }}
-        whileTap={{ scale: 1.05, boxShadow: card.hoverShadow, zIndex: 10 }}
-        style={{ rotateX, rotateY, scale, transformStyle: 'preserve-3d' }}
-        transition={{ duration: 0.32, ease }}
-      >
-        <span className={`hero-card-dot ${card.dot}`} />
-        <div className="hero-card-body">
-          <p className="hero-card-title">{card.title}</p>
-          <p className="hero-card-meta">{card.meta}</p>
-        </div>
-      </motion.div>
-    </div>
-  )
-}
+const ease = [0.22, 1, 0.36, 1] as const
 
 export default function Hero() {
-  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 900)
-
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 900)
-    window.addEventListener('resize', check, { passive: true })
-    return () => window.removeEventListener('resize', check)
-  }, [])
-
   return (
-    <section className="hero">
-      <div className="hero-content">
-        <h1 className="hero-title" style={{ minHeight: '2.2em' }}>
-          <TextType
-            as="span"
-            text="De la idea al producto."
-            typingSpeed={100}
-            loop={false}
-            showCursor={true}
-            cursorCharacter={
-              <span style={{
-                display: 'inline-block',
-                width: '6px',
-                height: '0.82em',
-                background: 'currentColor',
-                verticalAlign: 'middle',
-                borderRadius: '1px',
-              }} />
-            }
-            cursorBlinkDuration={0.5}
-          />
-        </h1>
+    <section className="hero2">
+      {/* Símbolo rábano-R monumental — textura de fondo, recortado a la derecha */}
+      <img
+        src="/brand/symbol-pine.png"
+        alt=""
+        aria-hidden="true"
+        className="hero2-symbol"
+      />
 
-        <p className="hero-subtitle">
-          Construimos experiencias web, soluciones IoT y sistemas digitales
-          a la medida — para negocios que saben lo que quieren.
-        </p>
-      </div>
+      <div className="container hero2-container">
+        <div className="hero2-content">
 
-      <div className="hero-visual">
-        <div className="hero-dots" />
-        <div className="hero-cards">
-          {cards.map((card) => (
-            <TiltCard key={card.cls} card={card} mobile={isMobile} />
-          ))}
+
+
+          <motion.h1
+            className="hero2-title"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, ease, delay: 0.08 }}
+          >
+            <span className="hero2-title-line whitespace-nowrap">Siembra tu</span>
+            <span className="hero2-title-line whitespace-nowrap pb-[0.05em]" style={{ minHeight: '1.2em' }}>
+              <RotatingText
+                texts={['web', 'app', 'sistema', 'idea']}
+                mainClassName="hero2-rot-pill"
+                staggerFrom="last"
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: '-120%', opacity: 0 }}
+                staggerDuration={0.025}
+                splitLevelClassName="overflow-hidden"
+                transition={{ type: 'spring', damping: 30, stiffness: 400 }}
+                rotationInterval={2600}
+              />
+            </span>
+            <span className="hero2-title-line whitespace-nowrap">con nosotros.</span>
+          </motion.h1>
+
+          <motion.p
+            className="hero2-subtitle"
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease, delay: 0.18 }}
+          >
+            Construimos lo que tu negocio necesita — listo para usar
+            desde el día uno.
+          </motion.p>
+
+          <motion.div
+            className="hero2-actions"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.55, ease, delay: 0.28 }}
+          >
+            <a href="#contacto" className="btn-primary">
+              Comienza aquí →
+            </a>
+            <a href="#labs" className="btn-secondary">
+              Ver Labs
+            </a>
+          </motion.div>
+
         </div>
       </div>
 
-      <a href="#servicios" className="hero-scroll-hint" aria-label="Desliza para ver más">
-        <span className="hero-scroll-hint-text">Desliza para ver más</span>
-        <span className="hero-scroll-hint-arrow" aria-hidden="true">↓</span>
+      <a href="#nosotros" className="hero2-scroll" aria-label="Desliza para ver más">
+        <span>Desliza</span>
+        <span className="hero2-scroll-arrow" aria-hidden="true">↓</span>
       </a>
 
       <style>{`
-        @media (max-width: 900px) {
-          .hero {
-            padding-top: 100px !important; /* Compactado a 100px para móvil */
-          }
+        .hero2 {
+          position: relative;
+          min-height: 100svh;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
         }
 
-        .hero-scroll-hint {
+        .hero2-container { width: 100%; position: relative; z-index: 2; }
+
+        /* Símbolo monumental — textura, recortado por el borde derecho */
+        .hero2-symbol {
           position: absolute;
-          bottom: 24px;
+          top: 50%;
+          right: -8%;
+          transform: translateY(-50%);
+          width: clamp(360px, 42vw, 560px);
+          height: auto;
+          opacity: 0.06;
+          pointer-events: none;
+          z-index: 1;
+          user-select: none;
+        }
+
+        .hero2-content {
+          display: flex;
+          flex-direction: column;
+          gap: 28px;
+          max-width: 760px;
+        }
+
+        .hero2-title {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(48px, 8vw, 104px);
+          line-height: 1.02;
+          letter-spacing: -0.035em;
+          color: var(--color-pine);
+          display: flex;
+          flex-direction: column;
+          gap: 0.08em;
+        }
+
+        .hero2-title-line {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 0.28em;
+        }
+
+        /* El pill rotativo — momento de marca */
+        .hero2-rot-pill {
+          display: inline-flex;
+          align-items: center;
+          background: var(--color-radish);
+          color: var(--color-cream);
+          padding: 0.04em 0.34em 0.12em;
+          border-radius: 0.18em;
+          line-height: 1;
+          overflow: hidden;
+          vertical-align: baseline;
+        }
+
+        .hero2-subtitle {
+          font-family: var(--font-sans);
+          font-size: clamp(15px, 1.3vw, 18px);
+          color: var(--text-secondary);
+          max-width: 440px;
+          line-height: 1.7;
+          font-weight: 400;
+        }
+
+        .hero2-actions {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          flex-wrap: wrap;
+          padding-top: 6px;
+        }
+
+        /* Scroll hint */
+        .hero2-scroll {
+          position: absolute;
+          bottom: 26px;
           left: 50%;
           transform: translateX(-50%);
           display: flex;
           flex-direction: column;
           align-items: center;
           gap: 6px;
-          color: var(--text-muted);
           font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.15em;
+          font-size: 0.66rem;
+          letter-spacing: 0.16em;
           text-transform: uppercase;
+          color: var(--text-muted);
           text-decoration: none;
-          opacity: 0.7;
-          transition: opacity 0.2s ease, color 0.2s ease;
-          animation: hero-scroll-bounce 2.2s ease-in-out infinite;
-          z-index: 5;
+          opacity: 0.65;
+          z-index: 3;
+          transition: opacity 0.2s, color 0.2s;
+          animation: hero2-bounce 2.4s ease-in-out infinite;
         }
-
-        .hero-scroll-hint:hover {
-          opacity: 1;
-          color: var(--text);
-        }
-
-        .hero-scroll-hint-arrow {
-          font-size: 0.95rem;
-          line-height: 1;
-        }
-
-        @keyframes hero-scroll-bounce {
+        .hero2-scroll:hover { opacity: 1; color: var(--color-pine); }
+        .hero2-scroll-arrow { font-size: 0.9rem; line-height: 1; }
+        @keyframes hero2-bounce {
           0%, 100% { transform: translate(-50%, 0); }
           50% { transform: translate(-50%, 6px); }
         }
 
-        @media (prefers-reduced-motion: reduce) {
-          .hero-scroll-hint {
-            animation: none;
+        @media (max-width: 900px) {
+          .hero2 { min-height: auto; padding-top: 140px; padding-bottom: 80px; }
+          .hero2-symbol {
+            right: -22%;
+            opacity: 0.045;
+            width: clamp(320px, 70vw, 460px);
           }
+          .hero2-subtitle { max-width: none; }
         }
 
         @media (max-width: 600px) {
-          .hero-scroll-hint {
-            bottom: 16px;
-            font-size: 0.65rem;
-          }
+          .hero2 { padding-top: 120px; padding-bottom: 64px; }
+          .hero2-scroll { display: none; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero2-scroll { animation: none; }
         }
       `}</style>
     </section>

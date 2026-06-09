@@ -1,158 +1,198 @@
 import { motion } from 'motion/react'
-import ShinyText from '../animations/ShinyText'
-import BlurText from '../animations/BlurText'
 
-const ease = [0.16, 1, 0.3, 1] as const
+const ease = [0.22, 1, 0.36, 1] as const
 
 export default function RavynsetHero() {
   return (
-    <section className="ravynset-hero">
-      <div className="hero-dots" />
-      <div className="container">
-        <div className="ravynset-hero-content">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease }}
-            className="mb-12"
+    <section className="rhero">
+      {/* Símbolo monumental como textura */}
+      <img src="/brand/symbol-pine.png" alt="" aria-hidden="true" className="rhero-symbol" />
+
+      <div className="container rhero-inner">
+        <motion.a
+          href="/#labs"
+          className="rhero-breadcrumb"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5, ease }}
+        >
+          ← Ravyn Labs
+        </motion.a>
+
+        <motion.span
+          className="rhero-badge"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease, delay: 0.05 }}
+        >
+          <span className="rhero-badge-dot" /> Ravynset · Live
+        </motion.span>
+
+        <motion.h1
+          className="rhero-title"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease, delay: 0.1 }}
+        >
+          Tu clínica pierde citas todos los días.<br />Nosotros las recuperamos.
+        </motion.h1>
+
+        <motion.p
+          className="rhero-sub"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease, delay: 0.18 }}
+        >
+          Un CRM diseñado para clínicas que centraliza la gestión de pacientes, 
+          con agenda 24/7 y comunicación automática por WhatsApp.
+        </motion.p>
+
+        <motion.div
+          className="rhero-actions"
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, ease, delay: 0.26 }}
+        >
+          <button
+            className="rhero-btn-primary"
+            onClick={() => document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            <ShinyText 
-              text="RavynSet · Sistema de gestión para clínicas" 
-              disabled={false} 
-              speed={3} 
-              className="ravynset-hero-tag" 
-            />
-          </motion.div>
-
-          <BlurText
-            text="Tu clínica pierde citas todos los días. Nosotros las recuperamos."
-            className="ravynset-hero-title"
-            delay={50}
-            animateBy="words"
-            direction="top"
-          />
-
-          <BlurText
-            text="RavynSet automatiza tu agenda, tus recordatorios y tu reputación en Google — para que tú solo te preocupes por atender a tus pacientes."
-            className="ravynset-hero-subtitle"
-            delay={30}
-            animateBy="words"
-            direction="top"
-          />
-
-          <motion.div 
-            className="ravynset-hero-actions"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease, delay: 0.3 }}
+            Empieza hoy →
+          </button>
+          <button
+            className="rhero-btn-secondary"
+            onClick={() => document.getElementById('incluye')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            <button className="btn-primary py-4 px-8 text-base" onClick={() => document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })}>
-              Ver planes →
-            </button>
-          </motion.div>
-        </div>
+            Conocer el sistema
+          </button>
+        </motion.div>
       </div>
 
       <style>{`
-        .ravynset-hero {
+        .rhero {
           position: relative;
           min-height: 100svh;
           display: flex;
           align-items: center;
-          justify-content: center;
-          padding-top: 80px;
-          background-color: var(--bg);
+          background: var(--color-cream);
           overflow: hidden;
         }
 
-        .hero-dots {
+        .rhero-symbol {
           position: absolute;
-          inset: 0;
-          background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
-          background-size: 40px 40px;
-          -webkit-mask-image: radial-gradient(circle at center, black, transparent 80%);
-          mask-image: radial-gradient(circle at center, black, transparent 80%);
-          opacity: 0.3;
-        }
-
-        .ravynset-hero-content {
-          position: relative;
+          top: 50%;
+          right: -8%;
+          transform: translateY(-50%);
+          width: clamp(360px, 44vw, 580px);
+          height: auto;
+          opacity: 0.06;
+          pointer-events: none;
+          user-select: none;
           z-index: 1;
-          max-width: 900px;
-          margin: 0 auto;
-          text-align: center;
         }
 
-        .ravynset-hero-tag {
+        .rhero-inner {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start;
+          max-width: 760px;
+        }
+
+        .rhero-breadcrumb {
           font-family: var(--font-mono);
-          font-size: 0.85rem;
+          font-size: 0.72rem;
+          letter-spacing: 0.1em;
+          color: var(--text-muted);
+          text-decoration: none;
+          margin-bottom: 28px;
+          transition: color 0.2s;
+        }
+        .rhero-breadcrumb:hover { color: var(--color-pine); }
+
+        .rhero-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 9px;
+          font-family: var(--font-mono);
+          font-size: 0.7rem;
+          letter-spacing: 0.16em;
           text-transform: uppercase;
-          letter-spacing: 0.25em;
-          padding: 8px 0;
-          background: transparent;
-          border: none;
+          color: var(--color-sprout);
+          margin-bottom: 24px;
+        }
+        .rhero-badge-dot {
+          width: 7px;
+          height: 7px;
+          border-radius: 50%;
+          background: var(--color-sprout);
+          animation: rhero-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes rhero-pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.35; } }
+
+        .rhero-title {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(40px, 6vw, 80px);
+          line-height: 1.02;
+          letter-spacing: -0.035em;
+          color: var(--color-pine);
+        }
+
+        .rhero-sub {
+          font-family: var(--font-sans);
+          font-size: clamp(15px, 1.4vw, 18px);
           color: var(--text-secondary);
-          display: inline-block;
+          line-height: 1.7;
+          max-width: 540px;
+          margin-top: 26px;
         }
 
-        .ravynset-hero-title {
-          font-size: clamp(2.2rem, 8vw, 5.5rem);
-          line-height: 1.05;
-          font-weight: 800;
-          letter-spacing: -0.04em;
-          margin-bottom: 2rem;
-          color: var(--text);
+        .rhero-actions {
           display: flex;
-          justify-content: center;
-          text-align: center;
-        }
-
-        .ravynset-hero-subtitle {
-          font-size: clamp(1rem, 2vw, 1.35rem);
-          color: var(--text-secondary);
-          margin-bottom: 3.5rem;
-          line-height: 1.6;
-          max-width: 700px;
-          margin-left: auto;
-          margin-right: auto;
-          display: flex;
-          justify-content: center;
-          text-align: center;
-        }
-
-        .ravynset-hero-actions {
-          display: flex;
-          gap: 1.5rem;
-          justify-content: center;
+          gap: 12px;
           flex-wrap: wrap;
+          margin-top: 36px;
+        }
+
+        .rhero-btn-primary {
+          background: var(--color-radish);
+          color: var(--color-cream);
+          padding: 14px 30px;
+          border-radius: var(--radius-pill);
+          font-family: var(--font-sans);
+          font-size: 0.95rem;
+          font-weight: 600;
+          cursor: pointer;
+          border: 1px solid var(--color-radish);
+          transition: opacity 0.2s, transform 0.2s;
+        }
+        .rhero-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .rhero-btn-secondary {
+          background: transparent;
+          color: var(--color-pine);
+          padding: 14px 28px;
+          border-radius: var(--radius-pill);
+          font-family: var(--font-sans);
+          font-size: 0.95rem;
+          font-weight: 500;
+          cursor: pointer;
+          border: 1px solid var(--border-strong);
+          transition: border-color 0.2s, background 0.2s;
+        }
+        .rhero-btn-secondary:hover {
+          border-color: var(--color-pine);
+          background: var(--bg-hover);
         }
 
         @media (max-width: 768px) {
-          .ravynset-hero {
-            padding-top: 100px !important;
-            padding-bottom: 60px;
-            min-height: auto;
-          }
-          .ravynset-hero-actions {
-            flex-direction: column;
-            width: 100%;
-            padding: 0 20px;
-          }
-          .ravynset-hero-actions button {
-            width: 100%;
-          }
-          .ravynset-hero-tag {
-            /* Mismo estilo que PC: mono + espaciado */
-            font-family: var(--font-mono) !important;
-            font-size: 0.75rem;
-            letter-spacing: 0.2em;
-          }
-        }
-        
-        @media (max-width: 480px) {
-           .ravynset-hero-title {
-             font-size: 2rem;
-           }
+          .rhero { padding-top: 110px; padding-bottom: 70px; min-height: auto; }
+          .rhero-symbol { right: -28%; opacity: 0.05; }
+          .rhero-sub { max-width: none; }
+          .rhero-actions { width: 100%; }
+          .rhero-btn-primary, .rhero-btn-secondary { flex: 1; text-align: center; }
         }
       `}</style>
     </section>

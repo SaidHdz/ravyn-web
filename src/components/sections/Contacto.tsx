@@ -1,216 +1,170 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { motion } from 'motion/react'
-import SplitText from '../animations/SplitText'
-import Magnet from '../animations/Magnet'
+import ContactModal from '../ContactModal'
 
-const ease = [0.16, 1, 0.3, 1] as const
+const ease = [0.22, 1, 0.36, 1] as const
+const viewport = { once: true, amount: 0.4 }
 
 export default function Contacto() {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    interest: 'web',
-    message: ''
-  });
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
-    
-    try {
-      const response = await fetch('https://n8n.srv1574981.hstgr.cloud/webhook/contacto-ravyn', {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
-        },
-        mode: 'cors',
-        body: JSON.stringify(formData)
-      });
-      
-      // n8n a veces responde con 200 pero sin cuerpo, o con texto plano
-      if (response.ok || response.status === 200) {
-        setStatus('success');
-        setFormData({ name: '', email: '', interest: 'web', message: '' });
-        setTimeout(() => setStatus('idle'), 5000);
-      } else {
-        console.error('Respuesta no exitosa:', response.status);
-        setStatus('error');
-        setTimeout(() => setStatus('idle'), 4000);
-      }
-    } catch (error) {
-      console.error('Error de red o CORS:', error);
-      setStatus('error');
-      setTimeout(() => setStatus('idle'), 4000);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  const [modalOpen, setModalOpen] = useState(false)
 
   return (
-    <section id="contacto" className="section">
-      <div className="container">
-        <SplitText
-          text="Contacto"
-          className="section-label"
-          delay={50}
-          duration={0.8}
-          tag="p"
-        />
-        <div className="contacto-layout">
-          <div className="contacto-info-col">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.55, ease }}
-            >
-              <div className="flex flex-col items-start mb-6">
-                <SplitText
-                  text="¿Tienes un"
-                  className="contacto-heading"
-                  delay={40}
-                  duration={0.6}
-                  tag="h2"
-                  textAlign="left"
-                  splitType="words"
-                />
-                <SplitText
-                  text="proyecto?"
-                  className="contacto-heading"
-                  delay={40}
-                  duration={0.6}
-                  tag="h2"
-                  textAlign="left"
-                  splitType="words"
-                />
-              </div>
-              <p className="contacto-sub mb-12">
-                Cuéntanos qué quieres construir o lo que necesitas resolver. Respondemos en menos de 24 horas.
-              </p>
-            </motion.div>
+    <section id="contacto" className="cierre">
+      {/* Símbolo rábano-R monumental — espejo del Hero, recortado por el borde inferior */}
+      <img
+        src="/brand/symbol-cream.png"
+        alt=""
+        aria-hidden="true"
+        className="cierre-symbol"
+      />
 
-            <motion.div
-              className="contacto-options"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.55, ease, delay: 0.15 }}
-            >
-              <Magnet distance={0.15} stiffness={160} damping={15}>
-                <a className="contact-option" href="https://wa.me/528361168007" target="_blank" rel="noopener noreferrer">
-                  <div className="contact-option-body">
-                    <p className="contact-option-label">WhatsApp</p>
-                    <p className="contact-option-value">+52 836 116 8007</p>
-                  </div>
-                  <span className="contact-option-arrow">→</span>
-                </a>
-              </Magnet>
-              
-              <Magnet distance={0.15} stiffness={160} damping={15}>
-                <a className="contact-option" href="mailto:contacto@ravynstudio.mx">
-                  <div className="contact-option-body">
-                    <p className="contact-option-label">Email</p>
-                    <p className="contact-option-value">contacto@ravynstudio.mx</p>
-                  </div>
-                  <span className="contact-option-arrow">→</span>
-                </a>
-              </Magnet>
-            </motion.div>
-          </div>
+      <div className="container cierre-inner">
+        <motion.h2
+          className="cierre-heading"
+          initial={{ opacity: 0, y: 22 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.65, ease }}
+        >
+          ¿Qué quieres<br />construir?
+        </motion.h2>
 
-          <motion.div 
-            className="contacto-form-col"
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: '-60px' }}
-            transition={{ duration: 0.6, ease, delay: 0.2 }}
-          >
-            <form className="contact-form" onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="form-label">Nombre</label>
-                <input 
-                  type="text" 
-                  name="name"
-                  className="form-input" 
-                  placeholder="Tu nombre" 
-                  value={formData.name}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
-              
-              <div className="form-group">
-                <label className="form-label">Email</label>
-                <input 
-                  type="email" 
-                  name="email"
-                  className="form-input" 
-                  placeholder="tu@email.com" 
-                  value={formData.email}
-                  onChange={handleChange}
-                  required 
-                />
-              </div>
+        <motion.p
+          className="cierre-sub"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.6, ease, delay: 0.1 }}
+        >
+          Cuéntanos. Si no sabes por dónde empezar, también.
+          Para eso estamos.
+        </motion.p>
 
-              <div className="form-group">
-                <label className="form-label">Interés</label>
-                <select 
-                  name="interest"
-                  className="form-input appearance-none" 
-                  style={{ cursor: 'pointer' }}
-                  value={formData.interest}
-                  onChange={handleChange}
-                >
-                  <option value="web">Desarrollo web y de apps</option>
-                  <option value="iot">Soluciones IoT</option>
-                  <option value="automation">Automatización de procesos manuales</option>
-                </select>
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Mensaje</label>
-                <textarea 
-                  name="message"
-                  className="form-textarea" 
-                  placeholder="¿Cómo podemos ayudarte?" 
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                ></textarea>
-              </div>
-
-              <button 
-                type="submit" 
-                className="btn-primary form-submit"
-                disabled={status === 'loading'}
-              >
-                <motion.span whileHover={{ x: 3 }} className="flex items-center gap-2">
-                  {status === 'loading' ? 'Enviando...' : 
-                   status === 'success' ? '¡Mensaje Enviado!' : 
-                   status === 'error' ? 'Error al enviar' : 'Enviar Mensaje'} 
-                   {status === 'idle' && <span>→</span>}
-                </motion.span>
-              </button>
-
-              {status === 'success' && (
-                <motion.p 
-                  initial={{ opacity: 0, y: 5 }} 
-                  animate={{ opacity: 1, y: 0 }}
-                  className="text-green-400 text-xs mt-2 text-center font-mono"
-                >
-                  ¡Recibido! En Ravyn Studio nos ponemos en contacto contigo pronto.
-                </motion.p>
-              )}
-            </form>
-          </motion.div>
-        </div>
+        <motion.div
+          className="cierre-actions"
+          initial={{ opacity: 0, y: 14 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={viewport}
+          transition={{ duration: 0.55, ease, delay: 0.2 }}
+        >
+          <button type="button" className="cierre-btn-primary" onClick={() => setModalOpen(true)}>
+            Siembra tu proyecto →
+          </button>
+        </motion.div>
       </div>
+
+      <ContactModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+
+      <style>{`
+        .cierre {
+          position: relative;
+          padding: clamp(80px, 14vh, 130px) 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--color-pine);
+          overflow: hidden;
+          text-align: center;
+        }
+
+        /* Símbolo monumental — espejo del Hero, recortado por abajo */
+        .cierre-symbol {
+          position: absolute;
+          bottom: -14%;
+          left: 50%;
+          transform: translateX(-50%);
+          width: clamp(420px, 60vw, 680px);
+          height: auto;
+          opacity: 0.04;
+          pointer-events: none;
+          user-select: none;
+          z-index: 1;
+        }
+
+        .cierre-inner {
+          position: relative;
+          z-index: 2;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .cierre-heading {
+          font-family: var(--font-display);
+          font-style: italic;
+          font-weight: 600;
+          font-size: clamp(44px, 8vw, 84px);
+          line-height: 1.0;
+          letter-spacing: -0.03em;
+          color: var(--color-cream);
+          max-width: 11ch;
+        }
+
+        .cierre-sub {
+          font-family: var(--font-sans);
+          font-size: clamp(15px, 1.5vw, 18px);
+          color: rgba(250, 246, 238, 0.62);
+          line-height: 1.65;
+          max-width: 420px;
+          margin-top: 28px;
+        }
+
+        .cierre-actions {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 14px;
+          flex-wrap: wrap;
+          margin-top: 44px;
+        }
+
+        .cierre-btn-primary {
+          display: inline-flex;
+          align-items: center;
+          font-family: var(--font-sans);
+          font-size: 0.95rem;
+          font-weight: 600;
+          color: var(--color-cream);
+          background: var(--color-radish);
+          padding: 14px 30px;
+          border-radius: var(--radius-pill);
+          border: 1px solid var(--color-radish);
+          cursor: pointer;
+          transition: opacity 0.2s, transform 0.2s;
+          white-space: nowrap;
+        }
+        .cierre-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+        .cierre-btn-secondary {
+          display: inline-flex;
+          align-items: center;
+          font-family: var(--font-sans);
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: var(--color-cream);
+          background: transparent;
+          padding: 14px 28px;
+          border-radius: var(--radius-pill);
+          border: 1px solid rgba(250, 246, 238, 0.30);
+          text-decoration: none;
+          transition: border-color 0.2s, background 0.2s, transform 0.2s;
+          white-space: nowrap;
+        }
+        .cierre-btn-secondary:hover {
+          border-color: var(--color-cream);
+          background: rgba(250, 246, 238, 0.06);
+          transform: translateY(-1px);
+        }
+
+        @media (max-width: 600px) {
+          .cierre-sub { max-width: none; }
+          .cierre-actions { flex-direction: column; width: 100%; }
+          .cierre-btn-primary, .cierre-btn-secondary {
+            width: 100%;
+            justify-content: center;
+          }
+        }
+      `}</style>
     </section>
   )
 }
