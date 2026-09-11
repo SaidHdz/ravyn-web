@@ -144,7 +144,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
                   className="cm-success"
                 >
-                  {t.contactModal.successDesc} 🌱
+                  {t.contactModal.successDesc}
                 </motion.p>
               )}
               {status === 'error' && (
