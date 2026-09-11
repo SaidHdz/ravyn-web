@@ -1,34 +1,18 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const servicios = [
-  {
-    num: '01',
-    title: 'Sitios y sistemas web',
-    desc: 'Para negocios que necesitan crecer online y que los encuentren.',
-  },
-  {
-    num: '02',
-    title: 'Apps de gestión interna',
-    desc: 'Reemplaza cuadernos, Excel y WhatsApp con algo que corre solo.',
-  },
-  {
-    num: '03',
-    title: 'Automatización e IoT',
-    desc: 'Procesos que corren sin que nadie los empuje. Hardware y software.',
-  },
-]
-
 export default function Servicios() {
+  const { t } = useLanguage()
+
   return (
     <section id="studio" className="studio2">
       <div className="container studio2-grid">
 
         {/* Izquierda — ancla + CTA */}
         <div className="studio2-left">
-
 
           <motion.h2
             className="studio2-heading"
@@ -37,7 +21,7 @@ export default function Servicios() {
             viewport={viewport}
             transition={{ duration: 0.6, ease, delay: 0.06 }}
           >
-            Software propio<br />sin equipo<br />propio.
+            {t.servicios.headingLine1}<br />{t.servicios.headingLine2}<br />{t.servicios.headingLine3}
           </motion.h2>
 
           <motion.p
@@ -47,8 +31,7 @@ export default function Servicios() {
             viewport={viewport}
             transition={{ duration: 0.55, ease, delay: 0.14 }}
           >
-            Trabajamos directo con quien nos contrata. Si ya sabes qué construir,
-            perfecto. Si solo sabes qué problema tienes, también.
+            {t.servicios.intro}
           </motion.p>
 
           <motion.a
@@ -61,13 +44,13 @@ export default function Servicios() {
             viewport={viewport}
             transition={{ duration: 0.5, ease, delay: 0.22 }}
           >
-            Cotiza tu proyecto →
+            {t.servicios.cta}
           </motion.a>
         </div>
 
         {/* Derecha — lista editorial */}
         <div className="studio2-list">
-          {servicios.map((s, i) => (
+          {t.servicios.items.map((s, i) => (
             <motion.div
               key={s.num}
               className="studio2-row"
@@ -91,7 +74,7 @@ export default function Servicios() {
             viewport={viewport}
             transition={{ duration: 0.6, ease, delay: 0.3 }}
           >
-            Las tecnologías varían según el proyecto. El método no.
+            {t.servicios.note}
           </motion.p>
         </div>
 

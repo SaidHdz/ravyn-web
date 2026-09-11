@@ -1,4 +1,7 @@
+import { useLanguage } from '@/context/LanguageContext'
+
 export default function Footer() {
+  const { t } = useLanguage()
   const year = new Date().getFullYear()
 
   return (
@@ -16,15 +19,15 @@ export default function Footer() {
               className="h-[24px] w-auto block object-contain flex-shrink-0"
             />
             <span className="font-mono text-[0.6rem] text-[var(--color-muted)] tracking-[0.04em] uppercase">
-              De la semilla al producto.
+              {t.footer.tagline}
             </span>
           </div>
 
           {/* Nav + IG — centrado en móvil */}
           <nav className="flex items-center gap-6">
             {[
-              { label: 'Studio', href: '/#studio' },
-              { label: 'Labs',   href: '/#labs'   },
+              { label: t.footer.studio, href: '/#studio' },
+              { label: t.footer.labs,   href: '/#labs'   },
             ].map(({ label, href }) => (
               <a
                 key={label}
@@ -38,7 +41,7 @@ export default function Footer() {
               href="https://www.instagram.com/ravynstudio/"
               target="_blank"
               rel="noopener noreferrer"
-              aria-label="Instagram de Ravyn Studio"
+              aria-label="Instagram @ravynstudio"
               className="text-[rgba(250,246,238,0.50)] hover:text-[var(--color-cream)] transition-colors duration-150"
             >
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -53,7 +56,7 @@ export default function Footer() {
         {/* Divider + copyright centrado */}
         <div className="mt-6 pt-5 border-t border-[rgba(250,246,238,0.08)] text-center">
           <span className="font-mono text-[0.7rem] text-[rgba(250,246,238,0.30)] tracking-[0.04em]">
-            © {year} Ravyn Studio
+            © {year} {t.footer.rights}
           </span>
         </div>
 

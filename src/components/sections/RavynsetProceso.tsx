@@ -1,28 +1,15 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.4 }
 
-const pasos = [
-  { num: '01', title: 'Confirmas', desc: 'Eliges tu plan y nos contactas. Te respondemos el mismo día para iniciar.' },
-  { num: '02', title: 'Kickoff', desc: 'Una llamada corta de 30 minutos. Nos compartes tu logo, colores y lista de servicios.' },
-  { num: '03', title: 'Construimos', desc: 'En 2 a 4 semanas tu CRM y automatizaciones quedan listas y probadas. Tú solo esperas.' },
-  { num: '04', title: 'Go live', desc: 'Lanzamos juntos. Y no desaparecemos, cuentas con nuestro soporte continuo.' },
-]
-
 export default function RavynsetProceso() {
+  const { t } = useLanguage()
+
   return (
     <section id="proceso" className="rproc">
       <div className="container rproc-inner">
-        <motion.span
-          className="rproc-label"
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport}
-          transition={{ duration: 0.4, ease }}
-        >
-          Cómo empezamos
-        </motion.span>
         <motion.h2
           className="rproc-heading"
           initial={{ opacity: 0, y: 20 }}
@@ -30,7 +17,7 @@ export default function RavynsetProceso() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.06 }}
         >
-          Del primer mensaje<br />al sistema en vivo.
+          {t.ravynset.procesoHeadingLine1}<br />{t.ravynset.procesoHeadingLine2}
         </motion.h2>
 
         <div className="rproc-timeline">
@@ -42,7 +29,7 @@ export default function RavynsetProceso() {
             viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.8, ease: [0, 0, 0.2, 1], delay: 0.1 }}
           />
-          {pasos.map((p, i) => (
+          {t.ravynset.procesoPasos.map((p, i) => (
             <motion.div
               key={p.num}
               className="rproc-node"

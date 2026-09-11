@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { X } from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
 
 interface ContactModalProps {
   isOpen: boolean
@@ -12,6 +13,7 @@ const ease = [0.22, 1, 0.36, 1] as const
 const WEBHOOK = 'https://n8n.srv1574981.hstgr.cloud/webhook/contacto-ravyn'
 
 export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
+  const { t } = useLanguage()
   const [formData, setFormData] = useState({ name: '', email: '', interest: 'web', message: '' })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
 
@@ -58,10 +60,10 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
   }
 
   const submitLabel =
-    status === 'loading' ? 'Sembrando…' :
-    status === 'success' ? '¡Recibido!' :
-    status === 'error'   ? 'Algo no germinó' :
-    'Siembra tu proyecto'
+    status === 'loading' ? t.contactModal.submitLoading :
+    status === 'success' ? t.contactModal.submitSuccess :
+    status === 'error'   ? t.contactModal.submitError :
+    t.contactModal.submitIdle
 
   return (
     <AnimatePresence>
@@ -87,57 +89,54 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             </button>
 
             <div className="cm-head">
-              <span className="cm-tag">Cuéntanos</span>
-              <h2 className="cm-title">Siembra tu proyecto.</h2>
-              <p className="cm-sub">
-                Respondemos en menos de 24 horas. Si no sabes por dónde empezar,
-                también — para eso estamos.
-              </p>
+              <h2 className="cm-title">{t.contactModal.title}</h2>
+              <p className="cm-sub">{t.contactModal.sub}</p>
             </div>
 
             <form className="cm-form" onSubmit={handleSubmit}>
               <div className="cm-field">
-                <label className="cm-label" htmlFor="cm-name">Nombre</label>
+                <label className="cm-label" htmlFor="cm-name">{t.contactModal.nameLabel}</label>
                 <input
                   id="cm-name" name="name" type="text" required
-                  className="cm-input" placeholder="Tu nombre"
+                  className="cm-input" placeholder={t.contactModal.namePlaceholder}
                   value={formData.name} onChange={handleChange}
                 />
               </div>
 
               <div className="cm-field">
-                <label className="cm-label" htmlFor="cm-email">Email</label>
+                <label className="cm-label" htmlFor="cm-email">{t.contactModal.emailLabel}</label>
                 <input
                   id="cm-email" name="email" type="email" required
-                  className="cm-input" placeholder="tu@email.com"
+                  className="cm-input" placeholder={t.contactModal.emailPlaceholder}
                   value={formData.email} onChange={handleChange}
                 />
               </div>
 
               <div className="cm-field">
-                <label className="cm-label" htmlFor="cm-interest">Interés</label>
+                <label className="cm-label" htmlFor="cm-interest">{t.contactModal.interestLabel}</label>
                 <select
                   id="cm-interest" name="interest"
                   className="cm-input cm-select"
                   value={formData.interest} onChange={handleChange}
                 >
-                  <option value="web">Desarrollo web y de apps</option>
-                  <option value="iot">Soluciones IoT</option>
-                  <option value="automation">Automatización de procesos</option>
+                  <option value="web">{t.contactModal.interestOptions.web}</option>
+                  <option value="app">{t.contactModal.interestOptions.app}</option>
+                  <option value="auto">{t.contactModal.interestOptions.auto}</option>
+                  <option value="idea">{t.contactModal.interestOptions.idea}</option>
                 </select>
               </div>
 
               <div className="cm-field">
-                <label className="cm-label" htmlFor="cm-message">Mensaje</label>
+                <label className="cm-label" htmlFor="cm-message">{t.contactModal.messageLabel}</label>
                 <textarea
                   id="cm-message" name="message" required
-                  className="cm-input cm-textarea" placeholder="¿Qué quieres construir?"
+                  className="cm-input cm-textarea" placeholder={t.contactModal.messagePlaceholder}
                   value={formData.message} onChange={handleChange}
                 />
               </div>
 
               <button type="submit" className="btn-primary cm-submit" disabled={status === 'loading'}>
-                {submitLabel}{status === 'idle' && <span> →</span>}
+                {submitLabel}
               </button>
 
               {status === 'success' && (
@@ -145,7 +144,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
                   className="cm-success"
                 >
-                  Nos ponemos en contacto contigo pronto. 🌱
+                  {t.contactModal.successDesc} 🌱
                 </motion.p>
               )}
               {status === 'error' && (
@@ -153,7 +152,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
                   initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}
                   className="cm-error"
                 >
-                  Algo no germinó. Inténtalo de nuevo o escríbenos por WhatsApp.
+                  {t.contactModal.errorDesc}
                 </motion.p>
               )}
             </form>
@@ -203,12 +202,11 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              transition: background 0.25s, transform 0.25s, border-color 0.25s;
+              transition: background 0.25s, border-color 0.25s;
             }
             .cm-close:hover {
               background: var(--color-cream-2);
               border-color: var(--color-pine);
-              transform: rotate(90deg);
             }
 
             .cm-head { margin-bottom: 28px; }

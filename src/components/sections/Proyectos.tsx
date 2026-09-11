@@ -1,78 +1,55 @@
 import { motion } from 'motion/react'
 import { useState } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 import ProjectModal from '../ProjectModal'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const proyectos = [
-  {
-    id: 'klino',
-    title: 'Klino',
-    status: 'BETA',
-    color: '#10342A',
-    rowDesc: 'Documenta la consulta médica por voz. Nota clínica automática conforme a NOM.',
-    pageHref: '/klino',
-    description: 'App móvil que transcribe la consulta médica por voz y genera la nota clínica estructurada conforme a NOM-004 y NOM-024, sin escritura manual.',
-    problem: 'El médico pasa gran parte de la consulta escribiendo en lugar de mirar al paciente. La documentación clínica es obligatoria por normativa, pero le roba al médico lo más valioso: la atención.',
-    solution: 'Klino escucha la consulta y genera automáticamente la nota clínica completa — antecedentes, exploración física — en formato estructurado conforme a NOM-004 y NOM-024. El médico habla con su paciente; Klino documenta.',
-    result: '2do Lugar Innovatec Local 2026 — Área de Salud. Piloto en curso con médicos.',
-    tech: ['Speech-to-Text', 'IA', 'Web App', 'Expediente Digital', 'Expo', 'n8n', 'Supabase'],
-    images: [
-      '/projects/klino/Home.jpg',
-      '/projects/klino/Expedientes.jpg',
-      '/projects/klino/Hardware.jpg',
-      '/projects/klino/Ajustes.jpg',
-    ],
-  },
-  {
-    id: 'ravynset',
-    title: 'Ravynset',
-    status: 'LIVE',
-    color: '#E0436B',
-    rowDesc: 'CRM para clínicas: agenda, expedientes y WhatsApp en un solo lugar.',
-    pageHref: '/ravynset',
-    description: 'CRM para clínicas que centraliza la gestión de citas y pacientes en un solo lugar, con agenda inteligente y comunicación automática por WhatsApp.',
-    problem: 'La gestión de citas y pacientes vive dispersa entre cuadernos, WhatsApp del recepcionista y hojas de Excel. Las clínicas pierden tiempo, citas y seguimiento de pacientes.',
-    solution: 'Un CRM diseñado para clínicas: agenda 24/7 sincronizada con WhatsApp, expedientes de pacientes centralizados y motor automático de reseñas en Google Maps.',
-    result: 'Plataforma diseñada para resolver los puntos reales de fricción en la operación diaria de una clínica.',
-    tech: ['React', 'n8n', 'WhatsApp API', 'Google Maps API', 'CRM'],
-    images: [],
-  },
-  {
-    id: 'shield-sense',
-    title: 'Shield Sense',
-    status: 'CRECIENDO',
-    color: '#34C759',
-    rowDesc: 'Wearable IoT que detecta impactos en la cabeza y alerta al cuidador.',
-    pageHref: null,
-    description: 'Wearable IoT integrado en un gorro que detecta impactos en la cabeza de adultos mayores y alerta al cuidador en tiempo real.',
-    problem: 'Los golpes en la cabeza son la lesión más peligrosa en caídas de adultos mayores, pero los wearables tradicionales detectan movimiento del cuerpo, no el impacto real en el cráneo.',
-    solution: 'Sensores de impacto colocados directamente sobre la cabeza, integrados discretamente en un gorro. Detectan la intensidad del golpe y envían alerta vía Bluetooth al celular del cuidador — sin internet.',
-    result: '1er Lugar Innovatec Local 2026 — Área de Salud. Prototipo funcional reconocido por jurado médico y técnico.',
-    tech: ['IoT', 'Sensores de impacto', 'App Móvil', 'Alertas en tiempo real', 'Expo', 'Three.js'],
-    images: [
-      '/projects/shield-sense/Home.jpg',
-      '/projects/shield-sense/Alertas.jpg',
-      '/projects/shield-sense/Ajustes.jpg',
-    ],
-  },
-]
+const projectImages: Record<string, string[]> = {
+  klino: [
+    '/projects/klino/Home.jpg',
+    '/projects/klino/Expedientes.jpg',
+    '/projects/klino/Hardware.jpg',
+    '/projects/klino/Ajustes.jpg',
+  ],
+  ravynset: [],
+  slimergy: [
+    '/projects/slimergy/home_despues_slimergy.jpeg',
+    '/projects/slimergy/home_antes_slimergy.jpeg',
+    '/projects/slimergy/cuartos__despues_slimergy.jpeg',
+    '/projects/slimergy/cuartos__antes_slimergy.jpeg',
+    '/projects/slimergy/conifg_despues_slimergy.jpeg',
+    '/projects/slimergy/config_antes_slimergy.jpeg',
+  ],
+  'shield-sense': [
+    '/projects/shield-sense/Home.jpg',
+    '/projects/shield-sense/Alertas.jpg',
+    '/projects/shield-sense/Ajustes.jpg',
+  ],
+}
 
 const statusColor: Record<string, string> = {
   LIVE: 'var(--color-sprout)',
   BETA: 'var(--color-radish)',
   CRECIENDO: 'var(--color-muted)',
+  GROWING: 'var(--color-muted)',
 }
 
 export default function Proyectos() {
-  const [selectedProject, setSelectedProject] = useState<typeof proyectos[0] | null>(null)
+  const { t } = useLanguage()
+  const [selectedId, setSelectedId] = useState<string | null>(null)
+
+  const proyectos = t.proyectos.items.map(p => ({
+    ...p,
+    images: projectImages[p.id] || [],
+  }))
+
+  const selectedProject = proyectos.find(p => p.id === selectedId) || null
 
   return (
     <section id="labs" className="labs2">
       <div className="container">
-
-
 
         <motion.h2
           className="labs2-heading"
@@ -81,7 +58,7 @@ export default function Proyectos() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.06 }}
         >
-          Productos que<br />sembramos nosotros.
+          {t.proyectos.headingLine1}<br />{t.proyectos.headingLine2}
         </motion.h2>
 
         <motion.p
@@ -91,8 +68,7 @@ export default function Proyectos() {
           viewport={viewport}
           transition={{ duration: 0.55, ease, delay: 0.14 }}
         >
-          Además del trabajo con clientes, corremos nuestros propios proyectos.
-          Algunos ya están vivos, otros creciendo.
+          {t.proyectos.intro}
         </motion.p>
 
         {/* Filas de productos */}
@@ -101,8 +77,8 @@ export default function Proyectos() {
             <motion.button
               type="button"
               key={p.id}
-              className={`labs2-row ${p.status === 'CRECIENDO' ? 'labs2-row--soft' : ''}`}
-              onClick={() => setSelectedProject(p)}
+              className={`labs2-row ${(p.status as string) === 'CRECIENDO' || (p.status as string) === 'GROWING' ? 'labs2-row--soft' : ''}`}
+              onClick={() => setSelectedId(p.id)}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={viewport}
@@ -110,12 +86,12 @@ export default function Proyectos() {
             >
               <span className="labs2-row-name">{p.title}</span>
               <span className="labs2-row-desc">{p.rowDesc}</span>
-              <span className="labs2-row-status" style={{ color: statusColor[p.status] }}>
-                <span className="labs2-status-dot" style={{ background: statusColor[p.status] }} />
+              <span className="labs2-row-status" style={{ color: statusColor[p.status] || 'var(--color-muted)' }}>
+                <span className="labs2-status-dot" style={{ background: statusColor[p.status] || 'var(--color-muted)' }} />
                 {p.status}
               </span>
               <span className="labs2-row-action">
-                Conocer más <span aria-hidden="true">→</span>
+                {t.proyectos.ctaRow} <span aria-hidden="true">→</span>
               </span>
             </motion.button>
           ))}
@@ -124,7 +100,7 @@ export default function Proyectos() {
 
       <ProjectModal
         isOpen={!!selectedProject}
-        onClose={() => setSelectedProject(null)}
+        onClose={() => setSelectedId(null)}
         project={selectedProject}
       />
 

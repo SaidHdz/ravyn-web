@@ -1,9 +1,12 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.4 }
 
 export default function RavynsetProblema() {
+  const { t } = useLanguage()
+
   return (
     <section id="problema" className="rprob">
       <div className="container rprob-inner">
@@ -14,8 +17,7 @@ export default function RavynsetProblema() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.08 }}
         >
-          La gestión de pacientes no debería vivir en un cuaderno, en un archivo de Excel,
-          ni en el WhatsApp personal del recepcionista.
+          {t.ravynset.problemaLead}
         </motion.p>
 
         <motion.p
@@ -25,8 +27,7 @@ export default function RavynsetProblema() {
           viewport={viewport}
           transition={{ duration: 0.55, ease, delay: 0.16 }}
         >
-          Las clínicas pierden tiempo respondiendo mensajes a deshoras, pierden citas por no enviar 
-          recordatorios a tiempo, y pierden el seguimiento de sus pacientes porque la información está dispersa.
+          {t.ravynset.problemaBody}
         </motion.p>
 
         <motion.p
@@ -36,7 +37,7 @@ export default function RavynsetProblema() {
           viewport={viewport}
           transition={{ duration: 0.55, ease, delay: 0.24 }}
         >
-          Ravynset centraliza todo.
+          {t.ravynset.problemaPunch}
         </motion.p>
       </div>
 

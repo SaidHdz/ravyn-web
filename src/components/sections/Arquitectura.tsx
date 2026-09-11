@@ -1,9 +1,12 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
 export default function Arquitectura() {
+  const { t } = useLanguage()
+
   return (
     <section className="arq" aria-label="Arquitectura de marca">
 
@@ -20,14 +23,14 @@ export default function Arquitectura() {
         transition={{ duration: 0.6, ease }}
       >
         <div className="arq-body">
-          <span className="arq-label arq-label--radish">Studio</span>
-          <h2 className="arq-title arq-title--cream">A la medida<br />de tu negocio.</h2>
+          <h2 className="arq-title arq-title--cream">
+            {t.arquitectura.studioTitleLine1}<br />{t.arquitectura.studioTitleLine2}
+          </h2>
           <p className="arq-desc arq-desc--cream">
-            Desarrollamos sistemas web, apps de gestión y automatizaciones
-            para clínicas y negocios de servicios. Sin equipo interno propio.
+            {t.arquitectura.studioDesc}
           </p>
           <span className="arq-cta arq-cta--cream">
-            Ver qué construimos <span aria-hidden="true">→</span>
+            {t.arquitectura.studioCta} <span aria-hidden="true">→</span>
           </span>
         </div>
       </motion.a>
@@ -42,14 +45,14 @@ export default function Arquitectura() {
         transition={{ duration: 0.6, ease, delay: 0.1 }}
       >
         <div className="arq-body">
-          <span className="arq-label arq-label--muted">Labs</span>
-          <h2 className="arq-title arq-title--pine">Productos que<br />sembramos nosotros.</h2>
+          <h2 className="arq-title arq-title--pine">
+            {t.arquitectura.labsTitleLine1}<br />{t.arquitectura.labsTitleLine2}
+          </h2>
           <p className="arq-desc arq-desc--muted">
-            Klino, Ravynset, Shield Sense. Proyectos propios construidos
-            con el mismo método que aplicamos para clientes.
+            {t.arquitectura.labsDesc}
           </p>
           <span className="arq-cta arq-cta--pine">
-            Ver productos <span aria-hidden="true">→</span>
+            {t.arquitectura.labsCta} <span aria-hidden="true">→</span>
           </span>
         </div>
       </motion.a>

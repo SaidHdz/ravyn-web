@@ -1,15 +1,16 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 const viewport = { once: true, amount: 0.4 }
 
 export default function Manifiesto() {
+  const { t } = useLanguage()
+
   return (
     <section id="nosotros" className="manifiesto">
       <div className="container manifiesto-inner">
-
-
 
         <motion.p
           className="manifiesto-lead"
@@ -18,11 +19,10 @@ export default function Manifiesto() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.08 }}
         >
-          Ravyn nació como un semillero: un lugar donde una idea se siembra,
-          se cuida, y se cosecha como producto real.
+          {t.manifiesto.lead}
           <br className="manifiesto-br" />
-          <span className="manifiesto-lead-accent"> Algunas semillas las traen los clientes. Otras las plantamos nosotros.</span>
-          {' '}Mismo método. Mismas manos.
+          <span className="manifiesto-lead-accent">{t.manifiesto.leadAccent}</span>
+          {t.manifiesto.leadFoot}
         </motion.p>
 
         <motion.p
@@ -32,8 +32,7 @@ export default function Manifiesto() {
           viewport={viewport}
           transition={{ duration: 0.55, ease, delay: 0.18 }}
         >
-          Operamos desde México. Construimos software que ya está corriendo —
-          no presentaciones que envejecen.
+          {t.manifiesto.foot}
         </motion.p>
 
       </div>

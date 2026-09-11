@@ -1,11 +1,13 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 import ContactModal from '../ContactModal'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.4 }
 
 export default function Contacto() {
+  const { t } = useLanguage()
   const [modalOpen, setModalOpen] = useState(false)
 
   return (
@@ -26,7 +28,7 @@ export default function Contacto() {
           viewport={viewport}
           transition={{ duration: 0.65, ease }}
         >
-          ¿Qué quieres<br />construir?
+          {t.contacto.headingLine1}<br />{t.contacto.headingLine2}
         </motion.h2>
 
         <motion.p
@@ -36,8 +38,7 @@ export default function Contacto() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.1 }}
         >
-          Cuéntanos. Si no sabes por dónde empezar, también.
-          Para eso estamos.
+          {t.contacto.sub}
         </motion.p>
 
         <motion.div
@@ -48,7 +49,7 @@ export default function Contacto() {
           transition={{ duration: 0.55, ease, delay: 0.2 }}
         >
           <button type="button" className="cierre-btn-primary" onClick={() => setModalOpen(true)}>
-            Siembra tu proyecto →
+            {t.contacto.cta}
           </button>
         </motion.div>
       </div>

@@ -2,16 +2,18 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Link } from 'react-router-dom'
 import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
 
 interface ProjectModalProps {
   isOpen: boolean
   onClose: () => void
   project: {
+    id?: string
     title: string
     color: string
     description: string
-    tech: string[]
-    images?: string[]
+    tech: readonly string[] | string[]
+    images?: readonly string[] | string[]
     problem?: string
     solution?: string
     result?: string
@@ -59,16 +61,17 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
           top: 0;
           left: 50%;
           transform: translateX(-50%);
-          width: 120px;
-          height: 25px;
+          width: 90px;
+          height: 20px;
           background: var(--color-pine);
-          border-bottom-left-radius: 15px;
-          border-bottom-right-radius: 15px;
-          z-index: 20;
+          border-bottom-left-radius: 12px;
+          border-bottom-right-radius: 12px;
+          z-index: 10;
         }
         .iphone-screen-content {
           width: 100%;
           height: 100%;
+          overflow: hidden;
           position: relative;
         }
         .iphone-glow {
@@ -76,9 +79,17 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
           inset: -40px;
           pointer-events: none;
           z-index: -1;
+          filter: blur(30px);
         }
-        @media (max-width: 768px) {
-          .iphone-frame { width: 240px; height: 500px; }
+        @media (max-width: 600px) {
+          .iphone-frame {
+            width: 240px;
+            height: 490px;
+            border-radius: 38px;
+            padding: 7px;
+          }
+          .iphone-inner { border-radius: 30px; }
+          .iphone-notch { width: 75px; height: 16px; }
         }
       `}</style>
     </div>
@@ -86,13 +97,19 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
 }
 
 export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
+  const { t, language } = useLanguage()
   const [activeImageIdx, setActiveImageIdx] = useState(0)
 
+  // Reset al abrir proyecto nuevo
+  useEffect(() => {
+    if (isOpen) setActiveImageIdx(0)
+  }, [isOpen, project])
+
+  // Lock de scroll al abrir
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
       document.documentElement.style.overflow = 'hidden'
-      setActiveImageIdx(0)
     } else {
       document.body.style.overflow = ''
       document.documentElement.style.overflow = ''
@@ -123,6 +140,36 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     if (project.images) setActiveImageIdx((p) => (p - 1 + project.images!.length) % project.images!.length)
   }
 
+  const getScreenTabLabel = (imgPath: string, idx: number) => {
+    const raw = imgPath.split('/').pop()?.toLowerCase() || ''
+    const isDespues = raw.includes('despues')
+    const isAntes = raw.includes('antes')
+    const tagDespues = language === 'es' ? 'Después' : 'After'
+    const tagAntes = language === 'es' ? 'Antes' : 'Before'
+    const suffix = isDespues ? ` · ${tagDespues}` : isAntes ? ` · ${tagAntes}` : ''
+
+    if (raw.includes('home')) {
+      return `Home${suffix}`
+    }
+    if (raw.includes('cuarto')) {
+      const label = language === 'es' ? 'Cuartos' : 'Rooms'
+      return `${label}${suffix}`
+    }
+    if (raw.includes('confi') || raw.includes('config')) {
+      const label = language === 'es' ? 'Ajustes' : 'Settings'
+      return `${label}${suffix}`
+    }
+    const clean = raw.replace(/[_-]+/g, ' ').replace(/\.(jpg|jpeg|png|webp)$/i, '').trim()
+    return clean || `${t.projectModal.screenNum} ${idx + 1}`
+  }
+
+  const getScreenTag = (imgPath: string) => {
+    const raw = imgPath.split('/').pop()?.toLowerCase() || ''
+    if (raw.includes('despues')) return language === 'es' ? 'REDISEÑO NUEVO' : 'NEW REDESIGN'
+    if (raw.includes('antes')) return language === 'es' ? 'PROTOTIPO PREVIO' : 'PREVIOUS PROTOTYPE'
+    return null
+  }
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -142,7 +189,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             exit={{ opacity: 0, scale: 0.97, y: 8 }}
             transition={{ duration: 0.45, ease }}
           >
-            <button className="pm-close" onClick={onClose} aria-label="Cerrar">
+            <button className="pm-close" onClick={onClose} aria-label={t.projectModal.close}>
               <X size={18} strokeWidth={2.25} />
             </button>
 
@@ -152,23 +199,20 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
                   {/* Columna de contenido */}
                   <div className="pm-col-content">
-                    <div className="pm-tag" style={{ color: accent }}>
-                      Ravyn Labs · Caso de estudio
-                    </div>
                     <h2 className="pm-title">{project.title}</h2>
 
                     {project.problem ? (
                       <div className="pm-case">
                         <div className="pm-case-item">
-                          <span className="pm-case-label">Problema</span>
+                          <span className="pm-case-label">{t.projectModal.problem}</span>
                           <p className="pm-case-text">{project.problem}</p>
                         </div>
                         <div className="pm-case-item">
-                          <span className="pm-case-label">Solución</span>
+                          <span className="pm-case-label">{t.projectModal.solution}</span>
                           <p className="pm-case-text">{project.solution}</p>
                         </div>
                         <div className="pm-case-item">
-                          <span className="pm-case-label" style={{ color: accent }}>Resultado</span>
+                          <span className="pm-case-label" style={{ color: accent }}>{t.projectModal.result}</span>
                           <p className="pm-case-result" style={{ color: accent }}>{project.result}</p>
                         </div>
                       </div>
@@ -177,17 +221,17 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                     )}
 
                     <div className="pm-tech">
-                      <h4 className="pm-tech-heading">Stack</h4>
+                      <h4 className="pm-tech-heading">{t.projectModal.stack}</h4>
                       <div className="pm-tech-stack">
-                        {project.tech.map(t => (
-                          <span key={t} className="pm-tech-pill">{t}</span>
+                        {project.tech.map(techItem => (
+                          <span key={techItem} className="pm-tech-pill">{techItem}</span>
                         ))}
                       </div>
                     </div>
 
                     {project.pageHref && (
                       <Link to={project.pageHref} className="pm-cta" onClick={onClose}>
-                        Ver sitio completo <span aria-hidden="true">→</span>
+                        {t.projectModal.explorePage} <span aria-hidden="true">→</span>
                       </Link>
                     )}
                   </div>
@@ -198,7 +242,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                       <div className="pm-mockup-wrap">
                         <div className="pm-tabs">
                           {project.images!.map((img, idx) => {
-                            const name = img.split('/').pop()?.split('.')[0] || `Vista ${idx + 1}`
+                            const name = getScreenTabLabel(img, idx)
                             return (
                               <button
                                 key={idx}
@@ -214,29 +258,36 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
                         <div className="pm-mockup-display">
                           <IPhoneMockup color={accent}>
-                            <AnimatePresence mode="wait">
-                              <motion.img
-                                key={activeImageIdx}
-                                src={project.images![activeImageIdx]}
-                                alt={`${project.title} vista ${activeImageIdx + 1}`}
-                                className="pm-mockup-img"
-                                initial={{ opacity: 0, x: 16 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -16 }}
-                                transition={{ duration: 0.35, ease }}
-                              />
-                            </AnimatePresence>
+                            <div className="relative w-full h-full">
+                              <AnimatePresence mode="wait">
+                                <motion.img
+                                  key={activeImageIdx}
+                                  src={project.images![activeImageIdx]}
+                                  alt={`${project.title} ${t.projectModal.screenNum} ${activeImageIdx + 1}`}
+                                  className="pm-mockup-img"
+                                  initial={{ opacity: 0, x: 16 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -16 }}
+                                  transition={{ duration: 0.35, ease }}
+                                />
+                              </AnimatePresence>
+                              {getScreenTag(project.images![activeImageIdx]) && (
+                                <span className="pm-screen-tag">
+                                  {getScreenTag(project.images![activeImageIdx])}
+                                </span>
+                              )}
+                            </div>
                           </IPhoneMockup>
 
                           <div className="pm-nav">
-                            <button className="pm-nav-arrow" onClick={prevImage} aria-label="Anterior"><ChevronLeft size={22} /></button>
-                            <button className="pm-nav-arrow" onClick={nextImage} aria-label="Siguiente"><ChevronRight size={22} /></button>
+                            <button className="pm-nav-arrow" onClick={prevImage} aria-label={t.projectModal.prevScreen}><ChevronLeft size={22} /></button>
+                            <button className="pm-nav-arrow" onClick={nextImage} aria-label={t.projectModal.nextScreen}><ChevronRight size={22} /></button>
                           </div>
                         </div>
                       </div>
                     ) : (
                       <div className="pm-placeholder" style={{ borderColor: `${accent}40` }}>
-                        <span className="pm-placeholder-text">Vista previa pronto</span>
+                        <span className="pm-placeholder-text">Preview coming soon</span>
                       </div>
                     )}
                   </div>
@@ -299,12 +350,11 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               justify-content: center;
               cursor: pointer;
               z-index: 100;
-              transition: background 0.25s, transform 0.25s, border-color 0.25s;
+              transition: background 0.25s, border-color 0.25s;
             }
             .pm-close:hover {
               background: var(--color-cream-2);
               border-color: var(--color-pine);
-              transform: rotate(90deg);
             }
 
             .pm-grid {
@@ -456,6 +506,25 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               height: 100%;
               object-fit: cover;
               display: block;
+            }
+            .pm-screen-tag {
+              position: absolute;
+              bottom: 16px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: rgba(16, 52, 42, 0.9);
+              color: var(--color-cream);
+              font-family: var(--font-mono);
+              font-size: 0.65rem;
+              font-weight: 700;
+              letter-spacing: 0.12em;
+              padding: 4px 12px;
+              border-radius: 100vw;
+              backdrop-filter: blur(8px);
+              z-index: 10;
+              pointer-events: none;
+              white-space: nowrap;
+              border: 1px solid rgba(250, 246, 238, 0.25);
             }
             .pm-nav {
               position: absolute;

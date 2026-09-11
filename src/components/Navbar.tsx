@@ -1,20 +1,17 @@
 import { useState, useEffect } from 'react'
 import { motion, useScroll, useSpring, AnimatePresence } from 'motion/react'
 import { Link, useLocation } from 'react-router-dom'
-import { LogOut, Settings, LogIn, Menu, X } from 'lucide-react'
+import { LogOut, Settings, LogIn, Menu, X, Globe } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useLanguage } from '@/context/LanguageContext'
 import AuthModal from './AuthModal'
 import AccountModal from './AccountModal'
-
-const navLinks = [
-  { label: 'Studio', anchor: 'studio' },
-  { label: 'Labs',   anchor: 'labs'   },
-]
 
 export default function Navbar() {
   const { scrollYProgress } = useScroll()
   const location = useLocation()
   const { user, signOut } = useAuth()
+  const { language, toggleLanguage, t } = useLanguage()
 
   const [scrolled,          setScrolled]          = useState(false)
   const [visible,           setVisible]           = useState(true)
@@ -26,7 +23,12 @@ export default function Navbar() {
 
   const scaleX = useSpring(scrollYProgress, { stiffness: 180, damping: 30, restDelta: 0.001 })
 
-  const isSubapp = location.pathname === '/ravynset' || location.pathname === '/klino'
+  const isSubapp = location.pathname === '/klino'
+
+  const navLinks = [
+    { label: t.nav.studio, anchor: 'studio' },
+    { label: t.nav.labs,   anchor: 'labs'   },
+  ]
 
   const resolveHref = (anchor: string) =>
     isSubapp ? `/#${anchor}` : `#${anchor}`
@@ -134,14 +136,28 @@ export default function Navbar() {
           </div>
         </div>
 
-        {/* Right side: CTA + auth */}
+        {/* Right side: Language Switch + CTA + auth */}
         <div className="flex items-center gap-3">
+          {/* Language Switcher */}
+          <button
+            type="button"
+            onClick={toggleLanguage}
+            title={t.nav.langSwitchAria}
+            aria-label={t.nav.langSwitchAria}
+            className="h-[34px] px-2.5 rounded-full border border-[rgba(16,52,42,0.14)] bg-[rgba(250,246,238,0.6)] hover:bg-[var(--color-cream)] text-[0.74rem] font-mono tracking-wider text-[var(--color-pine)] hover:border-[var(--color-radish)] transition-all duration-150 flex items-center gap-1.5 cursor-pointer"
+          >
+            <Globe className="w-3.5 h-3.5 text-[var(--color-muted)]" />
+            <span className={language === 'es' ? 'text-[var(--color-radish)] font-bold' : 'text-[var(--text-muted)] font-normal'}>ES</span>
+            <span className="text-[rgba(16,52,42,0.2)] text-[0.68rem]">/</span>
+            <span className={language === 'en' ? 'text-[var(--color-radish)] font-bold' : 'text-[var(--text-muted)] font-normal'}>EN</span>
+          </button>
+
           {/* CTA — hidden on smallest screens */}
           <a
             href={resolveHref('contacto')}
             className="btn-primary nb-sm-up"
           >
-            Siembra tu proyecto →
+            {t.nav.cta}
           </a>
 
           {/* Auth button */}
@@ -160,11 +176,11 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={handleAuthClick}
-                aria-label="Iniciar sesión"
+                aria-label={t.nav.login}
                 className="btn-secondary nb-sm-up items-center gap-[6px]"
               >
                 <LogIn className="w-[14px] h-[14px]" strokeWidth={2.25} />
-                Entrar
+                {t.nav.login}
               </button>
             )}
 
@@ -188,7 +204,7 @@ export default function Navbar() {
                     className="flex items-center gap-3 px-3 py-3 rounded-xl text-[0.88rem] font-medium text-[var(--color-cream)] hover:bg-[rgba(250,246,238,0.06)] hover:text-[var(--color-radish)] transition-colors duration-150 text-left"
                   >
                     <Settings className="w-4 h-4 flex-shrink-0" />
-                    Mi Cuenta
+                    {t.nav.account}
                   </button>
                   <button
                     type="button"
@@ -196,7 +212,7 @@ export default function Navbar() {
                     className="flex items-center gap-3 px-3 py-3 rounded-xl text-[0.88rem] font-medium text-[var(--color-cream)] hover:bg-[rgba(224,67,107,0.12)] hover:text-[var(--color-radish)] transition-colors duration-150 text-left"
                   >
                     <LogOut className="w-4 h-4 flex-shrink-0" />
-                    Cerrar Sesión
+                    {t.nav.logout}
                   </button>
                 </motion.div>
               )}
@@ -243,6 +259,23 @@ export default function Navbar() {
                   {label}
                 </motion.a>
               ))}
+
+              {/* Mobile Language Switcher row */}
+              <div className="flex items-center justify-between py-4 border-b border-[var(--border)]">
+                <span className="font-mono text-[0.8rem] text-[var(--text-secondary)] uppercase tracking-wider">
+                  Idioma / Language
+                </span>
+                <button
+                  type="button"
+                  onClick={toggleLanguage}
+                  className="h-[36px] px-3 rounded-full border border-[var(--color-pine)] bg-transparent text-[0.82rem] font-mono font-bold tracking-wider text-[var(--color-pine)] flex items-center gap-2"
+                >
+                  <Globe className="w-4 h-4 text-[var(--color-radish)]" />
+                  <span className={language === 'es' ? 'text-[var(--color-radish)] font-extrabold' : 'text-[var(--text-muted)]'}>ES</span>
+                  <span className="text-[var(--border-strong)]">/</span>
+                  <span className={language === 'en' ? 'text-[var(--color-radish)] font-extrabold' : 'text-[var(--text-muted)]'}>EN</span>
+                </button>
+              </div>
             </nav>
 
             <motion.div
@@ -256,7 +289,7 @@ export default function Navbar() {
                 onClick={() => setMobileOpen(false)}
                 className="btn-primary justify-center text-center text-[0.95rem] py-[14px]"
               >
-                Siembra tu proyecto →
+                {t.nav.cta}
               </a>
               {!user && (
                 <button
@@ -264,7 +297,7 @@ export default function Navbar() {
                   onClick={() => { setMobileOpen(false); setIsAuthModalOpen(true) }}
                   className="btn-secondary justify-center text-[0.95rem] py-[14px]"
                 >
-                  Entrar
+                  {t.nav.login}
                 </button>
               )}
             </motion.div>

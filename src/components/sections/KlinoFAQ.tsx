@@ -1,50 +1,20 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const faqs = [
-  {
-    pregunta: '¿Klino reemplaza mi criterio médico?',
-    respuesta:
-      'No. Klino documenta lo que ocurre en la consulta; tú revisas, ajustas y firmas. La última palabra siempre es del médico.',
-  },
-  {
-    pregunta: '¿Las notas cumplen con la normativa?',
-    respuesta:
-      'Sí. Klino genera la nota clínica estructurada conforme a NOM-004 y NOM-024, lista para auditoría.',
-  },
-  {
-    pregunta: '¿Y si la transcripción se equivoca?',
-    respuesta:
-      'Revisas y editas la nota antes de guardarla. Klino propone; tú confirmas. Nada se guarda sin tu visto bueno.',
-  },
-  {
-    pregunta: '¿En qué dispositivos funciona?',
-    respuesta:
-      'Klino funciona en celular y tableta con micrófono, y desde computadora para consultar el expediente. Sin instalaciones complejas.',
-  },
-  {
-    pregunta: '¿Están seguros los datos de mis pacientes?',
-    respuesta:
-      'Sí. La información se almacena cifrada y nunca se comparte con terceros. Cumplimos con la LFPDPPP.',
-  },
-  {
-    pregunta: '¿Qué necesito para empezar?',
-    respuesta:
-      'Un dispositivo con micrófono y tu cuenta de beta. Te acompañamos en la configuración inicial en una llamada corta.',
-  },
-]
-
 export default function KlinoFAQ() {
+  const { t } = useLanguage()
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
+  const faqs = t.klino.faqs
   const midIndex = Math.ceil(faqs.length / 2)
   const leftCol = faqs.slice(0, midIndex)
   const rightCol = faqs.slice(midIndex)
 
-  const renderItem = (faq: (typeof faqs)[0], globalIndex: number) => (
+  const renderItem = (faq: { pregunta: string; respuesta: string }, globalIndex: number) => (
     <motion.div
       key={globalIndex}
       className="kfaq-item"
@@ -80,15 +50,15 @@ export default function KlinoFAQ() {
   return (
     <section className="kfaq">
       <div className="container">
-        <motion.span
-          className="kfaq-label"
-          initial={{ opacity: 0, y: 14 }}
+        <motion.h2
+          className="kfaq-heading"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease }}
+          transition={{ duration: 0.5, ease }}
         >
-          Preguntas frecuentes
-        </motion.span>
+          {t.klino.faqTag}
+        </motion.h2>
 
         <div className="kfaq-grid">
           <div className="kfaq-col">{leftCol.map((f, i) => renderItem(f, i))}</div>
@@ -98,13 +68,13 @@ export default function KlinoFAQ() {
 
       <style>{`
         .kfaq { padding: clamp(80px, 12vh, 130px) 0 clamp(100px, 14vh, 150px); background: var(--color-cream); }
-        .kfaq-label {
-          display: block;
-          font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--text-muted);
+        .kfaq-heading {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(30px, 3.8vw, 48px);
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          color: var(--color-pine);
           margin-bottom: 48px;
         }
         .kfaq-grid {

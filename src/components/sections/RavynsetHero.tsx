@@ -1,8 +1,11 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 export default function RavynsetHero() {
+  const { t } = useLanguage()
+
   return (
     <section className="rhero">
       {/* Símbolo monumental como textura */}
@@ -16,17 +19,8 @@ export default function RavynsetHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease }}
         >
-          ← Ravyn Labs
+          {t.ravynset.breadcrumb}
         </motion.a>
-
-        <motion.span
-          className="rhero-badge"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease, delay: 0.05 }}
-        >
-          <span className="rhero-badge-dot" /> Ravynset · Live
-        </motion.span>
 
         <motion.h1
           className="rhero-title"
@@ -34,7 +28,7 @@ export default function RavynsetHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease, delay: 0.1 }}
         >
-          Tu clínica pierde citas todos los días.<br />Nosotros las recuperamos.
+          {t.ravynset.heroTitleLine1}<br />{t.ravynset.heroTitleLine2}
         </motion.h1>
 
         <motion.p
@@ -43,8 +37,7 @@ export default function RavynsetHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.18 }}
         >
-          Un CRM diseñado para clínicas que centraliza la gestión de pacientes, 
-          con agenda 24/7 y comunicación automática por WhatsApp.
+          {t.ravynset.heroSub}
         </motion.p>
 
         <motion.div
@@ -57,13 +50,13 @@ export default function RavynsetHero() {
             className="rhero-btn-primary"
             onClick={() => document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Empieza hoy →
+            {t.ravynset.ctaPrimary}
           </button>
           <button
             className="rhero-btn-secondary"
             onClick={() => document.getElementById('incluye')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Conocer el sistema
+            {t.ravynset.ctaSecondary}
           </button>
         </motion.div>
       </div>

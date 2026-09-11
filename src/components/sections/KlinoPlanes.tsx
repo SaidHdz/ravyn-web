@@ -1,22 +1,13 @@
 import { motion } from 'motion/react'
 import { Check } from 'lucide-react'
 import { useState } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const funciones = [
-  'Transcripción por voz ilimitada',
-  'Notas conforme a NOM-004 y NOM-024',
-  'Antecedentes, exploración y diagnóstico estructurados',
-  'Expediente digital por paciente',
-  'Plantillas por especialidad',
-  'Revisión y firma antes de guardar',
-  'Exportación de datos en cualquier momento',
-  'Soporte directo por WhatsApp',
-]
-
 export default function KlinoPlanes() {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle')
 
@@ -31,15 +22,6 @@ export default function KlinoPlanes() {
   return (
     <section id="planes" className="kpl">
       <div className="container">
-        <motion.span
-          className="kpl-label"
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport}
-          transition={{ duration: 0.4, ease }}
-        >
-          Beta abierto
-        </motion.span>
         <motion.h2
           className="kpl-heading"
           initial={{ opacity: 0, y: 20 }}
@@ -47,7 +29,7 @@ export default function KlinoPlanes() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.06 }}
         >
-          Entra gratis.<br />Ayuda a moldear Klino.
+          {t.klino.planesHeadingLine1}<br />{t.klino.planesHeadingLine2}
         </motion.h2>
 
         <div className="kpl-layout">
@@ -58,18 +40,17 @@ export default function KlinoPlanes() {
             viewport={viewport}
             transition={{ duration: 0.6, ease }}
           >
-            <span className="kpl-badge">BETA</span>
-            <p className="kpl-plan-name">Acceso anticipado</p>
+            <p className="kpl-plan-name">{t.klino.planName}</p>
             <div className="kpl-price-row">
-              <span className="kpl-price">Gratis</span>
-              <span className="kpl-period">durante el beta</span>
+              <span className="kpl-price">{t.klino.price}</span>
+              <span className="kpl-period">{t.klino.period}</span>
             </div>
-            <p className="kpl-price-note">Precio estimado al lanzar: $600 MXN/mes</p>
+            <p className="kpl-price-note">{t.klino.priceNote}</p>
 
             <div className="kpl-divider" />
 
             <ul className="kpl-list">
-              {funciones.map((f, i) => (
+              {t.klino.planFeatures.map((f, i) => (
                 <li key={i} className="kpl-item">
                   <Check style={{ width: 15, height: 15, color: 'var(--color-sprout)', flexShrink: 0, marginTop: 3 }} />
                   <span>{f}</span>
@@ -85,35 +66,34 @@ export default function KlinoPlanes() {
             viewport={viewport}
             transition={{ duration: 0.6, ease, delay: 0.1 }}
           >
-            <h3 className="kpl-waitlist-title">Únete al beta</h3>
+            <h3 className="kpl-waitlist-title">{t.klino.waitlistTitle}</h3>
             <p className="kpl-waitlist-desc">
-              Klino está en acceso anticipado para médicos y clínicas. Deja tu correo
-              y te contactamos para activar tu cuenta.
+              {t.klino.waitlistDesc}
             </p>
 
             {status === 'done' ? (
               <div className="kpl-success">
                 <span className="kpl-success-dot" />
-                Listo. Te escribimos pronto para activar tu cuenta. 🌱
+                {t.klino.waitlistSuccess}
               </div>
             ) : (
               <form className="kpl-form" onSubmit={handleWaitlist}>
                 <input
                   type="email"
                   className="kpl-input"
-                  placeholder="tu@clinica.mx"
+                  placeholder={t.klino.waitlistPlaceholder}
                   value={email}
                   onChange={e => setEmail(e.target.value)}
                   required
                 />
                 <button type="submit" className="kpl-submit" disabled={status === 'loading'}>
-                  {status === 'loading' ? 'Guardando…' : 'Quiero acceso beta →'}
+                  {status === 'loading' ? t.klino.waitlistSaving : t.klino.waitlistBtn}
                 </button>
               </form>
             )}
 
             <p className="kpl-waitlist-footer">
-              También puedes escribirnos por{' '}
+              {t.klino.waitlistFooter}{' '}
               <a href="https://wa.me/528361168007" target="_blank" rel="noopener noreferrer" className="kpl-wa-link">
                 WhatsApp
               </a>

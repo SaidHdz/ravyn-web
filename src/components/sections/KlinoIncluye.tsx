@@ -1,46 +1,17 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const funciones = [
-  {
-    num: '01',
-    title: 'Transcripción por voz',
-    desc: 'Klino escucha la consulta en segundo plano y la convierte en texto en tiempo real. Tú solo hablas con tu paciente.',
-  },
-  {
-    num: '02',
-    title: 'Nota clínica estructurada',
-    desc: 'Genera antecedentes, exploración física y diagnóstico en el formato correcto — no un bloque de texto suelto.',
-  },
-  {
-    num: '03',
-    title: 'Conforme a la norma',
-    desc: 'Cumple NOM-004 y NOM-024 sin que tengas que pensarlo. La documentación queda lista para auditoría.',
-  },
-  {
-    num: '04',
-    title: 'Expediente digital',
-    desc: 'Cada nota queda guardada y organizada por paciente. Buscas, consultas y das seguimiento en segundos.',
-  },
-]
-
 export default function KlinoIncluye() {
+  const { t } = useLanguage()
+
   return (
     <section id="incluye" className="kinc">
       <div className="container kinc-grid">
 
         <div className="kinc-left">
-          <motion.span
-            className="kinc-label"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.4, ease }}
-          >
-            Qué hace Klino
-          </motion.span>
           <motion.h2
             className="kinc-heading"
             initial={{ opacity: 0, y: 20 }}
@@ -48,7 +19,7 @@ export default function KlinoIncluye() {
             viewport={viewport}
             transition={{ duration: 0.6, ease, delay: 0.06 }}
           >
-            Tú atiendes.<br />Klino documenta.
+            {t.klino.incluyeHeadingLine1}<br />{t.klino.incluyeHeadingLine2}
           </motion.h2>
           <motion.p
             className="kinc-intro"
@@ -57,13 +28,12 @@ export default function KlinoIncluye() {
             viewport={viewport}
             transition={{ duration: 0.55, ease, delay: 0.14 }}
           >
-            El médico habla con su paciente; Klino convierte la conversación
-            en una nota clínica lista para firmar.
+            {t.klino.incluyeIntro}
           </motion.p>
         </div>
 
         <div className="kinc-list">
-          {funciones.map((f, i) => (
+          {t.klino.incluyeItems.map((f, i) => (
             <motion.div
               key={f.num}
               className="kinc-row"

@@ -4,6 +4,8 @@ import { supabase } from '../lib/supabase'
 
 interface SignUpMetadata {
   full_name?: string
+  company_name?: string
+  phone?: string
   clinic_name?: string
   clinic_phone?: string
   clinic_email?: string

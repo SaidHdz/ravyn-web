@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import RavynsetHero from '@/components/sections/RavynsetHero'
@@ -9,8 +10,13 @@ import RavynsetProceso from '@/components/sections/RavynsetProceso'
 import RavynsetFAQ from '@/components/sections/RavynsetFAQ'
 
 export default function RavynsetPage() {
+  const { t } = useLanguage()
+
   useEffect(() => {
-    document.title = 'Ravynset — Ravyn Labs'
+    document.title = t.ravynset.pageTitle
+  }, [t.ravynset.pageTitle])
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 

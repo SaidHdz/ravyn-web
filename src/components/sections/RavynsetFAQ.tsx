@@ -1,48 +1,20 @@
 import { motion, AnimatePresence } from 'motion/react'
 import { useState } from 'react'
 import { ChevronDown } from 'lucide-react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-const faqs = [
-  {
-    pregunta: "¿Necesito saber de tecnología para usar RavynSet?",
-    respuesta: "No. Nosotros nos encargamos de toda la configuración técnica. Tú solo nos das la información de tu clínica y nosotros hacemos el resto. Para el día a día, el sistema es tan simple como revisar tu agenda."
-  },
-  {
-    pregunta: "¿Mis datos y los de mis pacientes están seguros?",
-    respuesta: "Sí. El sistema trabaja directamente con tu propio Google Calendar — los datos de tus citas y pacientes nunca pasan por nuestros servidores. Cumplimos con la LFPDPPP para el manejo de datos personales."
-  },
-  {
-    pregunta: "¿Puedo cancelar cuando quiera?",
-    respuesta: "Sí, sin penalizaciones ni compromisos a largo plazo. Con un aviso de 30 días el servicio se da de baja y te entregamos toda tu información."
-  },
-  {
-    pregunta: "¿Funciona solo para clínicas dentales?",
-    respuesta: "No. RavynSet funciona para cualquier negocio que maneje citas: spas, centros de bienestar, psicólogos, nutriólogos, fisioterapeutas y más. El sistema se adapta a tu giro."
-  },
-  {
-    pregunta: "¿Cuánto tiempo tarda la implementación?",
-    respuesta: "Entre 2 y 4 semanas desde que nos das tu información. Una vez lanzado, todo corre de forma automática sin que tengas que hacer nada."
-  },
-  {
-    pregunta: "¿Qué pasa si algo deja de funcionar?",
-    respuesta: "Tienes soporte directo por WhatsApp con nuestro equipo en México. Respondemos el mismo día en horario de oficina. La mensualidad cubre el mantenimiento continuo del sistema."
-  },
-  {
-    pregunta: "¿Qué incluye la mensualidad exactamente?",
-    respuesta: "Hosting de tu web y tu CRM en nuestros servidores, costos de las APIs de automatización, mantenimiento técnico y cambios menores a tu web cuando los necesites."
-  }
-]
-
 export default function RavynsetFAQ() {
+  const { t } = useLanguage()
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
 
+  const faqs = t.ravynset.faqs
   const midIndex = Math.ceil(faqs.length / 2)
   const leftCol = faqs.slice(0, midIndex)
   const rightCol = faqs.slice(midIndex)
 
-  const renderItem = (faq: (typeof faqs)[0], globalIndex: number) => (
+  const renderItem = (faq: { pregunta: string; respuesta: string }, globalIndex: number) => (
     <motion.div
       key={globalIndex}
       className="rfaq-item"
@@ -78,15 +50,15 @@ export default function RavynsetFAQ() {
   return (
     <section className="rfaq">
       <div className="container">
-        <motion.span
-          className="rfaq-label"
-          initial={{ opacity: 0, y: 14 }}
+        <motion.h2
+          className="rfaq-heading"
+          initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.4, ease }}
+          transition={{ duration: 0.5, ease }}
         >
-          Preguntas frecuentes
-        </motion.span>
+          {t.ravynset.faqTag}
+        </motion.h2>
 
         <div className="rfaq-grid">
           <div className="rfaq-col">{leftCol.map((f, i) => renderItem(f, i))}</div>
@@ -96,13 +68,13 @@ export default function RavynsetFAQ() {
 
       <style>{`
         .rfaq { padding: clamp(80px, 12vh, 130px) 0 clamp(100px, 14vh, 150px); background: var(--color-cream); }
-        .rfaq-label {
-          display: block;
-          font-family: var(--font-mono);
-          font-size: 0.7rem;
-          letter-spacing: 0.18em;
-          text-transform: uppercase;
-          color: var(--text-muted);
+        .rfaq-heading {
+          font-family: var(--font-display);
+          font-weight: 600;
+          font-size: clamp(30px, 3.8vw, 48px);
+          line-height: 1.05;
+          letter-spacing: -0.03em;
+          color: var(--color-pine);
           margin-bottom: 48px;
         }
         .rfaq-grid {

@@ -1,51 +1,16 @@
 import { motion } from 'motion/react'
 import { Check, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useLanguage } from '@/context/LanguageContext'
 import { useState } from 'react'
 import AuthModal from '../AuthModal'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const planes = [
-  {
-    id: 'esencial',
-    name: 'Plan Esencial',
-    price: '$900',
-    period: 'MXN / mes',
-    recommended: false,
-    includes: [
-      'Sitio web personalizado',
-      'Agenda online 24/7',
-      'Recordatorios automáticos por WhatsApp',
-      'Sincronización con Google Calendar',
-      'Motor de reputación Google Maps',
-      'Hosting y mantenimiento incluidos',
-    ],
-    excludes: ['CRM completo con historial'],
-    cta: 'Empieza hoy →',
-  },
-  {
-    id: 'completo',
-    name: 'Plan Completo',
-    price: '$1,400',
-    period: 'MXN / mes',
-    badge: 'Recomendado',
-    recommended: true,
-    includes: [
-      'Todo lo del plan Esencial',
-      'CRM completo con historial de pacientes',
-      'Gestión de usuarios y staff',
-      'Recordatorios manuales desde el panel',
-      'Modificación y creación de citas',
-      'Soporte por WhatsApp prioritario',
-    ],
-    cta: 'Empieza hoy →',
-  },
-]
-
 export default function RavynsetPlanes() {
   const { user } = useAuth()
+  const { t } = useLanguage()
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false)
 
   const handlePlanClick = () => {
@@ -57,15 +22,6 @@ export default function RavynsetPlanes() {
   return (
     <section id="planes" className="rpl">
       <div className="container">
-        <motion.span
-          className="rpl-label"
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={viewport}
-          transition={{ duration: 0.4, ease }}
-        >
-          Nuestros planes
-        </motion.span>
         <motion.h2
           className="rpl-heading"
           initial={{ opacity: 0, y: 20 }}
@@ -73,11 +29,11 @@ export default function RavynsetPlanes() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.06 }}
         >
-          Comienza cuando quieras.<br />Cancela cuando quieras.
+          {t.ravynset.planesHeadingLine1}<br />{t.ravynset.planesHeadingLine2}
         </motion.h2>
 
         <div className="rpl-grid">
-          {planes.map((plan, i) => (
+          {t.ravynset.planes.map((plan, i) => (
             <motion.div
               key={plan.id}
               className={`rpl-card ${plan.recommended ? 'is-recommended' : ''}`}
@@ -86,10 +42,6 @@ export default function RavynsetPlanes() {
               viewport={viewport}
               transition={{ duration: 0.6, ease, delay: i * 0.1 }}
             >
-              {plan.badge && (
-                <span className="rpl-badge">{plan.badge}</span>
-              )}
-
               <p className="rpl-plan-name">{plan.name}</p>
               <div className="rpl-price-row">
                 <span className="rpl-price">{plan.price}</span>
@@ -105,7 +57,7 @@ export default function RavynsetPlanes() {
                     <span>{item}</span>
                   </li>
                 ))}
-                {plan.excludes?.map((item, idx) => (
+                {'excludes' in plan && plan.excludes?.map((item, idx) => (
                   <li key={idx} className="rpl-item is-excluded">
                     <X style={{ width: 15, height: 15, color: 'var(--text-muted)', flexShrink: 0, marginTop: 3, opacity: 0.5 }} />
                     <span>{item}</span>

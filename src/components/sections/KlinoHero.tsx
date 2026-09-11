@@ -1,8 +1,11 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 export default function KlinoHero() {
+  const { t } = useLanguage()
+
   return (
     <section className="khero">
       {/* Símbolo monumental como textura */}
@@ -16,17 +19,8 @@ export default function KlinoHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, ease }}
         >
-          ← Ravyn Labs
+          {t.klino.breadcrumb}
         </motion.a>
-
-        <motion.span
-          className="khero-badge"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease, delay: 0.05 }}
-        >
-          <span className="khero-badge-dot" /> Klino · Beta
-        </motion.span>
 
         <motion.h1
           className="khero-title"
@@ -34,7 +28,7 @@ export default function KlinoHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.65, ease, delay: 0.1 }}
         >
-          Habla con tu paciente.<br />Klino escribe la nota.
+          {t.klino.heroTitleLine1}<br />{t.klino.heroTitleLine2}
         </motion.h1>
 
         <motion.p
@@ -43,8 +37,7 @@ export default function KlinoHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease, delay: 0.18 }}
         >
-          Klino escucha la consulta y genera la nota clínica completa —
-          conforme a NOM-004 y NOM-024. Sin teclear, sin dejar de mirar a quien tienes enfrente.
+          {t.klino.heroSub}
         </motion.p>
 
         <motion.div
@@ -57,13 +50,13 @@ export default function KlinoHero() {
             className="khero-btn-primary"
             onClick={() => document.getElementById('planes')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Únete al beta →
+            {t.klino.ctaBeta}
           </button>
           <button
             className="khero-btn-secondary"
             onClick={() => document.getElementById('incluye')?.scrollIntoView({ behavior: 'smooth' })}
           >
-            Cómo funciona
+            {t.klino.ctaHow}
           </button>
         </motion.div>
 
@@ -73,7 +66,7 @@ export default function KlinoHero() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, ease, delay: 0.4 }}
         >
-          🏆 2º lugar Innovatec 2026 · Área de Salud
+          {t.klino.award}
         </motion.div>
       </div>
 

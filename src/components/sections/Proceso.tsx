@@ -1,41 +1,15 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const pasos = [
-  {
-    num: '01',
-    nombre: 'Semilla',
-    lead: 'Entendemos el problema.',
-    desc: 'Sin presentaciones, sin humo. Nos reunimos, escuchamos y definimos qué vamos a construir — y qué no.',
-  },
-  {
-    num: '02',
-    nombre: 'Cultivo',
-    lead: 'Construimos en iteraciones cortas.',
-    desc: 'Ves avances reales durante todo el proceso. Comunicación directa con quien construye, no con un intermediario.',
-  },
-  {
-    num: '03',
-    nombre: 'Cosecha',
-    lead: 'Entregamos algo que ya está corriendo.',
-    desc: 'No una promesa ni un diseño en Figma. Código funcionando, desplegado, listo para operar.',
-  },
-  {
-    num: '04',
-    nombre: 'Raíz',
-    lead: 'El producto sigue creciendo contigo.',
-    desc: 'Soporte vivo después de la entrega. No desaparecemos cuando terminamos.',
-  },
-]
-
 export default function Proceso() {
+  const { t } = useLanguage()
+
   return (
     <section id="proceso" className="proceso2">
       <div className="container proceso2-inner">
-
-
 
         <motion.h2
           className="proceso2-heading"
@@ -44,7 +18,7 @@ export default function Proceso() {
           viewport={viewport}
           transition={{ duration: 0.6, ease, delay: 0.06 }}
         >
-          De la semilla<br />a la raíz.
+          {t.proceso.headingLine1}<br />{t.proceso.headingLine2}
         </motion.h2>
 
         {/* Tallo + nodos */}
@@ -58,7 +32,7 @@ export default function Proceso() {
             transition={{ duration: 0.8, ease: [0, 0, 0.2, 1], delay: 0.1 }}
           />
 
-          {pasos.map((p, i) => (
+          {t.proceso.pasos.map((p, i) => (
             <motion.div
               key={p.num}
               className="proceso2-node"

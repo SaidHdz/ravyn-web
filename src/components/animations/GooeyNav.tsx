@@ -148,14 +148,10 @@ const GooeyNav = ({
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         } else {
-          if (location.pathname === '/ravynset') {
-             document.querySelector(href)?.scrollIntoView({ behavior: 'smooth' });
-          } else {
-             navigate(`/ravynset${href}`);
-          }
+          navigate(`/${href}`);
         }
-      } else if (href === '/' || href === '/ravynset') {
-        if (location.pathname === href) {
+      } else if (href === '/') {
+        if (location.pathname === '/') {
           window.scrollTo({ top: 0, behavior: 'smooth' });
         } else {
           navigate(href);

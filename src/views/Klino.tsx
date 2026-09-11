@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import KlinoHero from '@/components/sections/KlinoHero'
@@ -9,8 +10,13 @@ import KlinoPlanes from '@/components/sections/KlinoPlanes'
 import KlinoFAQ from '@/components/sections/KlinoFAQ'
 
 export default function KlinoPage() {
+  const { t } = useLanguage()
+
   useEffect(() => {
-    document.title = 'Klino — Nota clínica por voz · Ravyn Labs'
+    document.title = t.klino.pageTitle
+  }, [t.klino.pageTitle])
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 

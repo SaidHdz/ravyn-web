@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { useLanguage } from '@/context/LanguageContext'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import Hero from '@/components/sections/Hero'
@@ -10,8 +11,13 @@ import Proceso from '@/components/sections/Proceso'
 import Contacto from '@/components/sections/Contacto'
 
 export default function Landing() {
+  const { language } = useLanguage()
+
   useEffect(() => {
-    document.title = 'Ravyn — De la semilla al producto.'
+    document.title = language === 'es' ? 'Ravyn — De la semilla al producto.' : 'Ravyn — From seed to product.'
+  }, [language])
+
+  useEffect(() => {
     window.scrollTo(0, 0)
   }, [])
 

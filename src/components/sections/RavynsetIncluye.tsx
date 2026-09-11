@@ -1,46 +1,17 @@
 import { motion } from 'motion/react'
+import { useLanguage } from '@/context/LanguageContext'
 
 const ease = [0.22, 1, 0.36, 1] as const
 const viewport = { once: true, amount: 0.3 }
 
-const funciones = [
-  {
-    num: '01',
-    title: 'Web y Agenda 24/7',
-    desc: 'Diseño con tu identidad. Tus pacientes agendan en línea y se sincroniza directo con tu Google Calendar.',
-  },
-  {
-    num: '02',
-    title: 'Recordatorios automáticos',
-    desc: 'El sistema envía confirmaciones y recordatorios por WhatsApp para que tus pacientes no olviden su cita.',
-  },
-  {
-    num: '03',
-    title: 'Expediente centralizado',
-    desc: 'Panel de control con todas tus citas, historial de pacientes y datos de contacto en un solo lugar.',
-  },
-  {
-    num: '04',
-    title: 'Motor de reputación',
-    desc: 'Mensajes automáticos de agradecimiento post-visita con invitación a dejar reseña en Google Maps.',
-  },
-]
-
 export default function RavynsetIncluye() {
+  const { t } = useLanguage()
+
   return (
     <section id="incluye" className="rinc">
       <div className="container rinc-grid">
 
         <div className="rinc-left">
-          <motion.span
-            className="rinc-label"
-            initial={{ opacity: 0, y: 14 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={viewport}
-            transition={{ duration: 0.4, ease }}
-          >
-            Qué incluye
-          </motion.span>
           <motion.h2
             className="rinc-heading"
             initial={{ opacity: 0, y: 20 }}
@@ -48,7 +19,7 @@ export default function RavynsetIncluye() {
             viewport={viewport}
             transition={{ duration: 0.6, ease, delay: 0.06 }}
           >
-            Cuatro herramientas.<br />Una sola plataforma.
+            {t.ravynset.incluyeHeadingLine1}<br />{t.ravynset.incluyeHeadingLine2}
           </motion.h2>
           <motion.p
             className="rinc-intro"
@@ -57,12 +28,12 @@ export default function RavynsetIncluye() {
             viewport={viewport}
             transition={{ duration: 0.55, ease, delay: 0.14 }}
           >
-            Ravynset unifica tu agenda, la información de tus pacientes y tus recordatorios en un solo flujo. Sin integraciones extrañas.
+            {t.ravynset.incluyeIntro}
           </motion.p>
         </div>
 
         <div className="rinc-list">
-          {funciones.map((f, i) => (
+          {t.ravynset.incluyeItems.map((f, i) => (
             <motion.div
               key={f.num}
               className="rinc-row"

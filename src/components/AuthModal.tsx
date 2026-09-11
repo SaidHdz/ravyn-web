@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { X, Mail, Lock, User, ArrowRight, Loader2, Eye, EyeOff, Building2, Phone, CheckCircle2, ArrowLeft } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import { useLanguage } from '@/context/LanguageContext'
 import { translateAuthError } from '@/lib/authErrors'
 
 type View = 'login' | 'signup' | 'forgot'
@@ -18,13 +19,14 @@ const MIN_PASSWORD = 6
 
 export default function AuthModal({ isOpen, onClose, initialView = 'login' }: AuthModalProps) {
   const { signIn, signUp, resetPassword } = useAuth()
+  const { t, language } = useLanguage()
   const [view, setView] = useState<View>(initialView)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [passwordConfirm, setPasswordConfirm] = useState('')
   const [fullName, setFullName] = useState('')
-  const [clinicName, setClinicName] = useState('')
-  const [clinicPhone, setClinicPhone] = useState('')
+  const [companyName, setCompanyName] = useState('')
+  const [phone, setPhone] = useState('')
 
   const [loading, setLoading] = useState(false)
   const [feedback, setFeedback] = useState<Feedback | null>(null)
@@ -35,8 +37,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
     setPassword('')
     setPasswordConfirm('')
     setFullName('')
-    setClinicName('')
-    setClinicPhone('')
+    setCompanyName('')
+    setPhone('')
     setShowPassword(false)
     setFeedback(null)
   }
@@ -44,12 +46,11 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   // Reset everything when modal closes (regardless of how it closed)
   useEffect(() => {
     if (!isOpen) {
-      // delay reset slightly so exit animation doesn't show the form clear out
-      const t = setTimeout(() => {
+      const timeout = setTimeout(() => {
         resetForm()
         setView(initialView)
       }, 250)
-      return () => clearTimeout(t)
+      return () => clearTimeout(timeout)
     }
   }, [isOpen, initialView])
 
@@ -96,16 +97,24 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
   }, [isOpen])
 
   const validate = (): string | null => {
-    if (!email.trim()) return 'Ingresa tu correo electrónico.'
+    if (!email.trim()) return language === 'es' ? 'Ingresa tu correo electrónico.' : 'Please enter your email address.'
     if (view !== 'forgot') {
-      if (!password) return 'Ingresa tu contraseña.'
-      if (view === 'signup' && password.length < MIN_PASSWORD) return `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`
-      if (view === 'signup' && password !== passwordConfirm) return 'Las contraseñas no coinciden.'
+      if (!password) return language === 'es' ? 'Ingresa tu contraseña.' : 'Please enter your password.'
+      if (view === 'signup' && password.length < MIN_PASSWORD) {
+        return language === 'es'
+          ? `La contraseña debe tener al menos ${MIN_PASSWORD} caracteres.`
+          : `Password must be at least ${MIN_PASSWORD} characters.`
+      }
+      if (view === 'signup' && password !== passwordConfirm) {
+        return language === 'es' ? 'Las contraseñas no coinciden.' : 'Passwords do not match.'
+      }
     }
     if (view === 'signup') {
-      if (!fullName.trim()) return 'Ingresa tu nombre.'
-      if (!clinicName.trim()) return 'Ingresa el nombre de tu clínica.'
-      if (!/^\d{10}$/.test(clinicPhone.replace(/\D/g, ''))) return 'El teléfono debe tener 10 dígitos.'
+      if (!fullName.trim()) return language === 'es' ? 'Ingresa tu nombre.' : 'Please enter your full name.'
+      if (!companyName.trim()) return language === 'es' ? 'Ingresa el nombre de tu empresa o negocio.' : 'Please enter your company or business name.'
+      if (!/^\d{10}$/.test(phone.replace(/\D/g, ''))) {
+        return language === 'es' ? 'El teléfono debe tener 10 dígitos.' : 'Phone must have 10 digits.'
+      }
     }
     return null
   }
@@ -127,29 +136,33 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
       if (view === 'login') {
         const { error } = await signIn(email.trim(), password)
         if (error) throw error
-        setFeedback({ type: 'success', message: '¡Bienvenido de vuelta!' })
+        setFeedback({ type: 'success', message: language === 'es' ? '¡Bienvenido de vuelta!' : 'Welcome back!' })
         setTimeout(() => {
           onClose()
         }, 600)
       } else if (view === 'signup') {
         const { error } = await signUp(email.trim(), password, {
           full_name: fullName.trim(),
-          clinic_name: clinicName.trim(),
-          clinic_phone: clinicPhone.trim(),
-          clinic_email: email.trim(),
+          company_name: companyName.trim(),
+          phone: phone.replace(/\D/g, ''),
+          clinic_name: companyName.trim(),
+          clinic_phone: phone.replace(/\D/g, ''),
         })
         if (error) throw error
-        // Con email confirmation desactivado: sesión inmediata.
-        setFeedback({ type: 'success', message: '¡Cuenta creada! Iniciando sesión…' })
-        setTimeout(() => {
-          onClose()
-        }, 900)
-      } else {
+        setFeedback({
+          type: 'success',
+          message: language === 'es'
+            ? '¡Cuenta creada! Revisa tu correo para confirmar tu registro.'
+            : 'Account created! Check your email to confirm your registration.',
+        })
+      } else if (view === 'forgot') {
         const { error } = await resetPassword(email.trim())
         if (error) throw error
         setFeedback({
           type: 'success',
-          message: 'Te enviamos un enlace para restablecer tu contraseña. Revisa tu correo.',
+          message: language === 'es'
+            ? 'Te enviamos un enlace para restablecer tu contraseña.'
+            : 'We sent a link to reset your password.',
         })
       }
     } catch (err) {
@@ -159,8 +172,15 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
     }
   }
 
-  const submitLabel = view === 'login' ? 'Iniciar sesión' : view === 'signup' ? 'Crear cuenta' : 'Enviar enlace'
-  const loadingLabel = view === 'login' ? 'Iniciando sesión…' : view === 'signup' ? 'Creando cuenta…' : 'Enviando…'
+  const submitLabel =
+    view === 'login' ? t.authModal.loginBtn :
+    view === 'signup' ? t.authModal.signupBtn :
+    t.authModal.forgotBtn
+
+  const loadingLabel =
+    view === 'login' ? t.authModal.loadingLogin :
+    view === 'signup' ? t.authModal.loadingSignup :
+    t.authModal.loadingForgot
 
   return (
     <AnimatePresence>
@@ -171,14 +191,15 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             onClick={safeClose}
           />
           <motion.div
             className="auth-modal-container"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 12 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
           >
             <button
               className="auth-modal-close"
@@ -193,25 +214,25 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
             <div className="auth-modal-scroll-area">
               <div className="auth-modal-content">
                 <div className="auth-modal-header">
-                  {view === 'forgot' && (
+                  {view !== 'login' && (
                     <button
                       type="button"
                       className="auth-back-btn"
                       onClick={() => switchView('login')}
                       disabled={loading}
                     >
-                      <ArrowLeft className="w-4 h-4" /> Volver
+                      <ArrowLeft className="w-4 h-4" /> {t.authModal.backToLogin}
                     </button>
                   )}
                   <h2 className="auth-header-title">
-                    {view === 'login' && 'Bienvenido'}
-                    {view === 'signup' && 'Crea tu cuenta'}
-                    {view === 'forgot' && 'Recupera tu contraseña'}
+                    {view === 'login' && t.authModal.loginTitle}
+                    {view === 'signup' && t.authModal.signupTitle}
+                    {view === 'forgot' && t.authModal.forgotTitle}
                   </h2>
                   <p className="auth-header-sub">
-                    {view === 'login' && 'Inicia sesión para gestionar tu suscripción.'}
-                    {view === 'signup' && 'Registra tu clínica y comienza a automatizar.'}
-                    {view === 'forgot' && 'Ingresa tu correo y te enviaremos un enlace.'}
+                    {view === 'login' && t.authModal.loginSubtitle}
+                    {view === 'signup' && t.authModal.signupSubtitle}
+                    {view === 'forgot' && t.authModal.forgotSubtitle}
                   </p>
                 </div>
 
@@ -236,12 +257,12 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     {view === 'signup' && (
                       <>
                         <div className="form-group">
-                          <label>Nombre del propietario</label>
+                          <label>{t.authModal.fullNameLabel}</label>
                           <div className="input-wrapper">
                             <User className="w-4 h-4 input-icon" />
                             <input
                               type="text"
-                              placeholder="Tu nombre completo"
+                              placeholder={t.authModal.fullNamePlaceholder}
                               value={fullName}
                               onChange={(e) => { setFullName(e.target.value); clearFeedbackOnEdit() }}
                               autoComplete="name"
@@ -250,28 +271,28 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                           </div>
                         </div>
                         <div className="form-group">
-                          <label>Nombre de la clínica</label>
+                          <label>{t.authModal.companyNameLabel}</label>
                           <div className="input-wrapper">
                             <Building2 className="w-4 h-4 input-icon" />
                             <input
                               type="text"
-                              placeholder="Ej. Clínica Dental Ravyn"
-                              value={clinicName}
-                              onChange={(e) => { setClinicName(e.target.value); clearFeedbackOnEdit() }}
+                              placeholder={t.authModal.companyNamePlaceholder}
+                              value={companyName}
+                              onChange={(e) => { setCompanyName(e.target.value); clearFeedbackOnEdit() }}
                               autoComplete="organization"
                               required
                             />
                           </div>
                         </div>
                         <div className="form-group">
-                          <label>Teléfono</label>
+                          <label>{t.authModal.phoneLabel}</label>
                           <div className="input-wrapper">
                             <Phone className="w-4 h-4 input-icon" />
                             <input
                               type="tel"
-                              placeholder="10 dígitos"
-                              value={clinicPhone}
-                              onChange={(e) => { setClinicPhone(e.target.value.replace(/\D/g, '').slice(0, 10)); clearFeedbackOnEdit() }}
+                              placeholder={t.authModal.phonePlaceholder}
+                              value={phone}
+                              onChange={(e) => { setPhone(e.target.value.replace(/\D/g, '').slice(0, 10)); clearFeedbackOnEdit() }}
                               inputMode="numeric"
                               autoComplete="tel"
                               required
@@ -282,12 +303,12 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                     )}
 
                     <div className="form-group">
-                      <label>Correo electrónico</label>
+                      <label>{t.authModal.emailLabel}</label>
                       <div className="input-wrapper">
                         <Mail className="w-4 h-4 input-icon" />
                         <input
                           type="email"
-                          placeholder="correo@ejemplo.com"
+                          placeholder={t.authModal.emailPlaceholder}
                           value={email}
                           onChange={(e) => { setEmail(e.target.value); clearFeedbackOnEdit() }}
                           autoComplete={view === 'signup' ? 'email' : 'username'}
@@ -298,12 +319,12 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
                     {view !== 'forgot' && (
                       <div className="form-group">
-                        <label>Contraseña</label>
+                        <label>{t.authModal.passwordLabel}</label>
                         <div className="input-wrapper">
                           <Lock className="w-4 h-4 input-icon" />
                           <input
                             type={showPassword ? 'text' : 'password'}
-                            placeholder={view === 'signup' ? `Mínimo ${MIN_PASSWORD} caracteres` : '••••••••'}
+                            placeholder={view === 'signup' ? `Min ${MIN_PASSWORD}` : t.authModal.passwordPlaceholder}
                             value={password}
                             onChange={(e) => { setPassword(e.target.value); clearFeedbackOnEdit() }}
                             autoComplete={view === 'signup' ? 'new-password' : 'current-password'}
@@ -325,12 +346,12 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
 
                     {view === 'signup' && (
                       <div className="form-group">
-                        <label>Confirma tu contraseña</label>
+                        <label>{t.authModal.passwordConfirmLabel}</label>
                         <div className="input-wrapper">
                           <Lock className="w-4 h-4 input-icon" />
                           <input
                             type={showPassword ? 'text' : 'password'}
-                            placeholder="Repite la contraseña"
+                            placeholder={t.authModal.passwordConfirmPlaceholder}
                             value={passwordConfirm}
                             onChange={(e) => { setPasswordConfirm(e.target.value); clearFeedbackOnEdit() }}
                             autoComplete="new-password"
@@ -347,7 +368,7 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                           className="auth-link-btn"
                           onClick={() => switchView('forgot')}
                         >
-                          ¿Olvidaste tu contraseña?
+                          {t.authModal.forgotPassLink}
                         </button>
                       </div>
                     )}
@@ -393,8 +414,8 @@ export default function AuthModal({ isOpen, onClose, initialView = 'login' }: Au
                       disabled={loading}
                     >
                       {view === 'login'
-                        ? '¿No tienes cuenta? Regístrate aquí'
-                        : '¿Ya tienes cuenta? Inicia sesión'}
+                        ? `${t.authModal.noAccount} ${t.authModal.createOne}`
+                        : `${t.authModal.haveAccount} ${t.authModal.loginHere}`}
                     </button>
                   </div>
                 )}
