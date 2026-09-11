@@ -8,10 +8,11 @@ const viewport = { once: true, amount: 0.3 }
 
 const projectImages: Record<string, string[]> = {
   klino: [
-    '/projects/klino/Home.jpg',
-    '/projects/klino/Expedientes.jpg',
-    '/projects/klino/Hardware.jpg',
-    '/projects/klino/Ajustes.jpg',
+    '/projects/klino/login.jpeg',
+    '/projects/klino/home.jpeg',
+    '/projects/klino/expedientes.jpeg',
+    '/projects/klino/calendario.jpeg',
+    '/projects/klino/ajustes.jpeg',
   ],
   ravynset: [],
   slimergy: [

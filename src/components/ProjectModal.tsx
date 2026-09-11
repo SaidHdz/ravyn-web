@@ -96,14 +96,51 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
   )
 }
 
+type SlimergyScreen = 'home' | 'cuartos' | 'ajustes'
+type SlimergyMode = 'despues' | 'antes'
+
+const slimergyImageMap: Record<SlimergyScreen, Record<SlimergyMode, number>> = {
+  home: { despues: 0, antes: 1 },
+  cuartos: { despues: 2, antes: 3 },
+  ajustes: { despues: 4, antes: 5 },
+}
+
 export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
   const { t, language } = useLanguage()
   const [activeImageIdx, setActiveImageIdx] = useState(0)
 
+  const isSlimergy = project?.id === 'slimergy'
+  const [slimergyMode, setSlimergyMode] = useState<SlimergyMode>('despues')
+  const [slimergyScreen, setSlimergyScreen] = useState<SlimergyScreen>('home')
+
   // Reset al abrir proyecto nuevo
   useEffect(() => {
-    if (isOpen) setActiveImageIdx(0)
+    if (isOpen) {
+      setActiveImageIdx(0)
+      setSlimergyMode('despues')
+      setSlimergyScreen('home')
+    }
   }, [isOpen, project])
+
+  // Sync Slimergy switch and pill states when activeImageIdx changes (e.g. from arrows)
+  useEffect(() => {
+    if (isSlimergy && project?.images && project.images[activeImageIdx]) {
+      const raw = project.images[activeImageIdx].toLowerCase()
+      if (raw.includes('antes')) {
+        setSlimergyMode('antes')
+      } else if (raw.includes('despues')) {
+        setSlimergyMode('despues')
+      }
+
+      if (raw.includes('cuarto')) {
+        setSlimergyScreen('cuartos')
+      } else if (raw.includes('confi')) {
+        setSlimergyScreen('ajustes')
+      } else if (raw.includes('home')) {
+        setSlimergyScreen('home')
+      }
+    }
+  }, [activeImageIdx, isSlimergy, project])
 
   // Lock de scroll al abrir
   useEffect(() => {
@@ -142,31 +179,41 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
   const getScreenTabLabel = (imgPath: string, idx: number) => {
     const raw = imgPath.split('/').pop()?.toLowerCase() || ''
-    const isDespues = raw.includes('despues')
-    const isAntes = raw.includes('antes')
-    const tagDespues = language === 'es' ? 'Después' : 'After'
-    const tagAntes = language === 'es' ? 'Antes' : 'Before'
-    const suffix = isDespues ? ` · ${tagDespues}` : isAntes ? ` · ${tagAntes}` : ''
+    const isEn = language === 'en'
 
+    if (raw.includes('login') || raw.includes('ingreso') || raw.includes('acceso')) {
+      return t.projectModal.screens?.login || (isEn ? 'Login' : 'Login')
+    }
     if (raw.includes('home')) {
-      return `Home${suffix}`
+      return t.projectModal.screens?.home || (isEn ? 'Home' : 'Home')
     }
-    if (raw.includes('cuarto')) {
-      const label = language === 'es' ? 'Cuartos' : 'Rooms'
-      return `${label}${suffix}`
+    if (raw.includes('expediente')) {
+      return t.projectModal.screens?.expedientes || (isEn ? 'Records' : 'Expedientes')
     }
-    if (raw.includes('confi') || raw.includes('config')) {
-      const label = language === 'es' ? 'Ajustes' : 'Settings'
-      return `${label}${suffix}`
+    if (raw.includes('calendar') || raw.includes('calendario') || raw.includes('agenda')) {
+      return t.projectModal.screens?.calendario || (isEn ? 'Schedule' : 'Agenda')
     }
+    if (raw.includes('ajuste') || raw.includes('confi') || raw.includes('config') || raw.includes('setting')) {
+      return t.projectModal.screens?.ajustes || (isEn ? 'Settings' : 'Ajustes')
+    }
+    if (raw.includes('hardware')) {
+      return t.projectModal.screens?.hardware || 'Hardware'
+    }
+    if (raw.includes('alerta')) {
+      return t.projectModal.screens?.alertas || (isEn ? 'Alerts' : 'Alertas')
+    }
+    if (raw.includes('cuarto') || raw.includes('room')) {
+      return t.projectModal.screens?.cuartos || (isEn ? 'Rooms' : 'Cuartos')
+    }
+
     const clean = raw.replace(/[_-]+/g, ' ').replace(/\.(jpg|jpeg|png|webp)$/i, '').trim()
-    return clean || `${t.projectModal.screenNum} ${idx + 1}`
+    return clean.charAt(0).toUpperCase() + clean.slice(1) || `${t.projectModal.screenNum} ${idx + 1}`
   }
 
   const getScreenTag = (imgPath: string) => {
     const raw = imgPath.split('/').pop()?.toLowerCase() || ''
-    if (raw.includes('despues')) return language === 'es' ? 'REDISEÑO NUEVO' : 'NEW REDESIGN'
-    if (raw.includes('antes')) return language === 'es' ? 'PROTOTIPO PREVIO' : 'PREVIOUS PROTOTYPE'
+    if (raw.includes('despues')) return t.projectModal.tagAfter || (language === 'es' ? 'REDISEÑO EN EXPO' : 'EXPO REDESIGN')
+    if (raw.includes('antes')) return t.projectModal.tagBefore || (language === 'es' ? 'PROTOTIPO PREVIO' : 'PREVIOUS PROTOTYPE')
     return null
   }
 
@@ -240,21 +287,78 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                   <div className="pm-col-visual">
                     {hasImages ? (
                       <div className="pm-mockup-wrap">
-                        <div className="pm-tabs">
-                          {project.images!.map((img, idx) => {
-                            const name = getScreenTabLabel(img, idx)
-                            return (
-                              <button
-                                key={idx}
-                                className={`pm-tab ${activeImageIdx === idx ? 'is-active' : ''}`}
-                                onClick={() => setActiveImageIdx(idx)}
-                                style={{ '--accent': accent } as React.CSSProperties}
-                              >
-                                {name}
-                              </button>
-                            )
-                          })}
-                        </div>
+                        {isSlimergy ? (
+                          <div className="slimergy-controls-wrap">
+                            {/* Toggle Switch Antes / Después */}
+                            <div className="slimergy-switch-bar">
+                              <div className="slimergy-switch-track">
+                                <button
+                                  type="button"
+                                  className={`slimergy-switch-btn ${slimergyMode === 'antes' ? 'is-active' : ''}`}
+                                  onClick={() => {
+                                    setSlimergyMode('antes')
+                                    const nextIdx = slimergyImageMap[slimergyScreen]['antes']
+                                    setActiveImageIdx(nextIdx)
+                                  }}
+                                >
+                                  <span>{t.projectModal.before}</span>
+                                </button>
+                                <button
+                                  type="button"
+                                  className={`slimergy-switch-btn ${slimergyMode === 'despues' ? 'is-active' : ''}`}
+                                  onClick={() => {
+                                    setSlimergyMode('despues')
+                                    const nextIdx = slimergyImageMap[slimergyScreen]['despues']
+                                    setActiveImageIdx(nextIdx)
+                                  }}
+                                >
+                                  <span>{t.projectModal.after}</span>
+                                </button>
+                              </div>
+                            </div>
+
+                            {/* Solo 3 píldoras para las pantallas: [Home] [Cuartos] [Ajustes] */}
+                            <div className="pm-tabs slimergy-pills-row">
+                              {(['home', 'cuartos', 'ajustes'] as const).map((screenKey) => {
+                                const label = t.projectModal.screens[screenKey]
+                                const isActive = slimergyScreen === screenKey
+
+                                return (
+                                  <button
+                                    key={screenKey}
+                                    type="button"
+                                    className={`pm-tab ${isActive ? 'is-active' : ''}`}
+                                    onClick={() => {
+                                      setSlimergyScreen(screenKey)
+                                      const nextIdx = slimergyImageMap[screenKey][slimergyMode]
+                                      setActiveImageIdx(nextIdx)
+                                    }}
+                                    style={{ '--accent': accent } as React.CSSProperties}
+                                  >
+                                    {label}
+                                  </button>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="pm-tabs">
+                            {project.images!.map((img, idx) => {
+                              const name = getScreenTabLabel(img, idx)
+                              return (
+                                <button
+                                  key={idx}
+                                  type="button"
+                                  className={`pm-tab ${activeImageIdx === idx ? 'is-active' : ''}`}
+                                  onClick={() => setActiveImageIdx(idx)}
+                                  style={{ '--accent': accent } as React.CSSProperties}
+                                >
+                                  {name}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        )}
 
                         <div className="pm-mockup-display">
                           <IPhoneMockup color={accent}>
@@ -470,8 +574,67 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               display: flex;
               flex-direction: column;
               align-items: center;
-              gap: 32px;
+              gap: 20px;
             }
+
+            /* Slimergy Interactive Controls */
+            .slimergy-controls-wrap {
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              gap: 12px;
+              width: 100%;
+            }
+
+            .slimergy-switch-bar {
+              display: flex;
+              justify-content: center;
+              width: 100%;
+            }
+
+            .slimergy-switch-track {
+              display: inline-flex;
+              align-items: center;
+              padding: 4px;
+              border-radius: 100vw;
+              background: rgba(16, 52, 42, 0.08);
+              border: 1px solid rgba(16, 52, 42, 0.14);
+              gap: 4px;
+              box-shadow: inset 0 2px 4px rgba(16, 52, 42, 0.04);
+            }
+
+            .slimergy-switch-btn {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              padding: 7px 20px;
+              border-radius: 100vw;
+              border: none;
+              background: transparent;
+              font-family: var(--font-mono);
+              font-size: 0.74rem;
+              font-weight: 700;
+              letter-spacing: 0.06em;
+              text-transform: uppercase;
+              color: var(--text-muted);
+              cursor: pointer;
+              transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
+            }
+
+            .slimergy-switch-btn:hover:not(.is-active) {
+              color: var(--color-pine);
+            }
+
+            .slimergy-switch-btn.is-active {
+              background: #FFFFFF;
+              color: var(--color-pine);
+              box-shadow: 0 3px 10px rgba(16, 52, 42, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
+            }
+
+            .slimergy-pills-row {
+              gap: 8px;
+            }
+
             .pm-tabs {
               display: flex;
               gap: 8px;
@@ -577,6 +740,20 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               .pm-col-content { position: static; }
               .pm-col-visual { order: -1; }
               .pm-nav { display: none; }
+            }
+            @media (max-width: 600px) {
+              .slimergy-switch-btn {
+                padding: 5px 12px;
+                font-size: 0.68rem;
+                gap: 6px;
+              }
+              .slimergy-controls-wrap {
+                gap: 10px;
+              }
+              .pm-tab {
+                padding: 6px 12px;
+                font-size: 0.68rem;
+              }
             }
           `}</style>
         </div>
