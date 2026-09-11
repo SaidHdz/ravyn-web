@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { motion } from 'motion/react'
 import { useLanguage } from '@/context/LanguageContext'
+import { useAuth } from '@/hooks/useAuth'
 import ContactModal from '../ContactModal'
 
 const ease = [0.22, 1, 0.36, 1] as const
@@ -8,7 +9,11 @@ const viewport = { once: true, amount: 0.4 }
 
 export default function Contacto() {
   const { t } = useLanguage()
+  const { user } = useAuth()
   const [modalOpen, setModalOpen] = useState(false)
+
+  const userName = (user?.user_metadata?.full_name || user?.user_metadata?.name || '') as string
+  const userEmail = (user?.email || '') as string
 
   return (
     <section id="contacto" className="cierre">
@@ -54,7 +59,12 @@ export default function Contacto() {
         </motion.div>
       </div>
 
-      <ContactModal isOpen={modalOpen} onClose={() => setModalOpen(false)} />
+      <ContactModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        initialName={userName}
+        initialEmail={userEmail}
+      />
 
       <style>{`
         .cierre {

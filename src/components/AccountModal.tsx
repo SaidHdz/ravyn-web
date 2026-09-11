@@ -19,12 +19,14 @@ import {
   Pencil,
   Check,
   ChevronDown,
+  Plus,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { useLanguage } from '@/context/LanguageContext'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import { translateAuthError } from '@/lib/authErrors'
+import ContactModal from './ContactModal'
 
 interface AccountModalProps {
   isOpen: boolean
@@ -106,6 +108,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const [companySaveSuccess, setCompanySaveSuccess] = useState(false)
   const [companySaveError, setCompanySaveError] = useState<string | null>(null)
   const [expandedProjectId, setExpandedProjectId] = useState<string | null>(null)
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false)
 
   // Bloqueo de scroll
   useEffect(() => {
@@ -336,34 +339,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
             ],
           },
         ]
-      } else if (loadedProjects.length === 0) {
-        // Si no hay proyectos en la tabla pero el usuario tiene metadatos de proyecto o negocio,
-        // creamos el proyecto en curso del cliente
-        const companyOrProjectName =
-          user.user_metadata?.company_name ||
-          user.user_metadata?.clinic_name ||
-          userData?.company_name
-
-        if (companyOrProjectName) {
-          loadedProjects = [
-            {
-              id: 'proj-active-1',
-              title: companyOrProjectName,
-              category: t.accountModal.sampleProjectCategory,
-              status: 'in_progress',
-              phase: t.accountModal.samplePhaseName,
-              progress: 75,
-              targetDate: isEn ? 'July 2026' : 'Julio 2026',
-              stagingUrl: 'https://staging.ravyn.mx/preview',
-              milestones: [
-                { name: t.accountModal.sampleMilestone1, done: true },
-                { name: t.accountModal.sampleMilestone2, done: true },
-                { name: t.accountModal.sampleMilestone3, done: true },
-                { name: t.accountModal.sampleMilestone4, done: false },
-              ],
-            },
-          ]
-        }
       }
 
       setProjects(loadedProjects)
@@ -442,11 +417,7 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   }
 
   const handleOpenContact = () => {
-    onClose()
-    const contactSection = document.getElementById('contacto')
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' })
-    }
+    setIsContactModalOpen(true)
   }
 
   const displayData = {
@@ -717,58 +688,78 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                         <p className="projects-main-sub">{t.accountModal.projectsSubtitle}</p>
                       </div>
 
-                      {/* Tabs de estado */}
-                      <div className="projects-tabs">
-                        <button
-                          type="button"
-                          className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
-                          onClick={() => setActiveTab('all')}
-                        >
-                          {t.accountModal.tabAll}
-                          <span className="tab-count">{projects.length}</span>
-                        </button>
-                        <button
-                          type="button"
-                          className={`tab-btn ${activeTab === 'in_progress' ? 'active' : ''}`}
-                          onClick={() => setActiveTab('in_progress')}
-                        >
-                          {t.accountModal.tabInProgress}
-                          <span className="tab-count">
-                            {projects.filter((p) => p.status === 'in_progress' || p.status === 'planning').length}
-                          </span>
-                        </button>
-                        <button
-                          type="button"
-                          className={`tab-btn ${activeTab === 'completed' ? 'active' : ''}`}
-                          onClick={() => setActiveTab('completed')}
-                        >
-                          {t.accountModal.tabCompleted}
-                          <span className="tab-count">
-                            {projects.filter((p) => p.status === 'completed').length}
-                          </span>
-                        </button>
-                      </div>
+                      {/* Tabs de estado — solo si hay proyectos */}
+                      {projects.length > 0 && (
+                        <div className="projects-tabs">
+                          <button
+                            type="button"
+                            className={`tab-btn ${activeTab === 'all' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('all')}
+                          >
+                            {t.accountModal.tabAll}
+                            <span className="tab-count">{projects.length}</span>
+                          </button>
+                          <button
+                            type="button"
+                            className={`tab-btn ${activeTab === 'in_progress' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('in_progress')}
+                          >
+                            {t.accountModal.tabInProgress}
+                            <span className="tab-count">
+                              {projects.filter((p) => p.status === 'in_progress' || p.status === 'planning').length}
+                            </span>
+                          </button>
+                          <button
+                            type="button"
+                            className={`tab-btn ${activeTab === 'completed' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('completed')}
+                          >
+                            {t.accountModal.tabCompleted}
+                            <span className="tab-count">
+                              {projects.filter((p) => p.status === 'completed').length}
+                            </span>
+                          </button>
+                        </div>
+                      )}
                     </div>
 
                     {/* Listado de proyectos */}
-                    {filteredProjects.length === 0 ? (
+                    {projects.length === 0 ? (
                       <div className="empty-projects-state">
-                        <div className="empty-icon-wrap">
-                          <Layers className="w-8 h-8 text-pine/60" />
+                        <div className="empty-icon-wrap" style={{ background: 'rgba(224, 67, 107, 0.08)' }}>
+                          <Plus className="w-8 h-8 text-radish" strokeWidth={2.5} />
                         </div>
-                        <h4 className="empty-title">{t.accountModal.emptyTitle}</h4>
-                        <p className="empty-desc">{t.accountModal.emptyDesc}</p>
+                        <h4 className="empty-title">
+                          {language === 'en' ? 'Plant your first project' : 'Siembra tu primer proyecto'}
+                        </h4>
+                        <p className="empty-desc">
+                          {language === 'en'
+                            ? "You don't have any active projects yet. Tell us what you want to build and let's plant it together."
+                            : 'Aún no tienes proyectos activos. Cuéntanos qué quieres construir y lo sembramos juntos.'}
+                        </p>
                         <button
                           type="button"
                           onClick={handleOpenContact}
                           className="btn-plant-project"
+                          style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}
                         >
-                          {t.accountModal.plantProjectCta}
+                          <Plus className="w-4 h-4" strokeWidth={2.5} />
+                          {language === 'en' ? 'Plant a new project' : 'Plantar un nuevo proyecto'}
                         </button>
                       </div>
                     ) : (
-                      <div className="folders-stack">
-                        {filteredProjects.map((project, index) => {
+                      <>
+                        {filteredProjects.length === 0 ? (
+                          <div className="empty-projects-state">
+                            <div className="empty-icon-wrap">
+                              <Layers className="w-8 h-8 text-pine/60" />
+                            </div>
+                            <h4 className="empty-title">{t.accountModal.emptyTitle}</h4>
+                            <p className="empty-desc">{t.accountModal.emptyDesc}</p>
+                          </div>
+                        ) : (
+                          <div className="folders-stack">
+                            {filteredProjects.map((project, index) => {
                           const isInProgress = project.status === 'in_progress' || project.status === 'planning'
                           const isExpanded = expandedProjectId === project.id
 
@@ -964,11 +955,46 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
                         })}
                       </div>
                     )}
-                  </div>
-                </div>
-              )}
+
+                    {/* Siempre abajo y al final de los proyectos: el + para crear uno nuevo */}
+                    <div className="add-project-bottom-wrap">
+                      <button
+                        type="button"
+                        className="btn-add-project-row"
+                        onClick={handleOpenContact}
+                      >
+                        <div className="add-project-icon-circle">
+                          <Plus className="w-5 h-5 text-radish" strokeWidth={2.5} />
+                        </div>
+                        <div className="add-project-text-col">
+                          <span className="add-project-row-title">
+                            {language === 'en' ? 'Plant a new project' : 'Plantar un nuevo proyecto'}
+                          </span>
+                          <span className="add-project-row-sub">
+                            {language === 'en'
+                              ? 'Start and plant a new development or idea with the Ravyn team'
+                              : 'Siembra un nuevo desarrollo o idea con el equipo de Ravyn'}
+                          </span>
+                        </div>
+                        <span className="add-project-pill-action">
+                          <Plus className="w-4 h-4" strokeWidth={2.5} />
+                        </span>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
-          </motion.div>
+          )}
+        </div>
+      </motion.div>
+
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+        initialName={displayData.contactName !== t.accountModal.defaultUser ? displayData.contactName : ''}
+        initialEmail={displayData.email}
+      />
 
           <style>{`
             .account-modal-overlay {
@@ -1499,6 +1525,85 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
             .btn-plant-project:hover {
               opacity: 0.92;
               transform: translateY(-1px);
+            }
+
+            /* Fila de añadir proyecto al final de la lista de carpetas */
+            .add-project-bottom-wrap {
+              margin-top: 18px;
+              padding-top: 6px;
+            }
+            .btn-add-project-row {
+              width: 100%;
+              display: flex;
+              align-items: center;
+              gap: 16px;
+              padding: 16px 20px;
+              background: #ffffff;
+              border: 1px dashed rgba(16, 52, 42, 0.22);
+              border-radius: 18px;
+              cursor: pointer;
+              text-align: left;
+              transition: all 0.22s ease;
+              box-shadow: 0 4px 16px rgba(16, 52, 42, 0.03);
+            }
+            .btn-add-project-row:hover {
+              border-color: var(--color-radish);
+              border-style: solid;
+              background: #fffafa;
+              transform: translateY(-2px);
+              box-shadow: 0 8px 24px rgba(224, 67, 107, 0.12);
+            }
+            .add-project-icon-circle {
+              width: 42px;
+              height: 42px;
+              border-radius: 50%;
+              background: rgba(224, 67, 107, 0.10);
+              border: 1px solid rgba(224, 67, 107, 0.22);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+              transition: background 0.2s;
+            }
+            .btn-add-project-row:hover .add-project-icon-circle {
+              background: var(--color-radish);
+            }
+            .btn-add-project-row:hover .add-project-icon-circle svg {
+              color: var(--color-cream);
+            }
+            .add-project-text-col {
+              display: flex;
+              flex-direction: column;
+              gap: 2px;
+              flex: 1;
+            }
+            .add-project-row-title {
+              font-family: var(--font-display);
+              font-size: 1.05rem;
+              font-weight: 700;
+              color: var(--color-pine);
+              line-height: 1.2;
+            }
+            .add-project-row-sub {
+              font-size: 0.82rem;
+              color: var(--text-secondary);
+              line-height: 1.4;
+            }
+            .add-project-pill-action {
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              background: rgba(16, 52, 42, 0.06);
+              color: var(--color-pine);
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              flex-shrink: 0;
+              transition: all 0.2s;
+            }
+            .btn-add-project-row:hover .add-project-pill-action {
+              background: var(--color-radish);
+              color: var(--color-cream);
             }
 
             /* Folders Stack System */

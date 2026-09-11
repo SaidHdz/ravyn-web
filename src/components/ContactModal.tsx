@@ -2,20 +2,51 @@ import React, { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { X } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
+import { useAuth } from '@/hooks/useAuth'
 
 interface ContactModalProps {
   isOpen: boolean
   onClose: () => void
+  initialName?: string
+  initialEmail?: string
 }
 
 const ease = [0.22, 1, 0.36, 1] as const
 
 const WEBHOOK = 'https://n8n.srv1574981.hstgr.cloud/webhook/contacto-ravyn'
 
-export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
+export default function ContactModal({
+  isOpen,
+  onClose,
+  initialName = '',
+  initialEmail = '',
+}: ContactModalProps) {
   const { t } = useLanguage()
-  const [formData, setFormData] = useState({ name: '', email: '', interest: 'web', message: '' })
+  const { user } = useAuth()
+
+  const authName = (user?.user_metadata?.full_name || user?.user_metadata?.name || '') as string
+  const authEmail = (user?.email || '') as string
+
+  const effectiveName = initialName || authName
+  const effectiveEmail = initialEmail || authEmail
+
+  const [formData, setFormData] = useState({
+    name: effectiveName,
+    email: effectiveEmail,
+    interest: 'web',
+    message: '',
+  })
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(prev => ({
+        ...prev,
+        name: prev.name.trim() ? prev.name : effectiveName,
+        email: prev.email.trim() ? prev.email : effectiveEmail,
+      }))
+    }
+  }, [isOpen, effectiveName, effectiveEmail])
 
   useEffect(() => {
     document.body.style.overflow = isOpen ? 'hidden' : ''
@@ -41,7 +72,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
       })
       if (res.ok || res.status === 200) {
         setStatus('success')
-        setFormData({ name: '', email: '', interest: 'web', message: '' })
+        setFormData({ name: effectiveName, email: effectiveEmail, interest: 'web', message: '' })
         setTimeout(() => { setStatus('idle'); onClose() }, 2200)
       } else {
         setStatus('error')
@@ -162,7 +193,7 @@ export default function ContactModal({ isOpen, onClose }: ContactModalProps) {
             .cm-overlay {
               position: fixed;
               inset: 0;
-              z-index: 1000;
+              z-index: 12000;
               display: flex;
               align-items: center;
               justify-content: center;
