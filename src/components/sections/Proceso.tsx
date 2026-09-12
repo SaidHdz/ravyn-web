@@ -46,15 +46,7 @@ export default function Proceso() {
                 <span className="proceso2-num">{p.num}</span>
               </div>
               <div className="proceso2-content">
-                <div className="flex items-center gap-2.5 mb-1.5 flex-wrap">
-                  <h3 className="proceso2-name !mb-0">{p.nombre}</h3>
-                  {p.badge ? (
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[0.68rem] font-mono tracking-wider uppercase font-semibold bg-[rgba(224,67,107,0.12)] text-[var(--color-radish)] border border-[rgba(224,67,107,0.28)]">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-radish)]" />
-                      {p.badge}
-                    </span>
-                  ) : null}
-                </div>
+                <h3 className="proceso2-name">{p.nombre}</h3>
                 <p className="proceso2-lead">{p.lead}</p>
                 <p className="proceso2-desc">{p.desc}</p>
               </div>

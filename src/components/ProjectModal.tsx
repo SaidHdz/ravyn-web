@@ -97,7 +97,7 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
   )
 }
 
-// Marco de Laptop / PC para escritorio
+// Marco de Laptop / PC para escritorio (sin emojis)
 function DesktopMockup({ children, color, url }: { children: React.ReactNode, color: string, url?: string }) {
   return (
     <div className="desktop-frame">
@@ -108,7 +108,6 @@ function DesktopMockup({ children, color, url }: { children: React.ReactNode, co
           <span className="desktop-dot desktop-dot--green" />
         </div>
         <div className="desktop-url-bar">
-          <span className="desktop-lock">🔒</span>
           <span className="desktop-url-text">{url || 'http://localhost:4321'}</span>
         </div>
       </div>
@@ -194,20 +193,57 @@ function DesktopMockup({ children, color, url }: { children: React.ReactNode, co
   )
 }
 
+type SlimergyScreen = 'home' | 'cuartos' | 'ajustes'
+type SlimergyMode = 'despues' | 'antes'
+
+const slimergyImageMap: Record<SlimergyScreen, Record<SlimergyMode, number>> = {
+  home: { despues: 0, antes: 1 },
+  cuartos: { despues: 2, antes: 3 },
+  ajustes: { despues: 4, antes: 5 },
+}
+
 export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
   const { t, language } = useLanguage()
   const [activeImageIdx, setActiveImageIdx] = useState(0)
 
-  const isSlimergy = project?.id === 'slimergy'
+  // Slimergy App (Mobile)
+  const isSlimergyApp = project?.id === 'slimergy'
+  const [slimergyMode, setSlimergyMode] = useState<SlimergyMode>('despues')
+  const [slimergyScreen, setSlimergyScreen] = useState<SlimergyScreen>('home')
+
+  // Slimergy Landing (Web PC vs Móvil)
+  const isSlimergyLanding = project?.id === 'slimergy-landing'
   const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop')
 
   // Reset al abrir proyecto nuevo
   useEffect(() => {
     if (isOpen) {
       setActiveImageIdx(0)
+      setSlimergyMode('despues')
+      setSlimergyScreen('home')
       setDeviceMode('desktop')
     }
   }, [isOpen, project])
+
+  // Sync Slimergy App switch when activeImageIdx changes
+  useEffect(() => {
+    if (isSlimergyApp && project?.images && project.images[activeImageIdx]) {
+      const raw = project.images[activeImageIdx].toLowerCase()
+      if (raw.includes('antes')) {
+        setSlimergyMode('antes')
+      } else if (raw.includes('despues')) {
+        setSlimergyMode('despues')
+      }
+
+      if (raw.includes('cuarto')) {
+        setSlimergyScreen('cuartos')
+      } else if (raw.includes('confi')) {
+        setSlimergyScreen('ajustes')
+      } else if (raw.includes('home')) {
+        setSlimergyScreen('home')
+      }
+    }
+  }, [activeImageIdx, isSlimergyApp, project])
 
   // Lock de scroll al abrir
   useEffect(() => {
@@ -281,7 +317,14 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     return clean.charAt(0).toUpperCase() + clean.slice(1) || `${t.projectModal.screenNum} ${idx + 1}`
   }
 
-  const liveUrl = project.liveUrl || (isSlimergy ? 'http://localhost:4321' : null)
+  const getScreenTag = (imgPath: string) => {
+    const raw = imgPath.split('/').pop()?.toLowerCase() || ''
+    if (raw.includes('despues')) return t.projectModal.tagAfter || (language === 'es' ? 'REDISEÑO EN EXPO' : 'EXPO REDESIGN')
+    if (raw.includes('antes')) return t.projectModal.tagBefore || (language === 'es' ? 'PROTOTIPO PREVIO' : 'PREVIOUS PROTOTYPE')
+    return null
+  }
+
+  const liveUrl = project.liveUrl || (isSlimergyLanding ? 'http://localhost:4321' : null)
 
   return (
     <AnimatePresence>
@@ -364,9 +407,9 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
                   {/* Columna visual */}
                   <div className="pm-col-visual">
-                    {isSlimergy ? (
+                    {/* CASO 1: Slimergy Landing Page (Switch PC vs Móvil) */}
+                    {isSlimergyLanding ? (
                       <div className="pm-mockup-wrap">
-                        {/* Switch PC vs Móvil */}
                         <div className="slimergy-switch-bar">
                           <div className="slimergy-switch-track">
                             <button
@@ -374,26 +417,25 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                               className={`slimergy-switch-btn ${deviceMode === 'desktop' ? 'is-active' : ''}`}
                               onClick={() => setDeviceMode('desktop')}
                             >
-                              <span>💻 {t.projectModal.deviceDesktop || 'PC / Desktop'}</span>
+                              <span>{t.projectModal.deviceDesktop || 'PC / Desktop'}</span>
                             </button>
                             <button
                               type="button"
                               className={`slimergy-switch-btn ${deviceMode === 'mobile' ? 'is-active' : ''}`}
                               onClick={() => setDeviceMode('mobile')}
                             >
-                              <span>📱 {t.projectModal.deviceMobile || 'Móvil'}</span>
+                              <span>{t.projectModal.deviceMobile || 'Móvil'}</span>
                             </button>
                           </div>
                         </div>
 
-                        {/* Enlace directo */}
                         <a
                           href={liveUrl || 'http://localhost:4321'}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[0.72rem] font-mono text-[var(--color-radish)] hover:underline"
+                          className="inline-flex items-center gap-1.5 text-[0.74rem] font-mono text-[var(--color-radish)] hover:underline"
                         >
-                          {t.projectModal.openLive || 'Abrir sitio en vivo ↗'} ({liveUrl || 'http://localhost:4321'})
+                          {t.projectModal.openLive || 'Abrir sitio en vivo →'} ({liveUrl || 'http://localhost:4321'})
                         </a>
 
                         <div className="pm-mockup-display w-full flex justify-center">
@@ -416,7 +458,92 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                           )}
                         </div>
                       </div>
+                    ) : isSlimergyApp ? (
+                      /* CASO 2: Slimergy App Móvil (Switch Antes / Después y pantallas) */
+                      <div className="pm-mockup-wrap">
+                        <div className="slimergy-controls-wrap">
+                          <div className="slimergy-switch-bar">
+                            <div className="slimergy-switch-track">
+                              <button
+                                type="button"
+                                className={`slimergy-switch-btn ${slimergyMode === 'antes' ? 'is-active' : ''}`}
+                                onClick={() => {
+                                  setSlimergyMode('antes')
+                                  const nextIdx = slimergyImageMap[slimergyScreen]['antes']
+                                  setActiveImageIdx(nextIdx)
+                                }}
+                              >
+                                <span>{t.projectModal.before}</span>
+                              </button>
+                              <button
+                                type="button"
+                                className={`slimergy-switch-btn ${slimergyMode === 'despues' ? 'is-active' : ''}`}
+                                onClick={() => {
+                                  setSlimergyMode('despues')
+                                  const nextIdx = slimergyImageMap[slimergyScreen]['despues']
+                                  setActiveImageIdx(nextIdx)
+                                }}
+                              >
+                                <span>{t.projectModal.after}</span>
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="pm-tabs slimergy-pills-row">
+                            {(['home', 'cuartos', 'ajustes'] as const).map((screenKey) => {
+                              const label = t.projectModal.screens[screenKey]
+                              const isActive = slimergyScreen === screenKey
+
+                              return (
+                                <button
+                                  key={screenKey}
+                                  type="button"
+                                  className={`pm-tab ${isActive ? 'is-active' : ''}`}
+                                  onClick={() => {
+                                    setSlimergyScreen(screenKey)
+                                    const nextIdx = slimergyImageMap[screenKey][slimergyMode]
+                                    setActiveImageIdx(nextIdx)
+                                  }}
+                                  style={{ '--accent': accent } as React.CSSProperties}
+                                >
+                                  {label}
+                                </button>
+                              )
+                            })}
+                          </div>
+                        </div>
+
+                        <div className="pm-mockup-display">
+                          <IPhoneMockup color={accent}>
+                            <div className="relative w-full h-full">
+                              <AnimatePresence mode="wait">
+                                <motion.img
+                                  key={activeImageIdx}
+                                  src={project.images![activeImageIdx]}
+                                  alt={`${project.title} ${t.projectModal.screenNum} ${activeImageIdx + 1}`}
+                                  className="pm-mockup-img"
+                                  initial={{ opacity: 0, x: 16 }}
+                                  animate={{ opacity: 1, x: 0 }}
+                                  exit={{ opacity: 0, x: -16 }}
+                                  transition={{ duration: 0.35, ease }}
+                                />
+                              </AnimatePresence>
+                              {getScreenTag(project.images![activeImageIdx]) && (
+                                <span className="pm-screen-tag">
+                                  {getScreenTag(project.images![activeImageIdx])}
+                                </span>
+                              )}
+                            </div>
+                          </IPhoneMockup>
+
+                          <div className="pm-nav">
+                            <button className="pm-nav-arrow" onClick={prevImage} aria-label={t.projectModal.prevScreen}><ChevronLeft size={22} /></button>
+                            <button className="pm-nav-arrow" onClick={nextImage} aria-label={t.projectModal.nextScreen}><ChevronRight size={22} /></button>
+                          </div>
+                        </div>
+                      </div>
                     ) : hasImages ? (
+                      /* CASO 3: Otros proyectos con imágenes (Klino, Shield Sense) */
                       <div className="pm-mockup-wrap">
                         <div className="pm-tabs">
                           {project.images!.map((img, idx) => {
@@ -691,6 +818,10 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               box-shadow: 0 3px 10px rgba(16, 52, 42, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
             }
 
+            .slimergy-pills-row {
+              gap: 8px;
+            }
+
             .pm-tabs {
               display: flex;
               gap: 8px;
@@ -725,6 +856,26 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               height: 100%;
               object-fit: cover;
               display: block;
+            }
+            .pm-screen-tag {
+              position: absolute;
+              bottom: 16px;
+              left: 50%;
+              transform: translateX(-50%);
+              background: rgba(16, 52, 42, 0.9);
+              color: var(--color-cream);
+              font-family: var(--font-mono);
+              font-size: 0.65rem;
+              font-weight: 700;
+              letter-spacing: 0.12em;
+              text-transform: uppercase;
+              padding: 4px 12px;
+              border-radius: 100vw;
+              backdrop-filter: blur(8px);
+              z-index: 10;
+              pointer-events: none;
+              white-space: nowrap;
+              border: 1px solid rgba(250, 246, 238, 0.25);
             }
             .pm-nav {
               position: absolute;
