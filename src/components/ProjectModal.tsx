@@ -452,7 +452,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                               <iframe
                                 src={liveUrl || 'http://localhost:4321'}
                                 title="Slimergy Landing Mobile Preview"
-                                className="w-full h-full border-0 bg-white"
+                                className="pm-mockup-iframe-mobile"
                               />
                             </IPhoneMockup>
                           )}
@@ -850,6 +850,14 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               position: relative;
               display: flex;
               align-items: center;
+            }
+            .pm-mockup-iframe-mobile {
+              width: 375px;
+              height: 800px;
+              transform: scale(0.704);
+              transform-origin: top left;
+              border: 0;
+              background: #ffffff;
             }
             .pm-mockup-img {
               width: 100%;

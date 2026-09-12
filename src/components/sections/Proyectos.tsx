@@ -64,10 +64,6 @@ export default function Proyectos() {
 
         {/* --- Bloque 1: Labs (Productos propios) --- */}
         <div className="labs2-section">
-          <div className="labs2-badge-row">
-            <span className="labs2-tag">{t.proyectos.tagLabs}</span>
-          </div>
-
           <motion.h2
             className="labs2-heading"
             initial={{ opacity: 0, y: 20 }}
@@ -183,30 +179,6 @@ export default function Proyectos() {
 
         .labs2-section {
           position: relative;
-        }
-
-        .labs2-badge-row {
-          margin-bottom: 16px;
-        }
-
-        .labs2-tag {
-          display: inline-flex;
-          align-items: center;
-          padding: 4px 14px;
-          border-radius: var(--radius-pill);
-          font-family: var(--font-mono);
-          font-size: 0.72rem;
-          letter-spacing: 0.12em;
-          text-transform: uppercase;
-          background: rgba(16, 52, 42, 0.06);
-          color: var(--color-pine);
-          border: 1px solid rgba(16, 52, 42, 0.14);
-        }
-
-        .labs2-tag--radish {
-          background: rgba(224, 67, 107, 0.08);
-          color: var(--color-radish);
-          border-color: rgba(224, 67, 107, 0.25);
         }
 
         .labs2-divider {
