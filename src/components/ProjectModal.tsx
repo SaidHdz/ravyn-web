@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'motion/react'
 import { Link } from 'react-router-dom'
-import { X, ChevronLeft, ChevronRight } from 'lucide-react'
+import { X, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react'
 import { useLanguage } from '@/context/LanguageContext'
 
 interface ProjectModalProps {
@@ -18,12 +18,13 @@ interface ProjectModalProps {
     solution?: string
     result?: string
     pageHref?: string | null
+    liveUrl?: string | null
   } | null
 }
 
 const ease = [0.22, 1, 0.36, 1] as const
 
-// Marco de iPhone para las capturas — el frame negro lee como producto real sobre cream
+// Marco de iPhone para móvil
 function IPhoneMockup({ children, color }: { children: React.ReactNode, color: string }) {
   return (
     <div className="iphone-frame">
@@ -96,13 +97,101 @@ function IPhoneMockup({ children, color }: { children: React.ReactNode, color: s
   )
 }
 
-type SlimergyScreen = 'home' | 'cuartos' | 'ajustes'
-type SlimergyMode = 'despues' | 'antes'
+// Marco de Laptop / PC para escritorio
+function DesktopMockup({ children, color, url }: { children: React.ReactNode, color: string, url?: string }) {
+  return (
+    <div className="desktop-frame">
+      <div className="desktop-header">
+        <div className="desktop-dots">
+          <span className="desktop-dot desktop-dot--red" />
+          <span className="desktop-dot desktop-dot--yellow" />
+          <span className="desktop-dot desktop-dot--green" />
+        </div>
+        <div className="desktop-url-bar">
+          <span className="desktop-lock">🔒</span>
+          <span className="desktop-url-text">{url || 'http://localhost:4321'}</span>
+        </div>
+      </div>
+      <div className="desktop-screen-content">
+        {children}
+      </div>
+      <div className="desktop-glow" style={{ background: `radial-gradient(circle at center, ${color}22 0%, transparent 70%)` }} />
 
-const slimergyImageMap: Record<SlimergyScreen, Record<SlimergyMode, number>> = {
-  home: { despues: 0, antes: 1 },
-  cuartos: { despues: 2, antes: 3 },
-  ajustes: { despues: 4, antes: 5 },
+      <style>{`
+        .desktop-frame {
+          position: relative;
+          width: 100%;
+          max-width: 540px;
+          height: 380px;
+          background: var(--color-pine);
+          border-radius: 18px;
+          padding: 8px;
+          box-shadow:
+            0 0 0 3px rgba(16,52,42,0.9),
+            0 30px 60px -12px rgba(16,52,42,0.4);
+          margin: 0 auto;
+          display: flex;
+          flex-direction: column;
+        }
+        .desktop-header {
+          height: 28px;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 0 10px;
+        }
+        .desktop-dots {
+          display: flex;
+          gap: 6px;
+        }
+        .desktop-dot {
+          width: 9px;
+          height: 9px;
+          border-radius: 50%;
+        }
+        .desktop-dot--red { background: #ff5f56; }
+        .desktop-dot--yellow { background: #ffbd2e; }
+        .desktop-dot--green { background: #27c93f; }
+        .desktop-url-bar {
+          flex: 1;
+          background: rgba(250, 246, 238, 0.12);
+          border-radius: 6px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          padding: 0 10px;
+          font-family: var(--font-mono);
+          font-size: 0.65rem;
+          color: var(--color-cream);
+          gap: 6px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .desktop-screen-content {
+          flex: 1;
+          background: #000;
+          border-radius: 12px;
+          overflow: hidden;
+          position: relative;
+        }
+        .desktop-glow {
+          position: absolute;
+          inset: -40px;
+          pointer-events: none;
+          z-index: -1;
+          filter: blur(30px);
+        }
+        @media (max-width: 600px) {
+          .desktop-frame {
+            height: 280px;
+            border-radius: 14px;
+            padding: 6px;
+          }
+        }
+      `}</style>
+    </div>
+  )
 }
 
 export default function ProjectModal({ isOpen, onClose, project }: ProjectModalProps) {
@@ -110,37 +199,15 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
   const [activeImageIdx, setActiveImageIdx] = useState(0)
 
   const isSlimergy = project?.id === 'slimergy'
-  const [slimergyMode, setSlimergyMode] = useState<SlimergyMode>('despues')
-  const [slimergyScreen, setSlimergyScreen] = useState<SlimergyScreen>('home')
+  const [deviceMode, setDeviceMode] = useState<'desktop' | 'mobile'>('desktop')
 
   // Reset al abrir proyecto nuevo
   useEffect(() => {
     if (isOpen) {
       setActiveImageIdx(0)
-      setSlimergyMode('despues')
-      setSlimergyScreen('home')
+      setDeviceMode('desktop')
     }
   }, [isOpen, project])
-
-  // Sync Slimergy switch and pill states when activeImageIdx changes (e.g. from arrows)
-  useEffect(() => {
-    if (isSlimergy && project?.images && project.images[activeImageIdx]) {
-      const raw = project.images[activeImageIdx].toLowerCase()
-      if (raw.includes('antes')) {
-        setSlimergyMode('antes')
-      } else if (raw.includes('despues')) {
-        setSlimergyMode('despues')
-      }
-
-      if (raw.includes('cuarto')) {
-        setSlimergyScreen('cuartos')
-      } else if (raw.includes('confi')) {
-        setSlimergyScreen('ajustes')
-      } else if (raw.includes('home')) {
-        setSlimergyScreen('home')
-      }
-    }
-  }, [activeImageIdx, isSlimergy, project])
 
   // Lock de scroll al abrir
   useEffect(() => {
@@ -157,35 +224,39 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     }
   }, [isOpen])
 
-  // Cerrar con ESC
+  // Cerrar con Escape
   useEffect(() => {
-    if (!isOpen) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
-    document.addEventListener('keydown', onKey)
-    return () => document.removeEventListener('keydown', onKey)
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+    }
+    if (isOpen) window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
   }, [isOpen, onClose])
 
   if (!project) return null
 
-  const accent = project.color
   const hasImages = project.images && project.images.length > 0
+  const accent = project.color || 'var(--color-radish)'
 
   const nextImage = () => {
-    if (project.images) setActiveImageIdx((p) => (p + 1) % project.images!.length)
+    if (!project.images || project.images.length === 0) return
+    setActiveImageIdx((prev) => (prev + 1) % project.images!.length)
   }
+
   const prevImage = () => {
-    if (project.images) setActiveImageIdx((p) => (p - 1 + project.images!.length) % project.images!.length)
+    if (!project.images || project.images.length === 0) return
+    setActiveImageIdx((prev) => (prev - 1 + project.images!.length) % project.images!.length)
   }
 
   const getScreenTabLabel = (imgPath: string, idx: number) => {
     const raw = imgPath.split('/').pop()?.toLowerCase() || ''
     const isEn = language === 'en'
 
-    if (raw.includes('login') || raw.includes('ingreso') || raw.includes('acceso')) {
-      return t.projectModal.screens?.login || (isEn ? 'Login' : 'Login')
+    if (raw.includes('home') || raw.includes('inicio')) {
+      return t.projectModal.screens?.home || 'Home'
     }
-    if (raw.includes('home')) {
-      return t.projectModal.screens?.home || (isEn ? 'Home' : 'Home')
+    if (raw.includes('login')) {
+      return t.projectModal.screens?.login || 'Login'
     }
     if (raw.includes('expediente')) {
       return t.projectModal.screens?.expedientes || (isEn ? 'Records' : 'Expedientes')
@@ -210,12 +281,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     return clean.charAt(0).toUpperCase() + clean.slice(1) || `${t.projectModal.screenNum} ${idx + 1}`
   }
 
-  const getScreenTag = (imgPath: string) => {
-    const raw = imgPath.split('/').pop()?.toLowerCase() || ''
-    if (raw.includes('despues')) return t.projectModal.tagAfter || (language === 'es' ? 'REDISEÑO EN EXPO' : 'EXPO REDESIGN')
-    if (raw.includes('antes')) return t.projectModal.tagBefore || (language === 'es' ? 'PROTOTIPO PREVIO' : 'PREVIOUS PROTOTYPE')
-    return null
-  }
+  const liveUrl = project.liveUrl || (isSlimergy ? 'http://localhost:4321' : null)
 
   return (
     <AnimatePresence>
@@ -276,89 +342,98 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                       </div>
                     </div>
 
-                    {project.pageHref && (
-                      <Link to={project.pageHref} className="pm-cta" onClick={onClose}>
-                        {t.projectModal.explorePage} <span aria-hidden="true">→</span>
-                      </Link>
-                    )}
+                    <div className="flex flex-col gap-3 pt-2">
+                      {liveUrl && (
+                        <a
+                          href={liveUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn-primary inline-flex items-center gap-2 self-start"
+                        >
+                          {t.projectModal.visitLive} <ExternalLink size={14} />
+                        </a>
+                      )}
+
+                      {project.pageHref && (
+                        <Link to={project.pageHref} className="pm-cta" onClick={onClose}>
+                          {t.projectModal.explorePage} <span aria-hidden="true">→</span>
+                        </Link>
+                      )}
+                    </div>
                   </div>
 
                   {/* Columna visual */}
                   <div className="pm-col-visual">
-                    {hasImages ? (
+                    {isSlimergy ? (
                       <div className="pm-mockup-wrap">
-                        {isSlimergy ? (
-                          <div className="slimergy-controls-wrap">
-                            {/* Toggle Switch Antes / Después */}
-                            <div className="slimergy-switch-bar">
-                              <div className="slimergy-switch-track">
-                                <button
-                                  type="button"
-                                  className={`slimergy-switch-btn ${slimergyMode === 'antes' ? 'is-active' : ''}`}
-                                  onClick={() => {
-                                    setSlimergyMode('antes')
-                                    const nextIdx = slimergyImageMap[slimergyScreen]['antes']
-                                    setActiveImageIdx(nextIdx)
-                                  }}
-                                >
-                                  <span>{t.projectModal.before}</span>
-                                </button>
-                                <button
-                                  type="button"
-                                  className={`slimergy-switch-btn ${slimergyMode === 'despues' ? 'is-active' : ''}`}
-                                  onClick={() => {
-                                    setSlimergyMode('despues')
-                                    const nextIdx = slimergyImageMap[slimergyScreen]['despues']
-                                    setActiveImageIdx(nextIdx)
-                                  }}
-                                >
-                                  <span>{t.projectModal.after}</span>
-                                </button>
-                              </div>
-                            </div>
-
-                            {/* Solo 3 píldoras para las pantallas: [Home] [Cuartos] [Ajustes] */}
-                            <div className="pm-tabs slimergy-pills-row">
-                              {(['home', 'cuartos', 'ajustes'] as const).map((screenKey) => {
-                                const label = t.projectModal.screens[screenKey]
-                                const isActive = slimergyScreen === screenKey
-
-                                return (
-                                  <button
-                                    key={screenKey}
-                                    type="button"
-                                    className={`pm-tab ${isActive ? 'is-active' : ''}`}
-                                    onClick={() => {
-                                      setSlimergyScreen(screenKey)
-                                      const nextIdx = slimergyImageMap[screenKey][slimergyMode]
-                                      setActiveImageIdx(nextIdx)
-                                    }}
-                                    style={{ '--accent': accent } as React.CSSProperties}
-                                  >
-                                    {label}
-                                  </button>
-                                )
-                              })}
-                            </div>
+                        {/* Switch PC vs Móvil */}
+                        <div className="slimergy-switch-bar">
+                          <div className="slimergy-switch-track">
+                            <button
+                              type="button"
+                              className={`slimergy-switch-btn ${deviceMode === 'desktop' ? 'is-active' : ''}`}
+                              onClick={() => setDeviceMode('desktop')}
+                            >
+                              <span>💻 {t.projectModal.deviceDesktop || 'PC / Desktop'}</span>
+                            </button>
+                            <button
+                              type="button"
+                              className={`slimergy-switch-btn ${deviceMode === 'mobile' ? 'is-active' : ''}`}
+                              onClick={() => setDeviceMode('mobile')}
+                            >
+                              <span>📱 {t.projectModal.deviceMobile || 'Móvil'}</span>
+                            </button>
                           </div>
-                        ) : (
-                          <div className="pm-tabs">
-                            {project.images!.map((img, idx) => {
-                              const name = getScreenTabLabel(img, idx)
-                              return (
-                                <button
-                                  key={idx}
-                                  type="button"
-                                  className={`pm-tab ${activeImageIdx === idx ? 'is-active' : ''}`}
-                                  onClick={() => setActiveImageIdx(idx)}
-                                  style={{ '--accent': accent } as React.CSSProperties}
-                                >
-                                  {name}
-                                </button>
-                              )
-                            })}
-                          </div>
-                        )}
+                        </div>
+
+                        {/* Enlace directo */}
+                        <a
+                          href={liveUrl || 'http://localhost:4321'}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 text-[0.72rem] font-mono text-[var(--color-radish)] hover:underline"
+                        >
+                          {t.projectModal.openLive || 'Abrir sitio en vivo ↗'} ({liveUrl || 'http://localhost:4321'})
+                        </a>
+
+                        <div className="pm-mockup-display w-full flex justify-center">
+                          {deviceMode === 'desktop' ? (
+                            <DesktopMockup color={accent} url={liveUrl || 'http://localhost:4321'}>
+                              <iframe
+                                src={liveUrl || 'http://localhost:4321'}
+                                title="Slimergy Landing Desktop Preview"
+                                className="w-full h-full border-0 bg-white"
+                              />
+                            </DesktopMockup>
+                          ) : (
+                            <IPhoneMockup color={accent}>
+                              <iframe
+                                src={liveUrl || 'http://localhost:4321'}
+                                title="Slimergy Landing Mobile Preview"
+                                className="w-full h-full border-0 bg-white"
+                              />
+                            </IPhoneMockup>
+                          )}
+                        </div>
+                      </div>
+                    ) : hasImages ? (
+                      <div className="pm-mockup-wrap">
+                        <div className="pm-tabs">
+                          {project.images!.map((img, idx) => {
+                            const name = getScreenTabLabel(img, idx)
+                            return (
+                              <button
+                                key={idx}
+                                type="button"
+                                className={`pm-tab ${activeImageIdx === idx ? 'is-active' : ''}`}
+                                onClick={() => setActiveImageIdx(idx)}
+                                style={{ '--accent': accent } as React.CSSProperties}
+                              >
+                                {name}
+                              </button>
+                            )
+                          })}
+                        </div>
 
                         <div className="pm-mockup-display">
                           <IPhoneMockup color={accent}>
@@ -375,11 +450,6 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                                   transition={{ duration: 0.35, ease }}
                                 />
                               </AnimatePresence>
-                              {getScreenTag(project.images![activeImageIdx]) && (
-                                <span className="pm-screen-tag">
-                                  {getScreenTag(project.images![activeImageIdx])}
-                                </span>
-                              )}
                             </div>
                           </IPhoneMockup>
 
@@ -391,7 +461,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                       </div>
                     ) : (
                       <div className="pm-placeholder" style={{ borderColor: `${accent}40` }}>
-                        <span className="pm-placeholder-text">Preview coming soon</span>
+                        <span className="pm-placeholder-text">Próximamente capturas</span>
                       </div>
                     )}
                   </div>
@@ -428,145 +498,140 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               border-radius: var(--radius-lg);
               overflow: hidden;
               box-shadow: 0 40px 90px rgba(16, 52, 42, 0.30);
-              display: flex;
-              flex-direction: column;
             }
-            .pm-scroll {
-              width: 100%;
-              height: 100%;
-              overflow-y: auto;
-              overflow-x: hidden;
-            }
-            .pm-inner { padding: clamp(32px, 5vw, 72px) clamp(24px, 5vw, 60px); }
-
             .pm-close {
               position: absolute;
-              top: 24px;
-              right: 24px;
-              width: 44px;
-              height: 44px;
+              top: 20px;
+              right: 20px;
+              width: 38px;
+              height: 38px;
               border-radius: 50%;
-              background: var(--color-cream);
-              border: 1px solid rgba(16, 52, 42, 0.15);
+              background: rgba(16, 52, 42, 0.06);
+              border: 1px solid rgba(16, 52, 42, 0.10);
               color: var(--color-pine);
               display: flex;
               align-items: center;
               justify-content: center;
               cursor: pointer;
-              z-index: 100;
-              transition: background 0.25s, border-color 0.25s;
+              z-index: 20;
+              transition: background 0.2s, transform 0.2s;
             }
             .pm-close:hover {
-              background: var(--color-cream-2);
-              border-color: var(--color-pine);
+              background: rgba(224, 67, 107, 0.15);
+              color: var(--color-radish);
+              transform: scale(1.05);
             }
-
+            .pm-scroll {
+              overflow-y: auto;
+              max-height: 90vh;
+              padding: clamp(32px, 5vw, 64px);
+            }
+            .pm-inner {
+              max-width: 960px;
+              margin: 0 auto;
+            }
             .pm-grid {
               display: grid;
               grid-template-columns: 1fr 1fr;
-              gap: clamp(40px, 5vw, 72px);
+              gap: clamp(36px, 5vw, 72px);
               align-items: start;
             }
-            .pm-col-content { position: sticky; top: 0; }
-
-            .pm-tag {
-              font-family: var(--font-mono);
-              font-size: 0.7rem;
-              font-weight: 500;
-              letter-spacing: 0.16em;
-              text-transform: uppercase;
-              margin-bottom: 14px;
+            .pm-col-content {
+              display: flex;
+              flex-direction: column;
+              gap: 28px;
+              position: sticky;
+              top: 0;
             }
             .pm-title {
               font-family: var(--font-display);
               font-weight: 600;
-              font-size: clamp(2.4rem, 5vw, 3.6rem);
+              font-size: clamp(28px, 3.5vw, 42px);
+              line-height: 1.08;
+              letter-spacing: -0.025em;
               color: var(--color-pine);
-              letter-spacing: -0.03em;
-              line-height: 1;
-              margin-bottom: 40px;
             }
-
+            .pm-description {
+              font-family: var(--font-sans);
+              font-size: 0.96rem;
+              color: var(--text-secondary);
+              line-height: 1.68;
+            }
             .pm-case {
               display: flex;
               flex-direction: column;
-              gap: 32px;
-              margin-bottom: 44px;
+              gap: 18px;
+            }
+            .pm-case-item {
+              display: flex;
+              flex-direction: column;
+              gap: 4px;
             }
             .pm-case-label {
-              display: block;
               font-family: var(--font-mono);
-              font-size: 0.66rem;
+              font-size: 0.68rem;
+              font-weight: 700;
+              letter-spacing: 0.14em;
               text-transform: uppercase;
-              letter-spacing: 0.15em;
               color: var(--text-muted);
-              margin-bottom: 8px;
             }
             .pm-case-text {
               font-family: var(--font-sans);
-              font-size: 1rem;
+              font-size: 0.92rem;
               color: var(--text-secondary);
               line-height: 1.6;
             }
             .pm-case-result {
-              font-family: var(--font-display);
-              font-weight: 600;
-              font-size: 1.5rem;
-              letter-spacing: -0.02em;
-              line-height: 1.2;
-            }
-            .pm-description {
               font-family: var(--font-sans);
-              font-size: 1.05rem;
-              color: var(--text-secondary);
-              line-height: 1.65;
-              margin-bottom: 44px;
+              font-size: 0.94rem;
+              font-weight: 600;
+              line-height: 1.5;
             }
-
+            .pm-tech {
+              display: flex;
+              flex-direction: column;
+              gap: 10px;
+              padding-top: 6px;
+            }
             .pm-tech-heading {
               font-family: var(--font-mono);
-              font-size: 0.66rem;
+              font-size: 0.68rem;
+              font-weight: 700;
+              letter-spacing: 0.14em;
               text-transform: uppercase;
-              letter-spacing: 0.12em;
               color: var(--text-muted);
-              margin-bottom: 16px;
             }
             .pm-tech-stack {
               display: flex;
               flex-wrap: wrap;
-              gap: 8px;
+              gap: 6px;
             }
             .pm-tech-pill {
               font-family: var(--font-mono);
-              padding: 6px 14px;
-              background: var(--color-cream-2);
-              border: 1px solid rgba(16, 52, 42, 0.12);
-              border-radius: var(--radius-pill);
-              font-size: 0.75rem;
+              font-size: 0.72rem;
+              padding: 4px 10px;
+              border-radius: 6px;
+              background: rgba(16, 52, 42, 0.05);
+              border: 1px solid rgba(16, 52, 42, 0.10);
               color: var(--color-pine);
             }
-
             .pm-cta {
               display: inline-flex;
               align-items: center;
               gap: 8px;
-              margin-top: 40px;
               font-family: var(--font-sans);
-              font-size: 0.88rem;
+              font-size: 0.9rem;
               font-weight: 600;
-              color: var(--color-cream);
-              background: var(--color-radish);
-              padding: 12px 24px;
-              border-radius: var(--radius-pill);
+              color: var(--color-radish);
               text-decoration: none;
-              transition: opacity 0.2s, transform 0.2s;
+              transition: gap 0.2s ease;
+              align-self: flex-start;
             }
-            .pm-cta span { transition: transform 0.22s ease; }
-            .pm-cta:hover { opacity: 0.9; transform: translateY(-1px); }
-            .pm-cta:hover span { transform: translateX(4px); }
-
+            .pm-cta:hover { gap: 12px; }
             .pm-col-visual {
               display: flex;
+              flex-direction: column;
+              align-items: center;
               justify-content: center;
             }
             .pm-mockup-wrap {
@@ -585,13 +650,11 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               gap: 12px;
               width: 100%;
             }
-
             .slimergy-switch-bar {
               display: flex;
               justify-content: center;
               width: 100%;
             }
-
             .slimergy-switch-track {
               display: inline-flex;
               align-items: center;
@@ -602,7 +665,6 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               gap: 4px;
               box-shadow: inset 0 2px 4px rgba(16, 52, 42, 0.04);
             }
-
             .slimergy-switch-btn {
               display: inline-flex;
               align-items: center;
@@ -620,19 +682,13 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               cursor: pointer;
               transition: all 0.22s cubic-bezier(0.22, 1, 0.36, 1);
             }
-
             .slimergy-switch-btn:hover:not(.is-active) {
               color: var(--color-pine);
             }
-
             .slimergy-switch-btn.is-active {
               background: #FFFFFF;
               color: var(--color-pine);
               box-shadow: 0 3px 10px rgba(16, 52, 42, 0.12), 0 1px 2px rgba(0, 0, 0, 0.04);
-            }
-
-            .slimergy-pills-row {
-              gap: 8px;
             }
 
             .pm-tabs {
@@ -669,25 +725,6 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               height: 100%;
               object-fit: cover;
               display: block;
-            }
-            .pm-screen-tag {
-              position: absolute;
-              bottom: 16px;
-              left: 50%;
-              transform: translateX(-50%);
-              background: rgba(16, 52, 42, 0.9);
-              color: var(--color-cream);
-              font-family: var(--font-mono);
-              font-size: 0.65rem;
-              font-weight: 700;
-              letter-spacing: 0.12em;
-              padding: 4px 12px;
-              border-radius: 100vw;
-              backdrop-filter: blur(8px);
-              z-index: 10;
-              pointer-events: none;
-              white-space: nowrap;
-              border: 1px solid rgba(250, 246, 238, 0.25);
             }
             .pm-nav {
               position: absolute;
@@ -743,9 +780,8 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
             }
             @media (max-width: 600px) {
               .slimergy-switch-btn {
-                padding: 5px 12px;
-                font-size: 0.68rem;
-                gap: 6px;
+                padding: 5px 14px;
+                font-size: 0.7rem;
               }
               .slimergy-controls-wrap {
                 gap: 10px;

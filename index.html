@@ -89,34 +89,72 @@
     }
     </script>
 
-    <!-- JSON-LD: Servicios profesionales -->
+    <!-- JSON-LD: Proyectos y Software de Ravyn (Indexación de Klino, Ravynset, Shield Sense, Slimergy) -->
     <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Ravyn Studio",
-      "url": "https://ravynstudio.mx",
-      "image": "https://ravynstudio.mx/brand/logo-light.png",
-      "description": "Desarrollo de software a la medida: sistemas web, apps de gestión, automatización e IoT para negocios en México.",
-      "address": {
-        "@type": "PostalAddress",
-        "addressCountry": "MX"
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Klino",
+        "alternateName": "Klino de Ravyn",
+        "applicationCategory": "HealthApplication",
+        "operatingSystem": "iOS, Android, Web",
+        "description": "App de documentación clínica por voz desarrollada por Ravyn Studio. Transcribe consultas médicas en tiempo real y genera notas clínicas estructuradas conforme a NOM-004 y NOM-024.",
+        "url": "https://ravynstudio.mx/klino",
+        "award": "2do Lugar Innovatec 2026 — Área de Salud",
+        "creator": {
+          "@type": "Organization",
+          "name": "Ravyn Studio",
+          "url": "https://ravynstudio.mx"
+        },
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "MXN",
+          "description": "Beta abierto gratuito para médicos y clínicas"
+        }
       },
-      "priceRange": "$$",
-      "serviceType": [
-        "Desarrollo de software",
-        "Desarrollo web",
-        "Aplicaciones móviles",
-        "Automatización de procesos",
-        "IoT",
-        "CRM a la medida"
-      ],
-      "areaServed": {
-        "@type": "Country",
-        "name": "México"
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "Ravynset",
+        "alternateName": "Ravynset CRM",
+        "applicationCategory": "BusinessApplication",
+        "description": "CRM para clínicas y centros de salud desarrollado por Ravyn Studio. Centraliza citas con agenda online 24/7, expedientes y automatización por WhatsApp.",
+        "url": "https://ravynstudio.mx/#labs",
+        "creator": {
+          "@type": "Organization",
+          "name": "Ravyn Studio",
+          "url": "https://ravynstudio.mx"
+        }
       },
-      "availableLanguage": ["Spanish", "English"]
-    }
+      {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "Shield Sense",
+        "category": "Wearable IoT",
+        "description": "Wearable IoT integrado en gorro con app móvil desarrollada por Ravyn Studio que detecta impactos en la cabeza de adultos mayores y alerta al cuidador en tiempo real.",
+        "url": "https://ravynstudio.mx/#labs",
+        "award": "1er Lugar Innovatec 2026 — Área de Salud",
+        "manufacturer": {
+          "@type": "Organization",
+          "name": "Ravyn Studio",
+          "url": "https://ravynstudio.mx"
+        }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "CreativeWork",
+        "name": "Slimergy",
+        "description": "Sistema de monitoreo eléctrico inteligente Slimergy V3 con app móvil y rediseño de landing page interactiva desarrollada por Ravyn Studio.",
+        "url": "https://slimergy-landingpage.vercel.app/",
+        "creator": {
+          "@type": "Organization",
+          "name": "Ravyn Studio",
+          "url": "https://ravynstudio.mx"
+        }
+      }
+    ]
     </script>
 
     <!-- Fuentes locales — variable fonts del brand kit -->

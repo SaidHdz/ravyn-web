@@ -94,7 +94,7 @@ export default function Proyectos() {
               <motion.button
                 type="button"
                 key={p.id}
-                className={`labs2-row ${(p.status as string) === 'CRECIENDO' || (p.status as string) === 'GROWING' ? 'labs2-row--soft' : ''}`}
+                className="labs2-row"
                 onClick={() => setSelectedId(p.id)}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -146,7 +146,7 @@ export default function Proyectos() {
               <motion.button
                 type="button"
                 key={p.id}
-                className={`labs2-row ${(p.status as string) === 'CRECIENDO' || (p.status as string) === 'GROWING' ? 'labs2-row--soft' : ''}`}
+                className="labs2-row"
                 onClick={() => setSelectedId(p.id)}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -260,8 +260,6 @@ export default function Proyectos() {
           border-bottom: 1px solid rgba(16, 52, 42, 0.12);
         }
         .labs2-row:hover { background: var(--color-cream-2); }
-        .labs2-row--soft { background: rgba(16, 52, 42, 0.025); }
-        .labs2-row--soft:hover { background: rgba(16, 52, 42, 0.05); }
 
         .labs2-row-name {
           font-family: var(--font-display);
