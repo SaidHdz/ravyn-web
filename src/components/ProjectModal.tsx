@@ -19,6 +19,7 @@ interface ProjectModalProps {
     result?: string
     pageHref?: string | null
     liveUrl?: string | null
+    displayUrl?: string | null
   } | null
 }
 
@@ -436,7 +437,8 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                             rel="noopener noreferrer"
                             className="inline-flex items-center gap-1.5 text-[0.74rem] font-mono text-[var(--color-radish)] hover:underline"
                           >
-                            {t.projectModal.openLive || 'Abrir sitio en vivo →'}
+                            <span>{project.displayUrl || 'slimergy.com'}</span>
+                            <span aria-hidden="true">↗</span>
                           </a>
                         ) : (
                           <span className="inline-flex items-center gap-2 text-[0.74rem] font-mono text-[var(--text-muted)] tracking-wider uppercase font-semibold">
@@ -447,7 +449,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
 
                         <div className="pm-mockup-display w-full flex justify-center">
                           {deviceMode === 'desktop' ? (
-                            <DesktopMockup color={accent} url={liveUrl || 'slimergy-landingpage.vercel.app'}>
+                            <DesktopMockup color={accent} url={project.displayUrl || 'slimergy.com'}>
                               {liveUrl ? (
                                 <iframe
                                   src={liveUrl}
