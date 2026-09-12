@@ -28,7 +28,6 @@
     width: 100%;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
-    user-select: none;
   }
 
   /* Grain texture — atmósfera orgánica Semillero */
