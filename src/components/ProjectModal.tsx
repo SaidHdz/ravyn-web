@@ -324,7 +324,7 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
     return null
   }
 
-  const liveUrl = project.liveUrl || (isSlimergyLanding ? 'http://localhost:4321' : null)
+  const liveUrl = project.liveUrl || null
 
   return (
     <AnimatePresence>
@@ -429,31 +429,64 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
                           </div>
                         </div>
 
-                        <a
-                          href={liveUrl || 'http://localhost:4321'}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 text-[0.74rem] font-mono text-[var(--color-radish)] hover:underline"
-                        >
-                          {t.projectModal.openLive || 'Abrir sitio en vivo →'} ({liveUrl || 'http://localhost:4321'})
-                        </a>
+                        {liveUrl ? (
+                          <a
+                            href={liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-[0.74rem] font-mono text-[var(--color-radish)] hover:underline"
+                          >
+                            {t.projectModal.openLive || 'Abrir sitio en vivo →'}
+                          </a>
+                        ) : (
+                          <span className="inline-flex items-center gap-2 text-[0.74rem] font-mono text-[var(--text-muted)] tracking-wider uppercase font-semibold">
+                            <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-radish)]" />
+                            {t.projectModal.comingSoon || 'Muestra pronto'}
+                          </span>
+                        )}
 
                         <div className="pm-mockup-display w-full flex justify-center">
                           {deviceMode === 'desktop' ? (
-                            <DesktopMockup color={accent} url={liveUrl || 'http://localhost:4321'}>
-                              <iframe
-                                src={liveUrl || 'http://localhost:4321'}
-                                title="Slimergy Landing Desktop Preview"
-                                className="w-full h-full border-0 bg-white"
-                              />
+                            <DesktopMockup color={accent} url={liveUrl || 'slimergy-landingpage.vercel.app'}>
+                              {liveUrl ? (
+                                <iframe
+                                  src={liveUrl}
+                                  title="Slimergy Landing Desktop Preview"
+                                  className="w-full h-full border-0 bg-white"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-[var(--color-cream-2)] p-6 text-center">
+                                  <span className="font-mono text-xs tracking-wider uppercase text-[var(--color-pine)] font-semibold px-3 py-1 rounded-full border border-[rgba(16,52,42,0.15)] bg-white/70">
+                                    {t.projectModal.comingSoon || 'Muestra pronto'}
+                                  </span>
+                                  <p className="font-sans text-xs text-[var(--text-secondary)] max-w-xs">
+                                    {language === 'es'
+                                      ? 'Próximamente disponible para exploración interactiva en desktop.'
+                                      : 'Interactive desktop preview coming soon.'}
+                                  </p>
+                                </div>
+                              )}
                             </DesktopMockup>
                           ) : (
                             <IPhoneMockup color={accent}>
-                              <iframe
-                                src={liveUrl || 'http://localhost:4321'}
-                                title="Slimergy Landing Mobile Preview"
-                                className="pm-mockup-iframe-mobile"
-                              />
+                              {liveUrl ? (
+                                <iframe
+                                  src={liveUrl}
+                                  title="Slimergy Landing Mobile Preview"
+                                  className="pm-mockup-iframe-mobile"
+                                />
+                              ) : (
+                                <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-[var(--color-cream-2)] p-6 text-center">
+                                  <span className="font-mono text-xs tracking-wider uppercase text-[var(--color-pine)] font-semibold px-3 py-1 rounded-full border border-[rgba(16,52,42,0.15)] bg-white/70">
+                                    {t.projectModal.comingSoon || 'Muestra pronto'}
+                                  </span>
+                                  <p className="font-sans text-xs text-[var(--text-secondary)] max-w-[200px]">
+                                    {language === 'es'
+                                      ? 'Próximamente disponible para exploración interactiva en móvil.'
+                                      : 'Interactive mobile preview coming soon.'}
+                                  </p>
+                                </div>
+                              )}
                             </IPhoneMockup>
                           )}
                         </div>
@@ -707,12 +740,14 @@ export default function ProjectModal({ isOpen, onClose, project }: ProjectModalP
               font-size: 0.92rem;
               color: var(--text-secondary);
               line-height: 1.6;
+              white-space: pre-line;
             }
             .pm-case-result {
               font-family: var(--font-sans);
               font-size: 0.94rem;
               font-weight: 600;
               line-height: 1.5;
+              white-space: pre-line;
             }
             .pm-tech {
               display: flex;
