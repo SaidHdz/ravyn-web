@@ -120,10 +120,6 @@ export default function Proyectos() {
 
         {/* --- Bloque 2: Studio (Semillas que germinamos / Clientes) --- */}
         <div className="labs2-section">
-          <div className="labs2-badge-row">
-            <span className="labs2-tag labs2-tag--radish">{t.proyectos.tagStudio}</span>
-          </div>
-
           <motion.h2
             className="labs2-heading"
             initial={{ opacity: 0, y: 20 }}
